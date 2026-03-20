@@ -7,7 +7,7 @@ Usage:
   python confluence_to_md.py --mode single --page-id 123456789
 
   # Single page by URL
-  python confluence_to_md.py --mode single --url "https://techsarathi.atlassian.net/wiki/spaces/BS/pages/123456789/Page+Title"
+  python confluence_to_md.py --mode single --url "https://your-site.atlassian.net/wiki/spaces/BS/pages/123456789/Page+Title"
 
   # Full space
   python confluence_to_md.py --mode space --space-key BS

@@ -15,7 +15,7 @@ Identify which mode from the user's request:
 
 Extract the page ID from a Confluence URL — it's the number in the path:
 ```
-https://techsarathi.atlassian.net/wiki/spaces/BS/pages/123456789/Page+Title
+https://your-site.atlassian.net/wiki/spaces/BS/pages/123456789/Page+Title
                                                               ^^^^^^^^^
                                                               page ID
 ```
@@ -56,7 +56,7 @@ space = "BS" AND type = page
 space = "BS" AND type = page AND lastModified >= "2026-03-07"
 
 # Pages by a specific author
-space = "BS" AND type = page AND creator = "aman@itechsarathi.in"
+space = "BS" AND type = page AND creator = "user@example.com"
 
 # Search by title
 title ~ "CRM" AND type = page

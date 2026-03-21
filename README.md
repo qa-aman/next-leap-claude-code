@@ -26,7 +26,7 @@ The repo follows the PM lifecycle from research to shipping. Each folder is a st
 
 | Folder | Stage | What's inside |
 |--------|-------|---------------|
-| `01-setup/` | Setup | Installation guides, integration setup (Jira, Gmail) |
+| `01-setup/` | Setup | Installation guides, integration setup (Jira) |
 | `02-presentation/` | Workshop | Session slides (PPTX) |
 | `03-product-knowledge/` | Understand | Company overview, product details, competitive landscape, tech stack |
 | `04-strategy/` | Plan | Product vision, Q2 2026 OKRs |
@@ -77,7 +77,6 @@ Start Claude Code (`claude`) in this directory, then try:
 
 This repo is pre-configured to work with:
 - **Atlassian (Jira + Confluence)** - See `01-setup/integrations.md` for setup
-- **Gmail** - First-party Claude Code integration via `/mcp`
 
 ## License
 

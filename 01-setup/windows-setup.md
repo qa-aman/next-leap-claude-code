@@ -306,10 +306,12 @@ Remove-Item -Path "$env:USERPROFILE\.claude.json" -Force
 
 | Problem | Solution |
 |---------|----------|
-| `claude: command not recognized` | Close and reopen PowerShell to pick up the updated PATH |
+| `claude: command not recognized` | Close and reopen PowerShell to pick up the updated PATH. If the issue persists, restart your computer - the installer automatically updates PATH settings |
 | Browser does not open on login | Press `c` to copy the login URL, paste it in your browser |
+| Subscription required / authentication fails | Verify you have an active Claude Pro or Max subscription at https://claude.ai. Log out and log back in to refresh credentials |
+| Node version too old | Run `node --version` to check. If below v18.0.0, download the latest LTS version from https://nodejs.org |
 | "Git Bash not found" error | Install Git for Windows from https://git-scm.com/downloads/win, or set the path manually (see Section 11) |
-| Permission errors during install | You do NOT need to run as Administrator. The installer puts the binary in your user profile directory |
+| Permission errors during install | You do NOT need to run as Administrator. The installer puts the binary in your user profile directory. If you still get permission denied, right-click PowerShell and select "Run as Administrator" |
 | WinGet update not available yet | Claude Code may notify you of updates before WinGet has the new version. Wait and try again later |
 
 For more help: https://code.claude.com/docs/en/troubleshooting

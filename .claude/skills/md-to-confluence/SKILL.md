@@ -96,6 +96,23 @@ Becomes:
 
 Tables: convert to `<table><tbody><tr><td>...</td></tr></tbody></table>`.
 
+### Numbered table rows
+
+If a markdown table has a `#` or number column (first column contains sequential integers like 1, 2, 3), do NOT convert it as a regular column. Instead:
+
+1. Remove the `#`/number column from the table entirely (both header and data cells).
+2. Use Confluence's built-in numbered column by adding `isNumberColumnEnabled: true` to the table attrs in ADF format.
+3. When using ADF format, the table node should look like:
+   ```json
+   {"type": "table", "attrs": {"layout": "default", "isNumberColumnEnabled": true}, "content": [...]}
+   ```
+4. When using storage/HTML format, add the attribute to the table tag:
+   ```html
+   <table data-number-column="true">
+   ```
+
+This ensures row numbers auto-update when rows are added, removed, or reordered in Confluence.
+
 Strip the first `#` heading from the body - it becomes the page title, not content.
 
 ## Running the script directly

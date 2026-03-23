@@ -229,9 +229,11 @@ rm ~/.claude.json
 
 | Problem | Solution |
 |---------|----------|
-| `claude: command not found` | Close and reopen your terminal, or run `source ~/.zshrc` |
+| `claude: command not found` | Close and reopen your terminal, or run `source ~/.zshrc`. If the issue persists, add `export PATH=$HOME/.local/bin:$PATH` to your `~/.zshrc` (or `~/.bashrc`) and restart the terminal |
 | Browser does not open on login | Press `c` to copy the login URL, paste it in your browser |
-| Permission errors during install | Do not use `sudo`. The native installer puts the binary in `~/.local/bin/` which does not require root |
+| Subscription required / authentication fails | Verify you have an active Claude Pro or Max subscription at https://claude.ai. Log out and log back in to refresh credentials |
+| Node version too old | Run `node --version` to check. If below v18.0.0, download the latest LTS version from https://nodejs.org |
+| Permission errors during install | Do not use `sudo`. The native installer puts the binary in `~/.local/bin/` which does not require root. If you still get permission denied, run `sudo curl -fsSL https://claude.ai/install.sh \| bash` |
 | Search not working | Claude Code includes ripgrep. If search fails, install it manually: `brew install ripgrep` |
 
 For more help: https://code.claude.com/docs/en/troubleshooting

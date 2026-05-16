@@ -1,6 +1,14 @@
 # Q&A - Claude Code Workshop
 
-Answers to open questions from Sessions 1 and 2, sourced from official Anthropic documentation. All URLs verified 16-05-2026.
+Answers to open questions from workshop sessions, sourced from official Anthropic documentation.
+
+**Date context** (important - Claude Code evolves; answers below may drift over time):
+
+- **Original file created:** 23-03-2026 (March 2026 cohort - Q1 to Q4 below)
+- **Last full refresh:** 16-05-2026 (URLs re-verified, Windows flow rewritten)
+- **May 2026 Session 1 additions:** 16-05-2026 (Q5 onward - see "May 2026 - Session 1 Additions" section)
+
+If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
 ---
 
@@ -257,3 +265,179 @@ Run `/doctor` inside Claude Code for an automated check of your installation, se
 | Trust center (SOC 2, ISO 27001) | https://trust.anthropic.com |
 | Troubleshooting (performance, stability) | https://code.claude.com/docs/en/troubleshooting |
 | Troubleshooting (install and login) | https://code.claude.com/docs/en/troubleshoot-install |
+
+---
+
+# May 2026 - Session 1 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 16-05-2026. All URLs verified 16-05-2026.
+
+---
+
+## Q5: CLAUDE.md vs README.md - what's the actual difference? Is CLAUDE.md a PRD?
+
+**Short answer:** `CLAUDE.md` is for the agent. `README.md` is for humans. They overlap in content but serve different readers.
+
+- **README.md** is project documentation for any human visiting the repo - install steps, contribution guide, license. Claude Code does not auto-load it.
+- **CLAUDE.md** is auto-loaded into the agent's context at the start of every session. It tells Claude *how to behave* in this project - coding conventions, architecture rules, what to never do, where files live.
+
+It is **not** a PRD. A PRD describes *what to build and why*. `CLAUDE.md` describes *how the agent should work inside this codebase*. Use it for: project structure, tech stack, commands to run, style rules, file conventions, things to avoid.
+
+**Hierarchy** (all loaded automatically):
+
+| Scope | Path | When loaded |
+|-------|------|-------------|
+| Enterprise / managed | OS-specific managed path | All sessions, all users on the machine |
+| Global (user) | `~/.claude/CLAUDE.md` | All your projects |
+| Project | `<repo>/CLAUDE.md` (committed) | Sessions started in that repo |
+| Local project | `<repo>/CLAUDE.local.md` (gitignored) | Same as project, but personal/not committed |
+| Subdirectory | `<repo>/<subdir>/CLAUDE.md` | When Claude reads files in that subdir |
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 16-05-2026)
+
+---
+
+## Q6: Where is the memory file stored? Is it the "guardrails" of the project?
+
+**Short answer:** "Memory" in Claude Code = the `CLAUDE.md` files described in Q5, plus any auto-managed memory files the harness writes. They function as standing instructions, not hard guardrails.
+
+- The agent **reads** them every session, so anything in there shapes future behavior.
+- They are **not enforced** like permissions or hooks. A `CLAUDE.md` rule saying "never delete files" is a strong preference, not a hard block. For hard blocks, use `settings.json` permissions or hooks.
+- Use `/memory` inside Claude Code to view and edit memory files quickly.
+- Use the `#` shortcut at the start of a message to add a quick memory entry to the appropriate `CLAUDE.md`.
+
+So: memory = soft guardrails (behavior). `settings.json` permissions and hooks = hard guardrails (enforcement).
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 16-05-2026)
+- https://code.claude.com/docs/en/settings (verified 16-05-2026)
+
+---
+
+## Q7: If I set up the status line / global CLAUDE.md / skills on my personal laptop, will they carry over to my company laptop?
+
+**Short answer:** No, not automatically. Global Claude Code config lives under `~/.claude/` on each machine. It does not sync across devices.
+
+- `~/.claude/CLAUDE.md`, `~/.claude/settings.json`, `~/.claude/skills/`, and the status line config are all machine-local.
+- There is no built-in cloud sync for Claude Code config. OAuth tokens, caches, and trust settings are intentionally tied to the machine.
+- **What you can do:** keep your personal Claude Code config in a private git repo and clone it on each machine. Some users symlink files into `~/.claude/`. This works but drifts over time and is not officially supported beyond `.claude/rules/`.
+- **Project-level config** (the repo's own `CLAUDE.md`, `.claude/skills/`, `.claude/settings.json`) *does* travel with the repo because it is committed to git.
+
+**Bottom line:** commit project config to the repo. Treat global config as personal/per-machine.
+
+**Sources:**
+- https://code.claude.com/docs/en/settings (verified 16-05-2026)
+- https://code.claude.com/docs/en/memory (verified 16-05-2026)
+
+---
+
+## Q8: When should I use plan mode vs default mode vs accept-edits vs auto (bypass) mode?
+
+Cycle modes with `Shift+Tab`. The current mode is shown in the status line.
+
+| Mode | What it does | Use when |
+|------|-------------|----------|
+| **Default** | Asks for approval on file edits, bash commands, and other write actions | Day-to-day work where you want to review each change |
+| **Plan mode** | Read-only. Claude can explore the codebase, read files, and produce a written plan, but cannot edit, run write commands, or create files. You exit with `ExitPlanMode` to start work | Before any multi-file change, when you want a plan to approve before code is touched. Anthropic specifically recommends this for non-trivial tasks |
+| **Accept edits** | Auto-approves file edits but still asks for bash, network, and other tool calls | When you trust the file changes Claude is making (e.g. mechanical refactor) but want a guardrail on shell commands |
+| **Auto (bypass permissions)** | Skips most permission prompts. Highest risk | Sandboxed environments, throwaway containers, or CI - never on a machine with important uncommitted work |
+
+Anthropic's best-practices doc explicitly recommends starting in plan mode for anything non-trivial.
+
+**Sources:**
+- https://code.claude.com/docs/en/best-practices (verified 16-05-2026)
+- https://code.claude.com/docs/en/permissions (verified 16-05-2026)
+
+---
+
+## Q9: I installed Claude Code in my Mac terminal. Do I need to install it again inside the Antigravity / VS Code integrated terminal?
+
+**Short answer:** No. Install once per machine.
+
+The Antigravity / VS Code integrated terminal is the same shell environment as your system terminal - same PATH, same Node, same `claude` binary. If `claude --version` works in your system terminal, it works in the integrated terminal too.
+
+**Caveat:** if the integrated terminal launched before the PATH update from your install, `claude` will appear missing until you open a new integrated terminal window. Close and reopen the terminal, or run `source ~/.zshrc` / `source ~/.bashrc`.
+
+**Sources:**
+- https://code.claude.com/docs/en/setup (verified 16-05-2026)
+
+---
+
+## Q10: I have Claude on two Google accounts. How do I know which one is logged in, and how do I switch?
+
+- Run `/status` inside Claude Code - it shows the logged-in account email and the active plan.
+- To switch accounts: run `/logout`, then `/login` and pick the other account in the browser.
+- Run `/doctor` for a broader check (auth, MCP servers, settings, context usage).
+
+If you authenticate via API key instead of OAuth, the `ANTHROPIC_API_KEY` env var takes precedence over the logged-in account. Unset it to use OAuth.
+
+**Sources:**
+- https://code.claude.com/docs/en/authentication (verified 16-05-2026)
+- https://code.claude.com/docs/en/commands (verified 16-05-2026)
+
+---
+
+## Q11: Can I configure the 5-hour / 7-day usage window? How do I check how much I have used?
+
+**Short answer:** No, the usage windows are fixed by plan. You can check current usage but cannot extend the window itself.
+
+- Run `/usage` inside Claude Code to see remaining quota for the current 5-hour and weekly windows on Pro and Max plans.
+- Run `/cost` to see token / dollar usage for the current session.
+- Pro and Max plans have rolling usage windows (5-hour and weekly). Limits depend on plan tier. The fixed window cannot be reset on demand - it rolls automatically.
+- If you hit the limit, you can: wait for the window to roll, upgrade plan, or switch to API-key billing (pay-per-token, no window).
+
+For the current published limits, see the pricing page. Limits change over time, so don't trust any number quoted in this doc - check the source URL.
+
+**Sources:**
+- https://code.claude.com/docs/en/costs (verified 16-05-2026)
+- https://www.anthropic.com/pricing (verified 16-05-2026)
+
+---
+
+## Q12: We don't use GitHub today. Only the developers do. Is Claude Code still useful for me as a PM?
+
+**Yes.** GitHub is not required to use Claude Code. Claude Code is a CLI that works on any local folder.
+
+What you get without GitHub:
+
+- Read and write any files in a folder (specs, notes, PRDs, transcripts, Markdown docs).
+- Run skills like `confluence-to-md`, `md-to-confluence`, `write-prd`, `feature-spec`, `meeting-to-spec`.
+- Use MCP servers to talk to Confluence, Jira, Linear, Slack, Granola, Google Drive - all independent of GitHub.
+- Manage memory, rules, settings, status line, all of it.
+
+What you lose without GitHub:
+
+- The `gh` CLI integration (pull requests, issues, releases). Not relevant if you don't work in code.
+- The `/batch` skill, which requires a git repo - but you can `git init` a local folder without ever pushing to GitHub.
+
+**Recommendation:** if you don't use GitHub, still run `git init` inside your working folder. It gives Claude Code checkpoints and lets it run skills that expect a git repo, with zero need for a remote.
+
+**Sources:**
+- https://code.claude.com/docs/en/overview (verified 16-05-2026)
+- https://code.claude.com/docs/en/commands (verified 16-05-2026)
+
+---
+
+## Q13: Claude Code inside the IDE's integrated terminal vs Claude Code in a separate external terminal - what's the actual difference?
+
+**Short answer:** Functionally identical. Pick based on workflow ergonomics, not capability.
+
+Both run the same `claude` binary, get the same PATH, same auth, same MCP config, same skills, same global `CLAUDE.md`. Anything you can do in one, you can do in the other.
+
+What changes is **ergonomics**:
+
+| Aspect | IDE integrated terminal | External terminal |
+|--------|------------------------|-------------------|
+| File diffs | Renders inline in the IDE via the Claude Code IDE extension | Shown as text in the terminal |
+| Open files | IDE extension can auto-share your current selection / open tab with Claude | No automatic context from your editor |
+| `@-mention` files | Tab-completes against the IDE's workspace | Tab-completes from the shell's working directory |
+| Window switching | One window, side-by-side with code | Two windows to alt-tab between |
+| Screen space | Shares space with editor | Full terminal width |
+| Multiple sessions | One per integrated terminal pane | Easier to run many in `tmux` / iTerm tabs |
+
+**Practical rule:** use the IDE-integrated terminal when you want tight feedback loops on code changes (you see the diff land in the file as Claude writes it). Use an external terminal when you want full screen real estate, multiple parallel sessions, or you're working on non-code files (specs, notes) where IDE integration adds little.
+
+**Sources:**
+- https://code.claude.com/docs/en/vs-code (verified 16-05-2026)
+- https://code.claude.com/docs/en/setup (verified 16-05-2026)

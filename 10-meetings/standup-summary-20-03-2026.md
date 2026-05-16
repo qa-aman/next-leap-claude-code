@@ -1,45 +1,45 @@
 # Standup Summary - 20-03-2026
 
-**Sprint context:** Day 4 of Action Item Confidence Scoring v2 sprint
-**Attendees:** PM (me), Kai, Remi, Yuki, Priscilla, Dev, Noor. Priscilla joined late.
+**Sprint context:** Day 4 of Action Item Confidence Scoring v2 sprint (17-03-2026 to 28-03-2026)
+**Attendees:** PM, Kai, Remi, Yuki, Priscilla, Dev, Noor. Priscilla joined late.
 
 ## TL;DR
-- Smart Follow-Up April launch is at risk if sprint slips past 28-03-2026. PM will pre-decide a scope cut by 24-03-2026.
-- Remi's implicit commitments model is catching ~78% (up from 61%), but the conditional actions corpus may be ~15% mislabeled and needs a spot check before the 36-hour training run kicks off.
-- Scoring v2 API contract is signed off and in main a day ahead of schedule, unblocking Priscilla's backend work.
+- Conditional actions corpus may be ~15% mislabeled; Remi spot-checking before the 36-hour training run kicks off this afternoon.
+- API contract for scoring v2 landed a day early, unblocking Priscilla's backend work on the suggested action items endpoint.
+- Smart Follow-Up April launch at risk if 28-03 slips; PM driving a pre-emptive scope cut decision by Tuesday 24-03.
 
 ## Progress by person
 | Person | Yesterday | Today | Blockers |
 |--------|-----------|-------|----------|
-| PM (me) | Signed off scoring v2 API contract, reviewed H/M/L Figma with Noor, pulled ~1,200 conditional action examples with Yuki | 11am eval review with Remi, draft 10/50/GA rollout plan PR, pair with Dev on confirm/dismiss UI copy | None |
-| Kai | Shipped API contract to main, posted wiki doc in channel | Scope retraining automation work for next quarter | None |
-| Remi | Implicit commitments model tweaks done, sanity check on 100 examples at ~78% (up from 61%) | Spot check corpus for mislabels, then kick off 36-hour training run after lunch | Conditional actions corpus may be ~15% mislabeled |
-| Yuki | Wrapped corpus pull (~1,200 examples) | Start multi-person item extraction (speaker attribution rewrite), heads down | None |
-| Priscilla | Pipeline doc 70% done | Finish pipeline doc, then start backend for suggested action items endpoint | None (API contract now in main) |
-| Dev | Wireframed UI states for suggested action items | Start coding UI states, pair with PM on confidence card copy | Waiting on Noor's dismiss state spec |
-| Noor | Polished H/M/L cards, decided dismiss interaction | Hand off dismiss spec to Dev by 4pm, continue card polish | None |
+| PM | Signed off on Kai's API contract; reviewed Noor's High/Medium/Low Figma; pulled 1,200 conditional action examples with Yuki | 11am eval review with Remi; draft rollout plan (10% Pro → 50% → GA) PR in 08-product-features/; pair with Dev on confirm/dismiss copy | None |
+| Kai | Shipped API contract to main, linked wiki doc | Scope retraining automation work for next quarter | None |
+| Remi | Implicit commitments tweaks done; sanity check on 100 examples catching ~78% (up from 61%) | Spot check conditional actions corpus; kick off training run after lunch (pending eval review) | Corpus noise risk (~15% mislabeled) |
+| Yuki | Wrapped conditional actions corpus pull (~1,200 examples) | Start multi-person item extraction; rewrite speaker attribution logic | None (out Friday afternoon, dentist) |
+| Priscilla | Pipeline doc 70% done | Finish pipeline doc; start backend for suggested action items endpoint | None (API contract now in main) |
+| Dev | Wireframed UI states for suggested action items | Start coding UI states; copy review with PM on confidence card | Waiting on Noor to finalize dismiss state interaction (button vs swipe) |
+| Noor | Polished High/Medium/Low cards | Hand off dismiss spec to Dev; continue card polish | None |
 
 ## Blockers and risks
-- Conditional actions corpus may be ~15% mislabeled, owner: Remi, needs: spot check before training run kicks off after lunch
-- Smart Follow-Up April launch at risk if sprint end (28-03-2026) slips by 2+ days, owner: PM (me), needs: pre-decided scope cut by 24-03-2026
-- Dev blocked on dismiss state interaction spec, owner: Noor, needs: handoff by 4pm today (on track)
-- 36-hour training run means a bad eval set costs a full sprint day, owner: PM + Remi, needs: tight eval review at 11am
+- Conditional actions corpus may be ~15% mislabeled, owner: Remi, needs: spot check before training run kicks off this afternoon
+- Dev blocked on dismiss state interaction spec, owner: Noor, needs: handoff by 4pm today
+- Smart Follow-Up April launch at risk if 28-03 slips by even 2 days, owner: PM, needs: scope cut decision by 24-03
 
 ## Decisions made
-- Dismiss state will use a button this sprint; swipe deferred to v2.1, decided by: Noor
-- Scoring v2 API contract finalized and merged to main, decided by: Kai + PM
+- Dismiss state = button this sprint; swipe deferred to v2.1, decided by: Noor
+- API contract for scoring v2 approved as-is (no major changes), decided by: PM
+- Rollout plan shape: 10% Pro cohort → 50% → GA, decided by: PM (draft to be PR'd today)
 
 ## Action items
-Every item must include both an owner and a due date. Due date is in DD-MM-YYYY, with an optional time qualifier in parentheses.
-
-- [ ] Pre-decide scope cut for Smart Follow-Up April launch, owner: PM (me), due: 24-03-2026
-- [ ] Spot check conditional actions corpus quality before training run, owner: Remi, due: 20-03-2026 (before lunch)
-- [ ] Run eval review with Remi before training kicks off, owner: PM (me), due: 20-03-2026 (11am)
-- [ ] Pair with Dev on confirm/dismiss UI copy, owner: PM (me) + Dev, due: 20-03-2026 (after lunch)
+- [ ] Spot check conditional actions corpus for mislabels, owner: Remi, due: 20-03-2026 (before lunch)
+- [ ] Walk through eval set with Remi, owner: PM, due: 20-03-2026 (11am)
+- [ ] Kick off 36-hour training run, owner: Remi, due: 20-03-2026 (after lunch)
+- [ ] Draft rollout plan PR in 08-product-features/, owner: PM, due: 20-03-2026 (EOD)
+- [ ] Pair with Dev on confirm/dismiss UI copy, owner: PM, due: 20-03-2026 (after lunch)
 - [ ] Hand off dismiss state spec to Dev, owner: Noor, due: 20-03-2026 (4pm)
-- [ ] Draft 10% / 50% / GA rollout plan PR in 08-product-features/, owner: PM (me), due: 20-03-2026 (EOD)
+- [ ] Finish pipeline doc, owner: Priscilla, due: 20-03-2026
+- [ ] Pre-decide Smart Follow-Up scope cut, owner: PM, due: 24-03-2026
 
 ## Callouts
-- Yuki out Friday afternoon 27-03-2026 (dentist).
-- Training run is 36 hours, so any issue in the 11am eval review eats a full day of the sprint.
-- Priscilla joined standup late (kid's school).
+- Yuki out Friday afternoon (dentist); heads-down on speaker attribution rewrite until then
+- Priscilla joined late (kid's school thing)
+- Smart Follow-Up April launch is the looming risk shaping this sprint's scope decisions

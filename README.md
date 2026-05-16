@@ -26,16 +26,16 @@ The repo follows the PM lifecycle from research to shipping. Each folder is a st
 
 | Folder | Stage | What's inside |
 |--------|-------|---------------|
-| `01-setup/` | Setup | Installation guides, integration setup (Jira) |
-| `02-presentation/` | Workshop | Session slides (PPTX) |
+| `01-setup/` | Setup | Mac and Windows install guides, Atlassian integration setup, guided prompts |
+| `02-presentation/` | Workshop | Session slides (PPTX) and live Q&A reference |
 | `03-product-knowledge/` | Understand | Company overview, product details, competitive landscape, tech stack |
 | `04-strategy/` | Plan | Product vision, Q2 2026 OKRs |
 | `05-user-personas/` | Research | Sarah Chen, Marcus Okafor, Priya Nair - three persona deep dives |
 | `06-user-feedback/` | Research | Q1 2026 NPS survey results |
 | `07-user-interviews/` | Research | 4 user interview transcripts |
-| `08-product-features/` | Build | PRD and user stories for Smart Follow-Up |
+| `08-product-features/` | Build | Smart Follow-Up PRD, change log, and user stories |
 | `09-release-notes/` | Ship | Release notes for Smart Summaries v2.4 |
-| `10-meetings/` | Communicate | Sprint planning and stakeholder sync notes |
+| `10-meetings/` | Communicate | Sprint planning, stakeholder sync, daily standup, and standup summary |
 | `11-sprint/` | Execute | Sprint backlog and retrospective |
 | `12-project-tracking/` | Track | Weekly status report with traffic-light format |
 | `13-teams/` | Organize | Team structure and RACI chart |
@@ -69,9 +69,10 @@ Start Claude Code (`claude`) in this directory, then try:
 ## Key Files
 
 - **CLAUDE.md** - Project context Claude reads every session. Start here.
-- **.claude/rules/** - Path-specific rules that load automatically when working with matching files.
-- **.claude/skills/** - Reusable skills (feature-spec, pptx-editor).
+- **.claude/rules/** - Path-specific rules that load automatically: `feature-writing`, `outputs`, `product-knowledge`, `prompt-writing`, `user-research`.
+- **.claude/skills/** - 35+ PM skills covering the full lifecycle: discovery (`product-discovery`, `discovery-interview-prep`, `opportunity-solution-tree`), strategy (`okr-writer`, `product-thinking`, `competitive-analysis`, `prioritization`), specs (`write-prd`, `feature-spec`, `write-user-stories`, `epic-breakdown`, `spec-reviewer`, `technical-review`, `compliance-auditor`), delivery (`jira-ticket-creator`, `standup-summary`, `retro-synthesizer`, `risk-register`, `stakeholder-update`, `release-notes-writer`, `go-to-market-checklist`), and content (`ppt-builder`, `pptx-editor`, `flowchart`, `email-drafter`, `md-to-confluence`, `confluence-to-md`, `youtube-transcript`).
 - **14-templates/** - Blank templates for every PM artifact in this repo.
+- **02-presentation/q&a.md** - Curated Q&A from live workshop sessions.
 
 ## Integrations
 

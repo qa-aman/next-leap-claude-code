@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(afplay *)",
+      "mcp__claude_ai_Granola__get_meeting_transcript",
+      "mcp__claude_ai_Granola__query_granola_meetings",
+      "mcp__plugin_chrome-devtools-mcp_chrome-devtools__take_screenshot"
+    ]
+  }
+}

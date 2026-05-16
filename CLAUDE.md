@@ -41,6 +41,22 @@ Workshop workspace for the "Claude Code for PMs" course. It contains realistic p
 - Cite which file a number or quote came from.
 - Ask before writing more than 500 words.
 - Path-specific rules live in `.claude/rules/` and load automatically when working with matching files.
+- When the user asks to "create a prompt", "write a prompt", "draft a prompt", or "review a prompt", read `.claude/rules/prompt-writing.md` first and apply its rubric. Self-score to >95/100 before delivering. Do not dispatch a subagent for review.
+
+## Time Convention
+
+This workshop is set in a fictional "now" of **17-03-2026**.
+
+- All dates across the repo (sprint dates, launch dates, OKR quarters, feedback timestamps, meeting notes) are anchored to this fictional today.
+- When reasoning about "current", "today", "upcoming", "this sprint", or "next quarter", use **17-03-2026** as today, not the real system date or any date from memory.
+- Concrete anchors that follow from this:
+  - Active sprint: 17-03-2026 to 28-03-2026 (Action Item Confidence Scoring v2)
+  - Smart Follow-Up launch: April 2026 (~3 weeks out)
+  - Salesforce integration: May 2026 (~7 weeks out)
+  - Enterprise Tier GA + Transcript Accuracy v2: June 2026 (~12 weeks out)
+  - Q1 2026 feedback survey is a historical artifact, not "recent" beyond the anchor.
+- **Refresh recipe for future cohorts:** to make the repo feel fresh for a new session, change only the anchor date above and update the four concrete anchors above proportionally. Do not rewrite individual docs - the relative framing handles it.
+- Date format everywhere is DD-MM-YYYY.
 
 ## Quick Tasks
 

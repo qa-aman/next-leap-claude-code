@@ -10,57 +10,68 @@ Step-by-step guide to install and configure Claude Code on Windows.
 
 Before you start, make sure you have:
 
-1. **Windows 10 (version 1809+) or Windows 11** - Press `Win + I` > System > About to check
+1. **Windows 10 or Windows 11** - Press `Win + I` > System > About to check
 2. **4 GB+ RAM** - Any modern PC meets this
 3. **Internet connection** - Required throughout setup and usage
 4. **A Claude subscription** - Pro, Max, Teams, or Enterprise. The free Claude.ai plan does not include Claude Code access. Subscribe at https://claude.com/pricing
 
 ---
 
-## Section 1: Install Git for Windows (Required)
-
-Claude Code on Windows requires Git for Windows. It uses Git Bash internally to run commands.
-
-1. Go to https://git-scm.com/downloads/win
-2. Download the installer for your system (64-bit for most machines)
-3. Run the installer
-4. Accept the default settings through the wizard - the defaults work fine
-5. Click Install, then Finish
-
-**To verify Git is installed:**
-
-1. Press `Win + R`, type `cmd`, press Enter
-2. Type:
-
-```
-git --version
-```
-
-You should see something like `git version 2.47.0.windows.1`.
-
----
-
-## Section 2: Open PowerShell
+## Section 1: Open PowerShell
 
 1. Press `Win + S` (or click the search bar)
 2. Type `PowerShell`
-3. Click "Windows PowerShell" (you do NOT need to run as Administrator)
+3. Click **"Windows PowerShell"** (you do NOT need to run as Administrator)
 
 A blue PowerShell window opens with a command prompt.
 
+> **Important: pick the 64-bit PowerShell, not the x86 one.**
+> The search results may show two entries: `Windows PowerShell` and `Windows PowerShell (x86)`.
+> Always pick the one **without** `(x86)`. The x86 version is 32-bit, and Claude Code does not support 32-bit Windows. If you accidentally install from the x86 PowerShell, you will see an error like:
+>
+> ```
+> Claude Code does not support 32-bit Windows. Please use the 64-bit version.
+> ```
+>
+> Close that window, search again, and pick the entry **without** `(x86)`.
+
 ---
 
-## Section 3: Install Claude Code (Native Install - Recommended)
+## Section 2: Install Claude Code (Native Install - Recommended)
 
-In PowerShell, run:
+Run all three steps below in order. Steps 1 and 2 run in the same PowerShell window. Step 3 runs in a fresh window.
+
+### Step 1: Download and install Claude Code
+
+In the open PowerShell window, run:
 
 ```powershell
 irm https://claude.ai/install.ps1 | iex
 ```
 
-This downloads and installs Claude Code. The native installer requires no dependencies (no Node.js, no npm). It auto-updates in the background.
+This downloads and installs Claude Code. The native installer requires no dependencies (no Node.js, no npm). It auto-updates in the background. **Wait for the installation to complete** before continuing. You should see a success message.
 
-**Wait for the installation to complete.** You should see a success message.
+### Step 2: Add Claude to your User PATH
+
+The installer drops the `claude` binary into `C:\Users\<YourName>\.local\bin`, but on most Windows machines that folder is not yet in your User PATH, so typing `claude` will not work until you add it. In the **same PowerShell window**, run:
+
+```powershell
+[Environment]::SetEnvironmentVariable("PATH", [Environment]::GetEnvironmentVariable("PATH", "User") + ";$HOME\.local\bin", "User")
+```
+
+This appends the install location to your User PATH and saves it permanently. The command prints nothing on success - that is expected.
+
+### Step 3: Open a new PowerShell and verify
+
+PATH changes only take effect in **new** PowerShell windows. Close the current PowerShell window completely, then open a fresh one (`Win + S` > type `PowerShell` > Enter) and run:
+
+```powershell
+claude --help
+```
+
+You should see the Claude Code help output listing all available commands. If you see `The term 'claude' is not recognized...`, Step 2 did not save (see Troubleshooting at the bottom).
+
+---
 
 ### Alternative: Install via CMD
 
@@ -85,27 +96,23 @@ Note: WinGet installations do not auto-update. Run `winget upgrade Anthropic.Cla
 
 ---
 
-## Section 4: Verify the Installation
+## Section 3: Run Detailed Diagnostics
 
-Close PowerShell and reopen it (to pick up the new PATH entry), then run:
+You already ran `claude --help` in Step 3 of Section 2, so the install is verified. For a deeper diagnostic of your installation and configuration, run:
 
 ```powershell
 claude --version
 ```
 
-You should see a version number printed (e.g., `2.0.30`).
-
-For a more detailed check:
-
 ```powershell
 claude doctor
 ```
 
-This runs diagnostics on your installation and configuration.
+`claude doctor` runs a full health check (subscription status, PATH, dependencies, IDE integration). You can also run `/doctor` from inside an active Claude Code session at any time.
 
 ---
 
-## Section 5: Start Claude Code and Log In
+## Section 4: Start Claude Code and Log In
 
 1. In PowerShell, navigate to any project folder (or stay in your user directory):
 
@@ -120,16 +127,18 @@ claude
 ```
 
 3. **First-time login flow:**
+   - When prompted, select **"Claude account with subscription"** (not the API key option)
    - Claude Code will open your default browser automatically
    - If the browser does not open, press `c` in the terminal to copy the login URL, then paste it into your browser manually
    - Log in with your Claude.ai account (Pro, Max, Teams, or Enterprise)
    - After successful login, return to PowerShell - Claude Code is now authenticated
+   - On first launch, Claude Code asks you to pick a **terminal text style** (light or dark theme). Choose whichever matches your terminal background
 
 Your credentials are stored in `~\.claude\.credentials.json`. You will not need to log in again unless you explicitly log out.
 
 ---
 
-## Section 6: Confirm Everything Works
+## Section 5: Confirm Everything Works
 
 You should now see the Claude Code welcome screen. It shows:
 - Your session information
@@ -146,7 +155,7 @@ Claude will respond with its capabilities. You are now ready to use Claude Code.
 
 ---
 
-## Section 7: Essential Commands to Know
+## Section 6: Essential Commands to Know
 
 | Command | What it does |
 |---------|-------------|
@@ -161,7 +170,7 @@ Claude will respond with its capabilities. You are now ready to use Claude Code.
 
 ---
 
-## Section 8: Using Claude Code in a Project
+## Section 7: Using Claude Code in a Project
 
 To use Claude Code on a real project:
 
@@ -188,7 +197,7 @@ Claude Code reads your project files automatically. You do not need to manually 
 
 ---
 
-## Section 9: Install the Antigravity IDE Extension (Optional)
+## Section 8: Install the Antigravity IDE Extension (Optional)
 
 If you use Google Antigravity IDE (built on VS Code's extension ecosystem):
 
@@ -202,7 +211,7 @@ This gives you inline diffs, @-mentions, and conversation history directly in yo
 
 ---
 
-## Section 10: Install the Desktop App (Optional)
+## Section 9: Install the Desktop App (Optional)
 
 If you prefer a graphical interface over the terminal:
 
@@ -218,7 +227,7 @@ The Desktop App works alongside PowerShell/CMD. Your settings and CLAUDE.md file
 
 ---
 
-## Section 11: Git Bash Path Troubleshooting
+## Section 10: Git Bash Path Troubleshooting
 
 If Claude Code cannot find your Git Bash installation, you need to set the path manually.
 
@@ -237,7 +246,7 @@ If Git is installed in a non-default location, adjust the path accordingly.
 
 ---
 
-## Section 12: Alternative - Using WSL (Windows Subsystem for Linux)
+## Section 11: Alternative - Using WSL (Windows Subsystem for Linux)
 
 If you prefer a Linux environment on Windows:
 
@@ -257,6 +266,32 @@ curl -fsSL https://claude.ai/install.sh | bash
 ```
 
 Both WSL 1 and WSL 2 are supported. WSL 2 additionally supports sandboxing for enhanced security.
+
+---
+
+## Section 12: Install Git for Windows (Optional)
+
+**You do not need this to complete the workshop.** Claude Code on Windows installs and runs without Git for Windows. This setup guide has been verified end-to-end on a Windows machine that did not have Git for Windows installed.
+
+**What you lose by skipping it:**
+Per the [official Claude Code setup doc](https://code.claude.com/docs/en/setup), "Git for Windows is recommended on native Windows so Claude Code can use the Bash tool. If Git for Windows is not installed, Claude Code uses PowerShell as the shell tool instead." That fallback covers most workflows. The only commands that may misbehave under PowerShell-only are skills or scripts that assume Unix shell behavior (`grep`, `awk`, piped chains, shell scripts).
+
+**Install it later if you need it:**
+
+1. Go to https://git-scm.com/downloads/win
+2. Download the 64-bit installer (default for most machines)
+3. Run the installer and accept the defaults through the wizard
+4. Click Install, then Finish
+
+**Verify Git is installed:**
+
+```
+git --version
+```
+
+You should see something like `git version 2.47.0.windows.1`.
+
+If Claude Code cannot find your Git Bash installation after install, see Section 10 (Git Bash Path Troubleshooting) for the manual path setting.
 
 ---
 
@@ -306,7 +341,8 @@ Remove-Item -Path "$env:USERPROFILE\.claude.json" -Force
 
 | Problem | Solution |
 |---------|----------|
-| `claude: command not recognized` | Close and reopen PowerShell to pick up the updated PATH. If the issue persists, restart your computer - the installer automatically updates PATH settings |
+| `Claude Code does not support 32-bit Windows. Please use the 64-bit version.` | You launched the x86 (32-bit) PowerShell. Close it. Press `Win + S`, type `PowerShell`, and pick the entry labeled **"Windows PowerShell"** without the `(x86)` suffix. Re-run the install command from the 64-bit window |
+| `claude: command not recognized` / `The term 'claude' is not recognized...` | Your User PATH is missing `C:\Users\<YourName>\.local\bin`. Run this in PowerShell, then open a fresh PowerShell window: `[Environment]::SetEnvironmentVariable("PATH", [Environment]::GetEnvironmentVariable("PATH", "User") + ";$HOME\.local\bin", "User")`. If you prefer the GUI: System Properties > Environment Variables > Edit User PATH > New > `%USERPROFILE%\.local\bin`, then restart PowerShell |
 | Browser does not open on login | Press `c` to copy the login URL, paste it in your browser |
 | Subscription required / authentication fails | Verify you have an active Claude Pro or Max subscription at https://claude.ai. Log out and log back in to refresh credentials |
 | Node version too old | Run `node --version` to check. If below v18.0.0, download the latest LTS version from https://nodejs.org |

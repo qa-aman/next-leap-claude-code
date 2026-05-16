@@ -68,7 +68,7 @@ For a more detailed check:
 claude doctor
 ```
 
-This runs diagnostics on your installation and configuration.
+This runs diagnostics on your installation and configuration. You can also run `/doctor` from inside an active Claude Code session to check installation integrity, subscription status, and system configuration at any time.
 
 ---
 
@@ -87,10 +87,12 @@ claude
 ```
 
 3. **First-time login flow:**
+   - When prompted, select **"Claude account with subscription"** (not the API key option)
    - Claude Code will open your default browser automatically
    - If the browser does not open, press `c` in the terminal to copy the login URL, then paste it into your browser manually
    - Log in with your Claude.ai account (Pro, Max, Teams, or Enterprise)
    - After successful login, return to the terminal - Claude Code is now authenticated
+   - On first launch, Claude Code asks you to pick a **terminal text style** (light or dark theme). Choose whichever matches your terminal background
 
 Your credentials are stored securely in the macOS Keychain. You will not need to log in again unless you explicitly log out.
 

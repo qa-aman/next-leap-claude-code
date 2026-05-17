@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Five Agent Patterns via /agents - MeetFlow Workshop</title>
+<style>
+  :root {
+    --bg: #0f0f10;
+    --panel: #1a1a1d;
+    --panel-2: #232327;
+    --border: #2e2e33;
+    --text: #ececec;
+    --muted: #9a9aa0;
+    --accent: #f08a24;
+    --accent-soft: #f08a2420;
+    --code-bg: #141416;
+    --green: #4ade80;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.65;
+    font-size: 16px;
+  }
+  .container { max-width: 920px; margin: 0 auto; padding: 48px 32px 96px; }
+  header { border-bottom: 2px solid var(--accent); padding-bottom: 24px; margin-bottom: 40px; }
+  header .eyebrow {
+    color: var(--accent); font-size: 13px; letter-spacing: 1.5px;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
+  }
+  h1 { font-size: 36px; margin: 0 0 12px; line-height: 1.2; }
+  h2 { font-size: 26px; margin: 56px 0 16px; padding-top: 32px; border-top: 1px solid var(--border); }
+  h3 { font-size: 18px; margin: 24px 0 10px; color: var(--accent); }
+  h4 { font-size: 14px; margin: 20px 0 8px; color: var(--text); text-transform: uppercase; letter-spacing: 0.8px; }
+  p { margin: 12px 0; color: var(--text); }
+  .muted { color: var(--muted); }
+  .lead { font-size: 18px; color: var(--muted); }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  a:hover { border-bottom-style: solid; }
+  code {
+    font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+    font-size: 13.5px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #f4d6a8;
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  pre code { background: none; border: none; padding: 0; color: var(--text); font-size: 13px; }
+  .pattern {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 32px 0;
+  }
+  .pattern-num {
+    display: inline-block;
+    background: var(--accent);
+    color: #000; font-weight: 700;
+    padding: 4px 12px; border-radius: 4px;
+    font-size: 13px; letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .pattern h2 { margin-top: 0; padding-top: 0; border-top: none; font-size: 28px; }
+  .callout {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-radius: 4px;
+  }
+  .callout strong { color: var(--accent); }
+  .wizard-step {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 10px 0;
+  }
+  .wizard-step.tight { padding: 10px 16px; }
+  .wizard-step-head {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 8px;
+  }
+  .wizard-step.tight .wizard-step-head { margin-bottom: 0; }
+  .wizard-step-num {
+    background: var(--accent); color: #000;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px;
+    flex-shrink: 0;
+  }
+  .wizard-step.tight .wizard-step-num {
+    width: 24px; height: 24px; font-size: 12px;
+  }
+  .wizard-prompt {
+    color: var(--muted);
+    font-style: italic;
+    font-size: 14px;
+  }
+  .you-pick {
+    background: var(--code-bg);
+    border: 1px dashed var(--accent);
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 8px 0;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 13px;
+    color: var(--green);
+  }
+  .you-pick strong { color: var(--accent); }
+  .quick-do {
+    color: var(--text);
+    font-size: 14px;
+  }
+  .quick-do strong { color: var(--accent); }
+  ul, ol { padding-left: 22px; }
+  ul li, ol li { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
+  th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; vertical-align: top; }
+  th { background: var(--panel-2); color: var(--accent); font-weight: 600; }
+  .checkbox-list { list-style: none; padding-left: 0; }
+  .checkbox-list li { padding-left: 28px; position: relative; margin: 10px 0; }
+  .checkbox-list li::before {
+    content: "☐"; position: absolute; left: 0; top: 0;
+    color: var(--accent); font-size: 18px;
+  }
+  .tag {
+    display: inline-block;
+    background: var(--panel-2);
+    color: var(--muted);
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-right: 6px;
+    border: 1px solid var(--border);
+  }
+  .tag.green { color: var(--green); border-color: var(--green); }
+  .footer {
+    margin-top: 64px; padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--muted); font-size: 14px;
+  }
+  hr.divider { border: none; border-top: 1px dashed var(--border); margin: 28px 0; }
+  .toc {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 28px;
+    margin: 24px 0 40px;
+  }
+  .toc h3 { margin-top: 0; color: var(--text); font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
+  .toc ol { margin: 12px 0 0; }
+  .toc a { border-bottom: none; color: var(--text); }
+  .toc a:hover { color: var(--accent); }
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 6px;
+    margin: 8px 0;
+  }
+  .tool-pill {
+    background: var(--code-bg);
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 12px;
+    text-align: center;
+  }
+  .tool-pill.off {
+    border-color: var(--border);
+    color: var(--muted);
+  }
+  .color-swatch {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-right: 6px;
+    border: 1px solid var(--border);
+  }
+  .wizard-block {
+    margin: 18px 0;
+  }
+  .wizard-block-title {
+    color: var(--accent);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="eyebrow">Claude Code for PMs — Hands-on Lab</div>
+  <h1>Build Five Agents Using the <code>/agents</code> Command</h1>
+  <p class="lead">No file editing. No copy-pasting Markdown. Open Claude Code, type <code>/agents</code>, and follow the 7-screen wizard. By the end of this handout you'll have built nine subagents across five workflow patterns.</p>
+  <p class="muted" style="font-size: 13px; margin-top: 12px;">Reference: <a href="https://code.claude.com/docs/en/sub-agents#quickstart-create-your-first-subagent">Anthropic's official subagents quickstart</a>. This handout adapts the same flow for MeetFlow.</p>
+</header>
+
+<div class="toc">
+  <h3>What you will build</h3>
+  <ol>
+    <li><a href="#prompt-chaining">Prompt Chaining → <strong>interview-insight-synthesizer</strong></a></li>
+    <li><a href="#routing">Routing → <strong>pm-request-router</strong> (+ 3 specialists)</a></li>
+    <li><a href="#parallelization">Parallelization → <strong>feedback-triangulator</strong></a></li>
+    <li><a href="#orchestrator-workers">Orchestrator-Workers → <strong>competitor-deep-dive</strong></a></li>
+    <li><a href="#evaluator-optimizer">Evaluator-Optimizer → <strong>prd-quality-loop</strong> (+ critic)</a></li>
+  </ol>
+</div>
+
+<!-- ============================================ -->
+<!-- HOW THE WIZARD WORKS                          -->
+<!-- ============================================ -->
+<h2 id="how-the-wizard-works">The <code>/agents</code> wizard — 7 screens</h2>
+
+<p>Every agent you build goes through these seven screens, in this order:</p>
+
+<table>
+<thead><tr><th>#</th><th>Screen</th><th>What you do</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Open subagents interface</td><td>Run <code>/agents</code> in Claude Code chat</td></tr>
+<tr><td>2</td><td>Location</td><td><strong>Library</strong> tab → <strong>Create new agent</strong> → pick <strong>Project</strong></td></tr>
+<tr><td>3</td><td>Generate with Claude</td><td>Paste a paragraph describing the agent. Claude scaffolds identifier, description, system prompt</td></tr>
+<tr><td>4</td><td>Select tools</td><td>Multi-select. Pick only what the agent needs</td></tr>
+<tr><td>5</td><td>Select model</td><td><strong>Sonnet</strong> for all five patterns</td></tr>
+<tr><td>6</td><td>Choose a color</td><td>Any color — helps you spot which agent is running</td></tr>
+<tr><td>7</td><td>Configure memory</td><td><strong>None</strong> — workshop agents are stateless</td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+<strong>For every agent below</strong>, screens <strong>1, 2, 5, 7</strong> are identical (run <code>/agents</code> → Library tab → Create new agent → Project; pick Sonnet; memory None). What changes per agent is screen <strong>3</strong> (the description you paste), screen <strong>4</strong> (which tools to check), and screen <strong>6</strong> (a suggested color). Each agent section below shows you all 7 screens so nothing feels skipped.
+</div>
+
+<div class="callout">
+<strong>Why Project (not Personal).</strong> Project saves the agent inside this repo's <code>.claude/agents/</code> — it gets committed and shared with the cohort. Personal saves to your global folder. Use Project for workshop agents.
+</div>
+
+<div class="callout">
+<strong>Why memory = None.</strong> Memory makes an agent accumulate insights across runs. Useful for a real long-running reviewer. Bad for a workshop, because every student's agent would slowly drift. None keeps outputs reproducible and predictable.
+</div>
+
+<hr class="divider">
+
+<!-- ============================================ -->
+<!-- 1. PROMPT CHAINING                            -->
+<!-- ============================================ -->
+<div class="pattern" id="prompt-chaining">
+<span class="pattern-num">PATTERN 01</span>
+<h2>Prompt Chaining</h2>
+<p class="lead">Decompose a task into sequential stages. Each stage has a quality gate before moving on.</p>
+
+<h3>The agent: <code>interview-insight-synthesizer</code></h3>
+<p>Reads every transcript in <code>07-user-interviews/</code> and produces a ranked synthesis brief. Chains four stages: extract pains → cluster into themes → rank by frequency → write the brief.</p>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> type <code>/agents</code> in Claude Code chat</div></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library tab → Create new agent → <strong>Project</strong></div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
+<pre><code>A user-research synthesis agent named "interview-insight-synthesizer" for
+MeetFlow. It reads every transcript in 07-user-interviews/ and produces a
+ranked synthesis brief.
+
+The agent MUST work in four sequential stages with a quality gate between each:
+
+STAGE 1 — Extract raw pains: use Glob to list all files in 07-user-interviews/,
+read each transcript, extract every distinct user pain, frustration, or unmet
+need. Output as a list: { interview: filename, pains: [...] }.
+Gate: if fewer than 3 pains per interview, re-read that interview.
+
+STAGE 2 — Cluster into themes: group all pains into 4-7 themes based on
+semantic similarity. Gate: no theme may have only 1 pain (merge singletons).
+
+STAGE 3 — Rank by frequency and severity: count how many distinct interviews
+mention each theme. Tag severity as workflow-breaker / annoyance / nice-to-fix.
+Produce a ranked table: theme | interview count | severity | top quote.
+
+STAGE 4 — Write the brief: save a 1-page Markdown synthesis to
+outputs/interview-synthesis-DD-MM-YYYY.md (DD-MM-YYYY format only).
+Structure: TL;DR (3 bullets) → top 3 themes (each with quote + count) →
+recommendations (1 line each).
+
+Rules: cite the interview filename for every quote. Never invent quotes.
+Always use DD-MM-YYYY date format.
+
+Use this agent when the user asks to synthesize user interviews, find common
+pain points, or build a research brief from interview transcripts.</code></pre>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools — check only these:</strong></div>
+<div class="tool-grid">
+  <div class="tool-pill">✓ Read</div>
+  <div class="tool-pill">✓ Glob</div>
+  <div class="tool-pill">✓ Write</div>
+  <div class="tool-pill off">Edit</div>
+  <div class="tool-pill off">Bash</div>
+  <div class="tool-pill off">WebFetch</div>
+  <div class="tool-pill off">Agent</div>
+</div>
+<p class="muted">No Agent tool needed — this pattern is single-agent.</p>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
+<div class="you-pick"><strong>Suggested:</strong> Blue <span class="color-swatch" style="background:#3b82f6;"></span></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
+</div>
+
+<h3>Test it</h3>
+<p>Back in chat: <em>"Synthesize the user interviews and tell me the top 3 frustrations."</em> Claude Code should dispatch this agent. Watch it move through all four stages and write the file to <code>outputs/</code>.</p>
+</div>
+
+
+<!-- ============================================ -->
+<!-- 2. ROUTING                                    -->
+<!-- ============================================ -->
+<div class="pattern" id="routing">
+<span class="pattern-num">PATTERN 02</span>
+<h2>Routing</h2>
+<p class="lead">One agent classifies the request, then dispatches to a specialist. Run the wizard four times — three specialists, then the router.</p>
+
+<div class="callout">
+<strong>Build order matters.</strong> Build 2A, 2B, and 2C before 2D. The router (2D) dispatches to specialists by name — if the specialists don't exist yet, the router will fail at runtime.
+</div>
+
+<h3>Agent 2A: <code>prd-drafter</code> (specialist 1)</h3>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
+<pre><code>A PRD writing agent named "prd-drafter" for MeetFlow. It writes a concise
+one-page PRD for a feature.
+
+Before writing, the agent reads 03-product-knowledge/company.md and
+04-strategy/product-vision.md for context.
+
+Output structure (Markdown, saved to outputs/):
+1. Problem (3 lines max, with one stat from 06-user-feedback/ or 07-user-interviews/)
+2. Target user (which persona from 05-user-personas/)
+3. Solution (5 bullets, no implementation detail)
+4. Success metric (1 metric with current baseline + target)
+5. Risks (top 3, concrete)
+6. Out of scope (top 3)
+
+Filename: outputs/prd-{feature-name}-DD-MM-YYYY.md
+
+Use this agent when the user asks for a feature spec, PRD, one-pager, or
+product requirements doc.</code></pre>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
+<div class="tool-grid">
+  <div class="tool-pill">✓ Read</div>
+  <div class="tool-pill">✓ Glob</div>
+  <div class="tool-pill">✓ Write</div>
+</div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
+<div class="you-pick"><strong>Suggested:</strong> Green <span class="color-swatch" style="background:#4ade80;"></span></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
+</div>
+
+
+<h3>Agent 2B: <code>competitor-snapshot</code> (specialist 2)</h3>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
+<pre><code>A quick competitive read agent named "competitor-snapshot" for MeetFlow.
+
+Before writing, read 03-product-knowledge/competitive.md for our existing
+intel on competitors.
+
+Output (Markdown, saved to outputs/competitor-snapshot-{name}-DD-MM-YYYY.md):
+1. Their positioning (1 line)
+2. Where they beat MeetFlow (3 bullets)
+3. Where MeetFlow beats them (3 bullets)
+4. One strategic implication for our roadmap
+
+Use this agent when the user asks for a competitor analysis, feature
+comparison, or positioning read on a specific competitor by name.</code></pre>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
+<div class="tool-grid">
+  <div class="tool-pill">✓ Read</div>
+  <div class="tool-pill">✓ Glob</div>
+  <div class="tool-pill">✓ Write</div>
+</div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
+<div class="you-pick"><strong>Suggested:</strong> Yellow <span class="color-swatch" style="background:#facc15;"></span></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
+</div>
+
+
+<h3>Agent 2C: <code>churn-diagnoser</code> (specialist 3)</h3>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
+<pre><code>A churn analysis agent named "churn-diagnoser" for MeetFlow. It diagnoses why
+users are leaving. Pro monthly churn is currently 4.1%.
+
+Reads: 06-user-feedback/ (Q1 survey), 07-user-interviews/ (qualitative), and
+03-product-knowledge/company.md (baseline).
+
+Output (Markdown, saved to outputs/churn-diagnosis-DD-MM-YYYY.md):
+1. Top 3 churn drivers, each with: evidence from at least 2 sources, source
+   files cited.
+2. Quick wins (things we could ship in &lt; 2 sprints)
+3. Structural fixes (things that require quarter-level work)
+
+Use this agent when the user asks about churn, retention, why users are
+leaving, or how to improve Pro stickiness.</code></pre>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
+<div class="tool-grid">
+  <div class="tool-pill">✓ Read</div>
+  <div class="tool-pill">✓ Glob</div>
+  <div class="tool-pill">✓ Write</div>
+</div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
+<div class="you-pick"><strong>Suggested:</strong> Red <span class="color-swatch" style="background:#f87171;"></span></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
+</div>
+
+
+<h3>Agent 2D: <code>pm-request-router</code> (the router)</h3>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
+<pre><code>A triage agent named "pm-request-router" for incoming PM requests on MeetFlow.
+
+The agent's ONLY job is classification and dispatch. It must NEVER answer the
+request itself.
+
+Workflow:
+1. Read the user's request.
+2. Classify into exactly one of: PRD, COMPETITOR, CHURN, UNCLEAR.
+3. State the classification out loud: "Classified as: X. Dispatching Y."
+4. Dispatch the matching specialist via the Agent tool:
+   - PRD → prd-drafter
+   - COMPETITOR → competitor-snapshot
+   - CHURN → churn-diagnoser
+5. Pass the user's original request verbatim to the specialist.
+6. If UNCLEAR, ask ONE clarifying question. Never guess.
+
+Use this agent FIRST for any open-ended PM request, or when the user says
+"help me with..." without specifying what they need.</code></pre>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
+<div class="tool-grid">
+  <div class="tool-pill">✓ Agent</div>
+  <div class="tool-pill">✓ Read</div>
+  <div class="tool-pill off">Glob</div>
+  <div class="tool-pill off">Write</div>
+</div>
+<p class="muted">The router must have the <code>Agent</code> tool — that's how it dispatches to specialists.</p>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
+<div class="you-pick"><strong>Suggested:</strong> Orange <span class="color-swatch" style="background:#f08a24;"></span></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
+</div>
+
+<h3>Test the routing</h3>
+<p>Try three requests and watch which specialist gets dispatched:</p>
+<ul>
+  <li><em>"Help me write a spec for Smart Follow-Up."</em> → PRD (green agent runs)</li>
+  <li><em>"How does Granola compare to us?"</em> → COMPETITOR (yellow agent runs)</li>
+  <li><em>"Why are Pro users leaving?"</em> → CHURN (red agent runs)</li>
+</ul>
+</div>
+
+
+<!-- ============================================ -->
+<!-- 3. PARALLELIZATION                            -->
+<!-- ============================================ -->
+<div class="pattern" id="parallelization">
+<span class="pattern-num">PATTERN 03</span>
+<h2>Parallelization</h2>
+<p class="lead">One agent fires three workers in parallel, then merges their outputs.</p>
+
+<h3>The agent: <code>feedback-triangulator</code></h3>
+<p>Reads three independent sources at once — interviews, Q1 survey, churn data — and surfaces issues that appear in MORE than one source.</p>
+
+<div class="callout">
+<strong>Parallelization vs Orchestrator-Workers (don't confuse them).</strong> Parallelization uses a FIXED set of workers — always the same three sources, no matter what the user asks. Orchestrator-Workers (Pattern 04) uses a DYNAMIC set — the agent picks which workers to spawn based on the input. Same parallel mechanics underneath, different decision-making.
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
+<pre><code>A triangulation agent named "feedback-triangulator" for MeetFlow that
+triangulates user feedback from three independent sources in parallel.
+
+Workflow:
+1. Dispatch THREE workers IN PARALLEL using the Agent tool. All three must be
+   dispatched in a SINGLE message — do not wait between dispatches. Use the
+   general-purpose subagent type for each.
+
+   Worker A prompt: "Read every file in 07-user-interviews/. Return the top
+   5 user issues. For each: title, 1-line description, source filename.
+   Do NOT read any other folder."
+
+   Worker B prompt: "Read 06-user-feedback/. Return the top 5 issues from the
+   Q1 2026 survey. For each: title, % of respondents, exact phrase used.
+   Do NOT read any other folder."
+
+   Worker C prompt: "Read 03-product-knowledge/company.md and any churn-
+   related files. Return the top 5 issues linked to Pro churn (currently
+   4.1% monthly). For each: title, evidence, source file."
+
+2. When all three return, find issues that appear in 2 or 3 sources
+   (triangulated). Rank them.
+
+3. Save to outputs/triangulated-feedback-DD-MM-YYYY.md with two sections:
+   - Triangulated issues (appears in 2+ sources) — these are top priorities.
+   - Source-specific issues (appears in only 1) — needs more investigation.
+
+Always cite source files. Use DD-MM-YYYY date format.
+
+Use this agent when the user wants a triangulated view of user feedback
+across multiple sources.</code></pre>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
+<div class="tool-grid">
+  <div class="tool-pill">✓ Agent</div>
+  <div class="tool-pill">✓ Read</div>
+  <div class="tool-pill">✓ Glob</div>
+  <div class="tool-pill">✓ Write</div>
+</div>
+<p class="muted">The <code>Agent</code> tool is what enables parallel dispatch.</p>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
+<div class="you-pick"><strong>Suggested:</strong> Purple <span class="color-swatch" style="background:#a855f7;"></span></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
+</div>
+
+<h3>Test it</h3>
+<p><em>"Triangulate the feedback. What's the top issue across sources?"</em> In Claude Code's UI you'll see three sub-agents running side by side — that's the parallel dispatch working.</p>
+</div>
+
+
+<!-- ============================================ -->
+<!-- 4. ORCHESTRATOR-WORKERS                       -->
+<!-- ============================================ -->
+<div class="pattern" id="orchestrator-workers">
+<span class="pattern-num">PATTERN 04</span>
+<h2>Orchestrator-Workers</h2>
+<p class="lead">The orchestrator decides which workers to spawn based on the input. Different inputs produce different worker sets.</p>
+
+<p class="muted">Unlike Routing (Pattern 02), which picks ONE specialist from a fixed menu, the orchestrator picks N workers — and the worker list changes per input. Unlike Parallelization (Pattern 03), which always dispatches the same fixed workers, the orchestrator decides the worker set at runtime.</p>
+
+<h3>The agent: <code>competitor-deep-dive</code></h3>
+<p>Given any competitor name, this agent picks 3-5 research angles that matter for THAT competitor, then spawns workers on those angles.</p>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
+<pre><code>A competitive intelligence orchestrator named "competitor-deep-dive" for
+MeetFlow. It runs deep competitive analysis on a named competitor.
+
+Workflow:
+1. Read 03-product-knowledge/competitive.md to learn what we already know
+   about this competitor.
+
+2. Decide which research angles matter for THIS specific competitor. Available
+   angles: Pricing &amp; packaging, Feature surface, User reviews (G2/Reddit/X),
+   Recent product launches (last 90 days), Funding &amp; team size, Positioning &amp;
+   ICP, Integration ecosystem.
+
+3. Pick 3-5 angles. Justify the pick out loud BEFORE dispatching. Example:
+   "For Granola, prioritizing Feature Surface, User Reviews, and Positioning
+   — they're a prosumer Mac-native play, so pricing matters less than design."
+
+4. Dispatch one worker per chosen angle IN PARALLEL via the Agent tool (use
+   the general-purpose subagent type). Each worker gets a focused prompt for
+   one angle only.
+
+5. When workers return, synthesize into
+   outputs/competitor-deepdive-{name}-DD-MM-YYYY.md. Structure: TL;DR →
+   Where they beat us → Where we beat them → Strategic implications for
+   MeetFlow (cite 04-strategy/product-vision.md).
+
+Rules: ALWAYS justify angle selection before dispatch. Workers must run in
+parallel (one message). Cite worker outputs in the final brief.
+
+Use this agent when the user wants a deep analysis of a specific competitor
+by name.</code></pre>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
+<div class="tool-grid">
+  <div class="tool-pill">✓ Agent</div>
+  <div class="tool-pill">✓ WebFetch</div>
+  <div class="tool-pill">✓ Read</div>
+  <div class="tool-pill">✓ Glob</div>
+  <div class="tool-pill">✓ Write</div>
+</div>
+<p class="muted">WebFetch lets workers pull from competitor sites if needed.</p>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
+<div class="you-pick"><strong>Suggested:</strong> Cyan <span class="color-swatch" style="background:#22d3ee;"></span></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
+</div>
+
+<h3>Test it twice</h3>
+<ul>
+  <li><em>"Deep dive on Granola."</em></li>
+  <li><em>"Deep dive on Fireflies."</em></li>
+</ul>
+<p>Verify the orchestrator picks <strong>different</strong> angles for each. If it picks the same angles for both, the orchestrator is being lazy — re-open <code>/agents</code>, edit this agent, and tighten the angle-selection rules.</p>
+</div>
+
+
+<!-- ============================================ -->
+<!-- 5. EVALUATOR-OPTIMIZER                        -->
+<!-- ============================================ -->
+<div class="pattern" id="evaluator-optimizer">
+<span class="pattern-num">PATTERN 05</span>
+<h2>Evaluator-Optimizer</h2>
+<p class="lead">Two agents in a feedback loop. One writes. One critiques. The writer revises until the critic is satisfied.</p>
+
+<div class="callout">
+<strong>Build order matters.</strong> Build 5A (the critic) first. The writer (5B) dispatches to the critic by name — if the critic doesn't exist yet, the writer's loop will fail.
+</div>
+
+<h3>Agent 5A: <code>prd-critic</code> (the critic)</h3>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
+<pre><code>A PRD critic agent named "prd-critic" that scores draft PRDs for MeetFlow
+against a strict 5-dimension rubric.
+
+You are a senior engineering manager. Be skeptical, specific, and brief.
+
+Rubric (score each 0-2, total out of 10):
+1. Problem clarity — is the problem stated with a real stat from real users?
+   (0 = no stat, 2 = specific number + source)
+2. User specificity — is the target user a named persona, not "users"?
+   (0 = generic, 2 = named persona with context)
+3. Solution scope — 5 bullets, no implementation detail, no scope creep?
+   (0 = jumbled, 2 = tight)
+4. Measurability — success metric with current baseline + target?
+   (0 = vague, 2 = both numbers)
+5. Risks — top 3 risks concrete and prioritized?
+   (0 = generic, 2 = specific)
+
+Output format:
+Score: X/10
+- Problem clarity: X/2 — [one-line reason]
+- User specificity: X/2 — [one-line reason]
+- Solution scope: X/2 — [one-line reason]
+- Measurability: X/2 — [one-line reason]
+- Risks: X/2 — [one-line reason]
+
+Top fixes (only if score &lt; 8):
+1. [specific change to make — name the exact section and exact fix]
+2. [specific change]
+3. [specific change]
+
+Rules: NEVER give a 10. There's always something. Be specific in fixes:
+not "make problem clearer" — say "add the 34% action item accuracy stat from
+04-strategy/product-vision.md."
+
+Use this agent only when dispatched by prd-quality-loop.</code></pre>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
+<div class="tool-grid">
+  <div class="tool-pill">✓ Read</div>
+</div>
+<p class="muted">Critic only needs Read — it scores a draft passed to it, no writing needed.</p>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
+<div class="you-pick"><strong>Suggested:</strong> Pink <span class="color-swatch" style="background:#ec4899;"></span></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
+</div>
+
+
+<h3>Agent 5B: <code>prd-quality-loop</code> (the writer + loop)</h3>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
+<pre><code>An iterative PRD writer agent named "prd-quality-loop" for MeetFlow. It
+writes engineering-ready PRDs using a critique loop with the prd-critic agent.
+
+Loop protocol:
+1. Read 04-strategy/product-vision.md and any relevant feedback/interview
+   files for context.
+2. Draft v1 of the PRD using the structure below.
+3. Dispatch the prd-critic agent via the Agent tool. Pass it the draft.
+4. Wait for the critic's score.
+5. If score &gt;= 8: write final to outputs/prd-{feature}-DD-MM-YYYY.md. Stop.
+6. If score &lt; 8: revise addressing EVERY critique point. Increment version.
+   Go to step 3.
+7. Max 3 iterations. If still &lt; 8 after 3, write the latest version plus a
+   "Remaining gaps" section at the top.
+
+PRD structure (every version):
+1. Problem (with 1 stat from real feedback)
+2. Target user (persona name from 05-user-personas/)
+3. Solution (5 bullets, no implementation detail)
+4. Success metric (current baseline + target)
+5. Risks (top 3)
+6. Out of scope (top 3)
+
+Rules:
+- After each critique, list which specific feedback points you addressed.
+- Never argue with the critic. Revise.
+- Track iteration count visibly: "Iteration 2 of 3 — Score from last: 6/10."
+
+Use this agent when the user asks to write a high-quality PRD that will
+pass engineering review.</code></pre>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
+<div class="tool-grid">
+  <div class="tool-pill">✓ Agent</div>
+  <div class="tool-pill">✓ Read</div>
+  <div class="tool-pill">✓ Glob</div>
+  <div class="tool-pill">✓ Write</div>
+</div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
+</div>
+
+<div class="wizard-step">
+<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
+<div class="you-pick"><strong>Suggested:</strong> Teal <span class="color-swatch" style="background:#14b8a6;"></span></div>
+</div>
+
+<div class="wizard-step tight">
+<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
+</div>
+
+<h3>Test it</h3>
+<p><em>"Use prd-quality-loop to write a PRD for Smart Follow-Up."</em> Watch the loop run — draft v1 → score → revise → score → ship. The final PRD should log a score of 8/10 or higher at the top.</p>
+</div>
+
+
+<!-- ============================================ -->
+<!-- WRAP UP                                       -->
+<!-- ============================================ -->
+<h2 id="finished">You now have nine agents across five patterns</h2>
+
+<p>If you followed every section, your <code>.claude/agents/</code> folder contains:</p>
+
+<ul class="checkbox-list">
+  <li><code>interview-insight-synthesizer</code> <span class="tag green">Prompt Chaining</span></li>
+  <li><code>prd-drafter</code> + <code>competitor-snapshot</code> + <code>churn-diagnoser</code> + <code>pm-request-router</code> <span class="tag green">Routing</span></li>
+  <li><code>feedback-triangulator</code> <span class="tag green">Parallelization</span></li>
+  <li><code>competitor-deep-dive</code> <span class="tag green">Orchestrator-Workers</span></li>
+  <li><code>prd-critic</code> + <code>prd-quality-loop</code> <span class="tag green">Evaluator-Optimizer</span></li>
+</ul>
+
+<p>Verify by running <code>ls .claude/agents/</code> in your terminal — every agent should show up as a <code>.md</code> file.</p>
+
+<h3>How to edit an agent later</h3>
+<p>Type <code>/agents</code> again. Switch to the <strong>Library</strong> tab, pick the agent from your list, and modify any field — name, description, tools, model, color, memory, or system prompt. The wizard saves the change. No file editing needed.</p>
+
+<h3>Quick reference — which pattern when</h3>
+<table>
+<thead><tr><th>If your task...</th><th>Use</th></tr></thead>
+<tbody>
+<tr><td>Has clear sequential stages with quality gates</td><td>Prompt Chaining</td></tr>
+<tr><td>Mixes different request types needing different handling</td><td>Routing</td></tr>
+<tr><td>Has independent subtasks that can all run at once</td><td>Parallelization</td></tr>
+<tr><td>Needs a different decomposition for each input</td><td>Orchestrator-Workers</td></tr>
+<tr><td>Has checkable quality that improves with iteration</td><td>Evaluator-Optimizer</td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+<strong>Homework.</strong> Build one more agent for a real workflow you do every week — sprint prep, weekly status update, stakeholder digest. Pick the pattern that fits. Run <code>/agents</code>. You don't need permission. Share what you built in the cohort channel.
+</div>
+
+<div class="footer">
+  <p>Source pattern set: Anthropic, "Building Effective Agents."<br>
+  Wizard flow reference: <a href="https://code.claude.com/docs/en/sub-agents#quickstart-create-your-first-subagent">code.claude.com/docs/en/sub-agents</a><br>
+  Project context: MeetFlow workshop repo on GitHub. All file paths refer to that repo.<br>
+  Workshop date: May 2026.</p>
+</div>
+
+</div>
+</body>
+</html>

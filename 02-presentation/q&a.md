@@ -6,7 +6,9 @@ Answers to open questions from workshop sessions, sourced from official Anthropi
 
 - **Original file created:** 23-03-2026 (March 2026 cohort - Q1 to Q4 below)
 - **Last full refresh:** 16-05-2026 (URLs re-verified, Windows flow rewritten)
-- **May 2026 Session 1 additions:** 16-05-2026 (Q5 onward - see "May 2026 - Session 1 Additions" section)
+- **May 2026 Session 1 additions:** 16-05-2026 (Q5-Q13 - see "May 2026 - Session 1 Additions" section)
+- **May 2026 Session 2 additions:** 16-05-2026 (Q14-Q31 - see "May 2026 - Session 2 Additions" section)
+- **May 2026 Session 3 additions:** 17-05-2026 (Q32-Q45 - see "May 2026 - Session 3 Additions" section)
 
 If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
@@ -441,3 +443,522 @@ What changes is **ergonomics**:
 **Sources:**
 - https://code.claude.com/docs/en/vs-code (verified 16-05-2026)
 - https://code.claude.com/docs/en/setup (verified 16-05-2026)
+
+---
+
+# May 2026 - Session 2 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 16-05-2026 during Session 2 (Skills and sub-agents). All URLs verified 16-05-2026.
+
+---
+
+## Q14: When should I create a skill vs just chat with Claude, or put it in CLAUDE.md?
+
+**Short answer:** Three different containers for three different things.
+
+- **Chat** - one-off questions and exploratory work. Don't formalise.
+- **Skill** - a repeatable workflow that produces a structured output (PRD, feature spec, release note, PPT, flowchart, standup summary, competitor study). Rule of thumb: if you've done it three times with the same shape, turn it into a skill.
+- **CLAUDE.md** - project facts and architecture (what the project is, where files live, tech stack, things to never do here).
+- **Memory** - cross-project rules and preferences (date format, tone, formatting, recurring corrections).
+
+Don't make a skill for a single fact, a one-shot task, or a workflow whose output format is still changing.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 16-05-2026)
+- https://code.claude.com/docs/en/memory (verified 16-05-2026)
+
+---
+
+## Q15: What's the difference between a skill, a slash command, a sub-agent, and an MCP server?
+
+| Thing | What it is | When to use |
+|------|-----------|-------------|
+| **Skill** | A folder with `SKILL.md` describing a repeatable workflow in plain English | One specific repeatable task with a stable output shape |
+| **Slash command** | A shortcut typed with `/` to invoke a skill or built-in command (`/health`, `/doctor`) | Fast invocation of any skill or built-in |
+| **Sub-agent** | A persona with its own context window and tool set that can call multiple skills | Orchestrating multiple skills under one role (e.g. "Senior PM agent") |
+| **MCP server** | An external service connection (Confluence, Jira, Slack, Granola, Figma) | Reading from or writing to a system outside the local folder |
+
+Analogy used in the session: *"I am an agent. My PRD-writer skill, my email-drafter skill, my release-note skill - those are the skills I invoke."*
+
+The YAML front matter (`name` + `description`) is what tells Claude *when* to trigger a skill. The body tells it *how* to perform the task.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 16-05-2026)
+- https://code.claude.com/docs/en/commands (verified 16-05-2026)
+- https://code.claude.com/docs/en/mcp (verified 16-05-2026)
+
+---
+
+## Q16: If a skill exists at both global and project level, which one wins?
+
+**Project level wins.** Same as any standard config hierarchy - the more specific scope overrides the more general.
+
+- Global skills: `~/.claude/skills/<skill-name>/SKILL.md` - apply to all projects.
+- Project skills: `<repo>/.claude/skills/<skill-name>/SKILL.md` - apply only to that project, and override a global skill with the same name.
+
+Practical tip from the session: for skills you care about (e.g. PRD writer), keep a copy at both levels and add a global memory like *"whenever I update a skill, sync it across all projects and the global folder"* so Claude prompts you to copy it. Skills don't auto-sync across machines or projects.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 16-05-2026)
+- https://code.claude.com/docs/en/memory (verified 16-05-2026)
+
+---
+
+## Q17: Can I rename `SKILL.md`? What about the folder name?
+
+- **File name is fixed.** `SKILL.md` must be exactly that. Same for `AGENT.md` in sub-agent folders. Claude Code looks for those exact filenames.
+- **Folder name is free.** Name the folder anything readable (`prd-writer/`, `release-notes/`).
+- **`name:` in the front matter is also free.** This is the display name and trigger label.
+
+```
+.claude/skills/
+  prd-writer/          <- folder name: free
+    SKILL.md           <- file name: fixed
+    references/        <- subfolders: free
+    scripts/
+```
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 16-05-2026)
+
+---
+
+## Q18: Is a skill just plain English, or do I need to write code?
+
+**The skill itself is plain English.** `SKILL.md` is a markdown file describing the workflow step by step. Claude reads it and follows the instructions.
+
+You add code only when the workflow needs deterministic output that an LLM can't produce reliably:
+
+- Rendering a `.pptx` file - Python script using `python-pptx`.
+- Rendering an SVG flowchart - Python or JS script.
+- Calling an API with a fixed payload shape - script.
+- Anything that must be byte-identical every time.
+
+Scripts live in a `scripts/` subfolder inside the skill. The skill instructs Claude *when* to call the script and *what* to pass in. The LLM decides content; the script renders form.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 16-05-2026)
+
+---
+
+## Q19: My skill is too long. How do I shrink it?
+
+Keep `SKILL.md` short - target 100 to 200 lines. Anything beyond that goes into subfolders so the main file stays loadable and coherent:
+
+| Subfolder | What goes there |
+|-----------|----------------|
+| `references/` | Long-form rules, style guides, framework cheat sheets, output templates, examples |
+| `scripts/` | Executable code the skill calls |
+| `assets/` | Images, SVGs, fixed templates, brand assets |
+
+Practical prompt to use on an oversized skill: *"This skill is over 200 lines. Keep `SKILL.md` between 100 and 200 lines and move overflow into `references/`."* Claude will create the subfolder, split content into themed `.md` files, and replace inline blocks with references.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 16-05-2026)
+
+---
+
+## Q20: Can I reuse a skill across projects?
+
+Yes. Two options:
+
+1. **Promote to global.** Move the skill to `~/.claude/skills/<skill-name>/` and every project picks it up.
+2. **Copy-paste.** Copy the folder from `<projectA>/.claude/skills/<skill>/` to `<projectB>/.claude/skills/<skill>/`. After copying, ask Claude *"I copied this skill from project A. Check if any paths or references need updating for project B"* and it will fix relative paths.
+
+There's no built-in skill marketplace or `import`. Treat skills as portable folders.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 16-05-2026)
+
+---
+
+## Q21: Will the same skill give the same output for me and my teammate?
+
+**Not by default.** LLMs are probabilistic. Two people running the same skill on the same input will get two different wordings.
+
+What you can control:
+
+- **Structure** - put a strict output template (exact headings, exact section order, exact table columns) as a `.md` file under `references/` and have the skill fill that template. The content varies, the skeleton doesn't.
+- **Tone and rules** - codify in `references/style.md` (sentence length, banned phrases, voice).
+- **Inputs** - for high-variance inputs, build a "dynamic skill" that pauses and asks the user to select parameters before producing output.
+
+Treat skills like templates plus rules, not deterministic functions.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 16-05-2026)
+
+---
+
+## Q22: What is skill chaining?
+
+A **chained skill** is a master skill whose body calls several smaller skills in sequence to deliver a larger workflow.
+
+Example walked through in the session - a `/wake-up` skill that on invocation:
+
+1. Checks Confluence for updates.
+2. Checks Jira for ticket changes.
+3. Pulls mail (Zoho mail in my case).
+4. Processes meeting notes.
+5. Consolidates everything into a single "focus for today" file.
+
+Recommended progression: get individual skills stable first, then chain them, then put an agent on top. Chaining unstable skills compounds errors.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 16-05-2026)
+- https://code.claude.com/docs/en/mcp (verified 16-05-2026)
+
+---
+
+## Q23: In a chained workflow, where do I put evaluation criteria - one final check or one per skill?
+
+**One per skill.** Each skill should validate its own output before passing data to the next skill.
+
+If you only evaluate at the end, a bad output from step 1 poisons every downstream step and you have to rerun the whole chain. Per-skill evals fail fast and isolate the problem.
+
+In practice: every skill's `SKILL.md` ends with a short "Quality checks before returning" list (3-5 bullets) that Claude runs against its own output before handing off.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 16-05-2026)
+
+---
+
+## Q24: A recurring rule I want Claude to always follow - does that go in CLAUDE.md or a skill?
+
+**Neither. It goes in memory.**
+
+| Container | What it's for |
+|-----------|--------------|
+| **CLAUDE.md** | Project-level definition (architecture, tech stack, file map, things never to do *in this project*) |
+| **Skill** | A repeatable workflow that produces a structured output |
+| **Memory** | A standing rule or preference Claude should apply whenever generating output (date format, formatting, tone, naming, units) |
+
+Memories used to live inside `CLAUDE.md` but Anthropic split them out so `CLAUDE.md` stays focused on project structure and doesn't bloat.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 16-05-2026)
+
+---
+
+## Q25: Do I need an `AGENT.md` for every skill?
+
+**No.** Agents and skills are different layers.
+
+- A **skill** is invokable on its own (`/feature-spec`, `/release-notes`).
+- An **agent** is a persona that orchestrates multiple skills under one identity (e.g. "Senior PM" agent that decides which skill to call based on the situation).
+
+Build agents only after your skills are stable and you need a persona-level orchestrator. Agent setup is a Session 3 topic.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 16-05-2026)
+
+---
+
+## Q26: Where does a design system fit? It feels too big for one skill.
+
+It is too big. A design system is a **folder of references, not a single skill**.
+
+Keep it as a folder (e.g. `ux-guidelines/`, `design-system/`) holding markdown files for things like colors, buttons, and component rules, plus any assets - images, SVGs, brand files.
+
+When you want to generate UI, point Claude at the folder: *"Use `.claude/design-system/` for brand and component rules."* Commit the folder to the repo so every teammate's Claude generates UI with the same brand.
+
+If you need live Figma assets, connect via the Figma MCP. Heads-up: read-only Figma accounts hit MCP call limits quickly (around 5-6 calls per session). A Dev account avoids that.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 16-05-2026)
+
+---
+
+## Q27: Which Claude model should I default to? I want to conserve tokens.
+
+- **Sonnet, medium effort** for almost everything - drafting, editing, skill execution, code review. Sonnet is the best default.
+- **Opus** only for complex brainstorming or complex coding.
+
+Set your default model in `/config` or via the status line. Enable the status line so you can watch context usage and 5-hour / 7-day window burn in real time. Switch up to Opus only when you actually need it.
+
+**Sources:**
+- https://code.claude.com/docs/en/costs (verified 16-05-2026)
+- https://code.claude.com/docs/en/cli-reference (verified 16-05-2026)
+
+---
+
+## Q28: Do I need an Antigravity subscription to use Claude Code?
+
+**No.** Antigravity is just an IDE. Claude Code runs in the terminal and uses your Claude (Pro, Max, Team, Enterprise) subscription or your Anthropic API key for billing.
+
+You only need an Antigravity paid plan if you want to use **Antigravity's own agent features inside that IDE**. For Claude Code itself, the Claude subscription is enough.
+
+**Sources:**
+- https://code.claude.com/docs/en/setup (verified 16-05-2026)
+- https://code.claude.com/docs/en/vs-code (verified 16-05-2026)
+
+---
+
+## Q29: What's the right way to actually create a skill?
+
+Don't ask Claude to "create a skill" cold. Build the input first, then scaffold.
+
+1. **Define the problem.** What workflow, what input, what output shape.
+2. **Have Claude research the domain.** *"Find the top books, frameworks, and authors on user interviews."* Expect names like *The Mom Test*, *Continuous Discovery Habits* (Teresa Torres), *Interviewing Users* (Steve Portigal), *Inspired* (Marty Cagan).
+3. **Challenge the picks.** *"Why these and not X?"* See its reasoning. Approve or push back.
+4. **Have Claude draft a prompt** that encodes the chosen frameworks - this becomes the basis of `SKILL.md`.
+5. **Scaffold the skill folder** with `SKILL.md`, `references/`, `scripts/`.
+6. **Test the auto-trigger.** Type a real task and see if the skill fires from the `description` alone.
+7. **Iterate.** Every miss becomes a new eval rule inside the skill.
+
+Memorable naming tip: put a keyword you'll actually search for in the skill name (`email-drafter`, `ppt-builder`) so you can recall it months later.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 16-05-2026)
+
+---
+
+## Q30: Can I use Perplexity or Gemini to help build a Claude skill?
+
+**Yes.** Use whichever tool is best for each step.
+
+- **Perplexity / Gemini** - good for gathering up-to-date framework research, comparing methodologies, citing sources.
+- **Claude Code** - turns that research into the actual `SKILL.md`, `references/`, and `scripts/` inside your project.
+
+Workflow: research in Perplexity, paste the distilled findings into Claude Code, then have Claude scaffold the skill folder. The skill itself only lives inside Claude Code's folder structure.
+
+---
+
+## Q31: How many memories should I have? What kinds of things belong there?
+
+There is no hard limit. The host's work machine has 400+ memories. The rule is **save once, never repeat the correction**.
+
+Good memory candidates:
+
+- Date format (`DD-MM-YYYY`, never ISO or US).
+- Formatting rules (no unnumbered bullet points, table column headers in title case).
+- Tone rules (collaborative phrasing, no blame in exec summaries).
+- Tool-specific quirks (use Confluence's native table column property, not manual serial numbers).
+- Disambiguation (two people named "Sarah" - clarify which one).
+- Banned phrases.
+
+Every time Claude makes the same mistake twice, save the correction as a memory. It compounds fast.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 16-05-2026)
+
+---
+
+# May 2026 - Session 3 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 17-05-2026 during Session 3 (Agents and sub-agents). All URLs verified 17-05-2026.
+
+---
+
+## Q32: What is an agent, and how does it differ from a prompt or a skill?
+
+| Layer | What it is | Example |
+|-------|-----------|---------|
+| **Prompt** | One instruction. You guide every turn manually | "Write me a LinkedIn post" |
+| **Skill** | A repeatable workflow with a fixed shape | `/feature-spec`, `/release-notes` |
+| **Agent** | A persona with its own context, tools, and memory that picks the route on its own based on a goal | "Find three relevant stories from my industry, study my past posts for voice, draft a new post, revise against my style guide, schedule for Tuesday" |
+
+A prompt is a single instruction. A skill is a repeatable task. An agent is a goal plus the ability to iterate, call tools, and adapt mid-run when something breaks. The real test of an agent is *"when the first path breaks, can it find another?"*
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 17-05-2026)
+- https://code.claude.com/docs/en/skills (verified 17-05-2026)
+
+---
+
+## Q33: Do I have to specify a role (analyst, planner, operator) when creating an agent?
+
+**No.** Claude infers the role from the description and prompt you give. If your description says "review code and surface issues", it acts as an auditor. If it says "plan a release", it acts as a planner. You don't need to label the persona explicitly.
+
+The role types (analyst, planner, operator) are useful for *thinking* about what kind of agent you're building, not for configuring one.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 17-05-2026)
+
+---
+
+## Q34: When I save agent memory at project level, does it sync with my Claude.ai project (web app)?
+
+**No.** Project-level agent memory lives inside the repo at `.claude/agents/<agent-name>/memory/` (or a similar path the agent picks). It is a local filesystem artifact tied to that folder.
+
+The "Project" feature inside the Claude.ai web app (where you upload files for chat context) is a separate construct. It does not auto-sync with `.claude/` folders on your machine. Treat them as two different systems that happen to share the word "project".
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 17-05-2026)
+- https://code.claude.com/docs/en/memory (verified 17-05-2026)
+
+---
+
+## Q35: Should a code reviewer agent have edit access, or should I create a separate agent to apply fixes?
+
+**Start read-only. Always.**
+
+- First few iterations: read-only access. The agent produces a report file (`outputs/code-review-*.md`). You read it, validate it, and refine the agent based on what it got right or wrong.
+- Once you trust the output across multiple iterations, you can either (a) grant the same agent edit access and update its prompt to apply fixes, or (b) create a second agent (e.g. `code-fixer`) that consumes the review file and edits the code.
+
+Two-agent separation is cleaner: one auditor that finds problems, one operator that fixes them. Easier to test, easier to swap one without breaking the other.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 17-05-2026)
+- https://code.claude.com/docs/en/permissions (verified 17-05-2026)
+
+---
+
+## Q36: What is a sub-agent, and how do I invoke one?
+
+A sub-agent is a fresh, isolated Claude instance that the main session dispatches via the `Agent` tool. It runs in its own context window with its own tool set, returns a single result, and goes away. Use it to keep large or specialised work off your main session's context.
+
+Two ways to invoke:
+
+1. **By name** - `@agent-name do this task`. Triggers your custom agent file.
+2. **Generic dispatch** - just say "use a sub-agent to review this". Claude picks a default sub-agent and runs it. You don't have to define one yourself for generic review tasks.
+
+The point of a sub-agent in this session was *LLM as a judge*: have one agent produce output, then have a second sub-agent review that output against a rubric and iterate until it hits a quality bar (e.g. "score > 95/100").
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 17-05-2026)
+
+---
+
+## Q37: How do I make the sub-agent use a different model than my main session (e.g. Opus to review Sonnet's output)?
+
+Two steps:
+
+1. Run `/model` and pick the model you want available (e.g. switch to Opus).
+2. In your prompt, explicitly tell the sub-agent which model to use: *"use a sub-agent with the Opus model to review this against the rubric"*.
+
+This is the practical "LLM as a judge" pattern - Sonnet generates, Opus reviews. Opus is more expensive, so reserve it for the reviewer role, not the generator.
+
+**Sources:**
+- https://code.claude.com/docs/en/cli-reference (verified 17-05-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 17-05-2026)
+
+---
+
+## Q38: My agent's output went into the chat instead of the `outputs/` folder. Why?
+
+This happened mid-session: the agent file's stage 4 clearly said *"write synthesis to `outputs/`"*, but the output came back inline. Root cause - when you invoke an agent with a custom prompt (e.g. "run this agent and just give me the result"), the custom prompt can override the agent's own stage instructions.
+
+Fix:
+
+1. Ask the agent in chat *"why was the output file not created?"* - it will explain which instruction got bypassed.
+2. Save the lesson to **agent memory**, not project memory. The instruction is agent-specific, not project-wide.
+3. Add a non-negotiable rule to the agent memory file: *"Always write output to `outputs/`. Stage 4 is non-negotiable even if invoked via a custom prompt."*
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 17-05-2026)
+- https://code.claude.com/docs/en/memory (verified 17-05-2026)
+
+---
+
+## Q39: I'm starting a brand new project folder. What's the right first step?
+
+1. Open Antigravity / IDE, open the new folder.
+2. Open the integrated terminal in that folder.
+3. Run `claude` to start a session.
+4. Run `/init`.
+5. When prompted, type a short description of what the project is *before* `/init` finishes - otherwise it will guess from sibling folders and produce a misleading `CLAUDE.md`.
+
+If `/init` starts inspecting sibling directories outside your project, press `Ctrl+C`, then re-prompt with explicit context: *"This folder is for X. Don't look at other folders. Create a `CLAUDE.md` for this project."*
+
+**Sources:**
+- https://code.claude.com/docs/en/commands (verified 17-05-2026)
+- https://code.claude.com/docs/en/memory (verified 17-05-2026)
+
+---
+
+## Q40: What does `/init` actually do?
+
+`/init` initialises a `CLAUDE.md` for the current folder.
+
+- If `CLAUDE.md` doesn't exist - it explores the folder, infers what the project is, and writes a fresh `CLAUDE.md` describing structure, tech stack, and conventions.
+- If `CLAUDE.md` already exists - it reads what's there and updates it with anything it has learned since.
+- If the folder is empty - it falls back to parent directories to guess context. This is why providing your own context up front matters (see Q39).
+
+**Sources:**
+- https://code.claude.com/docs/en/commands (verified 17-05-2026)
+- https://code.claude.com/docs/en/memory (verified 17-05-2026)
+
+---
+
+## Q41: Agent vs routine - what's the actual difference?
+
+| Aspect | Agent | Routine (scheduled task) |
+|--------|-------|-------------------------|
+| Purpose | Goal-seeking persona with reasoning | Scheduled execution of a fixed instruction |
+| Memory | Yes - evolves over time via `agent-memory/` | No persistent memory |
+| Adapts on failure | Yes - re-routes when a step breaks | No - fails or skips |
+| Trigger | On demand by name or via main agent | Cron schedule (daily, weekly, etc.) |
+| Where it runs | Same session or sub-agent | Local machine OR Anthropic's cloud environment |
+| Use case | "Review this PR", "Draft this PRD" | "Email me Anthropic's docs digest every day at 7 AM" |
+
+If you ask Claude to "create an agent that runs daily at 7 AM and emails me X", it will create a **routine**, not an agent - because the time trigger plus deterministic instruction is a cron job, not a reasoning loop. The session demoed exactly this: prompt said "create an agent", Claude correctly built a routine instead.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 17-05-2026)
+- The `/schedule` skill (built-in) and Claude Code routines feature.
+
+---
+
+## Q42: When I create a routine in the terminal, does it appear in the Claude.ai web app too?
+
+**Yes.** Routines created via Claude Code (terminal) sync automatically to the Routines panel in the Claude.ai web app, provided both are signed into the same account.
+
+To view, edit, or manually trigger a routine, open Claude.ai, go to **Claude Code > Routines**. You'll see each routine with its schedule, environment, connectors, and inspection log. Hit *Test* / *Run now* to fire it on demand and see the log.
+
+---
+
+## Q43: How many routines can I run per day?
+
+Plan-dependent rolling limits:
+
+- **Pro:** 5 routine runs per rolling 24 hours (included).
+- **Max:** 15 routine runs per rolling 24 hours (included).
+- Beyond the included quota, extra runs consume "extra usage" - only billed if you've explicitly enabled it in settings. Otherwise the routine is skipped.
+
+Practical tip: if you have many candidate routines, keep low-value ones on weekly or monthly schedules so daily slots stay free for the high-value ones.
+
+Verify current limits at the Claude.ai usage page - quotas change.
+
+**Sources:**
+- https://www.anthropic.com/pricing (verified 17-05-2026)
+
+---
+
+## Q44: What is Claude.ai Co-work, and how does it differ from Claude Code?
+
+Three Claude surfaces, three different jobs:
+
+| Surface | What it is | Best for |
+|--------|-----------|----------|
+| **Claude.ai chat** | Standard web chatbot | One-off questions, exploration, no folder context |
+| **Claude.ai Co-work** (desktop app) | Folder-aware chat - point at a local folder, ask questions, get summaries | Non-technical members who want folder context without the IDE or terminal |
+| **Claude Code** (terminal / IDE) | Full agentic loop - file edits, bash, sub-agents, skills, memory, MCP servers | The actual power tool. Skills you create, agents you define, memories you save - all live here |
+
+Co-work limitations vs Claude Code:
+- Co-work cannot see custom skills under `.claude/skills/` (it only sees its own plugin/skill library).
+- Co-work cannot create or modify agent files, agent memory, or rules.
+- Co-work shows chat output, not a diff view of file changes.
+
+Think of it as **chat > Co-work > Code** on the capability ladder. Co-work is a stepping stone for non-technical teammates; Claude Code is where the real customisation lives.
+
+**Sources:**
+- https://code.claude.com/docs/en/overview (verified 17-05-2026)
+
+---
+
+## Q45: Can I build one master agent (e.g., `aman.md`) that has access to all my skills?
+
+**Yes, but don't start there.**
+
+It is possible to build a single PM agent with system-prompt access to all your skills (PRD writer, user interview synthesiser, release notes, competitor analysis, etc.). Sub-agents do not auto-inherit your skill set, but you can list the skills explicitly in the agent's system prompt and the agent will dispatch them.
+
+Trade-offs:
+
+- **Pro:** single entry point - "write a PRD for Smart Follow-Up" routes itself to the right skill. Long-running drafts don't bloat your main session. Your standing PM rules (date format, no em dashes, cite sources) apply across every skill.
+- **Con:** the master agent runs in fresh context. If you say *"write user stories for what we just discussed"*, the sub-agent does not know what you were discussing. You'd have to brief it.
+
+**Recommendation:** get each individual skill stable first. Then chain related skills. Only after those work end-to-end, wrap them in a master agent. Building the master agent first compounds errors and gives you a system you can't debug.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 17-05-2026)
+- https://code.claude.com/docs/en/skills (verified 17-05-2026)

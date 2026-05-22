@@ -1,0 +1,8 @@
+{
+  "app": "Asana",
+  "mobbin_url": "https://mobbin.com/screens/2f0846fd-871b-491c-a6f2-7d1f26e6de62",
+  "image_url": "https://mobbin.com/api/mcp/short/b335VDHO",
+  "fetched_on": "17-03-2026",
+  "screen": "action-items",
+  "why_kept": "Task list with colored Priority chips (Low / Medium / High) AND status chips (On track / At risk / Off track). BEST reference for confidence badge styling - use the dual-pill pattern (priority + status) for confidence + needs-review."
+}

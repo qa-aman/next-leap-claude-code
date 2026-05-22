@@ -1,0 +1,100 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    background-color: #08080a;
+    color: #f1f1f4;
+    font-feature-settings: "cv11", "ss01", "ss03", "cv02";
+  }
+  body {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(139, 109, 255, 0.10), transparent 60%),
+      radial-gradient(circle at 20% 110%, rgba(63, 185, 80, 0.04), transparent 50%);
+    background-attachment: fixed;
+  }
+  * {
+    border-color: #22222a;
+  }
+  :focus-visible {
+    outline: 2px solid #8b6dff;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  ::selection {
+    background: rgba(139, 109, 255, 0.35);
+    color: #f1f1f4;
+  }
+  h1, h2, h3 {
+    letter-spacing: -0.018em;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #22222a;
+    border-radius: 3px;
+    transition: background 0.2s;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #2e2e38; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+
+  /* Subtle dotted texture for inset surfaces */
+  .bg-dots {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+    background-size: 14px 14px;
+  }
+
+  /* Hairline divider with fading edges */
+  .divide-fade {
+    background: linear-gradient(90deg, transparent, #2e2e38 20%, #2e2e38 80%, transparent);
+    height: 1px;
+  }
+
+  /* Shimmer placeholder bg */
+  .bg-shimmer {
+    background: linear-gradient(90deg, #16161b 0%, #1f1f26 50%, #16161b 100%);
+    background-size: 200% 100%;
+  }
+
+  /* Subtle inner highlight on elevated surfaces */
+  .surface-elevated {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0%, rgba(255, 255, 255, 0) 40%),
+      #101013;
+  }
+
+  /* Accent-tinted glow surface */
+  .surface-accent {
+    background:
+      radial-gradient(ellipse at top left, rgba(139, 109, 255, 0.10), transparent 60%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)),
+      #101013;
+  }
+
+  /* Hover lift */
+  .lift {
+    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .lift:hover {
+    transform: translateY(-1px);
+  }
+
+  /* Sparkle/AI gradient text */
+  .text-gradient-accent {
+    background: linear-gradient(135deg, #c4b5ff 0%, #8b6dff 50%, #6a4dff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Tabular figures for numbers in dense rows */
+  .nums { font-variant-numeric: tabular-nums; }
+}

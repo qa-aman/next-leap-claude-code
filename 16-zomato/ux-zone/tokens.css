@@ -1,0 +1,136 @@
+/* Zomato Sushi UX Zone, tokens.css
+   Source: https://www.zomato.com/blog/sushi/ (fetched 17-05-2026)
+   Generated from computed styles. Mirror of tokens.json. */
+
+@font-face {
+  font-display: swap;
+  font-family: "Be Vietnam Pro";
+  font-style: normal;
+  font-weight: 300;
+  src: url("./assets/fonts/BeVietnamPro-300.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Be Vietnam Pro";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./assets/fonts/BeVietnamPro-400.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Be Vietnam Pro";
+  font-style: normal;
+  font-weight: 500;
+  src: url("./assets/fonts/BeVietnamPro-500.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Be Vietnam Pro";
+  font-style: normal;
+  font-weight: 600;
+  src: url("./assets/fonts/BeVietnamPro-600.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Okra";
+  font-style: normal;
+  font-weight: 300;
+  src: url("./assets/fonts/Okra-300.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Okra";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./assets/fonts/Okra-400.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Okra";
+  font-style: normal;
+  font-weight: 500;
+  src: url("./assets/fonts/Okra-500.woff2") format("woff2");
+}
+
+:root {
+  /* Color */
+  --uxz-color-text-default: #020817;
+  --uxz-color-text-heading: #111827;
+  --uxz-color-text-body: #293142;
+  --uxz-color-text-muted: #696969;
+  --uxz-color-text-footer-heading: #1C1C1C;
+  --uxz-color-text-h1: #000000;
+  --uxz-color-link: #7293F3;
+  --uxz-color-bg-page: #FFFFFF;
+  --uxz-color-bg-footer: #F8F8F8;
+  --uxz-color-brand-red: #CB202D;
+  --uxz-color-border-muted: #E5E7EB;
+  --uxz-color-text-secondary: #828282;
+  --uxz-color-text-card-title: #1C1C1C;
+  --uxz-color-rating-green: #3F7E00;
+  --uxz-color-rating-yellow: #9C7E00;
+  --uxz-color-rating-red: #CB202D;
+  --uxz-color-border-pill: #E8E8E8;
+  --uxz-color-bg-promoted: rgba(0,0,0,0.3);
+  --uxz-color-white: #FFFFFF;
+
+  /* Typography families */
+  --uxz-font-article: "Be Vietnam Pro", sans-serif;
+  --uxz-font-footer: Okra, sans-serif;
+  --uxz-font-system: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Type scale */
+  --uxz-size-h1: 60px;        --uxz-lh-h1: 72px;        --uxz-weight-h1: 500;
+  --uxz-size-h2: 36px;        --uxz-lh-h2: 44px;        --uxz-weight-h2: 600;
+  --uxz-size-h3: 24px;        --uxz-lh-h3: 32px;        --uxz-weight-h3: 600;
+  --uxz-size-h4: 20px;        --uxz-lh-h4: 28px;        --uxz-weight-h4: 600;
+  --uxz-size-body: 20px;      --uxz-lh-body: 32.5px;    --uxz-weight-body: 300;
+  --uxz-size-blockquote: 18px; --uxz-lh-blockquote: 32px; --uxz-weight-blockquote: 500;
+  --uxz-size-meta: 14px;      --uxz-lh-meta: 20px;      --uxz-weight-meta: 300;
+  --uxz-size-footer-h3: 14px; --uxz-lh-footer-h3: 20px; --uxz-weight-footer-h3: 500;
+  --uxz-size-copy: 13px;      --uxz-lh-copy: 21.125px;  --uxz-weight-copy: 300;
+  --uxz-size-tag: 12px;       --uxz-lh-tag: 16px;       --uxz-weight-tag: 500;
+  --uxz-size-card-title: 17px; --uxz-lh-card-title: 20.4px; --uxz-weight-card-title: 500;
+  --uxz-size-card-meta: 14px;  --uxz-lh-card-meta: 21px;    --uxz-weight-card-meta: 300;
+  --uxz-size-pill: 14px;       --uxz-lh-pill: 20px;         --uxz-weight-pill: 400;
+
+  /* Spacing */
+  --uxz-space-0: 0px;
+  --uxz-space-1: 4px;
+  --uxz-space-2: 8px;
+  --uxz-space-3: 12px;
+  --uxz-space-4: 16px;
+  --uxz-space-5: 24px;
+  --uxz-space-6: 32px;
+  --uxz-space-7: 40px;
+  --uxz-space-8: 64px;
+  --uxz-space-9: 120px;
+
+  /* Radius */
+  --uxz-radius-none: 0px;
+  --uxz-radius-sm: 4px;
+  --uxz-radius-md: 8px;
+  --uxz-radius-lg: 12px;
+  --uxz-radius-full: 9999px;
+  --uxz-radius-pill: 2px;
+
+  /* Shadow */
+  --uxz-shadow-none: none;
+  --uxz-shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+  --uxz-shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.06);
+
+  /* Layout */
+  --uxz-article-max: 896px;
+  --uxz-header-height: 120px;
+
+  /* Breakpoints (reference, used in @media) */
+  --uxz-bp-sm: 640px;
+  --uxz-bp-md: 768px;
+  --uxz-bp-lg: 1024px;
+  --uxz-bp-xl: 1280px;
+}
+
+/* Resets used across components */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--uxz-color-bg-page); color: var(--uxz-color-text-default); font-family: var(--uxz-font-system); }
+img { max-width: 100%; height: auto; display: block; }

@@ -1,0 +1,73 @@
+.uxz-footer {
+  background: var(--uxz-color-bg-footer);
+  color: var(--uxz-color-text-default);
+  font-family: var(--uxz-font-footer);
+  padding: var(--uxz-space-8) var(--uxz-space-6);
+}
+.uxz-footer__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.uxz-footer__brand img { height: 28px; width: auto; margin-bottom: var(--uxz-space-7); }
+.uxz-footer__cols {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--uxz-space-7);
+}
+.uxz-footer__col h3 {
+  margin: 0 0 var(--uxz-space-3) 0;
+  color: var(--uxz-color-text-footer-heading);
+  font-family: var(--uxz-font-footer);
+  font-size: var(--uxz-size-footer-h3);
+  line-height: var(--uxz-lh-footer-h3);
+  font-weight: var(--uxz-weight-footer-h3);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.uxz-footer__col ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--uxz-space-2);
+}
+.uxz-footer__col a {
+  color: var(--uxz-color-text-muted);
+  font-family: var(--uxz-font-footer);
+  font-size: var(--uxz-size-meta);
+  line-height: var(--uxz-lh-meta);
+  font-weight: var(--uxz-weight-meta);
+  text-decoration: none;
+}
+.uxz-footer__col a:hover { color: var(--uxz-color-text-footer-heading); }
+.uxz-footer__social {
+  display: flex;
+  gap: var(--uxz-space-3);
+  margin-bottom: var(--uxz-space-4);
+}
+.uxz-footer__social img { width: 28px; height: 28px; }
+.uxz-footer__stores {
+  display: flex;
+  flex-direction: column;
+  gap: var(--uxz-space-2);
+}
+.uxz-footer__stores img { height: 40px; width: auto; }
+.uxz-footer__legal {
+  margin: var(--uxz-space-8) 0 0 0;
+  color: var(--uxz-color-text-muted);
+  font-size: var(--uxz-size-copy);
+  line-height: var(--uxz-lh-copy);
+  font-weight: var(--uxz-weight-copy);
+}
+
+@media (max-width: 1024px) {
+  .uxz-footer__cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 768px) {
+  .uxz-footer { padding: var(--uxz-space-7) var(--uxz-space-4); }
+  .uxz-footer__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--uxz-space-6); }
+}
+@media (max-width: 360px) {
+  .uxz-footer__cols { grid-template-columns: 1fr; }
+}

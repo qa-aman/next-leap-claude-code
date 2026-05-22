@@ -1,0 +1,8 @@
+{
+  "app": "Pipedrive",
+  "mobbin_url": "https://mobbin.com/screens/879f52b1-5246-421c-9229-7d8e9f93e866",
+  "image_url": "https://mobbin.com/api/mcp/short/MNNFQ8B4",
+  "fetched_on": "17-03-2026",
+  "screen": "follow-up",
+  "why_kept": "Write my email modal: Describe email textarea + Email tone dropdown + Email length dropdown + Generate email button. Mirror the tone+length structured controls."
+}

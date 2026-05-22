@@ -1,0 +1,8 @@
+{
+  "app": "Sana-AI",
+  "mobbin_url": "https://mobbin.com/screens/3ea1b2d6-e04e-4f6f-8d89-a75d0a4296cd",
+  "image_url": "https://mobbin.com/api/mcp/short/9QdFcO7I",
+  "fetched_on": "17-03-2026",
+  "screen": "action-items",
+  "why_kept": "Action Items table from meeting: Task / Owner / Deadline / Notes columns with source-meeting badges. Mirror this for the core action-items table layout - closest match to MeetFlow action items extracted from meeting."
+}

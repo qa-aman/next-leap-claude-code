@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UXZ template: landing</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="../../tokens.css">
+<link rel="stylesheet" href="../../components/header-nav-rich/style.css">
+<link rel="stylesheet" href="../../components/tab-bar/style.css">
+<link rel="stylesheet" href="../../components/collection-card/style.css">
+<link rel="stylesheet" href="../../components/restaurant-card/style.css">
+<link rel="stylesheet" href="../../components/rating-chip/style.css">
+<link rel="stylesheet" href="../../components/price-tag/style.css">
+<link rel="stylesheet" href="../../components/footer/style.css">
+<style>
+  body { font-family: Okra, sans-serif; background: var(--uxz-color-bg-page); margin: 0; }
+  .uxz-landing { max-width: 1200px; margin: 0 auto; padding: 0 var(--uxz-space-6); }
+  .uxz-landing__section { padding: var(--uxz-space-8) 0; }
+  .uxz-landing__section-title {
+    margin: 0 0 var(--uxz-space-3) 0;
+    font-family: var(--uxz-font-footer);
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: 500;
+    color: var(--uxz-color-text-card-title);
+  }
+  .uxz-landing__section-lead {
+    margin: 0 0 var(--uxz-space-5) 0;
+    font-size: var(--uxz-size-meta);
+    line-height: var(--uxz-lh-meta);
+    color: var(--uxz-color-text-muted);
+  }
+  .uxz-landing__hscroll {
+    display: flex;
+    gap: var(--uxz-space-4);
+    overflow-x: auto;
+    padding-bottom: var(--uxz-space-3);
+  }
+  .uxz-landing__hscroll > * { flex: 0 0 auto; }
+  .uxz-landing__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: var(--uxz-space-6) var(--uxz-space-5);
+  }
+  @media (max-width: 1024px) { .uxz-landing__grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px)  { .uxz-landing__grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="uxz-header-rich">
+  <a class="uxz-header-rich__brand" href="/"><img src="../../assets/images/b40b97e677bc7b2ca77c58c61db266fe1603954218.png" alt="Zomato" height="32"></a>
+  <div class="uxz-header-rich__search">
+    <div class="uxz-header-rich__location">
+      <img src="../../assets/icons/location.svg" alt="">
+      <input type="text" value="Connaught Place, New Delhi" aria-label="Delivery location">
+      <img class="uxz-header-rich__chev" src="../../assets/icons/chevron-down.svg" alt="">
+    </div>
+    <div class="uxz-header-rich__divider"></div>
+    <div class="uxz-header-rich__query">
+      <img src="../../assets/icons/search.svg" alt="">
+      <input type="text" placeholder="Search for restaurant, cuisine or a dish" aria-label="Search">
+    </div>
+  </div>
+  <nav class="uxz-header-rich__auth" aria-label="Account">
+    <a href="#login">Log in</a>
+    <a href="#signup">Sign up</a>
+  </nav>
+</header>
+
+<main class="uxz-landing">
+  <section class="uxz-landing__section" style="padding-top:var(--uxz-space-5);">
+    <div class="uxz-tab-bar" role="tablist">
+      <button class="uxz-tab-bar__tab" role="tab" aria-selected="true"><span class="uxz-tab-bar__label">Dining Out</span></button>
+      <button class="uxz-tab-bar__tab" role="tab" aria-selected="false"><span class="uxz-tab-bar__label">Delivery</span></button>
+      <button class="uxz-tab-bar__tab" role="tab" aria-selected="false"><span class="uxz-tab-bar__label">Nightlife</span></button>
+    </div>
+  </section>
+
+  <section class="uxz-landing__section">
+    <h2 class="uxz-landing__section-title">Collections</h2>
+    <p class="uxz-landing__section-lead">Explore curated lists of top restaurants, cafes, pubs, and bars in Delhi NCR, based on trends</p>
+    <div class="uxz-landing__hscroll">
+      <a class="uxz-collection-card" href="#"><img class="uxz-collection-card__img" src="../../assets/images/collection-insta.webp" alt="Insta-worthy spots"><div class="uxz-collection-card__overlay"><p class="uxz-collection-card__title">Insta-worthy spots</p><div class="uxz-collection-card__meta"><span>82 Places</span><img src="../../assets/icons/chevron-right.svg" alt=""></div></div></a>
+      <a class="uxz-collection-card" href="#"><img class="uxz-collection-card__img" src="../../assets/images/collection-insta.webp" alt="New in town"><div class="uxz-collection-card__overlay"><p class="uxz-collection-card__title">New in town</p><div class="uxz-collection-card__meta"><span>8 Places</span><img src="../../assets/icons/chevron-right.svg" alt=""></div></div></a>
+      <a class="uxz-collection-card" href="#"><img class="uxz-collection-card__img" src="../../assets/images/collection-insta.webp" alt="Omakase bars"><div class="uxz-collection-card__overlay"><p class="uxz-collection-card__title">Omakase bars</p><div class="uxz-collection-card__meta"><span>10 Places</span><img src="../../assets/icons/chevron-right.svg" alt=""></div></div></a>
+      <a class="uxz-collection-card" href="#"><img class="uxz-collection-card__img" src="../../assets/images/collection-insta.webp" alt="Must visit cafes"><div class="uxz-collection-card__overlay"><p class="uxz-collection-card__title">Must visit cafes</p><div class="uxz-collection-card__meta"><span>57 Places</span><img src="../../assets/icons/chevron-right.svg" alt=""></div></div></a>
+    </div>
+  </section>
+
+  <section class="uxz-landing__section">
+    <h2 class="uxz-landing__section-title">Top picks in Delhi NCR</h2>
+    <p class="uxz-landing__section-lead">Hand-picked restaurants by editors and rated 4.0+ by diners</p>
+    <div class="uxz-landing__grid">
+      <a class="uxz-restaurant-card" href="#">
+        <div class="uxz-restaurant-card__media">
+          <img class="uxz-restaurant-card__image" src="../../assets/images/1765454758_597b48d3875d7de89778722d.png" alt="">
+        </div>
+        <div class="uxz-restaurant-card__body">
+          <div class="uxz-restaurant-card__row"><h4 class="uxz-restaurant-card__name">Connaught Club House</h4><span class="uxz-rating-chip" data-tier="green">4.3<img src="../../assets/icons/star-fill.svg" alt=""></span></div>
+          <p class="uxz-restaurant-card__cuisines">North Indian, Mughlai, Italian</p>
+          <p class="uxz-price-tag">&#8377;3,000 for two</p>
+          <div class="uxz-restaurant-card__foot"><p class="uxz-restaurant-card__locality">Connaught Place</p><p class="uxz-restaurant-card__distance">1 km</p></div>
+        </div>
+      </a>
+      <a class="uxz-restaurant-card" href="#">
+        <div class="uxz-restaurant-card__media">
+          <img class="uxz-restaurant-card__image" src="../../assets/images/1765454755_408db1037ddc5fc0dcb0c2c7.png" alt="">
+        </div>
+        <div class="uxz-restaurant-card__body">
+          <div class="uxz-restaurant-card__row"><h4 class="uxz-restaurant-card__name">Brewtally Honest</h4><span class="uxz-rating-chip" data-tier="green">4.5<img src="../../assets/icons/star-fill.svg" alt=""></span></div>
+          <p class="uxz-restaurant-card__cuisines">Pizza, Pasta, Chinese</p>
+          <p class="uxz-price-tag">&#8377;2,500 for two</p>
+          <div class="uxz-restaurant-card__foot"><p class="uxz-restaurant-card__locality">Connaught Place</p><p class="uxz-restaurant-card__distance">1.4 km</p></div>
+        </div>
+      </a>
+      <a class="uxz-restaurant-card" href="#">
+        <div class="uxz-restaurant-card__media">
+          <img class="uxz-restaurant-card__image" src="../../assets/images/1765454757_aa198267bf4121da6ed01dfb.png" alt="">
+        </div>
+        <div class="uxz-restaurant-card__body">
+          <div class="uxz-restaurant-card__row"><h4 class="uxz-restaurant-card__name">Ikk Panjab</h4><span class="uxz-rating-chip" data-tier="green">4.4<img src="../../assets/icons/star-fill.svg" alt=""></span></div>
+          <p class="uxz-restaurant-card__cuisines">North Indian, Mughlai</p>
+          <p class="uxz-price-tag">&#8377;3,000 for two</p>
+          <div class="uxz-restaurant-card__foot"><p class="uxz-restaurant-card__locality">Connaught Place</p><p class="uxz-restaurant-card__distance">1.2 km</p></div>
+        </div>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="uxz-footer">
+  <div class="uxz-footer__inner">
+    <div class="uxz-footer__brand"><img src="../../assets/images/b40b97e677bc7b2ca77c58c61db266fe1603954218.png" alt="Zomato" width="140"></div>
+    <div class="uxz-footer__cols">
+      <div class="uxz-footer__col"><h3>About Zomato</h3><ul><li><a href="#">Who We Are</a></li><li><a href="#">Blog</a></li></ul></div>
+      <div class="uxz-footer__col"><h3>Learn More</h3><ul><li><a href="#">Privacy</a></li><li><a href="#">Security</a></li><li><a href="#">Terms</a></li></ul></div>
+      <div class="uxz-footer__col"><h3>Social Links</h3>
+        <div class="uxz-footer__social">
+          <a href="#"><img src="../../assets/icons/linkedin.svg" alt="LinkedIn" width="28" height="28"></a>
+          <a href="#"><img src="../../assets/icons/instagram.svg" alt="Instagram" width="28" height="28"></a>
+          <a href="#"><img src="../../assets/icons/twitter-x.svg" alt="X" width="28" height="28"></a>
+        </div>
+      </div>
+    </div>
+    <p class="uxz-footer__legal">2008-2026 &copy; Zomato&trade; Ltd. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

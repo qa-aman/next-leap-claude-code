@@ -1,0 +1,16 @@
+/* tokens.tailwind.css
+   Drop into a Tailwind project alongside tailwind.config.js (from this folder).
+   Re-exports CSS custom properties so prototypes can use either:
+     - Tailwind utility classes (text-uxz-text-body, bg-uxz-bg-page, ...)
+     - Or raw vars (var(--uxz-color-text-body)) inside arbitrary values
+   Source of truth = ../tokens.json. */
+
+@import "../tokens.css";
+
+@layer base {
+  body {
+    font-family: var(--uxz-font-system);
+    color: var(--uxz-color-text-default);
+    background: var(--uxz-color-bg-page);
+  }
+}

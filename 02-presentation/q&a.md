@@ -9,6 +9,7 @@ Answers to open questions from workshop sessions, sourced from official Anthropi
 - **May 2026 Session 1 additions:** 16-05-2026 (Q5-Q13 - see "May 2026 - Session 1 Additions" section)
 - **May 2026 Session 2 additions:** 16-05-2026 (Q14-Q31 - see "May 2026 - Session 2 Additions" section)
 - **May 2026 Session 3 additions:** 17-05-2026 (Q32-Q45 - see "May 2026 - Session 3 Additions" section)
+- **May 2026 Session 4 additions:** 18-05-2026 (Q46-Q56 - see "May 2026 - Session 4 Additions" section)
 
 If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
@@ -962,3 +963,237 @@ Trade-offs:
 **Sources:**
 - https://code.claude.com/docs/en/sub-agents (verified 17-05-2026)
 - https://code.claude.com/docs/en/skills (verified 17-05-2026)
+
+---
+
+# May 2026 - Session 4 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 18-05-2026 during Session 4 (Building prototypes with Claude Code). All URLs verified 18-05-2026.
+
+---
+
+## Q46: What is a "UX zone" and why bother building one?
+
+A **UX zone** is a folder inside your repo that holds everything a prototype needs to look like it belongs to your product family - components, design tokens, assets, screen notes, reference screenshots. Every prototype in the company points at the same UX zone, so output is consistent regardless of who built it.
+
+A typical UX zone:
+
+```
+ux-zone/
+  components/        React + Tailwind component files
+  tokens/            color, type, spacing JSON
+  assets/            SVG icons, brand images, fonts
+  screens/           reference screenshots from Mobbin / your own product
+  screen-notes/      per-screen guidance (which references to mirror)
+  spec.md            human-readable design system rules
+```
+
+**Why bother:**
+
+- Same prototype, two teammates = same look and feel. Without a UX zone, every prototype is a snowflake.
+- Engineering hand-off becomes much cleaner - the UX zone is the source of truth, not a Figma file + verbal context.
+- Future Figma MCP / Figma Code Connect flows can map UX zone components to Figma frames automatically.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 18-05-2026)
+- Anthropic Frontend Design skill (`frontend-design` plugin) - see https://code.claude.com/docs/en/mcp (verified 18-05-2026)
+
+---
+
+## Q47: How is a plugin different from an MCP server?
+
+| | Plugin | MCP server |
+|---|--------|------------|
+| What it is | A packaged bundle of skills, hooks, and slash commands distributed via a marketplace | A connection to an external service (Slack, Jira, Confluence, Figma, Granola) |
+| Where the code lives | Hosted remotely; you install via `/plugin install <name>@<marketplace>` | Configured locally via `/mcp` or `claude mcp add`; the MCP server runs as a separate process |
+| What it does | Adds new in-session capabilities (a brainstorming skill, a code review skill, a frontend design skill) | Adds tools that read from / write to a system outside your local folder |
+| Example | `superpower` plugin auto-invokes brainstorming when you say "let's brainstorm..." | `mcp__claude_ai_Granola__get_meeting_transcript` fetches a Granola transcript |
+
+**Rule of thumb:** if it changes how Claude thinks/works in-session, it's a plugin (or a skill inside one). If it lets Claude talk to a system outside your folder, it's an MCP server.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 18-05-2026)
+- https://code.claude.com/docs/en/mcp (verified 18-05-2026)
+
+---
+
+## Q48: How do I discover useful plugins? Will Claude tell me which ones to install?
+
+**Claude won't tell you proactively.** You have to know what to install.
+
+How to discover:
+
+1. Inside Claude Code, run `/plugin`. The picker lists plugins available across marketplaces - Anthropic's official directory, community marketplaces, and any you've added.
+2. Browse by purpose - design, code review, web automation, observability, productivity.
+3. For unfamiliar plugins, take a screenshot of the plugin description and paste it into another Claude session: *"What does this plugin do? When would I use it?"*
+
+**A working starter set for PMs and prototyping:**
+
+- `superpower` - brainstorming, planning, auto-invokes other skills
+- `skill-creator` - scaffolds new skills with correct frontmatter
+- `frontend-design` - auto-improves UI on prototypes
+- `code-review` - flags critical issues before commit
+- `code-simplifier` - cleans up after implementation
+- `chrome-devtools` (MCP) - inspect live UI from inside Claude
+- `playwright` (MCP) - browser automation for testing flows
+- `figma` (MCP) - design-to-code if you use Figma
+
+Install once at session start. Verify each plugin's permissions before installing - plugins are community-contributed and not security-audited by Anthropic.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 18-05-2026)
+- https://code.claude.com/docs/en/mcp (verified 18-05-2026)
+
+---
+
+## Q49: What does the Superpower plugin actually do?
+
+Superpower is a meta-plugin that auto-routes to the right skill based on what you say:
+
+- "Let's brainstorm X" → fires the brainstorming skill (asks 3-5 scoping questions before any code/draft)
+- "Plan this implementation" → fires the planning skill
+- "I'm stuck debugging" → fires the systematic-debugging skill
+- "Write a spec for..." → fires the relevant feature/PRD skill if installed
+
+You don't have to remember which sub-skill to call. Superpower watches the conversation and invokes the right one. If it's not installed, your sessions will look "flatter" - no auto-brainstorming, no auto-planning.
+
+It is **not required** to use Claude Code, but if you skip it, you'll re-type the scoping questions yourself every time. Install it.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 18-05-2026)
+
+---
+
+## Q50: How is this different from prototyping in Cursor? Can't I do the same thing there?
+
+**Short answer:** you can build a single-shot prototype in Cursor. You cannot build the *assembly line* in Cursor.
+
+A single prototype in Cursor and a single prototype in Claude Code can look the same. The difference shows up the **second time** you build something:
+
+| Capability | Cursor | Claude Code |
+|-----------|--------|-------------|
+| Build one prototype | Yes | Yes |
+| Run a brainstorming skill that scopes before coding | No | Yes (via plugins) |
+| Reuse a UX zone folder across projects | Manual | Manual, but enforced via project rules + skills |
+| Spawn sub-agents to review the prototype after build | No | Yes |
+| Install plugins (frontend-design, code-review, playwright) | No | Yes |
+| Add MCP servers for Mobbin, Figma, Chrome DevTools | No | Yes |
+| Run `make it 10x better` as a structured sub-agent review | Manual | Yes |
+| Schedule a routine that re-runs the workflow weekly | No | Yes |
+
+**The one-line answer:** Cursor is a better editor. Claude Code is a better workshop. The moment you want to build the *thing that builds the thing*, you need the workshop.
+
+**Sources:**
+- https://code.claude.com/docs/en/overview (verified 18-05-2026)
+- https://code.claude.com/docs/en/skills (verified 18-05-2026)
+
+---
+
+## Q51: Mobbin vs Google Stitch vs Figma Make - which one for which job?
+
+| Tool | What it is | Best for |
+|------|-----------|----------|
+| **Mobbin** | Curated library of real-world app UI references (mobile + web) | Building a **UX zone** of reference screenshots before you prototype - "show me how 5 meeting apps handle action items" |
+| **Google Stitch** | AI tool that generates UI designs from prompts | Generating a fresh UI when you have no reference - works for both web and mobile |
+| **Figma Make** | Figma's AI tool that generates production-ready designs in Figma | Same category as Lovable / Bolt - prompt-to-app, but inside Figma |
+
+**Rule of thumb:**
+- Need **references** to mirror? → Mobbin
+- Need a **fresh design** generated from a prompt? → Google Stitch or Figma Make
+- Need to **build the prototype** that consumes references and produces real code? → Claude Code with a UX zone, optionally pulling Figma assets via the Figma MCP
+
+These are not competitors; they sit at different stages of the pipeline.
+
+**Sources:**
+- https://www.mobbin.com (verified 18-05-2026)
+- https://stitch.withgoogle.com (verified 18-05-2026)
+
+---
+
+## Q52: Do I need a paid Mobbin plan, or can I get by without?
+
+**You can get by without.** Mobbin is the easiest path because it's curated for UI references, but the same UX-zone outcome works from any public source:
+
+- Public design system articles (e.g. Zomato's published design system) - use the Playwright MCP to scrape components, tokens, and assets into your UX zone.
+- Open-source design systems (Material, Carbon, shadcn/ui, Radix) - clone the repo or point Claude at the docs and ask it to extract tokens + components.
+- Your own product screenshots + a written style guide - feed both into Claude and ask it to build the UX zone from those.
+
+If you do go paid: Mobbin "deep mode" with narrower queries produces meaningfully better references than the default fast mode. Worth knowing if your team commits to it.
+
+**Sources:**
+- https://www.mobbin.com (verified 18-05-2026)
+
+---
+
+## Q53: When do I use Frontend Design (plugin) vs Figma MCP vs Playwright?
+
+| Tool | Purpose | Trigger |
+|------|---------|---------|
+| **Frontend Design skill** (plugin) | Polish a prototype's UI for visual quality and component reuse after it's been built | Run as a sub-agent after first build: *"use the frontend-design sub-agent to review and improve this prototype"* |
+| **Figma MCP** | Read your team's Figma file - pull design tokens, component specs, frames - to inform code generation | When your source of truth is Figma and you want code that mirrors it |
+| **Playwright MCP** | Drive a real browser - scrape sites, automate flows, capture screenshots, test the running prototype | When you need to either (a) extract from a live website, or (b) verify a flow end-to-end after the build |
+
+You can use all three in one session - Playwright scrapes a reference site into the UX zone, Figma MCP pulls your brand tokens, and Frontend Design polishes the final output.
+
+**Heads-up:** Figma MCP requires a **Figma Dev account**. Free / read-only Figma accounts hit MCP rate limits within ~5-6 calls per session.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 18-05-2026)
+
+---
+
+## Q54: What does "build the assembly line" actually mean in practice?
+
+The framing: spend **20% of your time on the work, 80% on the system that does the work** (CLAUDE.md, rules, skills, agents, UX zones, knowledge folders).
+
+What that looks like for a PM in practice:
+
+1. **Knowledge folders.** A `product-knowledge/`, `user-research/`, `competitive-landscape/`, and `team-structure/` folder per project. Any time you learn something new (a customer quote, a Confluence page, a Jira pattern), drop it in.
+2. **Project rules.** When you correct Claude's output, save the correction as a memory or a rule under `.claude/rules/`. The same correction never has to be made twice.
+3. **Skills.** Every workflow you do more than three times - PRD writing, release notes, retro synthesis, user interview synthesis - becomes a skill.
+4. **Agents.** Wrap your skills behind a persona (e.g. "Senior PM agent") that picks the right skill for the situation.
+5. **Routines.** For the work that needs to happen on a schedule (weekly competitor digest, daily Anthropic docs digest), put it on cron.
+
+**The compounding effect:** after a few months, the system is producing output that would take a teammate days, in minutes. That is the "moat" referenced earlier in the workshop.
+
+**The career framing:** *"Want to isolate your job? Put everything you know into the factory. The more you can document and automate, the more high-value work you free up - for yourself."*
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 18-05-2026)
+- https://code.claude.com/docs/en/skills (verified 18-05-2026)
+
+---
+
+## Q55: My Claude Code terminal / sidebar / pinned panel vanished. How do I get it back?
+
+In Antigravity / VS Code:
+
+- The right-hand pinned panel (where Claude Code, the agents view, and the terminal sit) is the **Secondary Side Bar**. Toggle it via `View → Appearance → Secondary Side Bar`, or `Cmd+Alt+B` (Mac) / `Ctrl+Alt+B` (Win/Linux).
+- The Secondary Activity Bar (the vertical icon strip on the right) is on by default. If it's gone, right-click the title bar and ensure `Secondary Activity Bar Position` is set to `default` (not `hidden`).
+- If a Claude Code session "disappeared" mid-task, it's usually paused, not killed. Re-open the terminal and type `continue` and hit enter - it will resume from where it stopped.
+- If you accidentally pressed `Ctrl+C` or `Esc` during a Claude operation, the run stopped. Re-issue the prompt or type `continue` to resume the agent loop.
+
+If the cursor moves but selection doesn't work inside Claude Code's TUI - that's normal. Use arrow keys + Enter, not the mouse, for selection inside the agent / plugin pickers.
+
+**Sources:**
+- https://code.claude.com/docs/en/vs-code (verified 18-05-2026)
+- https://code.claude.com/docs/en/troubleshooting (verified 18-05-2026)
+
+---
+
+## Q56: How do I write a PRD without forgetting business rules or edge cases?
+
+**Don't try to remember them. Put them in `product-knowledge/`.**
+
+The pattern:
+
+1. Maintain a `product-knowledge/business-rules.md` (or equivalent) - every business rule, every edge case, every constraint that should never be missed.
+2. Wire your PRD-writer skill so it **always** reads `product-knowledge/business-rules.md` before drafting.
+3. Maintain a PRD template (`14-templates/prd-template.md`) the skill must follow.
+4. When a meeting or interview surfaces a new edge case, drop the transcript into Granola → save the relevant chunk as a new entry in `business-rules.md`. The next PRD draft pre-empts it automatically.
+
+The PRD skill becomes a function over three inputs - business rules, template, current feature context. The skill never forgets, because the knowledge isn't in the skill; it's in the knowledge folder the skill consumes.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 18-05-2026)
+- https://code.claude.com/docs/en/memory (verified 18-05-2026)

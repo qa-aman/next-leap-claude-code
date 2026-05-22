@@ -1,0 +1,8 @@
+.uxz-price-tag {
+  margin: 0;
+  font-family: var(--uxz-font-footer);
+  font-size: var(--uxz-size-card-meta);
+  line-height: var(--uxz-lh-card-meta);
+  font-weight: var(--uxz-weight-card-meta);
+  color: var(--uxz-color-text-muted);
+}

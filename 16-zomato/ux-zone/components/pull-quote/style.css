@@ -1,0 +1,20 @@
+.uxz-pullquote {
+  margin: var(--uxz-space-6) 0;
+  padding: 0 var(--uxz-space-5) 0 var(--uxz-space-7);
+  border-left: 4px solid var(--uxz-color-brand-red);
+  font-family: var(--uxz-font-article);
+}
+.uxz-pullquote p {
+  margin: 0;
+  font-size: var(--uxz-size-blockquote);
+  line-height: var(--uxz-lh-blockquote);
+  font-weight: var(--uxz-weight-blockquote);
+  color: var(--uxz-color-text-heading);
+}
+.uxz-pullquote em {
+  font-style: italic;
+  color: var(--uxz-color-text-body);
+  font-weight: var(--uxz-weight-body);
+  font-size: var(--uxz-size-body);
+  line-height: var(--uxz-lh-body);
+}

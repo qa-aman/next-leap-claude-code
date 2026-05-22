@@ -1,0 +1,8 @@
+{
+  "app": "Dialpad",
+  "mobbin_url": "https://mobbin.com/screens/3993ae4d-c423-4e1a-a6e6-2901710edf88",
+  "image_url": "https://mobbin.com/api/mcp/short/GZyVqpz8",
+  "fetched_on": "17-03-2026",
+  "screen": "live-meeting",
+  "why_kept": "Two-column layout: live transcript with speaker chips on left, video on right, call controls bottom. Mirror the entire layout for /live."
+}

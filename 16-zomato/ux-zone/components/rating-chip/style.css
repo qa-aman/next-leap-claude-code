@@ -1,0 +1,17 @@
+.uxz-rating-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--uxz-space-1);
+  padding: var(--uxz-space-1) var(--uxz-space-2);
+  border-radius: var(--uxz-radius-sm);
+  font-family: var(--uxz-font-footer);
+  font-size: var(--uxz-size-meta);
+  line-height: var(--uxz-lh-meta);
+  font-weight: 500;
+  color: var(--uxz-color-white);
+  background: var(--uxz-color-rating-green);
+}
+.uxz-rating-chip[data-tier="green"]  { background: var(--uxz-color-rating-green); }
+.uxz-rating-chip[data-tier="yellow"] { background: var(--uxz-color-rating-yellow); }
+.uxz-rating-chip[data-tier="red"]    { background: var(--uxz-color-rating-red); }
+.uxz-rating-chip img { width: 10px; height: 10px; }

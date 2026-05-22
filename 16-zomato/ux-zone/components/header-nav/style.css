@@ -1,0 +1,17 @@
+.uxz-header-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--uxz-color-bg-page);
+  border-bottom: 1px solid var(--uxz-color-border-muted);
+  height: var(--uxz-header-height);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--uxz-space-6);
+}
+.uxz-header-nav__brand { display: inline-flex; align-items: center; }
+.uxz-header-nav__brand img { height: 26px; width: auto; }
+
+@media (max-width: 768px) {
+  .uxz-header-nav { height: 72px; padding: 0 var(--uxz-space-4); }
+}

@@ -1,0 +1,22 @@
+.uxz-figure {
+  margin: var(--uxz-space-6) 0;
+  font-family: var(--uxz-font-article);
+}
+.uxz-figure img {
+  width: 100%;
+  border-radius: var(--uxz-radius-none);
+}
+.uxz-figure figcaption {
+  margin-top: var(--uxz-space-3);
+  font-size: var(--uxz-size-body);
+  line-height: var(--uxz-lh-body);
+  font-weight: var(--uxz-weight-body);
+  color: var(--uxz-color-text-body);
+  text-align: center;
+}
+.uxz-figure figcaption em { font-style: italic; }
+.uxz-figure figcaption strong { color: var(--uxz-color-text-heading); font-weight: var(--uxz-weight-h1); }
+
+@media (max-width: 768px) {
+  .uxz-figure figcaption { font-size: 16px; line-height: 24px; }
+}

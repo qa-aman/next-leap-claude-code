@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zomato Sushi UX Zone, component gallery</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./tokens.css">
+<link rel="stylesheet" href="./components/header-nav/style.css">
+<link rel="stylesheet" href="./components/hero-article/style.css">
+<link rel="stylesheet" href="./components/tag-chip/style.css">
+<link rel="stylesheet" href="./components/body-paragraph/style.css">
+<link rel="stylesheet" href="./components/body-heading/style.css">
+<link rel="stylesheet" href="./components/inline-image/style.css">
+<link rel="stylesheet" href="./components/pull-quote/style.css">
+<link rel="stylesheet" href="./components/footer/style.css">
+<link rel="stylesheet" href="./components/header-nav-rich/style.css">
+<link rel="stylesheet" href="./components/breadcrumb/style.css">
+<link rel="stylesheet" href="./components/tab-bar/style.css">
+<link rel="stylesheet" href="./components/filter-pill/style.css">
+<link rel="stylesheet" href="./components/rating-chip/style.css">
+<link rel="stylesheet" href="./components/price-tag/style.css">
+<link rel="stylesheet" href="./components/restaurant-card/style.css">
+<link rel="stylesheet" href="./components/collection-card/style.css">
+<style>
+  .uxz-gallery { font-family: var(--uxz-font-article); color: var(--uxz-color-text-default); }
+  .uxz-gallery__section { max-width: 1200px; margin: 0 auto; padding: 48px 24px; border-bottom: 1px solid var(--uxz-color-border-muted); }
+  .uxz-gallery__label { font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--uxz-color-text-muted); margin-bottom: 8px; }
+  .uxz-gallery__title { font-size: 24px; line-height: 32px; font-weight: 600; margin: 0 0 24px 0; color: var(--uxz-color-text-heading); }
+  .uxz-gallery__source { font-family: ui-monospace, monospace; font-size: 12px; color: var(--uxz-color-text-muted); margin-bottom: 24px; word-break: break-all; }
+  .uxz-gallery__frame { border: 1px dashed var(--uxz-color-border-muted); padding: 24px; border-radius: 8px; background: #fff; }
+</style>
+</head>
+<body>
+
+<header class="uxz-header-nav">
+  <a class="uxz-header-nav__brand" href="#"><img src="./assets/images/b40b97e677bc7b2ca77c58c61db266fe1603954218.png" alt="Zomato" height="26"></a>
+</header>
+
+<main class="uxz-gallery">
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 01</div>
+    <h2 class="uxz-gallery__title">header-nav</h2>
+    <div class="uxz-gallery__source">source: header (logo-only)</div>
+    <div class="uxz-gallery__frame">See top of page. Sticky, 120px, white, bottom border.</div>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 02</div>
+    <h2 class="uxz-gallery__title">tag-chip</h2>
+    <div class="uxz-gallery__source">source: article &gt; div &gt; div:first-child &gt; div:first-child</div>
+    <div class="uxz-gallery__frame">
+      <span class="uxz-tag-chip">technology</span>
+      <span class="uxz-tag-chip uxz-tag-chip--brand">brand variant</span>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 03</div>
+    <h2 class="uxz-gallery__title">hero-article</h2>
+    <div class="uxz-gallery__source">source: article &gt; div:first-child + figure</div>
+    <div class="uxz-gallery__frame">
+      <div class="uxz-hero-article">
+        <span class="uxz-tag-chip">technology</span>
+        <h1 class="uxz-hero-article__title">Zomato&rsquo;s new Sushi Design System</h1>
+        <div class="uxz-hero-article__meta">
+          <span>Vijay Verma</span><span class="uxz-hero-article__sep">|</span>
+          <span>August 26, 2019</span><span class="uxz-hero-article__sep">|</span>
+          <span>6 mins read</span>
+        </div>
+        <figure class="uxz-hero-article__media">
+          <img src="./assets/images/1765454758_597b48d3875d7de89778722d.png" alt="Zomato Sushi Design System hero">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 04</div>
+    <h2 class="uxz-gallery__title">body-paragraph</h2>
+    <div class="uxz-gallery__source">source: article p, strong, em, a</div>
+    <div class="uxz-gallery__frame">
+      <article class="uxz-prose" style="padding:0;">
+        <p>Say hello to <strong>Sushi</strong> &ndash; Zomato&rsquo;s all-new design system that we&rsquo;ve built from the ground up.</p>
+        <p>Let me break down what this <em>actually</em> means and what went into building Sushi.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 05</div>
+    <h2 class="uxz-gallery__title">body-heading</h2>
+    <div class="uxz-gallery__source">source: article h3, h4 (h2 inferred)</div>
+    <div class="uxz-gallery__frame">
+      <article class="uxz-prose" style="padding:0;">
+        <h2 class="uxz-h2">Section heading (h2)</h2>
+        <h3 class="uxz-h3">What is a Design System?</h3>
+        <h4 class="uxz-h4">Design Principle</h4>
+      </article>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 06</div>
+    <h2 class="uxz-gallery__title">inline-image</h2>
+    <div class="uxz-gallery__source">source: article figure</div>
+    <div class="uxz-gallery__frame">
+      <article class="uxz-prose" style="padding:0;">
+        <figure class="uxz-figure">
+          <img src="./assets/images/1765454757_d228e0df1827d6be38532423.png" alt="Atomic Design">
+          <figcaption><em>Atomic Design: Mapping with our design system</em></figcaption>
+        </figure>
+      </article>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 07</div>
+    <h2 class="uxz-gallery__title">pull-quote</h2>
+    <div class="uxz-gallery__source">source: article blockquote</div>
+    <div class="uxz-gallery__frame">
+      <article class="uxz-prose" style="padding:0;">
+        <blockquote class="uxz-pullquote">
+          <p><em>&ldquo;The effort required to build a design system is tiny compared to the effort required to maintain it.&rdquo;</em> - Kyle Peatt</p>
+        </blockquote>
+      </article>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 08</div>
+    <h2 class="uxz-gallery__title">footer</h2>
+    <div class="uxz-gallery__source">source: footer</div>
+    <div class="uxz-gallery__frame" style="padding:0;">
+      <iframe src="./components/footer/index.html" style="width:100%;border:0;height:720px;"></iframe>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section" style="background:#FAFAFA;margin:48px auto;">
+    <div class="uxz-gallery__label">Phase 02</div>
+    <h2 class="uxz-gallery__title">New components from listing page</h2>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 09</div>
+    <h2 class="uxz-gallery__title">header-nav-rich</h2>
+    <div class="uxz-gallery__source">source: header nav on /ncr/restaurants</div>
+    <div class="uxz-gallery__frame" style="padding:0;">
+      <iframe src="./components/header-nav-rich/index.html" style="width:100%;border:0;height:120px;"></iframe>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 10</div>
+    <h2 class="uxz-gallery__title">breadcrumb</h2>
+    <div class="uxz-gallery__source">source: [aria-label="Breadcrumb"]</div>
+    <div class="uxz-gallery__frame">
+      <nav class="uxz-breadcrumb" aria-label="Breadcrumb">
+        <a href="#">Home</a><span class="uxz-breadcrumb__sep">/</span>
+        <a href="#">India</a><span class="uxz-breadcrumb__sep">/</span>
+        <span class="uxz-breadcrumb__current">Delhi NCR Restaurants</span>
+      </nav>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 11</div>
+    <h2 class="uxz-gallery__title">tab-bar</h2>
+    <div class="uxz-gallery__source">source: [role="tablist"]</div>
+    <div class="uxz-gallery__frame">
+      <div class="uxz-tab-bar" role="tablist">
+        <button class="uxz-tab-bar__tab" role="tab" aria-selected="true"><span class="uxz-tab-bar__label">Dining Out</span></button>
+        <button class="uxz-tab-bar__tab" role="tab" aria-selected="false"><span class="uxz-tab-bar__label">Delivery</span></button>
+        <button class="uxz-tab-bar__tab" role="tab" aria-selected="false"><span class="uxz-tab-bar__label">Nightlife</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 12</div>
+    <h2 class="uxz-gallery__title">filter-pill</h2>
+    <div class="uxz-gallery__source">source: filter row above listing grid</div>
+    <div class="uxz-gallery__frame">
+      <div class="uxz-filter-row">
+        <button class="uxz-filter-pill uxz-filter-pill--with-icon"><img src="./assets/icons/filter.svg" alt="">Filters</button>
+        <button class="uxz-filter-pill">Offers</button>
+        <button class="uxz-filter-pill">Rating: 4.5+</button>
+        <button class="uxz-filter-pill">Pet friendly</button>
+        <button class="uxz-filter-pill" aria-pressed="true">Open Now</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 13</div>
+    <h2 class="uxz-gallery__title">rating-chip</h2>
+    <div class="uxz-gallery__source">source: a[href*="/info"] img[alt="star-fill"] parent</div>
+    <div class="uxz-gallery__frame" style="display:flex;gap:12px;">
+      <span class="uxz-rating-chip" data-tier="green">4.3<img src="./assets/icons/star-fill.svg" alt=""></span>
+      <span class="uxz-rating-chip" data-tier="yellow">3.5<img src="./assets/icons/star-fill.svg" alt=""></span>
+      <span class="uxz-rating-chip" data-tier="red">2.5<img src="./assets/icons/star-fill.svg" alt=""></span>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 14</div>
+    <h2 class="uxz-gallery__title">price-tag</h2>
+    <div class="uxz-gallery__source">source: a[href*="/info"] p:nth-of-type(2)</div>
+    <div class="uxz-gallery__frame">
+      <p class="uxz-price-tag">&#8377;3,000 for two</p>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 15</div>
+    <h2 class="uxz-gallery__title">restaurant-card</h2>
+    <div class="uxz-gallery__source">source: a[href*="/info"] containing img[alt="Restaurant Card"]</div>
+    <div class="uxz-gallery__frame" style="padding:0;">
+      <iframe src="./components/restaurant-card/index.html" style="width:100%;border:0;height:440px;"></iframe>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Component 16</div>
+    <h2 class="uxz-gallery__title">collection-card</h2>
+    <div class="uxz-gallery__source">source: a[href="/ncr/insta-worthy"] (and siblings)</div>
+    <div class="uxz-gallery__frame" style="padding:0;">
+      <iframe src="./components/collection-card/index.html" style="width:100%;border:0;height:460px;"></iframe>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section" style="background:#FAFAFA;margin:48px auto;">
+    <div class="uxz-gallery__label">Phase 04</div>
+    <h2 class="uxz-gallery__title">Page templates</h2>
+    <div class="uxz-gallery__source">Composed from kit components only. Open each in a new tab.</div>
+    <div class="uxz-gallery__frame">
+      <ul style="margin:0;padding:0;list-style:none;display:flex;gap:24px;flex-wrap:wrap;">
+        <li><a href="./templates/article/index.html" target="_blank" rel="noopener" style="color:var(--uxz-color-link);">templates/article</a></li>
+        <li><a href="./templates/listing/index.html" target="_blank" rel="noopener" style="color:var(--uxz-color-link);">templates/listing</a></li>
+        <li><a href="./templates/landing/index.html" target="_blank" rel="noopener" style="color:var(--uxz-color-link);">templates/landing</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="uxz-gallery__section">
+    <div class="uxz-gallery__label">Omitted</div>
+    <h2 class="uxz-gallery__title">Not present on source page</h2>
+    <div class="uxz-gallery__frame">
+      The following components from the requested inventory are absent on the Zomato blog source page and are intentionally not built: cta-button, cta-banner, related-articles-card, related-articles-grid, social-share-bar, author-bio (only an inline byline exists), comments-block. See VERIFICATION.md.
+    </div>
+  </section>
+
+</main>
+</body>
+</html>

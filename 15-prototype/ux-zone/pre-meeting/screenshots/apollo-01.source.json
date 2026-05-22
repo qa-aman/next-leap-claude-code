@@ -1,0 +1,8 @@
+{
+  "app": "Apollo",
+  "mobbin_url": "https://mobbin.com/screens/58bc9fc3-6270-4372-8ab7-b61b48e645fa",
+  "image_url": "https://mobbin.com/api/mcp/short/Yq3HkjyP",
+  "fetched_on": "17-03-2026",
+  "screen": "pre-meeting",
+  "why_kept": "Meetings table: title + date + time + location + record toggle + insights button. Mirror this for the main meeting list row layout."
+}

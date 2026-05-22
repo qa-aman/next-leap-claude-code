@@ -1,0 +1,8 @@
+{
+  "app": "Motion",
+  "mobbin_url": "https://mobbin.com/screens/0629e19f-e02e-4ce7-a674-22ada7cf970d",
+  "image_url": "https://mobbin.com/api/mcp/short/SVdCzNMw",
+  "fetched_on": "17-03-2026",
+  "screen": "action-items",
+  "why_kept": "Priority filter chips dropdown (ASAP / High / Medium / Low) with checkboxes. Mirror this filter UX for the All / High / Needs review filter chips on /action-items."
+}

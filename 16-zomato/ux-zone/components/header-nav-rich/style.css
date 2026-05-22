@@ -1,0 +1,71 @@
+.uxz-header-rich {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--uxz-color-bg-page);
+  display: flex;
+  align-items: center;
+  gap: var(--uxz-space-6);
+  padding: var(--uxz-space-4) var(--uxz-space-7);
+  box-shadow: var(--uxz-shadow-sm);
+  font-family: var(--uxz-font-footer);
+}
+.uxz-header-rich__brand img { height: 32px; width: auto; display: block; }
+.uxz-header-rich__search input::placeholder { color: var(--uxz-color-text-secondary); }
+.uxz-header-rich__search {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--uxz-space-3);
+  background: var(--uxz-color-bg-page);
+  border: 1px solid var(--uxz-color-border-pill);
+  border-radius: var(--uxz-radius-md);
+  padding: var(--uxz-space-2) var(--uxz-space-4);
+  box-shadow: var(--uxz-shadow-sm);
+}
+.uxz-header-rich__location,
+.uxz-header-rich__query {
+  display: flex;
+  align-items: center;
+  gap: var(--uxz-space-2);
+}
+.uxz-header-rich__location { flex: 0 0 auto; max-width: 360px; }
+.uxz-header-rich__query    { flex: 1; }
+.uxz-header-rich__divider {
+  width: 1px;
+  height: 24px;
+  background: var(--uxz-color-border-pill);
+}
+.uxz-header-rich__search input {
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-family: var(--uxz-font-footer);
+  font-size: var(--uxz-size-meta);
+  line-height: var(--uxz-lh-meta);
+  color: var(--uxz-color-text-card-title);
+  width: 100%;
+}
+.uxz-header-rich__search input::placeholder { color: var(--uxz-color-text-secondary); }
+.uxz-header-rich__chev { width: 12px; height: 12px; }
+.uxz-header-rich__auth {
+  display: flex;
+  gap: var(--uxz-space-6);
+}
+.uxz-header-rich__auth a {
+  font-size: var(--uxz-size-meta);
+  font-weight: 400;
+  color: var(--uxz-color-text-card-title);
+  text-decoration: none;
+}
+.uxz-header-rich__auth a:hover { color: var(--uxz-color-brand-red); }
+
+@media (max-width: 1024px) {
+  .uxz-header-rich { padding: var(--uxz-space-3) var(--uxz-space-5); gap: var(--uxz-space-4); }
+  .uxz-header-rich__location { max-width: 220px; }
+}
+@media (max-width: 768px) {
+  .uxz-header-rich__auth { display: none; }
+  .uxz-header-rich__search { flex-direction: column; align-items: stretch; padding: var(--uxz-space-2); }
+  .uxz-header-rich__divider { display: none; }
+}

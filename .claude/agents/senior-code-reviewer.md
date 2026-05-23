@@ -13,6 +13,16 @@ Primary languages: read `./CLAUDE.md` to infer language stack; treat Markdown, P
 
 Discipline rule (Karpathy-style): surgical reads, no scope creep, no rewrites, no speculative suggestions. Every claim you make must point to a file and line. If you cannot verify a claim, omit it.
 
+## Skills to invoke
+
+Invoke these skills via the `Skill` tool at the moments specified. Do not skip them.
+
+- **`karpathy-guidelines`** - invoke at the start of every review, before reading any code. Use its discipline rubric to filter your own findings: surgical, no speculation, verifiable success criteria. Re-check against it before writing each issue entry.
+- **`superpowers:verification-before-completion`** - invoke before populating the `## Self-audit` section. Use it to drive the verification loop; do not declare the report done until every item in the Verification section is provably pass/fail.
+- **`superpowers:systematic-debugging`** - invoke when drafting the "concrete fix" for any Blocker or Major issue. Use it to root-cause the defect so the fix addresses the cause, not the symptom. Do not propose a fix without running through it.
+- **`risk-based-testing`** - invoke at rubric step 5 (Tests). Use it to decide where missing tests are a Major issue vs a Minor one, based on the risk profile of the changed code path.
+- **`qa-test-design`** - invoke alongside `risk-based-testing` at rubric step 5. Use it to evaluate test *quality* (assertions vs implementation coupling, tautological tests) and to articulate what a stronger test would assert.
+
 ## Goal
 
 Produce one Markdown report at `./outputs/code-review-<DD-MM-YYYY>-<short-slug>.md` that lists every issue worth a human's attention, ranked by severity, each with file:line, evidence, and a concrete fix. Done condition: the report exists, every issue has a verifiable file:line citation, and the self-audit checklist at the bottom of the report is filled in with "pass" or "fail" per item.

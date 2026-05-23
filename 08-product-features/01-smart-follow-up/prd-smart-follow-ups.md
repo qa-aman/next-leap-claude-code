@@ -27,11 +27,15 @@ Three personas drive this feature. Each has different needs.
 
 ## What It Does
 
-- Drafts a follow-up email after each meeting using the summary and extracted action items.
-- Shows you a review screen before anything is sent. You edit, delete, or approve.
-- Assigns each action item a confidence score (example: "85% confident this is an action item") so you know what to double-check.
+- Drafts a follow-up email after each meeting. Uses the summary and extracted action items.
+- Shows a review screen before anything is sent. You edit, delete, or approve.
+- Tags each action item as **Ready** or **Needs review**. One label, used everywhere (see "Confidence vocabulary" below).
 - Lets you send directly from MeetFlow or copy the draft to your email client.
-- Integrates with Slack (send as a channel message), Notion (append to meeting page), and Jira/Linear (create tasks from action items).
+- Integrates with Slack and Notion at launch. Jira and Linear ship as fast-followers in May 2026.
+
+### Why integration scope was cut
+
+Original draft included Slack, Notion, Jira, and Linear at launch. Four integrations in one release was flagged as a quality and demo-stability risk in the 23-05-2026 pressure test (`outputs/smart-followup-pressure-test-23-05-2026.md`). Slack and Notion cover the highest-volume export channels per Q1 2026 feedback. Jira and Linear move to a May 2026 fast-follow.
 
 ---
 
@@ -57,12 +61,28 @@ Step-by-step user flow:
 6. You choose: send via email, post to Slack, or export to Notion/Jira/Linear.
 7. Sent. A confirmation log is saved to your meeting record.
 
+### Confidence vocabulary (one model, used everywhere)
+
+The pressure test surfaced three different confidence representations in the original draft (percentage in review, color dots in Slack, "Suggested/Confirmed" in tasks). One vocabulary replaces all three.
+
+- **Ready** = model confidence ≥ 70%. Auto-included in the draft.
+- **Needs review** = model confidence < 70%. Flagged for the user to check.
+- The raw percentage is available on hover or tap for users who want detail. It is never the primary signal.
+- Every surface (review screen, Slack, Notion, future Jira/Linear) uses the same two labels. No new words per channel.
+
+### Accessibility
+
+- Labels are text plus an icon (checkmark for Ready, exclamation for Needs review). Never color alone.
+- This meets WCAG 2.1 Level A (success criterion 1.4.1, "Use of Color").
+- All confidence states are readable by screen readers.
+
 ### Integration export format
 
-When follow-ups are sent via integrations, confidence scores are included:
+When follow-ups are sent via integrations, the same vocabulary applies:
 
-- **Slack:** Action items listed with a colored dot (green = high confidence, yellow = needs review). No raw score number - just the visual indicator.
-- **Notion/Jira/Linear:** Action items exported as tasks. Confidence score included as a metadata field. Items below 60% confidence are marked "Suggested" rather than "Confirmed."
+- **Slack:** Action items posted as a channel message. Each item shows the **Ready** or **Needs review** label inline, with the matching icon.
+- **Notion:** Action items appended to the meeting page. Same labels and icons.
+- **Jira and Linear (May 2026):** Action items exported as tasks. The label maps to a task field. **Ready** items create a confirmed task. **Needs review** items create a draft task that the assignee must accept before it appears in their queue. This avoids the downstream confusion flagged in the pressure test.
 
 ### Poor audio quality handling
 
@@ -87,13 +107,30 @@ Cross-reference: `04-strategy/okrs-q2-2026.md` for how these tie to Q2 goals.
 
 ---
 
-## Review burden for power users
+## Review screen design
 
-Sarah Chen runs 8-10 meetings/day. At an estimated 5-8 suggested items per meeting, that's 50-80 review actions daily. To keep this manageable:
+Sarah Chen runs 8-10 meetings/day (`05-user-personas/sarah-chen.md`). At 5-8 items per meeting, that's 50-80 review actions daily. The screen is designed for that load.
 
-- Default view shows only items below 70% confidence for review. High-confidence items are auto-included in the draft.
-- Batch review: users can "approve all" suggested items with one click, then edit individual items.
-- Target: review time per meeting should be under 2 minutes, compared to Sarah's current 30 minutes of manual correction.
+**What the user sees by default:**
+
+- A count at the top: "4 Ready, 2 Needs review."
+- The full action item list. Ready items are collapsed but visible (one-line preview). Needs review items are expanded.
+- An outbound data preview: "This draft will be sent from your account to: [recipients]. Action items will be posted to: Slack #product-eng, Notion meeting page." This addresses Marcus's privacy concern (`05-user-personas/marcus-okafor.md`) before send, not after.
+
+**Approve all behavior (defined explicitly):**
+
+- "Approve all Needs review" accepts every flagged item as-is. The user still sees a confirm step: "Approve 2 Needs review items?"
+- "Approve all" does not bypass the outbound data preview.
+- Ready items are already in the draft. They do not need approval, but they are visible and can be removed.
+
+**Zero-state and edge cases:**
+
+- Zero action items extracted: review screen shows "No action items detected." User can still send the summary or add items manually.
+- All items are Needs review: no Ready count shown. The user must review each before sending.
+- Low transcript quality: banner appears (see "Poor audio quality handling" below). All items default to Needs review.
+- User did not attend the meeting (calendar invite only): draft is not auto-generated. User can request one manually.
+
+**Target:** under 2 minutes review per meeting, compared to Sarah's current 30 minutes of manual correction. Measured by time from review-screen open to send.
 
 ---
 
@@ -101,19 +138,22 @@ Sarah Chen runs 8-10 meetings/day. At an estimated 5-8 suggested items per meeti
 
 - Automatic sending. Every draft requires your explicit approval.
 - Calendar integration. Scheduling follow-up calls is out of scope for this release.
-- Salesforce sync. That integration is Q2. This launch targets Slack, Notion, Jira, Linear.
 - Custom email templates beyond the default layout.
 - Multi-language support. English only at launch.
 - Re-processing historical meetings. Confidence scores and follow-up drafts apply to new meetings only. Old meetings retain v1 action items as-is.
-- Audit log events for Enterprise tier. Structured audit logging of AI confidence decisions deferred to Enterprise GA (June 2026, Tomas's scope).
+- Audit log events for Enterprise tier. Structured audit logging of AI confidence decisions deferred to Enterprise GA (June 2026, Tomás's scope).
+- **Enterprise pilots are scoped OUT of the April rollout.** The three active enterprise pilots will not get Smart Follow-Up in April. They are re-included after audit logging ships at Enterprise GA in June 2026. Reason: shipping AI-drafted business comms to enterprise accounts without audit trails creates compliance risk and unsellable demo moments. Surfaced in the 23-05-2026 pressure test.
+- Jira and Linear export at launch. Both ship in May 2026 as fast-followers (see "Why integration scope was cut" above).
+- Salesforce sync. Q2 2026 launch targets Slack and Notion only.
 
 ---
 
 ## Dependencies
 
-- **Action Item Scoring v2** must ship first. The confidence scoring model (trained on 50K labeled meetings) powers the flagging logic. Without it, follow-up drafts have no reliability signal.
-- Action Item Scoring v2 gaps to resolve before launch: implicit commitments, multi-person items, and conditional actions (example: "if design approves, Marcus will kick off sprint").
-- **Training data for new gap areas.** The existing 50K dataset has the same blind spots the model has. ML team needs to label new data for implicit commitments, multi-person, and conditional items. Labeling scope, volume, and timeline must be confirmed before Scoring v2 development starts. This is a blocking dependency.
+- **Action Item Scoring v2** must ship first. The confidence scoring model (trained on 50K labeled meetings) powers the Ready / Needs review logic. Without it, drafts have no reliability signal.
+- Scoring v2 gaps to resolve before launch: implicit commitments, multi-person items, and conditional actions (example: "if design approves, Marcus will kick off sprint").
+- **Training data for new gap areas - hard gate on April GA.** The existing 50K dataset has the same blind spots the model has. ML team needs to label new data for implicit, multi-person, and conditional items. Labeling scope, volume, and named ML owner must be confirmed by 25-03-2026. If labeling has not started by that date, April GA slips. This was the top risk flagged in the 23-05-2026 pressure test.
+- **Monthly labeled audit of 200 meetings needs an owner.** This is the source of truth for the 80% accuracy target. Confirm ML owner and tooling before beta. Not a future enhancement.
 - **Transcript quality ceiling.** Scoring v2 consumes transcription output. Transcript Accuracy v2 (Aisha, June 2026) ships after this feature. Until then, noisy-environment transcripts (~80% accuracy per `03-product-knowledge/product.md`) cap action item quality regardless of model improvements. The poor audio handling above mitigates this.
 - **Privacy review for feedback loop.** Scoring v2 logs user confirm/dismiss actions as training data. For Team users, confirm with Tomas whether this training data includes meeting content, whether it's aggregated or per-user, and whether it complies with data retention policies. Must resolve before beta.
 
@@ -127,8 +167,9 @@ This is an ML model change that affects every user's action items. Phased rollou
 |-------|----------|----------|-----------------|
 | 1. Internal dogfood | MeetFlow employees | 1 week | No regressions in confirm/dismiss ratio vs v1 |
 | 2. Pro power users | Top 10% Pro users by meeting volume (Sarah Chen segment) | 2 weeks | Accuracy proxy (confirm rate) >= 75%, no P0 bugs |
-| 3. All Pro + Team | All paid users | 1 week | Confirm rate holds, support ticket volume stable |
+| 3. All Pro + Team (excl. enterprise pilots) | All paid users except the three active enterprise pilots | 1 week | Confirm rate holds, support ticket volume stable |
 | 4. Free tier | All users | Ongoing | No gate - expand after paid tiers are stable |
+| 5. Enterprise pilots | Three active pilots | After June 2026 Enterprise GA | Audit logging shipped, Tomás sign-off |
 
 Feature-flagged from day one. Rollback trigger: confirm/dismiss ratio drops below v1 baseline for 48 hours, or P0 bug in draft generation.
 
@@ -152,6 +193,9 @@ Logging requirements: For every follow-up draft, log input transcript quality sc
 
 | Milestone | Date |
 |-----------|------|
+| Scoring v2 labeling started (hard gate for April GA) | 25-03-2026 |
 | Action Item Scoring v2 ships | March 2026 |
 | Smart Follow-Up beta (internal) | Early April 2026 |
-| Smart Follow-Up GA (general availability) | April 2026 |
+| Smart Follow-Up GA (Slack + Notion, paid tiers excl. enterprise) | April 2026 |
+| Jira + Linear export ships (fast-follow) | May 2026 |
+| Enterprise pilots included | After June 2026 Enterprise GA |

@@ -10,6 +10,7 @@ Answers to open questions from workshop sessions, sourced from official Anthropi
 - **May 2026 Session 2 additions:** 16-05-2026 (Q14-Q31 - see "May 2026 - Session 2 Additions" section)
 - **May 2026 Session 3 additions:** 17-05-2026 (Q32-Q45 - see "May 2026 - Session 3 Additions" section)
 - **May 2026 Session 4 additions:** 18-05-2026 (Q46-Q56 - see "May 2026 - Session 4 Additions" section)
+- **May 2026 Session 5 additions:** 23-05-2026 (Q57-Q70 - see "May 2026 - Session 5 Additions" section)
 
 If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
@@ -1197,3 +1198,267 @@ The PRD skill becomes a function over three inputs - business rules, template, c
 **Sources:**
 - https://code.claude.com/docs/en/skills (verified 18-05-2026)
 - https://code.claude.com/docs/en/memory (verified 18-05-2026)
+
+---
+
+# May 2026 - Session 5 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 23-05-2026 during Session 5 (Multi-agent architectures). All URLs verified 23-05-2026.
+
+---
+
+## Q57: Is "knowledge base" the same as project context, or is it a separate feature?
+
+**Same thing, different label.** In Claude Code there's no separate "knowledge base" product - what teams call a knowledge base is just the set of context files in your project folder that Claude reads automatically.
+
+Concretely, the knowledge base for a MeetFlow-style project is:
+
+- `CLAUDE.md` - project-level standing instructions
+- `03-product-knowledge/` - company, product, competitive context
+- `04-strategy/` - vision, OKRs, roadmap
+- `05-user-personas/` - persona deep-dives
+- `07-user-interviews/` - transcripts
+
+If those files don't exist, Claude falls back to generic LLM knowledge and the output is shallow. The richer the context folder, the richer the output. Some teams call it "context", "project OS", or "knowledge base" - it's the same thing.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 23-05-2026)
+
+---
+
+## Q58: How do I feed books or large PDFs to Claude without burning tokens?
+
+**Don't feed PDFs directly.** Two-step pattern:
+
+1. **Convert PDF/PPT/Word -> Markdown** via a Python script (e.g. `pypdf` + your own converter). Drop the script in `.claude/scripts/pdf-to-md.py` and invoke it via a skill.
+2. **Add a front-matter ToC** to the resulting MD so Claude can jump straight to the relevant chapter. If chapter 5 is what you need, the front-matter index points there - Claude doesn't have to scan chapters 1-4.
+
+If the MD is still huge (5000+ lines), generate a per-chapter summary file alongside the full MD. Claude consults the summary first, then opens only the chapter it needs.
+
+**Rule of thumb:** never let Claude ingest binary documents. Convert, index, summarize. Each step cuts tokens 10x.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 23-05-2026)
+
+---
+
+## Q59: How do I store per-stakeholder context (manager, PM peers, exec)?
+
+**One folder, one MD per stakeholder.** Keep it out of `CLAUDE.md` - that file is for project-wide rules, not personal relationships.
+
+Suggested layout:
+
+```
+.claude/personas/
+  amit-manager.md
+  priya-engineering-lead.md
+  raj-design-partner.md
+```
+
+Each file holds: what they care about, communication style, recurring feedback, current open threads, last 1:1 notes. Update after each 1:1. When you prompt Claude for "prep for my 1:1 with Amit", it reads `amit-manager.md` first and the prep reflects Amit's actual style, not generic manager advice.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 23-05-2026)
+
+---
+
+## Q60: If I have 50 interview transcripts, do I spawn 50 sub-agents or 10 sub-agents reading 5 each?
+
+**Let Claude decide unless you have a strong reason.** Prompt: *"I have 50 transcripts. Launch the right number of sub-agents to extract themes - decide based on file size and parallelism."* Claude inspects file sizes, estimates per-agent context, and picks a count.
+
+If you do want to fix the count, say it explicitly: *"Launch exactly 10 sub-agents, 5 transcripts each."*
+
+There is no documented hard cap on sub-agent count, but each sub-agent burns tokens and Anthropic plan limits (5h / weekly windows) apply. For 50+ transcripts, the practical sweet spot tends to be 5-10 sub-agents each handling a batch, not 50 in parallel.
+
+The lead agent then reads only the per-batch summaries (not the raw transcripts), keeping its own context clean.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 23-05-2026)
+
+---
+
+## Q61: What is a "lead orchestrator" and how do I trigger one?
+
+A **lead orchestrator** is the top-level agent in a multi-agent run that splits work, dispatches helpers, reads their summaries, and assembles the final output. Mental model: project lead + 3 developers + 1 QA. The lead never reads the raw code - only the helpers' status reports.
+
+You don't configure the orchestrator manually for sub-agent flows - Claude takes that role implicitly when you say *"spawn sub-agents to do X in parallel"*.
+
+For the formal **agent-teams** feature (where the orchestration is explicit), you must:
+
+1. Enable the experimental flag in `settings.json`.
+2. Use the phrase "**create an agent team**" in your prompt.
+3. Define the helpers (e.g. front-end agent, back-end agent, QA agent).
+
+Anthropic's published benchmark: a lead + several helpers outperformed a single agent by 90.2% on their internal multi-agent research evaluation.
+
+**Sources:**
+- https://www.anthropic.com/engineering/built-multi-agent-research-system (verified 23-05-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 23-05-2026)
+
+---
+
+## Q62: Sub-agent vs agent team vs agent view vs work tree - which do I pick?
+
+| Pattern | Use when | Trigger |
+|---------|----------|---------|
+| **Sub-agent** | Side task in parallel without polluting your main context | "Use a sub-agent to..." |
+| **Agent team** | 3+ angles or specialized roles working together (front-end / back-end / QA) | "Create an agent team for..." (needs experimental flag) |
+| **Agent view** | Background long-running tasks; you want to close the terminal and have it keep running | `claude agents` (instead of `claude`) |
+| **Work tree** | Multiple agents editing the *same file* concurrently without conflicts | Configure git worktrees; Claude operates on isolated copies |
+| **Single session** | Small, linear task with no parallelism needed | Just `claude` |
+
+Cost scales the other way: single session < sub-agent < agent view < agent team. Agent teams burn the most tokens. Reserve them for high-value work.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 23-05-2026)
+- https://code.claude.com/docs/en/cli-reference (verified 23-05-2026)
+
+---
+
+## Q63: How do I define an agent's responsibilities? Where do I write the role?
+
+You write one or two sentences describing the role, and Claude generates the rest. Flow via `/agents`:
+
+1. `/agents` -> Create new agent
+2. "Generate with Claude" -> paste a one-line description like *"Churn-pattern analyst that reads survey responses and pulls out the top churn drivers with verbatim quotes, frequency tags, and severity tags."*
+3. Pick tool permissions (default to **read-only** until you trust the agent)
+4. Pick model (Sonnet for most; Opus for complex review)
+5. Pick scope (project vs global)
+
+Claude generates the full system prompt - rubric, non-negotiable rules, output format - from your one-liner. You can edit `.claude/agents/<agent>.md` afterwards.
+
+Practical default: **read-only first**. Only grant write access after 2-3 iterations where the agent's output is reliable.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 23-05-2026)
+- https://code.claude.com/docs/en/permissions (verified 23-05-2026)
+
+---
+
+## Q64: Can I share an agent with my team, or publish it as a plugin?
+
+**Share via git, yes. Publish as a plugin, technically yes but not the same flow.**
+
+To share:
+
+- Agent file lives at `.claude/agents/<agent-name>.md` (project-scope) or `~/.claude/agents/<name>.md` (global).
+- Commit the project-scope file to your repo. Teammates pull, and the agent is available locally.
+- Agent teams that run on Anthropic's infrastructure (the experimental orchestration feature) **cannot** be shared this way - the orchestration runs on Anthropic's side, not in your repo.
+
+For wider distribution, package the agent + any companion skills into a plugin and publish to a marketplace (`/plugin`). Most teams stop at "commit to repo" because plugin packaging is overkill for an internal tool.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 23-05-2026)
+- https://code.claude.com/docs/en/plugins (verified 23-05-2026)
+
+---
+
+## Q65: How do skills relate to agents? Can one agent use multiple skills?
+
+**Yes.** An agent is a persona. Skills are the verbs it knows. One agent can list any number of skills in its system prompt; it will invoke the right one based on the situation.
+
+Example - a single `aman-pm.md` agent that lists:
+
+- `write-prd`
+- `feature-spec`
+- `release-notes`
+- `competitive-analysis`
+- `user-interview-synthesis`
+
+When you say "draft a PRD for Smart Follow-Up", the agent dispatches `write-prd`. When you say "summarize last week's interviews", it dispatches `user-interview-synthesis`.
+
+**Caveat from the session:** stuffing every skill into one master agent bloats context. Better pattern - create role-scoped agents (`aman-prd.md`, `aman-stakeholder.md`, `aman-research.md`) that each carry a focused skill set. Start small, expand once each role's skills are stable.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 23-05-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 23-05-2026)
+
+---
+
+## Q66: How do I track live token consumption? Can I put it in the status line?
+
+- `/usage` shows current 5-hour and weekly window consumption.
+- `/cost` shows session-level token + dollar usage.
+- Status line - take a screenshot of any existing rich status line, paste it into Claude, and prompt *"create a similar status line for me with folder, model, branch, context %, 5h / weekly window usage, and PID"*. Claude generates the status line config; iterate on color, separator, order in plain English.
+
+The status line is just a config string Claude can edit - no special command syntax to learn. Anything you can describe, you can add.
+
+To remove the token-usage element later: *"remove the weekly window from my status line"*. Done in one prompt.
+
+**Sources:**
+- https://code.claude.com/docs/en/cli-reference (verified 23-05-2026)
+- https://code.claude.com/docs/en/statusline (verified 23-05-2026)
+
+---
+
+## Q67: My Claude seems stuck or in a loop. What do I do?
+
+Three-step recovery:
+
+1. `Ctrl+C` to interrupt the current operation.
+2. Type `continue` or *"retry the last action"* - the agent resumes from where it stopped.
+3. If it's a write-to-file issue ("the write was rejected" / "no output produced"), prompt *"retry the write to `<file>`"* and it picks up.
+
+If a sub-agent loop never terminates (Claude shows activity but no file ever lands), it's usually a silent stall. `Ctrl+C` + retry resolves it almost every time. Don't kill the whole session - you'll lose context.
+
+For the specific Windows `/agents` JSON parse error seen this session, the workaround is: paste the description as plain text (`Ctrl+Shift+V` to strip newline formatting) or type it manually. If that fails, edit `.claude/agents/<name>.md` directly.
+
+**Sources:**
+- https://code.claude.com/docs/en/troubleshooting (verified 23-05-2026)
+
+---
+
+## Q68: What does `/feedback` do, and where does the GitHub issue actually appear?
+
+`/feedback` files a bug report against Anthropic's Claude Code GitHub repo from inside your session. Flow:
+
+1. Run `/feedback` in the terminal interface (not all CLI variants expose it - if missing, you're likely in a chat-only Claude session).
+2. Describe the issue. You can also paste a screenshot if you open the resulting URL in a browser.
+3. Submit. You get a **feedback ID** back.
+4. Press Enter to open the GitHub issue page in your browser.
+
+**Known oddity (observed 23-05-2026):** the feedback ID does not always surface under the **Issues** filter for your own GitHub account. The issue is logged on Anthropic's side regardless. Workarounds:
+
+- Save the feedback ID locally for reference.
+- Tag `@AnthropicAI` on X with the feedback ID if you need a faster response.
+- Search for the ID in the Anthropic Claude Code GitHub repository's issues directly.
+
+**Sources:**
+- https://github.com/anthropics/claude-code (verified 23-05-2026)
+- https://code.claude.com/docs/en/troubleshooting (verified 23-05-2026)
+
+---
+
+## Q69: How do I keep multiple Claude sessions organized across features?
+
+**Pattern used in the session - PID-based session registry.** Each Claude session has a process ID. Register it against a feature name in a local file (`.claude/claude-sessions-registry.md`), so closing the terminal or restarting the machine doesn't lose the chat.
+
+Workflow:
+
+1. Open new terminal, start `claude`.
+2. Note the PID (shown in the status line if configured).
+3. Register via a small shell helper (`ccs "create-agent-task"`) that appends an entry to the registry file with PID + task description.
+4. To resume after a terminal close: open registry, copy the PID-based resume command, paste in a new terminal. Claude reopens the same session with full history.
+
+This is a **user-built convention**, not a built-in Claude Code feature. The host's setup is shareable - ask Claude to read `.claude/claude-sessions-registry.md` and replicate the `ccs` helper in your shell config.
+
+**Sources:**
+- https://code.claude.com/docs/en/cli-reference (verified 23-05-2026)
+
+---
+
+## Q70: What's "ReAct" and is it a Claude Code thing I need to learn?
+
+**ReAct (Reason + Act)** is a generic LLM-agent design pattern from academic literature (Yao et al., 2022) where an agent alternates between reasoning about the next step and taking an action. It's a framing for *how* agents work, not a Claude Code feature.
+
+- Claude Code's agents already follow a ReAct-style loop internally. You don't configure it.
+- Third-party blogs may reference ReAct, ReWOO, Reflexion, etc. - useful conceptually, but **don't substitute them for the official Claude docs**.
+- For Claude-specific patterns, anchor on `code.claude.com/docs` and `anthropic.com/engineering`. Third-party content is often outdated or inaccurate for Claude Code specifics.
+
+**Bottom line:** read the official docs. ReAct is background reading, not a thing you have to implement.
+
+**Sources:**
+- https://www.anthropic.com/engineering/built-multi-agent-research-system (verified 23-05-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 23-05-2026)
+
+---

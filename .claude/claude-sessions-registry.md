@@ -11,7 +11,9 @@ Registry file: `~/.claude/named-sessions.json`
 
 | Name | PID | Status | Created | Last Used | Msgs | Description |
 |---|---|---|---|---|---|---|
-| `multi-agent` | 53891 | ● live | 19-05-2026 | 19-05-2026 21:45 | 3 | Multi agent session |
+| `multi-agent` | 53891 | ○ idle | 19-05-2026 | 23-05-2026 00:13 | 19 | Multi agent session |
+| `multi-agent-html-file` | 37182 | ● live | 23-05-2026 | 23-05-2026 11:01 | 29 | this chat is used to create the multi agent file for cohort |
+| `create-agent-task` | 59871 | ● live | 23-05-2026 | 23-05-2026 12:30 | 1 | this chat is being used to create the agent |
 ---
 
 ## Quick Reference

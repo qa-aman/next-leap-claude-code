@@ -1,0 +1,1612 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Multi-Agent Systems for PMs — Theory + Practical</title>
+<style>
+  :root{
+    --bg:#0b0d12;
+    --bg-2:#11141b;
+    --bg-3:#161a23;
+    --line:#222837;
+    --text:#e8eaf0;
+    --muted:#9aa3b2;
+    --accent:#cc785c;
+    --accent-2:#f4a78b;
+    --pm:#7eb8ff;
+    --pm-bg:#0e1a2a;
+    --do:#65d39a;
+    --do-bg:#0a1c14;
+    --good:#65d39a;
+    --warn:#f0c674;
+    --bad:#ef6b6b;
+    --code-bg:#0f131b;
+    --code-border:#1d2231;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);}
+  body{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent-2); text-decoration:none}
+  a:hover{text-decoration:underline}
+  code, pre, kbd{font-family:"JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;}
+  code{background:var(--code-bg); padding:2px 6px; border-radius:4px; font-size:0.92em; color:#f4d8c5;}
+  pre{
+    position:relative;
+    background:var(--code-bg);
+    border:1px solid var(--code-border);
+    border-radius:8px;
+    padding:18px 20px;
+    overflow:auto;
+    font-size:0.92em;
+    line-height:1.55;
+  }
+  pre code{background:transparent; padding:0; color:#e8eaf0;}
+  .copy-btn{
+    position:absolute;
+    top:8px;
+    right:8px;
+    background:var(--bg-3);
+    color:var(--muted);
+    border:1px solid var(--line);
+    border-radius:5px;
+    padding:4px 10px;
+    font-size:11px;
+    cursor:pointer;
+    font-family:inherit;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    transition:all 0.15s ease;
+  }
+  .copy-btn:hover{background:var(--accent); color:#fff; border-color:var(--accent);}
+  .copy-btn.copied{background:var(--good); color:#062014; border-color:var(--good);}
+  .wrap{
+    display:grid;
+    grid-template-columns: 280px 1fr;
+    min-height:100vh;
+  }
+  aside{
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+    padding:28px 22px;
+    border-right:1px solid var(--line);
+    background:var(--bg-2);
+  }
+  aside h2{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    color:var(--muted);
+    margin:0 0 14px 0;
+  }
+  aside ol{
+    list-style:none;
+    padding:0;
+    margin:0 0 18px 0;
+    counter-reset:toc;
+  }
+  aside li{
+    counter-increment:toc;
+    margin:0;
+  }
+  aside li a{
+    display:block;
+    padding:9px 10px;
+    border-radius:6px;
+    color:var(--text);
+    font-size:14px;
+    line-height:1.35;
+  }
+  aside li a::before{
+    content: counter(toc) ".";
+    color:var(--muted);
+    margin-right:8px;
+    font-variant-numeric: tabular-nums;
+  }
+  aside li a:hover{background:var(--bg-3); text-decoration:none;}
+  main{
+    padding:60px 80px 120px;
+    max-width:980px;
+  }
+  .meta{
+    color:var(--muted);
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.14em;
+    margin-bottom:10px;
+  }
+  h1{
+    font-size:42px;
+    line-height:1.15;
+    margin:0 0 14px 0;
+    letter-spacing:-0.02em;
+  }
+  .lede{
+    font-size:20px;
+    color:var(--muted);
+    margin:0 0 36px 0;
+    line-height:1.5;
+    max-width:760px;
+  }
+  section{
+    padding:48px 0;
+    border-top:1px solid var(--line);
+  }
+  section:first-of-type{border-top:none; padding-top:24px;}
+  section h2{
+    font-size:30px;
+    margin:0 0 8px 0;
+    letter-spacing:-0.01em;
+  }
+  section h2 .num{
+    color:var(--accent);
+    font-variant-numeric:tabular-nums;
+    margin-right:10px;
+  }
+  section .sub{
+    color:var(--muted);
+    margin:0 0 28px 0;
+    font-size:16px;
+  }
+  h3{
+    font-size:20px;
+    margin:34px 0 12px 0;
+    color:var(--accent-2);
+  }
+  h4{
+    font-size:16px;
+    margin:22px 0 8px 0;
+    color:var(--text);
+  }
+  h5{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    color:var(--muted);
+    margin:16px 0 6px 0;
+    font-weight:700;
+  }
+  p{margin:0 0 14px 0;}
+  ul,ol{padding-left:24px; margin:0 0 16px 0;}
+  li{margin:6px 0;}
+  .grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin:18px 0;
+  }
+  .card{
+    background:var(--bg-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:20px 22px;
+  }
+  .card h4{margin-top:0;}
+  .card.good{border-left:3px solid var(--good);}
+  .card.bad{border-left:3px solid var(--bad);}
+  .callout{
+    border:1px solid var(--line);
+    border-left:3px solid var(--accent);
+    background:var(--bg-2);
+    border-radius:8px;
+    padding:16px 20px;
+    margin:18px 0;
+  }
+  .callout.warn{border-left-color:var(--warn);}
+  .callout.key{border-left-color:var(--good);}
+  .callout .label{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.14em;
+    color:var(--accent);
+    margin-bottom:6px;
+    font-weight:600;
+  }
+  .callout.warn .label{color:var(--warn);}
+  .callout.key .label{color:var(--good);}
+
+  .pm-example{
+    border:1px solid #1f3654;
+    border-left:4px solid var(--pm);
+    background:var(--pm-bg);
+    border-radius:10px;
+    padding:18px 22px;
+    margin:22px 0;
+  }
+  .pm-example .label{
+    display:inline-block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.14em;
+    color:var(--pm);
+    margin-bottom:8px;
+    font-weight:700;
+    padding:2px 8px;
+    background:#0a1422;
+    border-radius:4px;
+    border:1px solid #1f3654;
+  }
+  .pm-example h4{
+    margin:0 0 10px 0;
+    color:var(--pm);
+    font-size:15px;
+  }
+  .pm-example p:last-child{margin-bottom:0;}
+  .pm-example pre{margin-top:12px;}
+
+  /* Practical "do it now" block */
+  .practical{
+    border:1px solid #19402a;
+    border-left:4px solid var(--do);
+    background:var(--do-bg);
+    border-radius:10px;
+    padding:20px 24px;
+    margin:18px 0 26px;
+  }
+  .practical .label{
+    display:inline-block;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.14em;
+    color:var(--do);
+    margin-bottom:10px;
+    font-weight:700;
+    padding:3px 10px;
+    background:#06120c;
+    border-radius:4px;
+    border:1px solid #19402a;
+  }
+  .practical h4{
+    margin:0 0 12px 0;
+    color:var(--do);
+    font-size:16px;
+  }
+  .practical h5{color:#7adba6; margin-top:18px;}
+  .practical h5:first-of-type{margin-top:12px;}
+  .practical ul, .practical ol{margin-bottom:10px;}
+  .practical pre{margin:8px 0 4px;}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:18px 0 22px;
+    font-size:15px;
+  }
+  th,td{
+    text-align:left;
+    padding:12px 14px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  th{
+    background:var(--bg-2);
+    color:var(--muted);
+    font-weight:600;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+  }
+  tr:last-child td{border-bottom:none;}
+  .stat-row{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:14px;
+    margin:24px 0 12px;
+  }
+  .stat{
+    background:var(--bg-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:18px;
+  }
+  .stat .n{
+    font-size:30px;
+    font-weight:700;
+    color:var(--accent-2);
+    letter-spacing:-0.02em;
+    font-variant-numeric:tabular-nums;
+  }
+  .stat .l{
+    font-size:13px;
+    color:var(--muted);
+    margin-top:4px;
+    line-height:1.35;
+  }
+  .ascii{
+    background:var(--code-bg);
+    border:1px solid var(--code-border);
+    border-radius:8px;
+    padding:18px;
+    white-space:pre;
+    overflow:auto;
+    font-family:"JetBrains Mono", "SF Mono", monospace;
+    font-size:13px;
+    line-height:1.5;
+    color:#cbd1de;
+    margin:18px 0;
+  }
+  .pill{
+    display:inline-block;
+    padding:2px 8px;
+    border-radius:999px;
+    font-size:11px;
+    background:var(--bg-3);
+    color:var(--muted);
+    border:1px solid var(--line);
+    margin-left:6px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+  }
+  .pill.exp{color:var(--warn); border-color:#3a2f0e; background:#1c1808;}
+  .pill.new{color:var(--good); border-color:#0e3a25; background:#08180f;}
+  blockquote{
+    margin:18px 0;
+    padding:14px 20px;
+    border-left:3px solid var(--accent);
+    background:var(--bg-2);
+    color:var(--text);
+    font-style:italic;
+  }
+  .glossary{
+    background:var(--bg-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:22px 26px;
+    margin:0 0 38px;
+  }
+  .glossary h3{margin-top:0; color:var(--accent-2);}
+  .glossary dl{margin:0; display:grid; grid-template-columns:160px 1fr; gap:10px 22px;}
+  .glossary dt{color:var(--accent-2); font-weight:600;}
+  .glossary dd{margin:0; color:var(--text);}
+
+  .picker{
+    background:var(--bg-2);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:22px 26px;
+    margin:18px 0;
+  }
+  .picker .row{
+    display:grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap:18px;
+    align-items:center;
+    padding:12px 0;
+    border-bottom:1px dashed var(--line);
+  }
+  .picker .row:last-child{border-bottom:none;}
+  .picker .if{color:var(--muted); font-size:15px;}
+  .picker .arrow{color:var(--accent); font-weight:700;}
+  .picker .then{font-weight:600; color:var(--text);}
+  .picker .then code{color:var(--accent-2); background:transparent; padding:0;}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:30px 0 0;
+    margin-top:50px;
+    color:var(--muted);
+    font-size:14px;
+  }
+  footer a{color:var(--accent-2);}
+  @media (max-width: 900px){
+    .wrap{grid-template-columns:1fr;}
+    aside{position:static; height:auto; border-right:none; border-bottom:1px solid var(--line);}
+    main{padding:40px 24px 80px;}
+    .grid-2{grid-template-columns:1fr;}
+    .stat-row{grid-template-columns:repeat(2,1fr);}
+    .glossary dl{grid-template-columns:1fr;}
+    .picker .row{grid-template-columns:1fr;}
+    h1{font-size:32px;}
+    section h2{font-size:24px;}
+  }
+  @media print{
+    aside{display:none;}
+    .wrap{grid-template-columns:1fr;}
+    body{background:#fff; color:#111;}
+    main{padding:0; max-width:none;}
+    .card,.callout,.stat,pre,.ascii,.pm-example,.practical,.glossary,.picker{background:#fafafa; color:#111; border-color:#ddd;}
+    .copy-btn{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <aside>
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#glossary">PM glossary</a></li>
+      <li><a href="#picker">Which pattern do I use?</a></li>
+      <li><a href="#why">Why use multiple agents</a></li>
+      <li><a href="#patterns">The four ways to run agents in parallel</a></li>
+      <li><a href="#orchestrator">The manager-and-helpers setup</a></li>
+      <li><a href="#case-study">Real example: Anthropic's research system</a></li>
+      <li><a href="#prompt-engineering">8 things to keep in mind when prompting</a></li>
+      <li><a href="#context-engineering">How to manage agent memory</a></li>
+      <li><a href="#agent-teams">Agent teams in Claude Code</a></li>
+      <li><a href="#when-not">When NOT to use multiple agents</a></li>
+      <li><a href="#pitfalls">Common PM mistakes</a></li>
+      <li><a href="#playbook">PM playbook (5 prompts)</a></li>
+      <li><a href="#getting-started">Your first run, step by step</a></li>
+      <li><a href="#references">Sources</a></li>
+    </ol>
+  </aside>
+
+  <main>
+    <p class="meta">Teaching reference for PMs · 23-05-2026</p>
+    <h1>Multi-Agent Systems for PMs</h1>
+    <p class="lede">A simple guide to using multiple AI agents together in Claude Code. Every idea comes with a PM example, plus a <strong>step-by-step practical you can run live in this repo</strong> (<code>next-leap-claude-code</code>) during the session.</p>
+
+    <div class="callout key">
+      <div class="label">How to use this doc</div>
+      Blue boxes = the PM-shaped example (the "why this matters" story). Green boxes = <strong>"Try it now in this repo"</strong> — copy the prompt, paste into Claude Code, and run the workflow live. Every practical uses files that already exist in this repo.
+    </div>
+
+    <!-- Glossary -->
+    <section id="glossary">
+      <h2><span class="num">00</span> PM glossary</h2>
+      <p class="sub">Plain-English definitions before we go any deeper. Skip if these terms are already familiar.</p>
+      <div class="glossary">
+        <dl>
+          <dt>Agent</dt>
+          <dd>A Claude session doing work for you. It can read files, search the web, write things, and use tools. Think of it as a smart helper with a toolbox.</dd>
+
+          <dt>Context window</dt>
+          <dd>The agent's working memory for this conversation. Everything it has read so far sits in there. When it gets too full, the agent starts forgetting things.</dd>
+
+          <dt>Tool call</dt>
+          <dd>When the agent uses something outside the chat: reading a file, searching the web, opening a Jira ticket. Each one adds to its memory.</dd>
+
+          <dt>Subagent</dt>
+          <dd>A helper that the main agent sends off to do a side task. The helper has its own memory, finishes the task, and hands back a short summary. Like asking a junior PM to do some digging and send you the headline.</dd>
+
+          <dt>Lead (orchestrator)</dt>
+          <dd>The main agent that plans the work, splits it up, hands pieces to helpers, and combines the results. Think tech lead or program manager.</dd>
+
+          <dt>Agent team</dt>
+          <dd>A group of agents working together with a shared to-do list. Unlike subagents, teammates can talk to each other. Like a small cross-functional pod with a lead.</dd>
+
+          <dt>Worktree</dt>
+          <dd>A separate copy of your project files, so two agents can edit without overwriting each other. Like giving two people their own branch of the code.</dd>
+
+          <dt>MCP</dt>
+          <dd>The plug system that lets Claude connect to outside tools like Slack, Drive, Figma, and Jira. If you've added an integration, you've used MCP.</dd>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Decision picker -->
+    <section id="picker">
+      <h2><span class="num">00</span> Which pattern do I use?</h2>
+      <p class="sub">A quick cheat sheet before we dive in. Use this to pick the right tool for any task.</p>
+      <div class="picker">
+        <div class="row">
+          <div class="if">I want a side task done without cluttering my main chat</div>
+          <div class="arrow">→</div>
+          <div class="then">Use a <code>subagent</code></div>
+        </div>
+        <div class="row">
+          <div class="if">I want to compare 3+ options or look at 3+ angles at once</div>
+          <div class="arrow">→</div>
+          <div class="then">Use an <code>agent team</code> (3 to 5 helpers)</div>
+        </div>
+        <div class="row">
+          <div class="if">I want to start a long task and check back later</div>
+          <div class="arrow">→</div>
+          <div class="then">Use <code>agent view</code> (runs in the background)</div>
+        </div>
+        <div class="row">
+          <div class="if">My agents will edit the same files at the same time</div>
+          <div class="arrow">→</div>
+          <div class="then">Use <code>worktrees</code> so they don't clash</div>
+        </div>
+        <div class="row">
+          <div class="if">It's a small linear task with no real parallel pieces</div>
+          <div class="arrow">→</div>
+          <div class="then">Use a <code>single session</code> — skip multi-agent</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1 -->
+    <section id="why">
+      <h2><span class="num">01</span> Why use multiple agents</h2>
+      <p class="sub">Why one agent isn't always enough, and what changes when you use a few of them together.</p>
+
+      <p>A single Claude session has one memory. As your task grows, that memory has to hold the goal, the plan, the half-done work, and everything the agent has read so far. Quality starts dropping well before the memory is full. The agent forgets early details, repeats itself, and misses things.</p>
+
+      <p>Multi-agent fixes this by giving each agent <strong>its own fresh memory</strong>. Each helper looks at a different slice of the problem, and only sends back a short summary. The main agent never has to read the raw stuff. Its memory stays clean and focused on the final answer.</p>
+
+      <div class="callout key">
+        <div class="label">Headline number</div>
+        Anthropic's multi-agent research system (one lead + several helpers) <strong>outperformed a single agent by 90.2%</strong> on their internal test. The win came from running agents in parallel and keeping the lead's memory clean — not from using a smarter model.
+      </div>
+
+      <div class="pm-example">
+        <span class="label">PM example</span>
+        <h4>Summarizing user interviews into themes</h4>
+        <p>If you load 50 transcripts into one Claude session, it loses track by around interview #20. The memory is full of raw text, so by the time you ask for themes, the agent has half-forgotten what was in interview #3. The output gets vague and you end up doing the work yourself.</p>
+        <p>Multi-agent fixes this. Send one helper per few interviews to pull out the themes. The lead only reads the short summaries (not the raw transcripts) and finds the patterns across them. You get a clean ranked list of themes without overloading anyone's memory.</p>
+      </div>
+
+      <div class="practical">
+        <span class="label">Try it now in this repo</span>
+        <h4>Synthesize user interviews using subagents</h4>
+
+        <h5>Prerequisites</h5>
+        <ul>
+          <li>Claude Code installed and signed in</li>
+          <li>Terminal open at the repo root (<code>next-leap-claude-code/</code>)</li>
+          <li>Interview files exist at <code>07-user-interviews/</code></li>
+        </ul>
+
+        <h5>Steps</h5>
+        <ol>
+          <li>From the repo root, run <code>claude</code> to start a session.</li>
+          <li>Run <code>ls 07-user-interviews/</code> to confirm the transcripts are there.</li>
+          <li>Paste the prompt below and press Enter.</li>
+          <li>Watch the lead spawn one Explore subagent per file (you'll see them in the output).</li>
+          <li>Wait for the synthesis — usually 2 to 4 minutes for 4 interviews.</li>
+        </ol>
+
+        <h5>The prompt</h5>
+<pre><code>I have user interview transcripts in 07-user-interviews/.
+
+Act as the lead. Spawn one Explore subagent per transcript file
+(use thoroughness "very thorough"). Each subagent should pull:
+- The user's top 3 pain points
+- A frequency tag (one-off vs recurring)
+- A severity tag (annoying / blocking / show-stopper)
+- The exact quote that supports each pain point
+
+After all subagents return, synthesize across them:
+- Top 5 themes ranked by frequency
+- Top 5 themes ranked by severity
+- 3 surprising findings (low frequency but high severity)
+
+Save the output to outputs/interview-synthesis-23-05-2026.md.</code></pre>
+
+        <h5>What success looks like</h5>
+        <ul>
+          <li>You see the Explore subagents being dispatched (one per file).</li>
+          <li>The lead's main chat stays clean — only summaries come back, not transcripts.</li>
+          <li>A markdown file lands at <code>outputs/interview-synthesis-23-05-2026.md</code> with ranked themes and quotes.</li>
+        </ul>
+      </div>
+
+      <h3>When this approach wins</h3>
+      <ul>
+        <li><strong>Open-ended research</strong> where you don't know in advance what you'll find.</li>
+        <li><strong>Many things to look at side by side</strong> — multiple competitors, multiple hypotheses, multiple personas.</li>
+        <li><strong>Tasks too big for one memory</strong> — long investigations, big folders of files, wide comparisons.</li>
+        <li><strong>Work that's important enough</strong> to spend extra tokens on better quality.</li>
+      </ul>
+
+      <h3>What it costs</h3>
+      <div class="stat-row">
+        <div class="stat"><div class="n">4×</div><div class="l">More tokens than a normal chat for a single agent</div></div>
+        <div class="stat"><div class="n">15×</div><div class="l">More tokens than a normal chat for a multi-agent run</div></div>
+        <div class="stat"><div class="n">80%</div><div class="l">Of result quality on research tasks is explained by how many tokens you spend</div></div>
+        <div class="stat"><div class="n">~90%</div><div class="l">Less time to finish when agents work in parallel instead of one by one</div></div>
+      </div>
+
+      <p class="sub">Multi-agent trades extra tokens for better answers. It isn't always the right tool. For coding tasks, for example, there usually aren't enough truly independent pieces to make it worth the cost.</p>
+    </section>
+
+    <!-- 2 -->
+    <section id="patterns">
+      <h2><span class="num">02</span> The four ways to run agents in parallel</h2>
+      <p class="sub">Claude Code gives you four options. Each one is a different way to split the work — and below each is a step-by-step practical you can run live in this repo.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Pattern</th>
+            <th>What it does</th>
+            <th>When to use it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Subagents</strong></td>
+            <td>Helpers inside one session. Each has its own memory and returns a summary.</td>
+            <td>A side task would clutter your main chat with results, logs, or file contents you won't need again.</td>
+          </tr>
+          <tr>
+            <td><strong>Agent view</strong><span class="pill new">preview</span></td>
+            <td>One screen to start and check on agents running in the background. Open with <code>claude agents</code>.</td>
+            <td>You have a few separate tasks. You want to start them, glance at progress, and step in only if needed.</td>
+          </tr>
+          <tr>
+            <td><strong>Agent teams</strong><span class="pill exp">experimental</span></td>
+            <td>A group of agents with a shared to-do list. Teammates can message each other. A lead keeps them in sync.</td>
+            <td>You want Claude to split a project into pieces, hand them out, and have the team coordinate.</td>
+          </tr>
+          <tr>
+            <td><strong>Worktrees</strong></td>
+            <td>Separate copies of your project files, so two agents never edit the same file at the same time.</td>
+            <td>You're running multiple agents that will all write to the codebase.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 2A: Subagent practical -->
+      <h3>2A. Subagents — build your own and use it</h3>
+      <p>Subagents are helpers the main agent can send off. You can use the built-in ones (Explore, Plan, general-purpose) or build your own. Custom ones live in <code>.claude/agents/</code> (project) or <code>~/.claude/agents/</code> (your machine).</p>
+
+      <div class="pm-example">
+        <span class="label">PM example</span>
+        <p><strong>Subagent in real PM work:</strong> "Summarize last quarter's churn survey responses" — while you keep writing your PRD in the main chat. The helper reads 200 responses and hands you the top 5 reasons for churn.</p>
+      </div>
+
+      <div class="practical">
+        <span class="label">Try it now in this repo</span>
+        <h4>Create a custom "churn-pattern-analyst" subagent and use it</h4>
+
+        <h5>Prerequisites</h5>
+        <ul>
+          <li>Claude Code installed (any recent version)</li>
+          <li>Terminal open at the repo root</li>
+          <li>Feedback file exists at <code>06-user-feedback/</code></li>
+        </ul>
+
+        <h5>Steps</h5>
+        <ol>
+          <li>Start Claude Code in the repo: <code>claude</code></li>
+          <li>Run the slash command: <code>/agents</code></li>
+          <li>Switch to the <strong>Library</strong> tab → <strong>Create new agent</strong> → choose <strong>Project</strong> (saves to <code>.claude/agents/</code> so the cohort can use the same definition).</li>
+          <li>Select <strong>Generate with Claude</strong>. When asked, describe the subagent:
+<pre><code>A churn-pattern analyst that reads user feedback survey
+responses and pulls out the top churn drivers, with supporting
+verbatim quotes, frequency tags, and severity tags. Read-only.
+Always cite the line from the file where each quote came from.</code></pre>
+          </li>
+          <li>For tools, deselect Write/Edit. Keep only read-only tools (<code>Read</code>, <code>Grep</code>, <code>Glob</code>).</li>
+          <li>Choose model: <strong>Sonnet</strong> (good balance of cost and quality).</li>
+          <li>Press <kbd>s</kbd> to save. The file lands at <code>.claude/agents/churn-pattern-analyst.md</code>.</li>
+          <li>Use it on real data:
+<pre><code>Use the churn-pattern-analyst agent on 06-user-feedback/.
+Save the report to outputs/churn-drivers-23-05-2026.md.</code></pre>
+          </li>
+        </ol>
+
+        <h5>What success looks like</h5>
+        <ul>
+          <li>A new file exists at <code>.claude/agents/churn-pattern-analyst.md</code> with YAML frontmatter (<code>name</code>, <code>description</code>, <code>tools</code>, <code>model</code>) and a system prompt body.</li>
+          <li>The main agent delegates the analysis to it. You see the subagent label in the output.</li>
+          <li>A churn-drivers report lands in <code>outputs/</code>.</li>
+        </ul>
+      </div>
+
+      <!-- 2B: Agent view practical -->
+      <h3>2B. Agent view — kick things off and check back later</h3>
+      <p>Agent view is one dashboard for all your background sessions. Opened with <code>claude agents</code>. Start tasks, leave them running, attend your standup, come back later.</p>
+
+      <div class="pm-example">
+        <span class="label">PM example</span>
+        <p><strong>Agent view in real PM work:</strong> kick off a competitive audit on Notion AI and Granola in the background while you join standup. By the time you're back, both summaries are ready.</p>
+      </div>
+
+      <div class="practical">
+        <span class="label">Try it now in this repo</span>
+        <h4>Run two PM research tasks in parallel using agent view</h4>
+
+        <h5>Prerequisites</h5>
+        <ul>
+          <li>Claude Code <strong>v2.1.139 or later</strong> (check with <code>claude --version</code>)</li>
+          <li>Run <code>claude</code> once in the repo first to accept workspace trust</li>
+          <li>Files exist at <code>03-product-knowledge/competitive.md</code> and <code>06-user-feedback/</code></li>
+        </ul>
+
+        <h5>Steps</h5>
+        <ol>
+          <li>From the repo root, run: <code>claude agents</code></li>
+          <li>Agent view opens with an input at the bottom and an empty session list.</li>
+          <li>Type your first task and press <kbd>Enter</kbd>. The session appears as a row and starts running:
+<pre><code>Refresh our competitive matrix. Read 03-product-knowledge/competitive.md
+for the starting list. For each competitor: pricing tiers, free-tier
+limits, top 3 differentiators on the homepage, any product launches in
+the last 90 days. Cite source URLs for every claim. Save to
+outputs/competitive-scan-23-05-2026.md.</code></pre>
+          </li>
+          <li>Type a second task and press <kbd>Enter</kbd> — it dispatches alongside the first:
+<pre><code>Synthesize the Q1 2026 feedback in 06-user-feedback/. Extract the
+top 5 churn drivers with verbatim quotes. Save to
+outputs/churn-drivers-23-05-2026.md.</code></pre>
+          </li>
+          <li>Use <kbd>↑</kbd> / <kbd>↓</kbd> to move between rows. Press <kbd>Space</kbd> to peek inside one.</li>
+          <li>Press <kbd>Enter</kbd> or <kbd>→</kbd> on a row to attach (jump into that full session). Press <kbd>←</kbd> on an empty input to detach.</li>
+          <li>Press <kbd>Esc</kbd> to leave agent view. Both sessions keep running in the background.</li>
+          <li>Come back later: <code>claude agents</code> again. Rows show <strong>Completed</strong> when done.</li>
+        </ol>
+
+        <h5>What success looks like</h5>
+        <ul>
+          <li>Two rows in agent view both move from "Working" → "Completed".</li>
+          <li>You closed your terminal in between and the work kept going.</li>
+          <li>Two markdown files land in <code>outputs/</code>.</li>
+        </ul>
+
+        <div class="callout warn" style="margin-top:14px;">
+          <div class="label">Heads up</div>
+          Each background session uses your subscription quota the same as an interactive one. Running 5 in parallel uses ~5× the quota for that time.
+        </div>
+      </div>
+
+      <!-- 2C: Agent team practical -->
+      <h3>2C. Agent teams — a coordinated squad with a lead <span class="pill exp">experimental</span></h3>
+      <p>Agent teams give you a lead + teammates who share a to-do list and can message each other. Best for tasks that benefit from debate or multiple stakeholder lenses.</p>
+
+      <div class="pm-example">
+        <span class="label">PM example</span>
+        <p><strong>Agent team in real PM work:</strong> spec review where one teammate plays the Engineering Lead, one plays Design, one plays Sales. They debate the spec, and the lead writes up the verdict.</p>
+      </div>
+
+      <div class="practical">
+        <span class="label">Try it now in this repo</span>
+        <h4>Pressure-test a PRD with an adversarial agent team</h4>
+
+        <h5>Prerequisites</h5>
+        <ul>
+          <li>Claude Code <strong>v2.1.32 or later</strong> (check with <code>claude --version</code>)</li>
+          <li>Agent teams must be enabled — see step 1 below</li>
+          <li>A PRD file exists in <code>08-product-features/</code> (use any existing PRD, or generate one first)</li>
+        </ul>
+
+        <h5>Steps</h5>
+        <ol>
+          <li>Enable agent teams. Open <code>~/.claude/settings.json</code> and add the env flag (merge into your existing settings):
+<pre><code>{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  }
+}</code></pre>
+          </li>
+          <li>Restart Claude Code so it picks up the new env.</li>
+          <li>Open Claude Code in the repo: <code>claude</code></li>
+          <li>Paste the prompt below. The lead will create the team and spawn teammates.</li>
+          <li>While they run, use <kbd>Shift</kbd> + <kbd>↓</kbd> to flip through teammates and listen in. Press <kbd>Enter</kbd> to focus a teammate; <kbd>Esc</kbd> to come back to the lead.</li>
+          <li>When done, tell the lead: <code>Clean up the team.</code></li>
+        </ol>
+
+        <h5>The prompt</h5>
+<pre><code>Create an agent team to pressure-test the Smart Follow-Up PRD
+in 08-product-features/. Pick the most recent PRD file there.
+
+Spawn three teammates:
+- One playing a skeptical Engineering Lead. Push back on effort
+  estimates, hidden complexity, scalability risk, and where it
+  might break.
+- One playing Design. Push back on UX assumptions, edge cases,
+  and accessibility gaps.
+- One playing Sales / GTM. Push back on whether this is sellable,
+  whether the value prop is clear, and whether enterprise will care.
+
+Have them debate openly for 2 rounds. Then the lead writes:
+- Top 5 issues I should fix before the eng walkthrough
+- 3 questions I need answers to before the meeting
+- 1 thing in the PRD that's strong and should stay
+
+Save to outputs/smart-followup-pressure-test-23-05-2026.md.</code></pre>
+
+        <h5>What success looks like</h5>
+        <ul>
+          <li>Three teammate sessions visible in your terminal.</li>
+          <li>You can <kbd>Shift</kbd> + <kbd>↓</kbd> between them and read their reasoning live.</li>
+          <li>The output file shows real debate — competing points, not three agreeable summaries.</li>
+        </ul>
+      </div>
+
+      <!-- 2D: Worktree practical -->
+      <h3>2D. Worktrees — work on two PRDs at once without overwrites</h3>
+      <p>A worktree is a separate copy of the project files on its own branch. Two Claude Code sessions in two worktrees can edit at the same time and never step on each other.</p>
+
+      <div class="pm-example">
+        <span class="label">PM example</span>
+        <p><strong>Worktree in real PM work:</strong> drafting two PRDs at the same time — one for Smart Follow-Up, one for Salesforce integration — without them mixing into each other.</p>
+      </div>
+
+      <div class="practical">
+        <span class="label">Try it now in this repo</span>
+        <h4>Run two Claude sessions in parallel on two different PRDs</h4>
+
+        <h5>Prerequisites</h5>
+        <ul>
+          <li>Git installed (worktrees are a git feature)</li>
+          <li>The repo is a git repository (it is)</li>
+          <li>One-time: add <code>.claude/worktrees/</code> to <code>.gitignore</code> so worktrees don't show as untracked</li>
+          <li>You've run <code>claude</code> once in this repo to accept the trust prompt</li>
+        </ul>
+
+        <h5>Steps</h5>
+        <ol>
+          <li>From the repo root, open the first worktree session in terminal #1:
+<pre><code>claude --worktree smart-followup</code></pre>
+            This creates <code>.claude/worktrees/smart-followup/</code> on a new branch <code>worktree-smart-followup</code> and starts Claude inside it.
+          </li>
+          <li>In <strong>another terminal</strong> (terminal #2), from the same repo root, open the second worktree session:
+<pre><code>claude --worktree salesforce-integration</code></pre>
+          </li>
+          <li>You now have two Claude sessions, each in its own checkout. They can both edit files without overwriting each other.</li>
+          <li>In terminal #1, paste a PRD-drafting prompt for Smart Follow-Up:
+<pre><code>Draft a PRD for the Smart Follow-Up feature (planned launch April 2026).
+Use the PRD template in 14-templates/. Ground the content in
+03-product-knowledge/ and 04-strategy/product-vision.md. Don't invent
+metrics — only use numbers that appear in repo files.
+Save to 08-product-features/smart-followup-prd-23-05-2026.md.</code></pre>
+          </li>
+          <li>In terminal #2, paste a PRD-drafting prompt for Salesforce:
+<pre><code>Draft a PRD for the Salesforce integration (planned launch May 2026).
+Use the PRD template in 14-templates/. Ground in 03-product-knowledge/
+and 04-strategy/product-vision.md. Don't invent metrics.
+Save to 08-product-features/salesforce-prd-23-05-2026.md.</code></pre>
+          </li>
+          <li>When done, exit Claude in each worktree. If you made changes, Claude prompts you to keep or remove the worktree. To remove later:
+<pre><code>git worktree list
+git worktree remove .claude/worktrees/smart-followup</code></pre>
+          </li>
+        </ol>
+
+        <h5>What success looks like</h5>
+        <ul>
+          <li>Two terminals each show a working Claude session.</li>
+          <li><code>git worktree list</code> shows both worktrees.</li>
+          <li>Two PRD files land — one in each worktree — without any file collisions.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section id="orchestrator">
+      <h2><span class="num">03</span> The manager-and-helpers setup</h2>
+      <p class="sub">The setup that powers almost every serious multi-agent system. Engineers call it "orchestrator-worker" — but it's really just a manager handing out work.</p>
+
+      <p>Almost every multi-agent system uses the same shape: one <strong>lead (the manager)</strong> that plans and combines, and several <strong>helpers</strong> that do the actual digging. The lead never does the deep work itself. The helpers never see each other's raw notes.</p>
+
+      <div class="ascii">                       ┌──────────────────────────┐
+                       │     Lead / Manager        │
+                       │  - Reads what you want    │
+                       │  - Splits the work        │
+                       │  - Sends out helpers      │
+                       │  - Combines the results   │
+                       └──────────┬───────────────┘
+                                  │
+            ┌─────────────────────┼─────────────────────┐
+            ▼                     ▼                     ▼
+   ┌─────────────────┐   ┌─────────────────┐   ┌─────────────────┐
+   │   Helper A      │   │   Helper B      │   │   Helper C      │
+   │ own memory      │   │ own memory      │   │ own memory      │
+   │ own tools       │   │ own tools       │   │ own tools       │
+   │ returns: SUMMARY│   │ returns: SUMMARY│   │ returns: SUMMARY│
+   └─────────────────┘   └─────────────────┘   └─────────────────┘
+</div>
+
+      <div class="pm-example">
+        <span class="label">PM example</span>
+        <h4>Mapping the AI meeting assistant market</h4>
+        <p><strong>You ask the lead:</strong> "I need a competitive matrix of the top 5 AI meeting assistants — pricing, free-tier limits, top differentiators, and recent launches."</p>
+        <p><strong>The lead splits the work:</strong> one helper per competitor — Notion AI, Granola, Fireflies, Otter, tl;dv. Each helper digs into one company's pricing page, blog, recent reviews, and returns a one-page summary.</p>
+        <p><strong>The lead combines:</strong> turns the 5 summaries into a comparison table, flags the threats, and suggests 3 strategic moves. You never opened 5 competitor websites yourself.</p>
+      </div>
+
+      <div class="practical">
+        <span class="label">Try it now in this repo</span>
+        <h4>Build a fresh competitive matrix using the manager-and-helpers pattern</h4>
+
+        <h5>Prerequisites</h5>
+        <ul>
+          <li>Claude Code in the repo</li>
+          <li>Web search available (built into Claude Code)</li>
+          <li>File exists at <code>03-product-knowledge/competitive.md</code></li>
+        </ul>
+
+        <h5>Steps</h5>
+        <ol>
+          <li>Start Claude Code in the repo: <code>claude</code></li>
+          <li>Paste the prompt below. The lead will spawn one helper per competitor.</li>
+          <li>Watch the helpers run in parallel. The lead's chat stays clean — only summaries return.</li>
+          <li>Review the matrix and the proposed updates to <code>03-product-knowledge/competitive.md</code> before accepting.</li>
+        </ol>
+
+        <h5>The prompt</h5>
+<pre><code>Refresh our competitive matrix. First, read
+03-product-knowledge/competitive.md to get our current list of
+competitors and what we last knew about them.
+
+Then act as the lead. Spawn one helper per competitor in parallel
+(not sequentially). Each helper should find:
+- Current pricing tiers and free-tier limits
+- The 3 things they push hardest on their homepage
+- Any product launches or major changes in the last 90 days
+- A source URL for every claim
+
+After all helpers report back, combine into:
+- An updated comparison matrix (markdown table)
+- 3 strategic threats to MeetFlow ranked by urgency
+- 3 strategic openings we could exploit
+
+Save to outputs/competitive-scan-23-05-2026.md.
+Also propose specific updates to 03-product-knowledge/competitive.md
+but do NOT apply them yet — ask me to confirm.</code></pre>
+
+        <h5>What success looks like</h5>
+        <ul>
+          <li>You see helpers being dispatched in parallel in the output.</li>
+          <li>A fresh matrix lands at <code>outputs/competitive-scan-23-05-2026.md</code> with source URLs.</li>
+          <li>The lead asks you to confirm the updates to <code>competitive.md</code> rather than silently overwriting.</li>
+        </ul>
+      </div>
+
+      <h3>Why this works better than one big agent</h3>
+      <ol>
+        <li><strong>Each helper keeps the lead's memory clean.</strong> Helpers burn their own memory on digging. The lead only sees the short summaries.</li>
+        <li><strong>Helpers run at the same time.</strong> The lead sends out 3–5 helpers at once. The task finishes much faster than doing it one step at a time.</li>
+        <li><strong>Each helper is focused.</strong> One narrow brief and one job. Quality goes up when the role is narrow.</li>
+        <li><strong>A bad helper doesn't ruin the whole run.</strong> If one helper gets stuck or returns junk, it doesn't pollute the lead's thinking.</li>
+      </ol>
+
+      <h3>Subagents vs. agent teams — one key difference</h3>
+      <div class="grid-2">
+        <div class="card">
+          <h4>Subagents</h4>
+          <ul>
+            <li>Own memory. Results go back to whoever sent them.</li>
+            <li>Can't talk to each other.</li>
+            <li>The main agent runs the show.</li>
+            <li>Best for focused tasks where you only need the final answer.</li>
+            <li>Cheaper. The results get summarized into the main chat.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>Agent teams</h4>
+          <ul>
+            <li>Own memory. Fully separate sessions.</li>
+            <li>Teammates can message each other directly.</li>
+            <li>Shared to-do list. The team coordinates itself.</li>
+            <li>Best for complex work that needs discussion.</li>
+            <li>More expensive. Each teammate is its own full Claude session.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section id="case-study">
+      <h2><span class="num">04</span> Real example: Anthropic's research system</h2>
+      <p class="sub">The system Anthropic actually shipped — and most of what we know about making multi-agent work in real use comes from here.</p>
+
+      <h3>The flow</h3>
+      <ol>
+        <li>The lead reads your question and plans an approach.</li>
+        <li>It sends out helpers <em>at the same time</em>.</li>
+        <li>Each helper searches, looks at results, and refines its search based on what it finds.</li>
+        <li>Helpers send back short findings.</li>
+        <li>The lead combines them. If something's missing, it sends out more helpers.</li>
+        <li>A separate "citation" helper attaches a source link to every claim, so nothing is unsourced.</li>
+      </ol>
+
+      <blockquote>"Helpers keep things compact by running in parallel with their own memory, looking at different angles at the same time, and then handing the lead only the short version."</blockquote>
+
+      <div class="pm-example">
+        <span class="label">PM example</span>
+        <h4>"Map the AI meeting assistant market in 60 minutes — with sources I can put in my PRD"</h4>
+        <p>Same setup as Anthropic's. The lead splits the task into 5 helpers, one per competitor. Each helper looks at pricing pages, recent blog posts, and reviews. A citation helper attaches a source URL to every claim. So when your VP asks "where did this number come from", you have the link in your PRD — not "Claude said so."</p>
+      </div>
+
+      <div class="practical">
+        <span class="label">Try it now in this repo</span>
+        <h4>Run the same flow with strict citations for your PRD</h4>
+
+        <h5>Prerequisites</h5>
+        <ul>
+          <li>Same as section 3 (Claude Code in the repo, web search available)</li>
+          <li>Existing competitive context at <code>03-product-knowledge/competitive.md</code></li>
+        </ul>
+
+        <h5>Steps</h5>
+        <ol>
+          <li>Start Claude Code in the repo: <code>claude</code></li>
+          <li>Paste the prompt below. Key difference from §3: a dedicated citation step at the end.</li>
+          <li>When done, check the output: every claim should have a clickable source URL.</li>
+        </ol>
+
+        <h5>The prompt</h5>
+<pre><code>I'm writing a PRD section on "competitive risk" for MeetFlow.
+Every fact needs a source URL so my VP can verify.
+
+Read 03-product-knowledge/competitive.md for our current list
+of competitors. Then:
+
+1. Spawn one helper per competitor in parallel. Each finds:
+   - Current pricing and free-tier limits
+   - 3 most-pushed differentiators on their homepage
+   - Any launches in the last 90 days
+   - A direct source URL for every fact
+
+2. Spawn a dedicated "citation reviewer" helper at the end. Its
+   only job: open each source URL the other helpers cited and
+   confirm the claim actually appears on that page. Flag any
+   that don't check out.
+
+3. Combine into a "Competitive Risk" PRD section with:
+   - A markdown table of competitors
+   - A "Top 3 risks to MeetFlow" subsection
+   - A "Sources" subsection listing every URL used
+
+Save to outputs/competitive-risk-prd-section-23-05-2026.md.</code></pre>
+
+        <h5>What success looks like</h5>
+        <ul>
+          <li>The output file has a source URL next to every claim.</li>
+          <li>The citation reviewer's findings appear at the bottom (any flagged claims listed separately).</li>
+          <li>You can drop the file straight into your PRD without rewriting.</li>
+        </ul>
+      </div>
+
+      <h3>Why this beats normal research</h3>
+      <ul>
+        <li><strong>The agent adapts as it goes</strong> instead of just fetching pre-saved chunks of text.</li>
+        <li><strong>It refines its search step by step</strong> instead of running one big query.</li>
+        <li><strong>Each helper can use its own approach</strong> — the one digging into pricing works differently than the one tracking recent launches.</li>
+      </ul>
+
+      <div class="callout key">
+        <div class="label">A concrete win</div>
+        On a "find the board members of these 5 companies" task, the multi-agent system worked by splitting it into 5 parallel helpers. A single agent failed at the same task — it kept doing one search after another and ran out of memory before finishing. The same pattern applies to any PM "research these N things and compare them" task.
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section id="prompt-engineering">
+      <h2><span class="num">05</span> 8 things to keep in mind when prompting</h2>
+      <p class="sub">The hard-earned lessons from real multi-agent runs in production. Each one comes with a PM example, plus a single combined practical at the end you can run live.</p>
+
+      <ol>
+        <li>
+          <strong>Look at what the agent is actually doing.</strong> When something goes wrong, replay the trace step by step. Don't guess. The agent usually did exactly what you asked, just not what you meant.
+          <div class="pm-example">
+            <span class="label">PM lens</span>
+            <p>Same rule as user research: don't guess what the user is doing — go watch. When a multi-agent run gives you a weird output, look at the trace before you "fix the prompt."</p>
+          </div>
+        </li>
+        <li>
+          <strong>Be specific when you delegate.</strong> "Research semiconductors" is too vague. Tell the helper what you want, what the output should look like, which tools to use, and where its job ends. Without this, helpers either repeat each other or leave gaps.
+          <div class="pm-example">
+            <span class="label">PM lens — vague vs. specific</span>
+            <p><strong>Vague:</strong> "Research Notion AI."</p>
+            <p><strong>Specific:</strong> "Goal: find Notion AI's pricing tiers, free-tier limits, and the 3 things they push the most on their homepage. Output: a one-page summary with bullets and source URLs. Tools: web search only. Don't cover: enterprise SKUs or partner programs."</p>
+          </div>
+        </li>
+        <li>
+          <strong>Match the effort to the question.</strong> Simple fact = one agent. Comparison = a few helpers. Big research project = many helpers with clear roles. Don't spin up a team for a one-line question.
+          <div class="pm-example">
+            <span class="label">PM lens</span>
+            <p>"What's our current Pro churn rate?" = one session, look it up. "Why are Pro users churning?" = one helper for tickets, one for survey responses, one for usage data, lead combines.</p>
+          </div>
+        </li>
+        <li>
+          <strong>Be careful with tools.</strong> The tools you give an agent shape what it does. Tell it which tool to use for which job, and which to avoid.
+          <div class="pm-example">
+            <span class="label">PM lens</span>
+            <p>If your agent has Slack, Jira, and Confluence connected, tell it: "Use Jira for tickets, Confluence for specs, and Slack only for recent decisions." Otherwise it might paste your spec into a Slack DM.</p>
+          </div>
+        </li>
+        <li>
+          <strong>Let the agent improve itself.</strong> Claude can review its own runs and suggest better prompts. Anthropic built an agent that rewrites tool descriptions — and got <strong>40% faster runs</strong> on the next tasks because of it.
+          <div class="pm-example">
+            <span class="label">PM lens</span>
+            <p>After a multi-agent run, ask Claude: "Look at the trace. Which step wasted the most tokens, and how would you rewrite the prompt to fix it?"</p>
+          </div>
+        </li>
+        <li>
+          <strong>Start wide, then go narrow.</strong> Agents tend to jump straight to specific questions. Force them to start with "what's broadly known about this?" before going deep.
+          <div class="pm-example">
+            <span class="label">PM lens</span>
+            <p>Same idea as good discovery: start with "what is the user trying to do" before "should we add this button."</p>
+          </div>
+        </li>
+        <li>
+          <strong>Ask the agent to think before doing.</strong> Get the lead to write a plan before sending out helpers. This catches bad plans early.
+          <div class="pm-example">
+            <span class="label">PM lens</span>
+            <p>Tell the lead: "First, write me the plan for how you'll split this across 5 helpers. I'll approve before you send them out."</p>
+          </div>
+        </li>
+        <li>
+          <strong>Make sure things run in parallel, not one at a time.</strong> The lead should send out 3–5 helpers at the same time. Each helper should call its tools at the same time too.
+          <div class="pm-example">
+            <span class="label">PM lens</span>
+            <p>If your agent is doing research one company at a time and you're waiting 20 minutes, ask directly: "Send out 5 helpers at the same time, one per competitor."</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="practical">
+        <span class="label">Try it now in this repo</span>
+        <h4>Exercise principles 2, 4, 7, and 8 together on a real PM task</h4>
+
+        <h5>Prerequisites</h5>
+        <ul>
+          <li>Claude Code in the repo</li>
+          <li>Files exist at <code>06-user-feedback/</code>, <code>07-user-interviews/</code>, <code>03-product-knowledge/</code></li>
+        </ul>
+
+        <h5>What this exercises</h5>
+        <ul>
+          <li><strong>#7 Plan first:</strong> you'll ask the lead to write the plan before spawning anyone.</li>
+          <li><strong>#2 Be specific:</strong> the plan must give each helper objective, output, tools, boundary.</li>
+          <li><strong>#4 Be careful with tools:</strong> each helper gets only the tools it actually needs.</li>
+          <li><strong>#8 Run in parallel:</strong> helpers must run at the same time, not one after the other.</li>
+        </ul>
+
+        <h5>The prompt</h5>
+<pre><code>I want to validate a feature idea for MeetFlow:
+"Auto-detect action items in Smart Follow-Up and pre-draft a
+Slack message with @-mentions of the owners."
+
+Don't spawn anyone yet. First, write me a plan. The plan must
+be MECE: each helper has a single objective, an output format,
+the specific tools it should use, and what's out of scope for it.
+
+Cover at least these angles in the plan:
+- User feedback signal (read from 06-user-feedback/)
+- Interview signal (read from 07-user-interviews/)
+- Closest competitor capability (use web search)
+- Implementation risk (read 03-product-knowledge/product.md
+  for current product context)
+
+After I approve the plan, spawn the helpers in parallel
+(not sequentially) and synthesize the findings into:
+- Should we build this? (yes / no / not now, with reasoning)
+- Top 3 risks
+- 3 next steps if we proceed
+
+Save to outputs/auto-action-item-validation-23-05-2026.md.</code></pre>
+
+        <h5>What success looks like</h5>
+        <ul>
+          <li>Claude shows you the plan first and waits for approval.</li>
+          <li>You see helpers being spawned in parallel after you approve.</li>
+          <li>Each helper has a focused brief and uses only the tools it needs.</li>
+          <li>The final memo gives a clear yes/no/not-now with reasoning grounded in repo files.</li>
+        </ul>
+      </div>
+
+      <div class="callout warn">
+        <div class="label">Production reality</div>
+        Agents remember the past, and small mistakes early on snowball into big problems 20 steps later. Build your runs so you can resume from where it broke, not restart from scratch.
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section id="context-engineering">
+      <h2><span class="num">06</span> How to manage agent memory</h2>
+      <p class="sub">Prompting is what you say at the start. Memory management is everything you do across a long task to keep the agent sharp.</p>
+
+      <p>Every token in the lead's memory is space taken away from the final answer. On long runs, what you choose <em>not</em> to load matters as much as what you do load.</p>
+
+      <div class="pm-example">
+        <span class="label">PM example</span>
+        <h4>The 90-minute roadmap session that forgot Q2</h4>
+        <p>You spend the first 30 minutes loading Q2 themes into Claude — user research, OKRs, competitive pressure. Then you spend an hour going deep on Q3. By minute 90, the agent has "forgotten" Q2 because Q3 details have pushed them out of effective memory.</p>
+        <p>Fix: save the Q2 themes to a file (<code>q2-themes.md</code>) and tell the agent: "Read this file when you need Q2 context." Now Q2 is one tool call away instead of crowding the conversation.</p>
+      </div>
+
+      <div class="practical">
+        <span class="label">Try it now in this repo</span>
+        <h4>Run Q3 planning using "load on demand" instead of pre-loading</h4>
+
+        <h5>Prerequisites</h5>
+        <ul>
+          <li>Claude Code in the repo</li>
+          <li>Files exist at <code>04-strategy/</code>, <code>03-product-knowledge/</code>, <code>06-user-feedback/</code>, <code>11-sprint/</code></li>
+        </ul>
+
+        <h5>Steps</h5>
+        <ol>
+          <li>Start Claude Code: <code>claude</code></li>
+          <li>Paste the prompt below. Notice: it gives the agent <em>paths</em> to files, not the file contents.</li>
+          <li>Watch helpers fetch only what they need. The lead's main chat stays clean.</li>
+        </ol>
+
+        <h5>The prompt</h5>
+<pre><code>I'm doing Q3 2026 planning. Do NOT pre-load files into our
+context. Use the paths below and let each helper fetch only
+what it needs.
+
+Available context (paths only, not contents):
+- 04-strategy/product-vision.md  (long-term vision)
+- 04-strategy/                   (any OKR / roadmap files here)
+- 03-product-knowledge/competitive.md  (competitive)
+- 06-user-feedback/              (recent user signal)
+- 11-sprint/                     (current sprint state)
+
+Spawn one helper per source above. Each helper reads ONLY its
+own file(s) and returns: "the 3 strongest signals for what we
+should build in Q3, and why."
+
+Then synthesize:
+- Top 5 candidate themes for Q3
+- For each: the supporting signals (which sources point to it)
+- 1 risk per theme
+
+Save to outputs/q3-2026-themes-23-05-2026.md.</code></pre>
+
+        <h5>What success looks like</h5>
+        <ul>
+          <li>Helpers fetch files on demand instead of having them pre-loaded.</li>
+          <li>The lead's chat stays short — only summaries come back.</li>
+          <li>The final memo cites which source each signal came from.</li>
+        </ul>
+      </div>
+
+      <h3>Seven simple rules</h3>
+      <ol>
+        <li><strong>Memory is a limited resource.</strong> Agents get worse at remembering as their memory fills up — well before you hit the official limit.</li>
+        <li><strong>Use the smallest amount of useful info, not the most.</strong> Be ruthless about what you include.</li>
+        <li><strong>Don't be too rigid or too vague.</strong> Give strong guidance but leave room to adapt.</li>
+        <li><strong>Keep tools focused.</strong> If you can't tell which tool applies, the agent can't either.</li>
+        <li><strong>Load info only when needed.</strong> Give the agent paths or links, let it fetch on demand.</li>
+        <li><strong>Clear old tool results.</strong> Once a tool output has been used and summarized, the raw result is just noise.</li>
+        <li><strong>Use helpers for complex tasks.</strong> Send the deep work to helpers with their own memory. Bring back only the short version.</li>
+      </ol>
+
+      <div class="callout">
+        <div class="label">The big idea</div>
+        Multi-agent research is really about <em>squeezing big info into small summaries</em>. Helpers do this better because each one has a clean slate and focuses on one slice.
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section id="agent-teams">
+      <h2><span class="num">07</span> Agent teams in Claude Code <span class="pill exp">experimental</span></h2>
+      <p class="sub">The official Claude Code feature for running coordinated agent teams. (Practical for setup + first run is in section 2C above — this section covers the deeper concepts.)</p>
+
+      <h3>What's inside an agent team</h3>
+      <table>
+        <thead><tr><th>Piece</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Team lead</strong></td><td>The main session. Creates the team, sends out teammates, keeps things on track.</td></tr>
+          <tr><td><strong>Teammates</strong></td><td>Separate Claude sessions, each working on their assigned piece.</td></tr>
+          <tr><td><strong>To-do list</strong></td><td>A shared list of tasks teammates can pick up. Locked so two people can't grab the same task.</td></tr>
+          <tr><td><strong>Mailbox</strong></td><td>How teammates send messages to each other directly.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Two ways to view the team</h3>
+      <div class="grid-2">
+        <div class="card">
+          <h4>In your main terminal (default)</h4>
+          <p>All teammates run in your terminal. Use <kbd>Shift</kbd> + <kbd>↓</kbd> to flip through them and message them directly. Works anywhere — no setup.</p>
+        </div>
+        <div class="card">
+          <h4>Split into separate panes</h4>
+          <p>Each teammate gets its own pane (needs <code>tmux</code> or iTerm2). You can see everyone's output at once. Best when you want to watch closely.</p>
+        </div>
+      </div>
+
+      <div class="pm-example">
+        <span class="label">PM example — investigation with competing theories</span>
+        <h4>Find why conversion dropped 30% last month</h4>
+        <p>A single agent picks the first plausible theory and stops. An agent team with 4 competing theories debates, tries to disprove each other, and the surviving one is much more likely to be the real answer.</p>
+      </div>
+
+      <div class="practical">
+        <span class="label">Try it now in this repo</span>
+        <h4>Investigation: why is Pro churn at 4.1% / month? (competing theories)</h4>
+
+        <h5>Prerequisites</h5>
+        <ul>
+          <li>Agent teams enabled (see section 2C step 1)</li>
+          <li>Claude Code in the repo</li>
+          <li>Files exist at <code>06-user-feedback/</code>, <code>05-user-personas/</code>, <code>03-product-knowledge/</code></li>
+        </ul>
+
+        <h5>Steps</h5>
+        <ol>
+          <li>Start Claude Code: <code>claude</code></li>
+          <li>Paste the prompt below. The lead spawns 4 teammates, each owning one theory.</li>
+          <li>Use <kbd>Shift</kbd> + <kbd>↓</kbd> to flip through teammates and watch the debate.</li>
+          <li>The lead writes up the surviving theory and the alternatives.</li>
+        </ol>
+
+        <h5>The prompt</h5>
+<pre><code>MeetFlow Pro churn is 4.1% monthly (from company.md). I want
+to find the most likely cause.
+
+Create an agent team. Spawn 4 teammates, each owning one theory:
+1. Theory A: Action item accuracy (66%) is eroding trust
+2. Theory B: Notion AI bundling is pulling users away
+3. Theory C: Onboarding is failing to demonstrate value
+4. Theory D: It's a measurement / cohort issue, not a real change
+
+Each teammate investigates its own theory using:
+- 06-user-feedback/ for verbatim signal
+- 05-user-personas/ for who's churning
+- 03-product-knowledge/ for context on product and competitive
+
+Then have them debate openly. Each must try to disprove the
+others' theories before the lead picks a verdict.
+
+The lead writes:
+- The surviving theory with evidence
+- The 2 next most likely alternatives
+- 3 next investigations to confirm
+
+Save to outputs/pro-churn-rca-23-05-2026.md.</code></pre>
+
+        <h5>What success looks like</h5>
+        <ul>
+          <li>You see real disagreement in the teammate output — not 4 agreeable summaries.</li>
+          <li>The verdict cites specific evidence (which file, which quote).</li>
+          <li>The "next investigations" list is something you could actually run next week.</li>
+        </ul>
+      </div>
+
+      <h3>Best practices</h3>
+      <ul>
+        <li><strong>Start with 3–5 teammates.</strong> More than that, the coordination cost gets bigger than the benefit.</li>
+        <li><strong>Give them enough context.</strong> Teammates read <code>CLAUDE.md</code> automatically, but they don't see the lead's chat history. Be clear in the spawn prompt.</li>
+        <li><strong>Don't let them fight over files.</strong> Give each teammate a different file or section.</li>
+        <li><strong>Start with research or review, not building.</strong> Lower risk, clearer success criteria, less coordination needed.</li>
+        <li><strong>Make sure the lead waits.</strong> If the lead starts doing the work itself, tell it to wait.</li>
+      </ul>
+    </section>
+
+    <!-- 8 -->
+    <section id="when-not">
+      <h2><span class="num">08</span> When NOT to use multiple agents</h2>
+      <p class="sub">Multi-agent is a power tool. Use it for the right jobs.</p>
+
+      <div class="grid-2">
+        <div class="card bad">
+          <h4>Skip multi-agent when</h4>
+          <ul>
+            <li>The task is step-by-step — step 2 needs the answer from step 1.</li>
+            <li>Every agent would need to see the same big shared context.</li>
+            <li>The work touches the same files heavily (overwrites).</li>
+            <li>It's a small task. The coordination cost isn't worth it.</li>
+            <li>You can't name clear, separate roles for each agent.</li>
+            <li>You're in a focused one-on-one chat that benefits from continuity.</li>
+          </ul>
+        </div>
+        <div class="card good">
+          <h4>Use multi-agent when</h4>
+          <ul>
+            <li>You want to compare many things or explore many angles at once.</li>
+            <li>Each helper can do something useful on its own.</li>
+            <li>The work would otherwise overflow one agent's memory.</li>
+            <li>You want to fight first-idea bias by making the agents debate.</li>
+            <li>Quality matters more than token cost for this task.</li>
+            <li>You can wait for the combining step at the end.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pm-example">
+        <span class="label">PM tasks — which is which</span>
+        <table style="margin-top:8px;">
+          <thead><tr><th>PM task</th><th>Use this</th></tr></thead>
+          <tbody>
+            <tr><td>Write one PRD from a brief</td><td>Single session (step-by-step, shared context)</td></tr>
+            <tr><td>Summarize 10 sprint retros into themes</td><td>Multi-agent (parallel, many inputs)</td></tr>
+            <tr><td>Prep for one user interview</td><td>Single session (focused conversation)</td></tr>
+            <tr><td>Quarterly competitive scan of 5 companies</td><td>Multi-agent (parallel research, sources)</td></tr>
+            <tr><td>Draft a Jira ticket from a spec</td><td>Single session (small, sequential)</td></tr>
+            <tr><td>Stress-test a roadmap with 4 stakeholder lenses</td><td>Agent team (debate)</td></tr>
+            <tr><td>Reply to a Slack thread</td><td>Single session (small, conversational)</td></tr>
+            <tr><td>Find why conversion dropped 30%</td><td>Agent team (competing theories)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout warn">
+        <div class="label">Be honest about cost</div>
+        Multi-agent costs about <strong>15× the tokens</strong> of a normal chat. Before you reach for it, ask: would a single Claude session get me 80% of the way there? Often yes.
+      </div>
+    </section>
+
+    <!-- 9 -->
+    <section id="pitfalls">
+      <h2><span class="num">09</span> Common PM mistakes</h2>
+      <p class="sub">The 4 mistakes PMs make on their first runs. Avoid these and you'll save hours.</p>
+
+      <h3>Mistake 1: Using a team for a task that doesn't need one</h3>
+      <p>"I'll use an agent team to write this user story." Don't. That's one focused task, one session. Multi-agent is for breadth — many angles, many inputs, many things to compare. If you can't list 3+ truly independent angles, stick with one session.</p>
+
+      <h3>Mistake 2: Vague briefs for helpers</h3>
+      <p>"Research the competitor" gets you garbage back. "Find pricing tiers, free-tier limits, and the 3 most-promoted differentiators; output a one-page summary with source URLs" gets you something usable.</p>
+
+      <h3>Mistake 3: Letting agents fight over files</h3>
+      <p>You ask the team to "update the PRD" and three teammates start editing the same file. Last one wins. Either give each teammate a different section, or use worktrees so each has its own copy.</p>
+
+      <h3>Mistake 4: Only watching the lead</h3>
+      <p>You watch the lead's screen the whole time. Meanwhile a helper is stuck in a loop, burning tokens. Use <kbd>Shift</kbd> + <kbd>↓</kbd> to flip through teammates during the run. Your first 2–3 multi-agent runs should be 100% supervised.</p>
+
+      <div class="callout">
+        <div class="label">The honest truth</div>
+        Your first multi-agent run will probably be worse than a single session. The skill is in the briefing and the supervision, not in the tool. Plan to throw away your first 2–3 runs as learning fees.
+      </div>
+    </section>
+
+    <!-- 10 -->
+    <section id="playbook">
+      <h2><span class="num">10</span> PM playbook — 5 ready-to-run prompts</h2>
+      <p class="sub">Copy any of these straight into Claude Code. Each is a full multi-agent workflow for a common PM job. Just swap in your details where you see [brackets].</p>
+
+      <h3>1. User interview synthesis</h3>
+<pre><code>I have [N] user interview transcripts in [folder/path].
+
+Send out one helper per transcript. Each helper should:
+- Find the user's top 3 pain points
+- Tag each one with: how often it comes up (one-off vs recurring),
+  how serious it is (annoying / blocking / show-stopper), and
+  which product area it touches
+- Quote the exact line that supports the tag
+
+After all helpers report back, combine across them:
+- Top 5 themes by how often they appear
+- Top 5 themes by how serious they are
+- 3 themes that surprised you (rare but very serious)
+
+Output: outputs/interview-synthesis-[DATE].md</code></pre>
+
+      <h3>2. Competitive landscape scan</h3>
+<pre><code>I need a competitive scan of [list of N competitors] for
+[my product / feature area].
+
+Send out one helper per competitor. Each one should:
+- Find the current pricing tiers and free-tier limits
+- Find the 3 things they push the most on their homepage
+- Find any product launches or major changes in the last 90 days
+- Cite a source URL for every claim
+
+After all helpers report back, combine into:
+- A comparison table
+- 3 strategic threats ranked by urgency
+- 3 strategic openings we should consider
+
+Output: outputs/competitive-scan-[DATE].md</code></pre>
+
+      <h3>3. Adversarial PRD review</h3>
+<pre><code>Create an agent team to pressure-test the PRD at [path/to/prd.md].
+
+Spawn three teammates:
+- One playing a skeptical Engineering Lead. Push back on effort
+  estimates, hidden complexity, scalability risks.
+- One playing Design. Push back on UX assumptions, edge cases,
+  accessibility.
+- One playing Sales / GTM. Push back on whether this is sellable,
+  whether the value is clear, and whether enterprise will care.
+
+Have them debate. After 2 rounds, write up:
+- Top 5 issues I should fix before the eng review
+- 3 questions I should have answers to before the meeting
+- 1 thing in the PRD that's actually strong and should stay
+
+Output: outputs/prd-review-[DATE].md</code></pre>
+
+      <h3>4. Finding the cause of a metric drop</h3>
+<pre><code>Our [metric] changed by [X%] over the last [time period].
+The data is at:
+- [path to usage data]
+- [path to tickets / surveys]
+- [path to release notes / changelog]
+
+Spawn 4 agent teammates, each owning one theory:
+1. A recent product change caused it
+2. A pricing or packaging change caused it
+3. A competitor move caused it
+4. It's a data / instrumentation issue, not a real change
+
+Each teammate investigates its own theory using the data above.
+Then they debate to try to disprove each other.
+
+Combine the results:
+- The surviving theory with evidence
+- The two most likely alternatives
+- 3 next investigations to confirm
+
+Output: outputs/rca-[metric]-[DATE].md</code></pre>
+
+      <h3>5. Roadmap stress-test by stakeholder</h3>
+<pre><code>Stress-test our [Q3 2026] roadmap at [path/to/roadmap.md].
+
+Spawn 4 agent teammates, each playing a different stakeholder:
+- CEO: Does this move the company-level metrics?
+- Engineering Lead: Is the scope realistic for the team size
+  and known dependencies?
+- Top Customer (use persona at [path/to/persona.md]): Does this
+  solve their actual problems?
+- Competitor analyst (use competitive scan at [path]): Does this
+  keep us competitive? What gap stays unfilled?
+
+Have them debate the roadmap. Combine the results:
+- Top 3 things to add
+- Top 3 things to cut or push to later
+- 1 contrarian bet worth considering
+
+Output: outputs/roadmap-stress-test-[DATE].md</code></pre>
+    </section>
+
+    <!-- 11 -->
+    <section id="getting-started">
+      <h2><span class="num">11</span> Your first run, step by step</h2>
+      <p class="sub">The shortest path from "I read about this" to "I'm using it."</p>
+
+      <ol>
+        <li><strong>Pick a low-stakes task.</strong> Summarize last week's user interviews. Don't start with a quarterly OKR debate.</li>
+        <li><strong>Try subagents first.</strong> Simpler, cheaper, built in. Run the practical in section 2A.</li>
+        <li><strong>Run the interview synthesis practical</strong> (section 1) as your first real run. It's a real PM workflow with very low risk.</li>
+        <li><strong>Then try agent teams</strong> with the adversarial PRD review (section 2C).</li>
+        <li><strong>Watch one full run end-to-end</strong> using <kbd>Shift</kbd> + <kbd>↓</kbd>. You'll learn more in 10 minutes of watching than 2 hours of reading.</li>
+        <li><strong>Add hooks for safety</strong> once you run teams regularly.</li>
+        <li><strong>Track what works.</strong> Note token cost and quality on your first 3–5 runs.</li>
+      </ol>
+    </section>
+
+    <!-- 12 -->
+    <section id="references">
+      <h2><span class="num">12</span> Sources</h2>
+      <p class="sub">All the official sources used to build this document. Every link is from Anthropic or the official Claude Code docs.</p>
+
+      <h3>Claude Code docs</h3>
+      <ul>
+        <li><a href="https://code.claude.com/docs/en/agents">Run agents in parallel — overview</a></li>
+        <li><a href="https://code.claude.com/docs/en/sub-agents">Sub-agents</a></li>
+        <li><a href="https://code.claude.com/docs/en/agent-teams">Agent teams</a></li>
+        <li><a href="https://code.claude.com/docs/en/agent-view">Agent view</a></li>
+        <li><a href="https://code.claude.com/docs/en/worktrees">Worktrees</a></li>
+        <li><a href="https://code.claude.com/docs/en/hooks">Hooks reference</a></li>
+        <li><a href="https://code.claude.com/docs/en/hooks-guide">Hooks guide</a></li>
+        <li><a href="https://code.claude.com/docs/en/mcp">MCP in Claude Code</a></li>
+        <li><a href="https://code.claude.com/docs/en/agent-sdk/overview">Claude Agent SDK</a></li>
+      </ul>
+
+      <h3>Anthropic research and engineering</h3>
+      <ul>
+        <li><a href="https://www.anthropic.com/research/building-effective-agents">Building effective AI agents</a></li>
+        <li><a href="https://www.anthropic.com/engineering/built-multi-agent-research-system">How we built our multi-agent research system</a></li>
+        <li><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Effective context engineering for AI agents</a></li>
+        <li><a href="https://www.anthropic.com/engineering/writing-tools-for-agents">Writing tools for agents</a></li>
+        <li><a href="https://www.anthropic.com/engineering/code-execution-with-mcp">Code execution with MCP</a></li>
+      </ul>
+    </section>
+
+    <footer>
+      <p>Multi-agent systems for PMs · Teaching reference · 23-05-2026</p>
+      <p>Built from official Anthropic sources. Every practical is grounded in real files from this repo (<code>next-leap-claude-code</code>) so the cohort can run them live during the session.</p>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  document.querySelectorAll('pre').forEach(function(pre){
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    btn.addEventListener('click', function(){
+      var code = pre.querySelector('code');
+      var text = code ? code.textContent : pre.textContent;
+      navigator.clipboard.writeText(text).then(function(){
+        btn.textContent = 'Copied';
+        btn.classList.add('copied');
+        setTimeout(function(){
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 1500);
+      });
+    });
+    pre.appendChild(btn);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "eval_id": 2,
+  "eval_name": "shipped-feature-social-post",
+  "prompt": "can you draft a social post about smart summaries v2.4? we never really promoted that release",
+  "assertions": [
+    "Produces a social post of 280 characters or fewer",
+    "The post is grounded in 09-release-notes/release-v2.4-smart-summaries.md facts (e.g. summaries 30% shorter, decisions highlighted first); no invented numbers",
+    "Customer-as-hero framing: the post leads with the reader's pain or outcome, not 'we shipped' or 'we're excited'",
+    "A SUCCESs score for the post is included in the output file",
+    "No em dashes; any dates in DD-MM-YYYY format"
+  ]
+}

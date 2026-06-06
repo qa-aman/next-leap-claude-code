@@ -1,0 +1,69 @@
+{
+  "expectations": [
+    {
+      "text": "Produces a social post of 280 characters or fewer",
+      "passed": true,
+      "evidence": "Section 4 Social Post body is 227 characters: 'You asked for bullet points, not essays. Your meeting summaries now open with decisions at the top - 30% shorter on average, structured the same way every time. The thing you needed to see is no longer buried in paragraph four.' (skill self-reported 279 chars \u2014 actual count is 227; either way well under 280)."
+    },
+    {
+      "text": "The post is grounded in 09-release-notes/release-v2.4-smart-summaries.md facts (e.g. summaries 30% shorter, decisions highlighted first); no invented numbers",
+      "passed": true,
+      "evidence": "Post contains '30% shorter on average' and 'decisions at the top' \u2014 both confirmed in release-v2.4-smart-summaries.md: 'Summaries are now 30% shorter on average' and 'Key decisions are highlighted at the top'. No numbers present that are absent from source files."
+    },
+    {
+      "text": "Customer-as-hero framing: the post leads with the reader's pain or outcome, not 'we shipped' or 'we're excited'",
+      "passed": true,
+      "evidence": "Post opens 'You asked for bullet points, not essays.' \u2014 reader as grammatical subject, leading with the reader's stated frustration. No brand-as-narrator framing present."
+    },
+    {
+      "text": "A SUCCESs score for the post is included in the output file",
+      "passed": true,
+      "evidence": "SUCCESs Scorecard table present, scoring the social post column 6/6 with specific one-line reasoning per check."
+    },
+    {
+      "text": "No em dashes; any dates in DD-MM-YYYY format",
+      "passed": true,
+      "evidence": "Zero '\u2014' characters found. Only date in file is '17-03-2026' in DD-MM-YYYY format."
+    }
+  ],
+  "pass_count": 5,
+  "total": 5,
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_tokens": 30360,
+    "total_duration_seconds": 78.2
+  },
+  "claims": [
+    {
+      "claim": "Social post is 279 characters (skill's self-count)",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Actual character count of the post body is 227 characters, not 279. The skill's character count is incorrect, though the post still comfortably passes the 280-char limit."
+    },
+    {
+      "claim": "'Summaries too long' was the #2 NPS complaint with 14 mentions",
+      "type": "factual",
+      "verified": true,
+      "evidence": "release-v2.4-smart-summaries.md: 'Summaries too long was the #2 complaint in user feedback - 14 mentions in the Q1 2026 NPS survey'"
+    },
+    {
+      "claim": "NPS improved from 22 (Q3 2025) to 34 (Q1 2026) = 12-point gain",
+      "type": "factual",
+      "verified": true,
+      "evidence": "release-v2.4-smart-summaries.md Impact section: 'NPS improved from 22 (Q3 2025) to 34 (Q1 2026). That is a 12-point gain.'"
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "No assertion checks whether the full output (including positioning summary, email, banner, and blurb for v2.4) matches what a real post-launch promo kit would look like. The eval is scoped narrowly to the social post. That's deliberate and fine, but consider adding an assertion that the skill correctly detects this is a shipped release (November 2025) and does not treat it as an upcoming launch."
+      }
+    ],
+    "overall": "Clean eval with good discriminating power. All five assertions are substantive and require genuine skill execution to pass."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "eval_id": 0,
+  "eval_name": "full-launch-kit",
+  "prompt": "I'm on the marketing team. Smart Follow-Up launches in April and I need the full launch announcement kit for it - announcement copy, customer email, banner, social. Put it together for me.",
+  "assertions": [
+    "Output contains all four copy sections: announcement blurb, customer email, in-app banner, and social post",
+    "Output contains a positioning summary covering competitive alternatives, unique capabilities, value, target customer, and market category, each with a source file citation",
+    "Output contains a SUCCESs scorecard table scoring the copy against the six checks",
+    "Every metric or number used in the copy appears in a repo file (e.g. 34% action item error, NPS 34) and is cited; no invented numbers",
+    "No customer-facing output opens with brand-as-hero phrasing such as 'We're excited to announce', 'Introducing', or 'MeetFlow now supports'",
+    "In-app banner copy is 90 characters or fewer plus a short CTA label, and the social post is 280 characters or fewer",
+    "No em dashes anywhere in the output, and any dates use DD-MM-YYYY format"
+  ]
+}

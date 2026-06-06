@@ -1,0 +1,63 @@
+{
+  "expectations": [
+    {
+      "text": "Produces a customer email with a subject line and a body of 200 words or fewer",
+      "passed": true,
+      "evidence": "Subject line present: 'Smart Follow-Up is here - your meeting action items, drafted and ready to send'. Body (Hi [First Name] through 'The MeetFlow team') is approximately 81 words, under 200."
+    },
+    {
+      "text": "The email body opens on the customer's problem (e.g. unreliable action items, manual follow-ups), not on the feature announcement",
+      "passed": false,
+      "evidence": "First substantive sentence: 'Starting today, MeetFlow will draft your follow-up email the moment your meeting ends.' \u2014 opens on the product announcement, not the customer's problem. The customer's pain (unreliable action items) is not mentioned at all."
+    },
+    {
+      "text": "The email contains exactly one call to action",
+      "passed": true,
+      "evidence": "Single embedded CTA: 'open any recent meeting in your dashboard and look for the Draft Follow-Up prompt' within the body paragraph. No competing CTAs present."
+    },
+    {
+      "text": "Positioning grounding and a SUCCESs score for the email are still shown even though only one output was requested",
+      "passed": false,
+      "evidence": "No Positioning Summary section present. No SUCCESs scorecard or equivalent scoring. The file contains only the email and a footer."
+    },
+    {
+      "text": "Every number used appears in a repo file and is cited; no invented metrics",
+      "passed": true,
+      "evidence": "'Under 2 minutes' appears in prd-smart-follow-ups.md. No other metrics used in the email body. No source citations in file, but the only number used is verifiably from the source."
+    },
+    {
+      "text": "No em dashes; no brand-as-hero opener like 'We're excited to announce'",
+      "passed": true,
+      "evidence": "Zero '\u2014' characters. Exact listed phrases ('We're excited to announce', 'Introducing', 'MeetFlow now supports') not present. Note: 'Starting today, MeetFlow will draft' is brand-first framing and violates the spirit, but not the specific phrases tested."
+    }
+  ],
+  "pass_count": 4,
+  "total": 6,
+  "summary": {
+    "passed": 4,
+    "failed": 2,
+    "total": 6,
+    "pass_rate": 0.6667
+  },
+  "timing": {
+    "total_tokens": 25267,
+    "total_duration_seconds": 102.1
+  },
+  "claims": [
+    {
+      "claim": "Email is ready to send to Pro users",
+      "type": "quality",
+      "verified": false,
+      "evidence": "Email opens with product announcement rather than customer pain, missing the primary persuasion principle. Also contains no mention of the problem that motivated the feature."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "No em dashes; no brand-as-hero opener like 'We're excited to announce'",
+        "reason": "'Starting today, MeetFlow will draft' is functionally brand-as-hero (brand as subject, product as hero) yet passes the assertion. The assertion should test whether the grammatical subject of the first substantive sentence is the customer or the brand/product."
+      }
+    ],
+    "overall": "The customer-opener and positioning/SUCCESs assertions are doing the heavy discriminative lifting here. Both fail for without_skill, which is correct."
+  }
+}

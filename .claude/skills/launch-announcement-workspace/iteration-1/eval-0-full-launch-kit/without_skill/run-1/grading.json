@@ -1,0 +1,74 @@
+{
+  "expectations": [
+    {
+      "text": "Output contains all four copy sections: announcement blurb, customer email, in-app banner, and social post",
+      "passed": true,
+      "evidence": "File has ## 1. Launch Announcement Copy, ## 2. Customer Email, ### In-App Banner, and ### Social Post - LinkedIn and ### Social Post - X / Twitter sections"
+    },
+    {
+      "text": "Output contains a positioning summary covering competitive alternatives, unique capabilities, value, target customer, and market category, each with a source file citation",
+      "passed": false,
+      "evidence": "No 'Positioning Summary' section present anywhere in the file. The output has a Messaging Framework section but it does not cover the Dunford positioning components with source citations."
+    },
+    {
+      "text": "Output contains a SUCCESs scorecard table scoring the copy against the six checks",
+      "passed": false,
+      "evidence": "No SUCCESs scorecard or equivalent scoring table present in the file."
+    },
+    {
+      "text": "Every metric or number used in the copy appears in a repo file (e.g. 34% action item error, NPS 34) and is cited; no invented numbers",
+      "passed": true,
+      "evidence": "A 'Key Numbers' table at the end cites sources for all figures used: 34% (company.md, prd), 66% accuracy (product-vision.md), 80% target (prd), 2 minutes (prd), 5 drafts/month (prd). '30+ minutes per day' is a slight paraphrase of feedback 'saves 20-30 min/day' but grounded in the source."
+    },
+    {
+      "text": "No customer-facing output opens with brand-as-hero phrasing such as 'We're excited to announce', 'Introducing', or 'MeetFlow now supports'",
+      "passed": true,
+      "evidence": "None of the three listed exact phrases appear. Announcement headline is 'Smart Follow-Up is here'; email opens 'One thing keeps coming up in feedback'; LinkedIn social opens 'We've been sitting on the #1 complaint'. Note: 'Today we're shipping Smart Follow-Up' in the LinkedIn post violates the spirit of the rule but not the exact phrasing tested."
+    },
+    {
+      "text": "In-app banner copy is 90 characters or fewer plus a short CTA label, and the social post is 280 characters or fewer",
+      "passed": false,
+      "evidence": "In-app banner body text is 102 characters ('Your follow-up email, drafted automatically. Action items flagged. Nothing sent without your approval.'), exceeding the 90-char limit. LinkedIn post is 717 chars and Twitter post is 309 chars, both over 280."
+    },
+    {
+      "text": "No em dashes anywhere in the output, and any dates use DD-MM-YYYY format",
+      "passed": true,
+      "evidence": "Zero '\u2014' characters found. Date '17-03-2026' is in DD-MM-YYYY format; no ISO or US format dates detected."
+    }
+  ],
+  "pass_count": 4,
+  "total": 7,
+  "summary": {
+    "passed": 4,
+    "failed": 3,
+    "total": 7,
+    "pass_rate": 0.5714
+  },
+  "timing": {
+    "total_tokens": 32197,
+    "total_duration_seconds": 153.2
+  },
+  "claims": [
+    {
+      "claim": "Output has a messaging framework for sales and support reference",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Section 4 Messaging Framework present with per-persona positioning (Sarah Chen, Marcus Okafor, Priya Nair archetypes)"
+    },
+    {
+      "claim": "LinkedIn social post leads with the brand perspective",
+      "type": "quality",
+      "verified": true,
+      "evidence": "'Today we're shipping Smart Follow-Up' and 'We've been sitting on the #1 complaint' frame the brand as narrator, not the reader"
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "No customer-facing output opens with brand-as-hero phrasing",
+        "reason": "The three listed phrases are too narrow. 'Today we're shipping Smart Follow-Up' passes the strict check but is the definition of brand-as-hero. Consider expanding the assertion to also flag 'we shipped', 'today we're launching', or any opener where the brand is the grammatical subject."
+      }
+    ],
+    "overall": "Positioning summary and SUCCESs scorecard assertions cleanly discriminate with/without-skill outputs. The brand-as-hero assertion needs broader phrase coverage."
+  }
+}

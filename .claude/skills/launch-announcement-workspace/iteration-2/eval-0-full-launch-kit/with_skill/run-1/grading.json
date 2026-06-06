@@ -1,0 +1,84 @@
+{
+  "expectations": [
+    {
+      "text": "Output contains all four copy sections: announcement blurb, customer email, in-app banner, and social post",
+      "passed": true,
+      "evidence": "File contains '## 1. Announcement Blurb', '## 2. Customer Email', '## 3. In-App Banner', and '## 4. Social Post' sections, all with substantive copy."
+    },
+    {
+      "text": "Output contains a positioning summary covering competitive alternatives, unique capabilities, value, target customer, and market category, each with a source file citation",
+      "passed": true,
+      "evidence": "Positioning Summary section has all five labeled bullets (Alternatives, Unique capabilities, Value, Target customer, Category frame), each ending with a (source: ...) citation."
+    },
+    {
+      "text": "Output contains a SUCCESs scorecard table scoring the copy against the six checks",
+      "passed": true,
+      "evidence": "SUCCESs Scorecard table is present with six rows (Simple, Unexpected, Concrete, Credible, Emotional, Stories) scoring all four copy formats, plus a revised banner rescoring."
+    },
+    {
+      "text": "Every metric or number used in the copy appears in a repo file (e.g. 34% action item error, NPS 34) and is cited; no invented numbers",
+      "passed": false,
+      "evidence": "'20 minutes of cleanup' appears in the Announcement Blurb ('You finish a meeting and face 20 minutes of cleanup') but this number does not appear in any repo source file. Grep across all source directories returned no matches. The Sources table does not cite it. All other numbers (30 min, 1 in 3 / 34%, 66%, 80%, under 2 min, 5 drafts/month, April 2026) are verifiable in PRD, company.md, or product-vision.md."
+    },
+    {
+      "text": "No customer-facing output opens with brand-as-hero phrasing such as 'We're excited to announce', 'Introducing', or 'MeetFlow now supports'",
+      "passed": true,
+      "evidence": "Blurb opens 'You finish a meeting...'; Email opens 'You run back-to-back meetings...'; Banner opens 'Your follow-up, drafted and scored...'; Social opens '30 minutes to correct action items...'. All four lead with customer situation or pain."
+    },
+    {
+      "text": "In-app banner copy is 90 characters or fewer plus a short CTA label, and the social post is 280 characters or fewer",
+      "passed": true,
+      "evidence": "Banner text 'Your follow-up, drafted and scored - review and send in under 2 minutes.' measures 72 characters (under 90 limit). Social post measures 228 characters (under 280 limit). Note: the output's self-reported counts are wrong (claims 88 and 255 respectively), but the actual copy is within both limits."
+    },
+    {
+      "text": "No em dashes anywhere in the output, and any dates use DD-MM-YYYY format",
+      "passed": true,
+      "evidence": "Zero em dash characters (—) found in the file. The only full date used is '17-03-2026' (DD-MM-YYYY format). Month+year references ('April 2026') are not full dates and do not trigger the format rule."
+    }
+  ],
+  "pass_count": 6,
+  "total": 7,
+  "summary": {
+    "passed": 6,
+    "failed": 1,
+    "total": 7,
+    "pass_rate": 0.857
+  },
+  "timing": {
+    "total_duration_seconds": 93.4,
+    "total_tokens": 35256
+  },
+  "claims": [
+    {
+      "claim": "Banner text = 88 characters",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Actual character count of 'Your follow-up, drafted and scored - review and send in under 2 minutes.' is 72, not 88. The copy still passes the 90-character limit."
+    },
+    {
+      "claim": "Social post = 255 characters",
+      "type": "factual",
+      "verified": false,
+      "evidence": "Actual character count is 228 (or 229 with raw newlines). Output claims 255. The copy still passes the 280-character limit."
+    },
+    {
+      "claim": "20 minutes of cleanup is a real user number",
+      "type": "factual",
+      "verified": false,
+      "evidence": "No repo file contains '20 minutes' in a context that supports this claim. Source files reference '30 minutes of manual correction' (PRD, interview-01-sarah-chen.md). '20 minutes' appears to be invented."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Every metric or number used in the copy appears in a repo file and is cited; no invented numbers",
+        "reason": "This assertion is the most important quality check and it caught a real invented number. Consider also asserting that the Sources table accounts for every number that appears in customer-facing copy (not just most of them) — the current output has a full Sources table but '20 minutes' is absent from it entirely, which itself is a signal the executor may have suspected the number was weak."
+      },
+      {
+        "assertion": "In-app banner copy is 90 characters or fewer plus a short CTA label, and the social post is 280 characters or fewer",
+        "reason": "The self-reported character counts in the output are wrong (88 claimed vs 72 actual; 255 claimed vs 228 actual). The assertion passes on the actual copy, but a future eval could verify the claimed count matches the actual count, since wrong self-reports erode trust in the output's internal consistency checks."
+      }
+    ],
+    "overall": "One real failure caught (invented '20 minutes'). The self-reported character counts being wrong is a notable internal consistency issue that no assertion currently catches."
+  }
+}

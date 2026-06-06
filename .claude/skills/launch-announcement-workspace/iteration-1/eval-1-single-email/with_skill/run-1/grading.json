@@ -1,0 +1,68 @@
+{
+  "expectations": [
+    {
+      "text": "Produces a customer email with a subject line and a body of 200 words or fewer",
+      "passed": true,
+      "evidence": "Subject line present: 'Your follow-up email, ready before your next meeting starts'. Email body (from 'Right now, 34%...' through '**Try the beta when it opens**') is approximately 101 words, well under 200."
+    },
+    {
+      "text": "The email body opens on the customer's problem (e.g. unreliable action items, manual follow-ups), not on the feature announcement",
+      "passed": true,
+      "evidence": "First sentence of body: 'Right now, 34% of the action items MeetFlow extracts are wrong or missing.' \u2014 opens directly on the customer's pain point before naming the feature."
+    },
+    {
+      "text": "The email contains exactly one call to action",
+      "passed": true,
+      "evidence": "Single CTA at end of email: '**Try the beta when it opens - [Join the waitlist]**'. No other standalone CTA is present."
+    },
+    {
+      "text": "Positioning grounding and a SUCCESs score for the email are still shown even though only one output was requested",
+      "passed": true,
+      "evidence": "File contains both a Positioning Summary section (with 5 components and citations) and a SUCCESs Scorecard table scoring the email 6/6."
+    },
+    {
+      "text": "Every number used appears in a repo file and is cited; no invented metrics",
+      "passed": true,
+      "evidence": "Numbers used: 34% error rate (company.md confirmed), 'under 2 minutes' (prd-smart-follow-ups.md confirmed), April 2026 (prd confirmed). All cited in Sources table at end of file."
+    },
+    {
+      "text": "No em dashes; no brand-as-hero opener like 'We're excited to announce'",
+      "passed": true,
+      "evidence": "Zero '\u2014' characters in file. Email body opens 'Right now, 34%...' \u2014 customer-problem-first framing. No 'We're excited to announce', 'Introducing', or 'MeetFlow now supports' present."
+    }
+  ],
+  "pass_count": 6,
+  "total": 6,
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_tokens": 33694,
+    "total_duration_seconds": 123.8
+  },
+  "claims": [
+    {
+      "claim": "Email scores 6/6 on SUCCESs",
+      "type": "quality",
+      "verified": true,
+      "evidence": "SUCCESs Scorecard shows 6/6 with one-line reasoning per check; all six pass verdicts are substantiated by specific elements in the email"
+    },
+    {
+      "claim": "34% error rate sourced from company.md",
+      "type": "factual",
+      "verified": true,
+      "evidence": "company.md line: 'Action item accuracy at 66% (34% wrong or missing)' confirms the figure"
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "No assertion checks whether the single CTA is genuinely a call to action (an imperative directing the reader) vs. just any sentence mentioning the feature. The current CTA 'Try the beta when it opens - [Join the waitlist]' passes easily, but a vague 'Learn more about Smart Follow-Up' would also pass. Consider requiring the CTA to include a clear imperative verb and a destination."
+      }
+    ],
+    "overall": "Solid eval \u2014 the positioning + SUCCESs assertion cleanly differentiates from the without_skill baseline. No structural gaps."
+  }
+}

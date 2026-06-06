@@ -1,0 +1,13 @@
+{
+  "eval_id": 1,
+  "eval_name": "single-email",
+  "prompt": "Write a customer email announcing Smart Follow-Up to our Pro users. Keep it short.",
+  "assertions": [
+    "Produces a customer email with a subject line and a body of 200 words or fewer",
+    "The email body opens on the customer's problem (e.g. unreliable action items, manual follow-ups), not on the feature announcement",
+    "The email contains exactly one call to action",
+    "Positioning grounding and a SUCCESs score for the email are still shown even though only one output was requested",
+    "Every number used appears in a repo file and is cited; no invented metrics",
+    "No em dashes; no brand-as-hero opener like 'We're excited to announce'"
+  ]
+}

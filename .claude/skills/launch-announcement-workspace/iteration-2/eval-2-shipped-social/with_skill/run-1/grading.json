@@ -1,0 +1,57 @@
+{
+  "expectations": [
+    {
+      "text": "Produces a social post of 280 characters or fewer",
+      "passed": true,
+      "evidence": "Social post 'You finish a 30-minute meeting. MeetFlow hands you a 350-word wall of text. You skim it, miss something, and rewrite it anyway. Smart Summaries v2.4 changed that - 30% shorter, decisions at the top. Your after-meeting routine just got a lot faster.' measures 248 characters. Output's self-reported count (248) is correct. Well under the 280-character limit."
+    },
+    {
+      "text": "The post is grounded in 09-release-notes/release-v2.4-smart-summaries.md facts (e.g. summaries 30% shorter, decisions highlighted first); no invented numbers",
+      "passed": true,
+      "evidence": "Both numbers in the post trace directly to release-v2.4-smart-summaries.md: '350-word wall of text' from 'The previous model averaged 350 words per 30-minute meeting'; '30% shorter' from 'Summaries are now 30% shorter on average'. No invented numbers."
+    },
+    {
+      "text": "Customer-as-hero framing: the post leads with the reader's pain or outcome, not 'we shipped' or 'we're excited'",
+      "passed": true,
+      "evidence": "Post opens 'You finish a 30-minute meeting.' Grammatical subject is 'You' (the reader). First two sentences describe the user's frustrating experience. Brand/product not named until sentence 4."
+    },
+    {
+      "text": "A SUCCESs score for the post is included in the output file",
+      "passed": true,
+      "evidence": "SUCCESs Scorecard table present, scoring the post 6/6 across Simple, Unexpected, Concrete, Credible, Emotional, Stories with per-row reasoning."
+    },
+    {
+      "text": "No em dashes; any dates in DD-MM-YYYY format",
+      "passed": true,
+      "evidence": "Zero em dash characters found. The only full date is '17-03-2026' in the file header (DD-MM-YYYY). No dates appear in the social post copy itself."
+    }
+  ],
+  "pass_count": 5,
+  "total": 5,
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_duration_seconds": 67.9,
+    "total_tokens": 31045
+  },
+  "claims": [
+    {
+      "claim": "Output contains ONLY a social post (plus positioning, scorecard, sources) - not all four copy formats",
+      "type": "quality",
+      "verified": true,
+      "evidence": "Sections found: Positioning Summary, '4. Social Post', SUCCESs Scorecard, Sources. No announcement blurb, customer email, or in-app banner sections present. The skill correctly scoped to single-format output on a shipped-feature request."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "No assertion checks that the output is scoped to a single format (social only). If the skill erroneously produced a full 4-format kit in response to a social-only request, all five current assertions would still pass. Adding 'Output does not contain a customer email, announcement blurb, or in-app banner section' would make the scoping requirement explicit and testable."
+      }
+    ],
+    "overall": "Clean 5/5. The extra check confirms correct scoping to social-only output. One gap: no assertion enforces the single-format constraint."
+  }
+}

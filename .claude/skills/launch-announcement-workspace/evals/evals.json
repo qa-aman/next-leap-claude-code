@@ -1,0 +1,47 @@
+{
+  "skill_name": "launch-announcement",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I'm on the marketing team. Smart Follow-Up launches in April and I need the full launch announcement kit for it - announcement copy, customer email, banner, social. Put it together for me.",
+      "expected_output": "A complete launch kit file with positioning summary (5 Dunford components with file citations), all four copy outputs structured customer-as-hero, a SUCCESs scorecard table, and a sources section. No invented metrics, DD-MM-YYYY dates, no em dashes.",
+      "files": [],
+      "assertions": [
+        "Output contains all four copy sections: announcement blurb, customer email, in-app banner, and social post",
+        "Output contains a positioning summary covering competitive alternatives, unique capabilities, value, target customer, and market category, each with a source file citation",
+        "Output contains a SUCCESs scorecard table scoring the copy against the six checks",
+        "Every metric or number used in the copy appears in a repo file (e.g. 34% action item error, NPS 34) and is cited; no invented numbers",
+        "No customer-facing output opens with brand-as-hero phrasing such as 'We're excited to announce', 'Introducing', or 'MeetFlow now supports'",
+        "In-app banner copy is 90 characters or fewer plus a short CTA label, and the social post is 280 characters or fewer",
+        "No em dashes anywhere in the output, and any dates use DD-MM-YYYY format"
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "Write a customer email announcing Smart Follow-Up to our Pro users. Keep it short.",
+      "expected_output": "A single customer email (under 200 words, subject + body, one CTA) that opens on the customer's problem rather than 'we're excited to announce', grounded in the PRD and personas, still showing positioning grounding and a SUCCESs score for the email.",
+      "files": [],
+      "assertions": [
+        "Produces a customer email with a subject line and a body of 200 words or fewer",
+        "The email body opens on the customer's problem (e.g. unreliable action items, manual follow-ups), not on the feature announcement",
+        "The email contains exactly one call to action",
+        "Positioning grounding and a SUCCESs score for the email are still shown even though only one output was requested",
+        "Every number used appears in a repo file and is cited; no invented metrics",
+        "No em dashes; no brand-as-hero opener like 'We're excited to announce'"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "can you draft a social post about smart summaries v2.4? we never really promoted that release",
+      "expected_output": "A social post under 280 characters for the shipped Smart Summaries v2.4 feature, grounded in 09-release-notes/release-v2.4-smart-summaries.md (30% shorter summaries, NPS 22 to 34), customer-as-hero framing, real numbers only with sources noted in the kit file.",
+      "files": [],
+      "assertions": [
+        "Produces a social post of 280 characters or fewer",
+        "The post is grounded in 09-release-notes/release-v2.4-smart-summaries.md facts (e.g. summaries 30% shorter, decisions highlighted first); no invented numbers",
+        "Customer-as-hero framing: the post leads with the reader's pain or outcome, not 'we shipped' or 'we're excited'",
+        "A SUCCESs score for the post is included in the output file",
+        "No em dashes; any dates in DD-MM-YYYY format"
+      ]
+    }
+  ]
+}

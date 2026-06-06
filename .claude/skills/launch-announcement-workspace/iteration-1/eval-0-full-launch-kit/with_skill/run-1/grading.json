@@ -1,0 +1,83 @@
+{
+  "expectations": [
+    {
+      "text": "Output contains all four copy sections: announcement blurb, customer email, in-app banner, and social post",
+      "passed": true,
+      "evidence": "File has ## 1. Announcement Blurb, ## 2. Customer Email, ## 3. In-App Banner, ## 4. Social Post sections"
+    },
+    {
+      "text": "Output contains a positioning summary covering competitive alternatives, unique capabilities, value, target customer, and market category, each with a source file citation",
+      "passed": true,
+      "evidence": "Positioning Summary section lists all 5 components, each ending with (source: `...`) \u2014 e.g. Alternatives: '(source: `prd-smart-follow-ups.md`, `competitive.md`)'"
+    },
+    {
+      "text": "Output contains a SUCCESs scorecard table scoring the copy against the six checks",
+      "passed": true,
+      "evidence": "SUCCESs Scorecard section contains a table with all six checks (Simple/Unexpected/Concrete/Credible/Emotional/Stories) scored for all four copy formats"
+    },
+    {
+      "text": "Every metric or number used in the copy appears in a repo file (e.g. 34% action item error, NPS 34) and is cited; no invented numbers",
+      "passed": false,
+      "evidence": "Announcement blurb states 'it was the #1 complaint, 19 out of 19 open-ended mentions' \u2014 the number 19 is in feedback-q1-2026.md (19 mentions of that theme), but 'out of 19' is invented: the source lists 5 themes totaling 59 complaint mentions, not 19. The framing '19/19' does not appear in any repo file."
+    },
+    {
+      "text": "No customer-facing output opens with brand-as-hero phrasing such as 'We're excited to announce', 'Introducing', or 'MeetFlow now supports'",
+      "passed": true,
+      "evidence": "All four sections open customer-first: blurb 'You leave a meeting with ten action items', email 'You still have to correct every action item', banner 'Your follow-up, drafted and ready to review', social 'You run 8 meetings a day'"
+    },
+    {
+      "text": "In-app banner copy is 90 characters or fewer plus a short CTA label, and the social post is 280 characters or fewer",
+      "passed": false,
+      "evidence": "Banner copy (original and revised) both pass: 71 chars and 89 chars respectively. Social post section 4 is 333 characters (measured), exceeding the 280-character limit."
+    },
+    {
+      "text": "No em dashes anywhere in the output, and any dates use DD-MM-YYYY format",
+      "passed": true,
+      "evidence": "Zero '\u2014' characters found in file. Only date present is '17-03-2026' in DD-MM-YYYY format."
+    }
+  ],
+  "pass_count": 5,
+  "total": 7,
+  "summary": {
+    "passed": 5,
+    "failed": 2,
+    "total": 7,
+    "pass_rate": 0.7143
+  },
+  "timing": {
+    "total_tokens": 37789,
+    "total_duration_seconds": 155.9
+  },
+  "claims": [
+    {
+      "claim": "19 out of 19 open-ended mentions were about action items",
+      "type": "factual",
+      "verified": false,
+      "evidence": "feedback-q1-2026.md shows action items had 19 mentions, but 5 complaint themes total 59 mentions; '19/19' denominator is not in any source file"
+    },
+    {
+      "claim": "Social post is a complete, short-form post",
+      "type": "quality",
+      "verified": false,
+      "evidence": "Post is 333 characters \u2014 over the 280-character limit for the stated platform (Twitter/X)"
+    },
+    {
+      "claim": "80% accuracy target by Q2 2026",
+      "type": "factual",
+      "verified": true,
+      "evidence": "prd-smart-follow-ups.md Success Metrics confirms 80% accuracy target by end Q2 2026"
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Every metric or number used in the copy appears in a repo file and is cited; no invented numbers",
+        "reason": "The assertion currently checks for presence in a repo file, but doesn't explicitly check for misrepresented ratios or denominators. '19 out of 19' slipped through because '19' exists in the source. Consider adding: 'numbers must appear in the same form or with the same denominator context as in the source file.'"
+      },
+      {
+        "reason": "No assertion checks whether the SUCCESs scorecard scores are self-consistent \u2014 the skill scored the original banner 3/6 then rewrote it. An eval could verify that any sub-6 output is accompanied by a rewrite."
+      }
+    ],
+    "overall": "Core assertions are meaningful. The invented-number check needs tightening to catch ratio misrepresentations, not just numeric value presence."
+  }
+}

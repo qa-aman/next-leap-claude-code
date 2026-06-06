@@ -1,0 +1,359 @@
+{
+  "metadata": {
+    "skill_name": "launch-announcement",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-06-06T10:24:55Z",
+    "evals_run": [
+      0,
+      1,
+      2
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.857,
+        "passed": 6,
+        "failed": 1,
+        "total": 7,
+        "time_seconds": 93.4,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Output contains all four copy sections: announcement blurb, customer email, in-app banner, and social post",
+          "passed": true,
+          "evidence": "File contains '## 1. Announcement Blurb', '## 2. Customer Email', '## 3. In-App Banner', and '## 4. Social Post' sections, all with substantive copy."
+        },
+        {
+          "text": "Output contains a positioning summary covering competitive alternatives, unique capabilities, value, target customer, and market category, each with a source file citation",
+          "passed": true,
+          "evidence": "Positioning Summary section has all five labeled bullets (Alternatives, Unique capabilities, Value, Target customer, Category frame), each ending with a (source: ...) citation."
+        },
+        {
+          "text": "Output contains a SUCCESs scorecard table scoring the copy against the six checks",
+          "passed": true,
+          "evidence": "SUCCESs Scorecard table is present with six rows (Simple, Unexpected, Concrete, Credible, Emotional, Stories) scoring all four copy formats, plus a revised banner rescoring."
+        },
+        {
+          "text": "Every metric or number used in the copy appears in a repo file (e.g. 34% action item error, NPS 34) and is cited; no invented numbers",
+          "passed": false,
+          "evidence": "'20 minutes of cleanup' appears in the Announcement Blurb ('You finish a meeting and face 20 minutes of cleanup') but this number does not appear in any repo source file. Grep across all source directories returned no matches. The Sources table does not cite it. All other numbers (30 min, 1 in 3 / 34%, 66%, 80%, under 2 min, 5 drafts/month, April 2026) are verifiable in PRD, company.md, or product-vision.md."
+        },
+        {
+          "text": "No customer-facing output opens with brand-as-hero phrasing such as 'We're excited to announce', 'Introducing', or 'MeetFlow now supports'",
+          "passed": true,
+          "evidence": "Blurb opens 'You finish a meeting...'; Email opens 'You run back-to-back meetings...'; Banner opens 'Your follow-up, drafted and scored...'; Social opens '30 minutes to correct action items...'. All four lead with customer situation or pain."
+        },
+        {
+          "text": "In-app banner copy is 90 characters or fewer plus a short CTA label, and the social post is 280 characters or fewer",
+          "passed": true,
+          "evidence": "Banner text 'Your follow-up, drafted and scored - review and send in under 2 minutes.' measures 72 characters (under 90 limit). Social post measures 228 characters (under 280 limit). Note: the output's self-reported counts are wrong (claims 88 and 255 respectively), but the actual copy is within both limits."
+        },
+        {
+          "text": "No em dashes anywhere in the output, and any dates use DD-MM-YYYY format",
+          "passed": true,
+          "evidence": "Zero em dash characters (\u2014) found in the file. The only full date used is '17-03-2026' (DD-MM-YYYY format). Month+year references ('April 2026') are not full dates and do not trigger the format rule."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 6,
+        "failed": 0,
+        "total": 6,
+        "time_seconds": 92.4,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Produces a customer email with a subject line and a body of 200 words or fewer",
+          "passed": true,
+          "evidence": "Subject line present: 'Your follow-up still takes 30 minutes. It shouldn't.' Body word count is 123 words (well under 200 limit)."
+        },
+        {
+          "text": "The email body opens on the customer's problem (e.g. unreliable action items, manual follow-ups), not on the feature announcement",
+          "passed": true,
+          "evidence": "Email body opens: 'You finish a meeting and sit down to write the follow-up. First you re-read the transcript. Then you sort through the action items and fix the ones that are wrong - which is nearly 1 in 3. Then you send. That's 30 minutes of work MeetFlow should be doing for you.' Grammatical subject is 'You' (customer); first sentences name the manual correction problem."
+        },
+        {
+          "text": "The email contains exactly one call to action",
+          "passed": true,
+          "evidence": "Single CTA found: 'Open your next meeting summary to try it.' No other imperative/action directives appear in the body."
+        },
+        {
+          "text": "Positioning grounding and a SUCCESs score for the email are still shown even though only one output was requested",
+          "passed": true,
+          "evidence": "Output contains a full Positioning Summary section (5 labeled bullets with citations) and a SUCCESs Scorecard table scoring the email 6/6 across all six checks."
+        },
+        {
+          "text": "Every number used appears in a repo file and is cited; no invented metrics",
+          "passed": true,
+          "evidence": "Numbers used: 'nearly 1 in 3' (from 34% in PRD), '30 minutes' (PRD review screen design / sarah-chen.md), 'under 2 minutes' (PRD), export channels 'email, Slack, or Notion' (PRD What It Does). All cited in Sources table. No invented numbers found."
+        },
+        {
+          "text": "No em dashes; no brand-as-hero opener like 'We're excited to announce'",
+          "passed": true,
+          "evidence": "Zero em dash characters found in file. Subject line and body both open on customer pain ('Your follow-up still takes 30 minutes' / 'You finish a meeting'). No brand-as-hero phrasing present."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "time_seconds": 67.9,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Produces a social post of 280 characters or fewer",
+          "passed": true,
+          "evidence": "Social post 'You finish a 30-minute meeting. MeetFlow hands you a 350-word wall of text. You skim it, miss something, and rewrite it anyway. Smart Summaries v2.4 changed that - 30% shorter, decisions at the top. Your after-meeting routine just got a lot faster.' measures 248 characters. Output's self-reported count (248) is correct. Well under the 280-character limit."
+        },
+        {
+          "text": "The post is grounded in 09-release-notes/release-v2.4-smart-summaries.md facts (e.g. summaries 30% shorter, decisions highlighted first); no invented numbers",
+          "passed": true,
+          "evidence": "Both numbers in the post trace directly to release-v2.4-smart-summaries.md: '350-word wall of text' from 'The previous model averaged 350 words per 30-minute meeting'; '30% shorter' from 'Summaries are now 30% shorter on average'. No invented numbers."
+        },
+        {
+          "text": "Customer-as-hero framing: the post leads with the reader's pain or outcome, not 'we shipped' or 'we're excited'",
+          "passed": true,
+          "evidence": "Post opens 'You finish a 30-minute meeting.' Grammatical subject is 'You' (the reader). First two sentences describe the user's frustrating experience. Brand/product not named until sentence 4."
+        },
+        {
+          "text": "A SUCCESs score for the post is included in the output file",
+          "passed": true,
+          "evidence": "SUCCESs Scorecard table present, scoring the post 6/6 across Simple, Unexpected, Concrete, Credible, Emotional, Stories with per-row reasoning."
+        },
+        {
+          "text": "No em dashes; any dates in DD-MM-YYYY format",
+          "passed": true,
+          "evidence": "Zero em dash characters found. The only full date is '17-03-2026' in the file header (DD-MM-YYYY). No dates appear in the social post copy itself."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5714,
+        "passed": 4,
+        "failed": 3,
+        "total": 7,
+        "time_seconds": 153.2,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Output contains all four copy sections: announcement blurb, customer email, in-app banner, and social post",
+          "passed": true,
+          "evidence": "File has ## 1. Launch Announcement Copy, ## 2. Customer Email, ### In-App Banner, and ### Social Post - LinkedIn and ### Social Post - X / Twitter sections"
+        },
+        {
+          "text": "Output contains a positioning summary covering competitive alternatives, unique capabilities, value, target customer, and market category, each with a source file citation",
+          "passed": false,
+          "evidence": "No 'Positioning Summary' section present anywhere in the file. The output has a Messaging Framework section but it does not cover the Dunford positioning components with source citations."
+        },
+        {
+          "text": "Output contains a SUCCESs scorecard table scoring the copy against the six checks",
+          "passed": false,
+          "evidence": "No SUCCESs scorecard or equivalent scoring table present in the file."
+        },
+        {
+          "text": "Every metric or number used in the copy appears in a repo file (e.g. 34% action item error, NPS 34) and is cited; no invented numbers",
+          "passed": true,
+          "evidence": "A 'Key Numbers' table at the end cites sources for all figures used: 34% (company.md, prd), 66% accuracy (product-vision.md), 80% target (prd), 2 minutes (prd), 5 drafts/month (prd). '30+ minutes per day' is a slight paraphrase of feedback 'saves 20-30 min/day' but grounded in the source."
+        },
+        {
+          "text": "No customer-facing output opens with brand-as-hero phrasing such as 'We're excited to announce', 'Introducing', or 'MeetFlow now supports'",
+          "passed": true,
+          "evidence": "None of the three listed exact phrases appear. Announcement headline is 'Smart Follow-Up is here'; email opens 'One thing keeps coming up in feedback'; LinkedIn social opens 'We've been sitting on the #1 complaint'. Note: 'Today we're shipping Smart Follow-Up' in the LinkedIn post violates the spirit of the rule but not the exact phrasing tested."
+        },
+        {
+          "text": "In-app banner copy is 90 characters or fewer plus a short CTA label, and the social post is 280 characters or fewer",
+          "passed": false,
+          "evidence": "In-app banner body text is 102 characters ('Your follow-up email, drafted automatically. Action items flagged. Nothing sent without your approval.'), exceeding the 90-char limit. LinkedIn post is 717 chars and Twitter post is 309 chars, both over 280."
+        },
+        {
+          "text": "No em dashes anywhere in the output, and any dates use DD-MM-YYYY format",
+          "passed": true,
+          "evidence": "Zero '\u2014' characters found. Date '17-03-2026' is in DD-MM-YYYY format; no ISO or US format dates detected."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.6667,
+        "passed": 4,
+        "failed": 2,
+        "total": 6,
+        "time_seconds": 102.1,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Produces a customer email with a subject line and a body of 200 words or fewer",
+          "passed": true,
+          "evidence": "Subject line present: 'Smart Follow-Up is here - your meeting action items, drafted and ready to send'. Body (Hi [First Name] through 'The MeetFlow team') is approximately 81 words, under 200."
+        },
+        {
+          "text": "The email body opens on the customer's problem (e.g. unreliable action items, manual follow-ups), not on the feature announcement",
+          "passed": false,
+          "evidence": "First substantive sentence: 'Starting today, MeetFlow will draft your follow-up email the moment your meeting ends.' \u2014 opens on the product announcement, not the customer's problem. The customer's pain (unreliable action items) is not mentioned at all."
+        },
+        {
+          "text": "The email contains exactly one call to action",
+          "passed": true,
+          "evidence": "Single embedded CTA: 'open any recent meeting in your dashboard and look for the Draft Follow-Up prompt' within the body paragraph. No competing CTAs present."
+        },
+        {
+          "text": "Positioning grounding and a SUCCESs score for the email are still shown even though only one output was requested",
+          "passed": false,
+          "evidence": "No Positioning Summary section present. No SUCCESs scorecard or equivalent scoring. The file contains only the email and a footer."
+        },
+        {
+          "text": "Every number used appears in a repo file and is cited; no invented metrics",
+          "passed": true,
+          "evidence": "'Under 2 minutes' appears in prd-smart-follow-ups.md. No other metrics used in the email body. No source citations in file, but the only number used is verifiably from the source."
+        },
+        {
+          "text": "No em dashes; no brand-as-hero opener like 'We're excited to announce'",
+          "passed": true,
+          "evidence": "Zero '\u2014' characters. Exact listed phrases ('We're excited to announce', 'Introducing', 'MeetFlow now supports') not present. Note: 'Starting today, MeetFlow will draft' is brand-first framing and violates the spirit, but not the specific phrases tested."
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.4,
+        "passed": 2,
+        "failed": 3,
+        "total": 5,
+        "time_seconds": 31.5,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Produces a social post of 280 characters or fewer",
+          "passed": false,
+          "evidence": "The output is a full LinkedIn post totaling 919 characters. No abbreviated version under 280 characters is provided."
+        },
+        {
+          "text": "The post is grounded in 09-release-notes/release-v2.4-smart-summaries.md facts (e.g. summaries 30% shorter, decisions highlighted first); no invented numbers",
+          "passed": true,
+          "evidence": "Post cites '30% shorter on average', '350 words', '14 mentions', 'NPS went from 22 to 34' \u2014 all confirmed in release-v2.4-smart-summaries.md. No invented numbers detected."
+        },
+        {
+          "text": "Customer-as-hero framing: the post leads with the reader's pain or outcome, not 'we shipped' or 'we're excited'",
+          "passed": false,
+          "evidence": "Post opens 'Most AI meeting tools give you more.' (line 1), then immediately pivots to 'We went the other way.' (line 2) and 'Smart Summaries v2.4 shipped in November 2025 and we never actually talked about what changed.' (line 3). The brand becomes the narrator within two sentences and the core announcement is brand-narrated, not customer-outcome-led."
+        },
+        {
+          "text": "A SUCCESs score for the post is included in the output file",
+          "passed": false,
+          "evidence": "No SUCCESs scorecard or scoring table present anywhere in the file."
+        },
+        {
+          "text": "No em dashes; any dates in DD-MM-YYYY format",
+          "passed": true,
+          "evidence": "Zero '\u2014' characters found. Date 'Date drafted: 06-06-2026' is in DD-MM-YYYY format."
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.9523,
+        "stddev": 0.0826,
+        "min": 0.857,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 84.5667,
+        "stddev": 14.4424,
+        "min": 67.9,
+        "max": 93.4
+      },
+      "tokens": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.546,
+        "stddev": 0.1351,
+        "min": 0.4,
+        "max": 0.6667
+      },
+      "time_seconds": {
+        "mean": 95.6,
+        "stddev": 61.1098,
+        "min": 31.5,
+        "max": 153.2
+      },
+      "tokens": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.41",
+      "time_seconds": "-11.0",
+      "tokens": "+0"
+    }
+  },
+  "notes": [
+    "Iteration 1 -> 2: with_skill pass rate improved 90.5% -> 95.2% (delta vs baseline +0.36 -> +0.41). Baselines reused from iteration 1 since the no-skill condition is unchanged.",
+    "All three iteration-1 fixes verified: scope check held on eval-2 (social post only, was full kit), all character limits passed with the new format gate (banner 72, social 228/248 chars), no brand-as-hero openers.",
+    "Remaining failure (eval-0): blurb invented '20 minutes of cleanup' - sources consistently say 30 minutes. The number also never appears in the output's own Sources table, so a 'every number in copy must appear in the Sources table' self-check would have caught it.",
+    "New issue found by grader: self-reported character counts in eval-0 are wrong (claimed 88/255, actual 72/228). Copy still passes limits, but inaccurate self-reports undermine the scorecard's credibility.",
+    "Eval coverage gap: no assertion enforces single-output scoping on eval-2 - a regression to four-format output would still pass all assertions. Add this assertion in any future iteration."
+  ]
+}

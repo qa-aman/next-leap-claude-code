@@ -1,0 +1,64 @@
+{
+  "expectations": [
+    {
+      "text": "Produces a social post of 280 characters or fewer",
+      "passed": false,
+      "evidence": "The output is a full LinkedIn post totaling 919 characters. No abbreviated version under 280 characters is provided."
+    },
+    {
+      "text": "The post is grounded in 09-release-notes/release-v2.4-smart-summaries.md facts (e.g. summaries 30% shorter, decisions highlighted first); no invented numbers",
+      "passed": true,
+      "evidence": "Post cites '30% shorter on average', '350 words', '14 mentions', 'NPS went from 22 to 34' \u2014 all confirmed in release-v2.4-smart-summaries.md. No invented numbers detected."
+    },
+    {
+      "text": "Customer-as-hero framing: the post leads with the reader's pain or outcome, not 'we shipped' or 'we're excited'",
+      "passed": false,
+      "evidence": "Post opens 'Most AI meeting tools give you more.' (line 1), then immediately pivots to 'We went the other way.' (line 2) and 'Smart Summaries v2.4 shipped in November 2025 and we never actually talked about what changed.' (line 3). The brand becomes the narrator within two sentences and the core announcement is brand-narrated, not customer-outcome-led."
+    },
+    {
+      "text": "A SUCCESs score for the post is included in the output file",
+      "passed": false,
+      "evidence": "No SUCCESs scorecard or scoring table present anywhere in the file."
+    },
+    {
+      "text": "No em dashes; any dates in DD-MM-YYYY format",
+      "passed": true,
+      "evidence": "Zero '\u2014' characters found. Date 'Date drafted: 06-06-2026' is in DD-MM-YYYY format."
+    }
+  ],
+  "pass_count": 2,
+  "total": 5,
+  "summary": {
+    "passed": 2,
+    "failed": 3,
+    "total": 5,
+    "pass_rate": 0.4
+  },
+  "timing": {
+    "total_tokens": 22759,
+    "total_duration_seconds": 31.5
+  },
+  "claims": [
+    {
+      "claim": "Post is suitable for LinkedIn",
+      "type": "quality",
+      "verified": false,
+      "evidence": "Post is 919 characters and multi-section \u2014 plausible for LinkedIn but would not work on Twitter/X. The eval prompt says 'social post' without specifying platform; the output assumes LinkedIn but does not note the platform-specific length issue."
+    },
+    {
+      "claim": "Numbers are sourced from release notes",
+      "type": "factual",
+      "verified": true,
+      "evidence": "Source file cited at bottom: '09-release-notes/release-v2.4-smart-summaries.md'. All numbers (30%, 350 words, NPS 22\u219234, 14 mentions) confirmed present in that file."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "assertion": "Produces a social post of 280 characters or fewer",
+        "reason": "The assertion implicitly assumes Twitter/X format. Without_skill produced a LinkedIn post that is reasonable for that platform. Consider specifying the target platform in the eval prompt, or changing the assertion to 'produces a short-form post suitable for Twitter/X (280 chars or fewer)' to make the requirement unambiguous."
+      }
+    ],
+    "overall": "The 280-char and SUCCESs assertions are the clearest discriminators. Customer-as-hero framing is the subtlest and most instructive failure \u2014 the post opens reader-centric then immediately shifts to brand narration."
+  }
+}

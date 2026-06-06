@@ -1,0 +1,62 @@
+{
+  "expectations": [
+    {
+      "text": "Produces a customer email with a subject line and a body of 200 words or fewer",
+      "passed": true,
+      "evidence": "Subject line present: 'Your follow-up still takes 30 minutes. It shouldn't.' Body word count is 123 words (well under 200 limit)."
+    },
+    {
+      "text": "The email body opens on the customer's problem (e.g. unreliable action items, manual follow-ups), not on the feature announcement",
+      "passed": true,
+      "evidence": "Email body opens: 'You finish a meeting and sit down to write the follow-up. First you re-read the transcript. Then you sort through the action items and fix the ones that are wrong - which is nearly 1 in 3. Then you send. That's 30 minutes of work MeetFlow should be doing for you.' Grammatical subject is 'You' (customer); first sentences name the manual correction problem."
+    },
+    {
+      "text": "The email contains exactly one call to action",
+      "passed": true,
+      "evidence": "Single CTA found: 'Open your next meeting summary to try it.' No other imperative/action directives appear in the body."
+    },
+    {
+      "text": "Positioning grounding and a SUCCESs score for the email are still shown even though only one output was requested",
+      "passed": true,
+      "evidence": "Output contains a full Positioning Summary section (5 labeled bullets with citations) and a SUCCESs Scorecard table scoring the email 6/6 across all six checks."
+    },
+    {
+      "text": "Every number used appears in a repo file and is cited; no invented metrics",
+      "passed": true,
+      "evidence": "Numbers used: 'nearly 1 in 3' (from 34% in PRD), '30 minutes' (PRD review screen design / sarah-chen.md), 'under 2 minutes' (PRD), export channels 'email, Slack, or Notion' (PRD What It Does). All cited in Sources table. No invented numbers found."
+    },
+    {
+      "text": "No em dashes; no brand-as-hero opener like 'We're excited to announce'",
+      "passed": true,
+      "evidence": "Zero em dash characters found in file. Subject line and body both open on customer pain ('Your follow-up still takes 30 minutes' / 'You finish a meeting'). No brand-as-hero phrasing present."
+    }
+  ],
+  "pass_count": 6,
+  "total": 6,
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_duration_seconds": 92.4,
+    "total_tokens": 35583
+  },
+  "claims": [
+    {
+      "claim": "Email is for Pro users and Smart Follow-Up is available now",
+      "type": "factual",
+      "verified": true,
+      "evidence": "'Smart Follow-Up is available now on your Pro plan' - consistent with PRD plan availability section and April 2026 launch (workshop now = 17-03-2026, launch is April 2026). Slight tension: 'available now' when launch is April 2026 (3 weeks away), but acceptable for a pre-launch customer email announcing availability."
+    }
+  ],
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "No assertion checks whether the subject line itself avoids brand-as-hero framing. The current assertion only covers the body opener. A subject line like 'Introducing Smart Follow-Up' would pass all current assertions. Worth adding a subject-line check."
+      }
+    ],
+    "overall": "Clean 6/6. Assertions are well-chosen for this single-format eval. The one gap is the subject line not having its own hero-framing check."
+  }
+}

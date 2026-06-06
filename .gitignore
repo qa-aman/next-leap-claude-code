@@ -5,3 +5,4 @@ node_modules/
 *.log
 .local/
 .playwright-mcp
+.claude/claude-sessions-registry.md

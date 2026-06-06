@@ -231,7 +231,8 @@ rm ~/.claude.json
 
 | Problem | Solution |
 |---------|----------|
-| `claude: command not found` | Close and reopen your terminal, or run `source ~/.zshrc`. If the issue persists, add `export PATH=$HOME/.local/bin:$PATH` to your `~/.zshrc` (or `~/.bashrc`) and restart the terminal |
+| `claude: command not found` (install succeeded) | Native install puts the binary in `~/.local/bin`, which is not on your PATH. See **Case 1** below for the exact one-line fix |
+| `curl: (22) ... error: 403` when running the install script | The install URL is being blocked (corporate network, proxy, or VPN). See **Case 2** below for the npm fallback |
 | Browser does not open on login | Press `c` to copy the login URL, paste it in your browser |
 | Subscription required / authentication fails | Verify you have an active Claude Pro or Max subscription at https://claude.ai. Log out and log back in to refresh credentials |
 | Node version too old | Run `node --version` to check. If below v18.0.0, download the latest LTS version from https://nodejs.org |
@@ -239,6 +240,82 @@ rm ~/.claude.json
 | Search not working | Claude Code includes ripgrep. If search fails, install it manually: `brew install ripgrep` |
 
 For more help: https://code.claude.com/docs/en/troubleshooting
+
+---
+
+## Real Setup Issues From Live Cohorts (and Exact Fixes)
+
+These two issues hit participants during a live setup session. Both look like the install failed - it did not. Here is exactly what happened and how to fix each.
+
+### Case 1: Install succeeded, but `claude: command not found`
+
+**What you see:** The installer prints `✓ Claude Code successfully installed!` with a version number, and a `⚠ Setup notes` line that says:
+
+```
+Native installation exists but ~/.local/bin is not in your PATH.
+```
+
+Then running `claude` still returns `zsh: command not found: claude`.
+
+**Why:** The install worked. The binary is at `~/.local/bin/claude`, but your shell (zsh) does not look in that folder yet, so it cannot find the command. This is a PATH issue, not an install failure.
+
+**Fix:** Add the folder to your shell config, then reload it:
+
+```bash
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
+```
+
+Then launch Claude Code:
+
+```bash
+claude
+```
+
+This is a one-time fix. The installer itself prints this exact command in its Setup notes - if you see it on screen, just copy that line. After this, `claude` works in every new terminal.
+
+### Case 2: `curl: (22) The requested URL returned error: 403`
+
+**What you see:** Running the native install command fails immediately:
+
+```
+curl -fsSL https://claude.ai/install.sh | bash
+curl: (22) The requested URL returned error: 403
+```
+
+**Why:** A `403` means the request to the install script was rejected before it ever downloaded. This is almost always a network block - a corporate laptop, an office proxy, a VPN, or a firewall sitting between you and `claude.ai`. It is not a problem with your Mac.
+
+**Fix - try these in order:**
+
+**Option A (fastest): switch networks.** Disconnect from the office VPN, or move to a personal hotspot, then re-run the native install command. On an unfiltered network the `403` usually disappears.
+
+**Option B (most reliable): install via npm.** The npm package is the official Anthropic build and routes around the blocked script URL:
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+Check npm is available first:
+
+```bash
+node --version
+npm --version
+```
+
+If npm is not installed, install Node.js with Homebrew:
+
+```bash
+brew install node
+```
+
+Then run the npm install command above. Once installed, `claude --help` should work right away - npm's global bin is usually already on your PATH. (If you still hit `command not found`, apply the Case 1 fix.)
+
+**Option C: if Homebrew is not installed either,** install it first, then use Option B:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Note: the npm and Homebrew routes do not auto-update. Run `npm update -g @anthropic-ai/claude-code` (or `brew upgrade`) periodically to stay current.
 
 ---
 

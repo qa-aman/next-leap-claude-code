@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Claude Code Setup — Workshop Session 1</title>
+<style>
+:root{--bg:#0D0D0D;--accent:#D47A21;--accent2:#f0a44e;--white:#FFFFFF;--light:#CCCCCC;--mid:#888888;--tag-bg:#1E1E1E;--card:#161616;--card-bd:#262626;--code-bg:#0a0a0a;--code-bd:#242424;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#000;color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+code,pre{font-family:"JetBrains Mono","SF Mono",Menlo,Consolas,monospace}
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 120% at 50% -10%,#161310 0%,#000 60%);overflow:hidden}
+.slide{position:absolute;width:1280px;height:720px;background:var(--bg);border:1px solid #1c1c1c;border-radius:14px;overflow:hidden;padding:62px 70px 58px;display:none;box-shadow:0 30px 90px rgba(0,0,0,.6)}
+.slide::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.slide.active{display:block}
+.slide-in{height:100%;display:flex;flex-direction:column;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.tag{display:inline-block;color:var(--accent);font-size:13px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.live{align-self:flex-start;background:var(--accent);color:#0d0d0d;font-size:12px;font-weight:800;letter-spacing:.1em;padding:5px 12px;border-radius:6px;white-space:nowrap}
+.stitle{font-size:38px;line-height:1.12;font-weight:800;margin:14px 0 0;letter-spacing:-.5px}
+.lead{color:var(--light);font-size:18px;margin-top:14px;max-width:90%}
+.body{margin-top:26px;flex:1;min-height:0}
+.foot{margin-top:auto;padding-top:20px;color:var(--accent2);font-size:16px;font-style:italic;border-top:1px solid #1c1c1c}
+.pagenum{position:absolute;right:24px;bottom:18px;color:var(--mid);font-size:12px;letter-spacing:.1em}
+/* hero */
+.hero{justify-content:center;text-align:left}
+.htitle{font-size:88px;font-weight:850;line-height:1;letter-spacing:-2px}
+.htitle span{color:var(--accent)}
+.htitle.big{font-size:120px}
+.hsub{margin-top:26px;font-size:26px;color:var(--light)}
+.hnote{margin-top:40px;font-size:17px;color:var(--mid);max-width:78%;line-height:1.6;border-left:3px solid var(--accent);padding-left:18px}
+.who{margin-top:30px;font-size:24px;color:var(--white);font-weight:600}
+.links{margin-top:30px;display:flex;flex-direction:column;gap:12px}
+.links a{color:var(--light);font-size:18px;display:flex;gap:14px;align-items:baseline}
+.links a span{color:var(--accent);font-weight:700;min-width:130px;display:inline-block}
+.links a:hover{color:var(--white)}
+/* bullets */
+.bul{list-style:none}
+.bul li{position:relative;padding:7px 0 7px 24px;color:var(--light);font-size:17px;line-height:1.5}
+.bul li::before{content:"";position:absolute;left:0;top:15px;width:8px;height:8px;background:var(--accent);border-radius:2px}
+/* two col */
+.two{display:grid;gap:30px;height:100%}
+/* code */
+.code{background:var(--code-bg);border:1px solid var(--code-bd);border-radius:10px;padding:20px 22px;font-size:15px;line-height:1.6;color:#e8d9c8;height:100%;overflow:auto;white-space:pre}
+.code code{color:#e8d9c8}
+/* cards */
+.cards{display:grid;gap:16px;height:100%}
+.card{background:var(--card);border:1px solid var(--card-bd);border-radius:12px;padding:18px 18px;display:flex;flex-direction:column;gap:7px;position:relative}
+.card .num{width:30px;height:30px;border-radius:8px;background:var(--accent);color:#0d0d0d;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center}
+.card .chip{align-self:flex-start;font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--accent);background:rgba(212,122,33,.12);border:1px solid rgba(212,122,33,.3);padding:3px 9px;border-radius:5px}
+.card .ch{font-size:17px;font-weight:700;color:var(--white);line-height:1.25}
+.card .csub{font-size:13px;color:var(--accent2);font-weight:600}
+.card .cdesc{font-size:14px;color:var(--mid);line-height:1.5}
+/* compare panels */
+.panel{background:var(--card);border:1px solid var(--card-bd);border-radius:12px;padding:24px 26px}
+.phead{font-size:19px;font-weight:800;color:var(--accent);letter-spacing:.02em}
+.psub{font-size:15px;color:var(--light);margin:4px 0 10px}
+.panel .bul li{font-size:16px}
+/* prompts */
+.prompts{display:grid;grid-template-columns:1fr 1fr;gap:12px 26px;height:100%;align-content:start}
+.prompt{display:flex;gap:14px;align-items:baseline;background:var(--card);border:1px solid var(--card-bd);border-radius:9px;padding:13px 16px}
+.prompt .pn{color:var(--accent);font-weight:800;font-size:16px;min-width:20px}
+.prompt .pt{color:var(--light);font-size:15.5px;line-height:1.4}
+/* glossary */
+.gloss{display:grid;grid-template-columns:1fr 1fr;gap:14px 30px;height:100%;align-content:start}
+.gitem{border-left:2px solid var(--accent);padding:2px 0 2px 16px}
+.gterm{font-weight:800;font-size:16px;color:var(--white)}
+.gdef{font-size:14px;color:var(--mid);line-height:1.45;margin-top:3px}
+/* summary */
+.ssub{color:var(--accent2);font-size:20px;margin-top:10px}
+.rec-head{font-size:15px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.summary .bul li,[data-kind=summary] .bul li{font-size:16px}
+/* nav */
+#nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;z-index:30;background:rgba(20,20,20,.8);backdrop-filter:blur(8px);border:1px solid #2a2a2a;border-radius:30px;padding:8px 16px}
+#nav button{background:none;border:none;color:var(--light);font-size:18px;cursor:pointer;padding:2px 8px;border-radius:6px}
+#nav button:hover{color:var(--accent);background:#222}
+#dots{display:flex;gap:6px;max-width:430px;flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:50%;background:#444;cursor:pointer;transition:.2s}
+.dot.on{background:var(--accent);transform:scale(1.25)}
+#hint{position:fixed;top:14px;right:16px;color:#555;font-size:12px;z-index:30}
+@media print{
+  @page{size:1280px 720px;margin:0}
+  #nav,#hint{display:none}
+  #stage{position:static;display:block;background:#000}
+  .slide{display:block!important;position:relative;page-break-after:always;border-radius:0;margin:0;box-shadow:none;width:1280px;height:720px}
+}
+</style>
+</head>
+<body>
+<div id="hint">← → navigate · F fullscreen · P print</div>
+<div id="stage">
+<section class="slide" data-kind="title"><div class="slide-in hero">
+          <div class="tag">CLAUDE CODE WORKSHOP  ·  SESSION 1</div>
+          <h1 class="htitle">Claude Code <span>Setup</span></h1>
+          <div class="hsub">Install, authenticate, and configure your environment.</div>
+          <div class="hnote">By the end of this session: Claude Code is running on your machine, your CLAUDE.md is set up, and you know the 10 commands that matter.</div>
+        </div><div class="pagenum">01 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">AGENDA</div></div>
+          <h2 class="stitle">What We&#x27;re Covering Today</h2>
+          
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(4,1fr)"><div class="card"><div class="ch">Install on Mac and Windows</div><div class="csub">Part 1</div></div><div class="card"><div class="ch">First launch, login, and verification</div><div class="csub">Part 2</div></div><div class="card"><div class="ch">Core commands: /help, /clear, /exit, ESC</div><div class="csub">Part 3</div></div><div class="card"><div class="ch">CLAUDE.md — the memory file hierarchy</div><div class="csub">Part 4</div></div><div class="card"><div class="ch">Settings, permissions, and plan mode</div><div class="csub">Part 5</div></div><div class="card"><div class="ch">MCP — connecting Claude to your tools</div><div class="csub">Part 6</div></div><div class="card"><div class="ch">Antigravity IDE integration</div><div class="csub">Part 7</div></div><div class="card"><div class="ch">First 10 minutes — full walkthrough</div><div class="csub">Part 8</div></div></div></div>
+          
+        </div><div class="pagenum">02 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 1 · INSTALL</div></div>
+          <h2 class="stitle">Mac: One Command in Terminal</h2>
+          
+          <div class="body"><div class="two" style="grid-template-columns:1.05fr .95fr"><ul class="bul"><li>Open Terminal: Cmd+Space, type Terminal, press Enter</li><li>Paste and run the install command (shown right)</li><li>Wait for the success message — takes about 30 seconds</li><li>The native installer needs no Node.js or npm</li><li>Updates happen automatically in the background</li><li>Homebrew alternative: brew install --cask claude-code</li></ul><pre class="code"><code># Mac / Linux / WSL
+curl -fsSL \
+  https://claude.ai/install.sh \
+  | bash
+
+# Homebrew (manual updates)
+brew install --cask claude-code
+
+# Verify
+claude --version</code></pre></div></div>
+          <div class="foot">This single command replaces a half-hour setup wizard — one line, done.</div>
+        </div><div class="pagenum">03 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 1 · INSTALL</div></div>
+          <h2 class="stitle">Windows: Three Steps in PowerShell</h2>
+          
+          <div class="body"><div class="two" style="grid-template-columns:1.05fr .95fr"><ul class="bul"><li>Open PowerShell (Win+S, type PowerShell). Pick the entry without (x86).</li><li>No need to run as Administrator.</li><li>Step 1: Paste the irm command shown right. Wait for success.</li><li>Step 2: In the same window, paste the SetEnvironmentVariable line to add Claude to your User PATH.</li><li>Step 3: Close PowerShell. Open a fresh one. Run claude --help.</li></ul><pre class="code"><code># Step 1: install
+irm https://claude.ai/install.ps1 `
+  | iex
+
+# Step 2: add to PATH
+[Environment]::
+SetEnvironmentVariable(&quot;PATH&quot;,
+  [Environment]::
+  GetEnvironmentVariable(
+    &quot;PATH&quot;, &quot;User&quot;)
+  + &quot;;$HOME\.local\bin&quot;,
+  &quot;User&quot;)
+
+# Step 3: new PowerShell
+claude --help</code></pre></div></div>
+          <div class="foot">Git for Windows is optional — PowerShell-only is enough for the workshop.</div>
+        </div><div class="pagenum">04 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 1 · INSTALL</div></div>
+          <h2 class="stitle">Five Errors You Will See — and Fixes</h2>
+          
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(5,1fr)"><div class="card"><span class="num">1</span><div class="ch">claude: command not found</div><div class="cdesc">Close and reopen terminal. Or add export PATH=$HOME/.local/bin:$PATH to ~/.zshrc</div></div><div class="card"><span class="num">2</span><div class="ch">Browser does not open on login</div><div class="cdesc">Press the letter c in the terminal to copy the login URL, then paste it manually</div></div><div class="card"><span class="num">3</span><div class="ch">Subscription required / auth fails</div><div class="cdesc">You need Claude Pro, Max, Teams, or Enterprise. The free Claude.ai plan does not include Claude Code</div></div><div class="card"><span class="num">4</span><div class="ch">Git Bash not found (Windows only)</div><div class="cdesc">Install Git for Windows from git-scm.com/downloads/win — Claude Code needs it on native Windows</div></div><div class="card"><span class="num">5</span><div class="ch">PowerShell execution policy error</div><div class="cdesc">Run: Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned, then retry</div></div></div></div>
+          
+        </div><div class="pagenum">05 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 2 · FIRST LAUNCH</div></div>
+          <h2 class="stitle">Login Flow: Five Steps in 60 Seconds</h2>
+          
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(5,1fr)"><div class="card"><span class="num">1</span><div class="ch">Run claude in your terminal</div><div class="cdesc">You will see a welcome screen. It prompts you to log in.</div></div><div class="card"><span class="num">2</span><div class="ch">Select &#x27;Claude account with subscription&#x27;</div><div class="cdesc">Not the API key option. OAuth — a browser-based login — is simpler and what most people want.</div></div><div class="card"><span class="num">3</span><div class="ch">Browser opens. Log in with your Claude.ai account.</div><div class="cdesc">If the browser does not open automatically, press the letter c to copy the URL and paste it yourself.</div></div><div class="card"><span class="num">4</span><div class="ch">Return to terminal. Pick a text style.</div><div class="cdesc">On first launch, Claude asks: light or dark terminal theme. Pick what matches your background.</div></div><div class="card"><span class="num">5</span><div class="ch">You are in. Credentials are saved.</div><div class="cdesc">You will not log in again unless you run /logout. On Mac, credentials live in the macOS Keychain.</div></div></div></div>
+          <div class="foot">OAuth means you never paste an API key — it is the same login flow as signing into Google.</div>
+        </div><div class="pagenum">06 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 2 · FIRST LAUNCH</div></div>
+          <h2 class="stitle">Three Ways to Check Your Install Is Healthy</h2>
+          
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(3,1fr)"><div class="card"><div class="ch">claude --version</div><div class="csub">Run in terminal before starting a session</div><div class="cdesc">Prints the installed version number. If you see &#x27;command not found&#x27;, your PATH needs updating.</div></div><div class="card"><div class="ch">claude doctor</div><div class="csub">Run in terminal before starting a session</div><div class="cdesc">Runs full diagnostics. Checks install, subscription status, network connectivity, and system config. If something is wrong, it tells you what and why.</div></div><div class="card"><div class="ch">/doctor</div><div class="csub">Run inside an active Claude session</div><div class="cdesc">Same diagnostics as claude doctor but runs from within the interactive session (REPL). Use it to re-check status after logging in.</div></div></div></div>
+          <div class="foot">Run claude doctor whenever something feels off — it is the health check that tells you exactly what to fix.</div>
+        </div><div class="pagenum">07 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 3 · CORE COMMANDS</div></div>
+          <h2 class="stitle">Four Commands Every Session Uses</h2>
+          
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(4,1fr)"><div class="card"><div class="ch">/help</div><div class="csub">Show all available commands and slash commands</div><div class="cdesc">Type this any time you are inside a Claude session. Lists every command, including skills you have installed.</div></div><div class="card"><div class="ch">/clear</div><div class="csub">Clear the conversation history</div><div class="cdesc">Wipes the current context window (the conversation Claude is holding in memory). Does not delete files. Use when Claude is confused or when you want a fresh start on a new topic.</div></div><div class="card"><div class="ch">/exit</div><div class="csub">Exit Claude Code (or use Ctrl+D)</div><div class="cdesc">Closes the interactive session cleanly. Your files and settings are untouched.</div></div><div class="card"><div class="ch">ESC</div><div class="csub">Interrupt — stop the current response immediately</div><div class="cdesc">Press Escape while Claude is generating to stop it mid-sentence. Useful when Claude goes in the wrong direction or when a command is taking too long.</div></div></div></div>
+          <div class="foot">ESC is your undo button — press it the moment Claude starts going somewhere wrong, before it writes a file you did not want.</div>
+        </div><div class="pagenum">08 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 3 · CORE COMMANDS</div></div>
+          <h2 class="stitle">Plan Mode: Claude Shows Its Work Before Acting</h2>
+          
+          <div class="body"><div class="two" style="grid-template-columns:1fr 1fr"><div class="panel"><div class="phead">DEFAULT MODE</div><div class="psub">Claude acts immediately</div><ul class="bul"><li>You say &#x27;update this doc&#x27;</li><li>Claude edits the file right away</li><li>You see changes after the fact</li><li>Good for quick, trusted tasks</li></ul></div><div class="panel"><div class="phead">PLAN MODE  (Shift+Tab or /plan)</div><div class="psub">Claude proposes first, then waits</div><ul class="bul"><li>You say &#x27;update this doc&#x27;</li><li>Claude describes what it will do</li><li>You review and approve</li><li>Then Claude acts — nothing before that</li></ul></div></div></div>
+          <div class="foot">Use plan mode when stakes are high — before Claude touches a live document or an important file.</div>
+        </div><div class="pagenum">09 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 4 · CLAUDE.md</div><span class="live">LIVE DEMO</span></div>
+          <h2 class="stitle">CLAUDE.md: The File Claude Reads Before Every Session</h2>
+          
+          <div class="body"><div class="two" style="grid-template-columns:1.05fr .95fr"><ul class="bul"><li>A plain text file you write once, Claude reads every time</li><li>Lives at the root of your project folder</li><li>Loaded automatically — you never have to re-explain context</li><li>Think of it as a briefing doc that survives every session</li><li>Without it: Claude has no memory of your project</li><li>With it: Claude knows your stack, rules, and role from word one</li></ul><pre class="code"><code>project-root/
+  CLAUDE.md   &lt;- reads first
+  src/
+  outputs/
+  .claude/
+    settings.json
+    rules/
+
+~/.claude/
+  CLAUDE.md   &lt;- global</code></pre></div></div>
+          <div class="foot">CLAUDE.md is the onboarding doc you write once that means every Claude session starts already knowing your project.</div>
+        </div><div class="pagenum">10 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 4 · CLAUDE.md</div><span class="live">LIVE DEMO</span></div>
+          <h2 class="stitle">Three Levels of Memory — Most Specific Wins</h2>
+          <div class="lead">Claude reads all three files and merges them. More specific overrides less specific.</div>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(3,1fr)"><div class="card"><span class="chip">GLOBAL</span><div class="ch">~/.claude/CLAUDE.md</div><div class="csub">Every Claude session on your machine</div><div class="cdesc">Your personal preferences, writing rules, tools you use across all projects. Private — never committed to git.</div></div><div class="card"><span class="chip">PROJECT</span><div class="ch">./CLAUDE.md</div><div class="csub">Any session in this project folder</div><div class="cdesc">Project context, tech stack, file conventions, hard rules. Committed to git — shared with your team.</div></div><div class="card"><span class="chip">SUBFOLDER</span><div class="ch">./src/CLAUDE.md</div><div class="csub">Only when working inside that folder</div><div class="cdesc">Module-specific overrides. Loads on demand when Claude reads files in that subfolder. Not loaded at launch.</div></div></div></div>
+          <div class="foot">Start with a project CLAUDE.md. Add a global one when you work across multiple projects.</div>
+        </div><div class="pagenum">11 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 5 · SETTINGS</div></div>
+          <h2 class="stitle">Two Settings Files — One Shared, One Private</h2>
+          
+          <div class="body"><div class="two" style="grid-template-columns:1fr 1fr"><div class="panel"><div class="phead">.claude/settings.json</div><div class="psub">Project settings — commit to git</div><ul class="bul"><li>Shared with your whole team</li><li>Allowed commands everyone can run</li><li>Denied commands (e.g. never curl *)</li><li>MCP server config for the project</li><li>Default permission mode</li></ul></div><div class="panel"><div class="phead">.claude/settings.local.json</div><div class="psub">Personal settings — gitignored</div><ul class="bul"><li>Only on your machine</li><li>Your sandbox URLs and test data</li><li>Personal allow/deny overrides</li><li>Overrides project settings locally</li><li>Auto-gitignored — safe to be specific</li></ul></div></div></div>
+          <div class="foot">Use settings.json for team rules, settings.local.json for your personal machine preferences.</div>
+        </div><div class="pagenum">12 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 5 · SETTINGS</div></div>
+          <h2 class="stitle">Permissions Let You Pre-Approve What Claude Can Run</h2>
+          
+          <div class="body"><div class="two" style="grid-template-columns:1.05fr .95fr"><ul class="bul"><li>By default: Claude asks permission before every file edit or command</li><li>Allow list: pre-approve commands Claude can always run without asking</li><li>Deny list: hard-block commands Claude can never run in this project</li><li>Format: Bash(command) or Read(path) or WebFetch(domain:url)</li><li>First match wins: deny is checked before ask, ask before allow</li><li>Use /config inside a session to open the settings interface</li></ul><pre class="code"><code>{
+  &quot;permissions&quot;: {
+    &quot;allow&quot;: [
+      &quot;Bash(npm run lint)&quot;,
+      &quot;Bash(npm run test *)&quot;,
+      &quot;Read(~/.zshrc)&quot;
+    ],
+    &quot;deny&quot;: [
+      &quot;Bash(curl *)&quot;,
+      &quot;Read(./.env)&quot;,
+      &quot;Read(./secrets/**)&quot;
+    ]
+  }
+}</code></pre></div></div>
+          <div class="foot">The deny list is your safety net — block .env files and secret folders before you forget.</div>
+        </div><div class="pagenum">13 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 6 · MCP</div></div>
+          <h2 class="stitle">MCP: Claude&#x27;s Standard Plug for External Tools</h2>
+          <div class="lead">MCP stands for Model Context Protocol. It is an open standard that lets Claude Code connect to external tools and data sources.</div>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(4,1fr)"><div class="card"><div class="ch">Jira + Confluence</div><div class="cdesc">Create tickets, search issues, publish pages — all from the terminal without copy-pasting</div></div><div class="card"><div class="ch">GitHub</div><div class="cdesc">Review PRs, create issues, push commits — Claude reads the PR, writes the review</div></div><div class="card"><div class="ch">Slack + Notion</div><div class="cdesc">Read channel summaries, create Notion pages, post updates — no browser tab switching</div></div><div class="card"><div class="ch">Your own data</div><div class="cdesc">Connect a database, an internal API, or a custom script. MCP is an open standard — anything goes.</div></div></div></div>
+          <div class="foot">MCP is why Claude Code beats copy-pasting into a chat window — it reads and writes your real tools.</div>
+        </div><div class="pagenum">14 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 6 · MCP</div><span class="live">LIVE DEMO</span></div>
+          <h2 class="stitle">Adding an MCP Server: Four-Step Pattern</h2>
+          <div class="lead">Example: adding the Atlassian server (Jira + Confluence)</div>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(4,1fr)"><div class="card"><span class="num">1</span><div class="ch">Run the add command in your terminal (outside Claude Code)</div><div class="csub">claude mcp add --transport http atlassian https://mcp.atlassian.com/v1/mcp</div></div><div class="card"><span class="num">2</span><div class="ch">Verify it was added</div><div class="csub">claude mcp list  →  you should see atlassian listed as &#x27;Needs authentication&#x27;</div></div><div class="card"><span class="num">3</span><div class="ch">Start a Claude session, run /mcp to trigger OAuth login</div><div class="csub">/mcp  →  opens your browser, log in with your Atlassian account, authorize</div></div><div class="card"><span class="num">4</span><div class="ch">Confirm connection</div><div class="csub">claude mcp list again  →  atlassian should now show &#x27;Connected&#x27;</div></div></div></div>
+          <div class="foot">One command adds a server, /mcp connects it, and then Claude can talk to your tools directly.</div>
+        </div><div class="pagenum">15 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 7 · IDE INTEGRATION</div><span class="live">LIVE DEMO</span></div>
+          <h2 class="stitle">Antigravity IDE: Claude Inline in Your Editor</h2>
+          <div class="lead">Antigravity IDE supports the extension marketplace, so the Claude Code extension installs without extra configuration.</div>
+          <div class="body"><div class="two" style="grid-template-columns:1.05fr .95fr"><ul class="bul"><li>What you get: inline diffs, @-mentions, conversation history in your editor</li><li>Mac install: Cmd+Shift+X to open Extensions, search Claude Code, click Install</li><li>Windows install: Ctrl+Shift+X, search Claude Code, click Install</li><li>After install: Cmd/Ctrl+Shift+P &gt; type Claude Code &gt; Open in New Tab</li><li>Same CLAUDE.md and settings apply — no duplicate setup needed</li><li>Prefer the terminal? You do not need the IDE extension at all</li></ul><div class="panel"><div class="phead">IDE vs Terminal</div><ul class="bul"><li>IDE: visual diffs, side panel</li><li>IDE: @-mention files with cursor</li><li>IDE: plan review as markdown doc</li><li>Terminal: full command set</li><li>Terminal: MCP config via CLI</li><li>Both share history and settings</li></ul></div></div></div>
+          <div class="foot">Start in the IDE if you find terminals intimidating — it gives you visual diffs before Claude edits your files.</div>
+        </div><div class="pagenum">16 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 8 · FIRST 10 MINUTES</div><span class="live">LIVE DEMO</span></div>
+          <h2 class="stitle">Your First 10 Minutes With Claude Code</h2>
+          <div class="lead">Run these in order. Each step builds on the last.</div>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(3,1fr)"><div class="card"><span class="num">1</span><div class="ch">Install + verify</div><div class="csub">curl -fsSL https://claude.ai/install.sh | bash  →  claude --version  →  claude doctor</div></div><div class="card"><span class="num">2</span><div class="ch">First launch + login</div><div class="csub">Navigate to a project folder: cd ~/Desktop/my-project   then: claude</div></div><div class="card"><span class="num">3</span><div class="ch">Pick Claude account with subscription, complete browser OAuth</div><div class="csub">Press c if browser does not open. Choose light or dark theme when prompted.</div></div><div class="card"><span class="num">4</span><div class="ch">Run your first prompt</div><div class="csub">Type: what does this project do?  Claude reads your files and responds. No file-pointing needed.</div></div><div class="card"><span class="num">5</span><div class="ch">Test /help, /clear, ESC</div><div class="csub">/help to see commands. /clear to reset context. Press ESC mid-response to interrupt.</div></div><div class="card"><span class="num">6</span><div class="ch">Set up plan mode</div><div class="csub">Press Shift+Tab to cycle to Plan mode. Try: summarize this folder. Review the plan before approving.</div></div></div></div>
+          <div class="foot">10 minutes of setup pays back in every session after — do not skip the verify steps.</div>
+        </div><div class="pagenum">17 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 8 · FIRST 10 MINUTES</div></div>
+          <h2 class="stitle">Ten Prompts to Run in Your First Session</h2>
+          <div class="lead">Copy-paste these. They show what Claude Code can do without any coding required.</div>
+          <div class="body"><div class="prompts"><div class="prompt"><span class="pn">1</span><span class="pt">What project is this and what is my role?</span></div><div class="prompt"><span class="pn">2</span><span class="pt">Read 03-product-knowledge/competitive.md — where are we most at risk?</span></div><div class="prompt"><span class="pn">3</span><span class="pt">Read all files in 07-user-interviews/ — top 3 user frustrations</span></div><div class="prompt"><span class="pn">4</span><span class="pt">Is there anyone in the interviews who does not have a persona file?</span></div><div class="prompt"><span class="pn">5</span><span class="pt">NPS went from 22 to 34. What caused the jump?</span></div><div class="prompt"><span class="pn">6</span><span class="pt">Read the sprint backlog. Is April still realistic for Smart Follow-Up?</span></div><div class="prompt"><span class="pn">7</span><span class="pt">Read Sarah Chen&#x27;s persona and interview. How much revenue is at risk?</span></div><div class="prompt"><span class="pn">8</span><span class="pt">Read the stakeholder sync. What 3 questions will I get in the next meeting?</span></div><div class="prompt"><span class="pn">9</span><span class="pt">James has no persona file yet. Create one using Sarah&#x27;s format.</span></div><div class="prompt"><span class="pn">10</span><span class="pt">Is MeetFlow&#x27;s free tier defensible against Notion AI? Be honest.</span></div></div></div>
+          
+        </div><div class="pagenum">18 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 4 · CLAUDE.md</div></div>
+          <h2 class="stitle">CLAUDE.md: What Works vs What Does Not</h2>
+          
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(4,1fr)"><div class="card"><span class="chip">AVOID</span><div class="ch">“Format code properly”</div><div class="cdesc">Too vague — Claude guesses</div></div><div class="card"><span class="chip">DO</span><div class="ch">“Use 2-space indentation”</div><div class="cdesc">Specific — Claude knows exactly</div></div><div class="card"><span class="chip">AVOID</span><div class="ch">“My current priorities are X and Y”</div><div class="cdesc">Changes every session — do not put here</div></div><div class="card"><span class="chip">DO</span><div class="ch">“Tech stack: TypeScript, Next.js 14, PostgreSQL”</div><div class="cdesc">Stable — belongs in CLAUDE.md</div></div><div class="card"><span class="chip">AVOID</span><div class="ch">“API_KEY=sk-abc123 DATABASE_URL=...”</div><div class="cdesc">Secret — never in CLAUDE.md</div></div><div class="card"><span class="chip">DO</span><div class="ch">“Secrets live in .env — never commit to git”</div><div class="cdesc">Safe alternative</div></div><div class="card"><span class="chip">AVOID</span><div class="ch">“Here is every edge case and exception...”</div><div class="cdesc">Too long — reduces adherence</div></div><div class="card"><span class="chip">DO</span><div class="ch">“Cover the 80%. Trust Claude for edge cases.”</div><div class="cdesc">Concise — better followed</div></div></div></div>
+          <div class="foot">Treat CLAUDE.md like a briefing doc for a new hire — facts, rules, context. Not a diary.</div>
+        </div><div class="pagenum">19 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">GLOSSARY</div></div>
+          <h2 class="stitle">Terms You&#x27;ll Hear All Workshop</h2>
+          
+          <div class="body"><div class="gloss"><div class="gitem"><div class="gterm">CLAUDE.md</div><div class="gdef">Persistent project notes Claude reads every session — your briefing doc that never expires.</div></div><div class="gitem"><div class="gterm">MCP</div><div class="gdef">Model Context Protocol — the standard that lets Claude talk to external tools like Jira, Figma, and Chrome.</div></div><div class="gitem"><div class="gterm">Skill</div><div class="gdef">A markdown file with instructions that loads when you type a trigger phrase — like a saved macro.</div></div><div class="gitem"><div class="gterm">Subagent</div><div class="gdef">A separate Claude instance with its own clean context, spun up to handle one focused task.</div></div><div class="gitem"><div class="gterm">Plan mode</div><div class="gdef">Read-only mode where Claude shows the plan and waits for your approval before doing anything.</div></div><div class="gitem"><div class="gterm">Slash command</div><div class="gdef">A built-in command typed directly inside Claude, starting with /: /help, /clear, /doctor.</div></div><div class="gitem"><div class="gterm">Permissions</div><div class="gdef">Pre-approval rules in settings.json that tell Claude what it can run without asking each time.</div></div><div class="gitem"><div class="gterm">settings.json vs .local.json</div><div class="gdef">settings.json is shared and committed to git. settings.local.json is personal and stays on your machine only.</div></div></div></div>
+          <div class="foot">Knowing the names makes every other doc readable.</div>
+        </div><div class="pagenum">20 / 23</div></section>
+<section class="slide" data-kind="summary"><div class="slide-in">
+          <div class="tag">RECAP</div>
+          <h2 class="stitle">You now have everything you need to run Claude Code.</h2>
+          <div class="ssub">The setup is the hardest part. It is done.</div>
+          <div class="body"><div class="rec-head">Eight things to remember</div><ul class="bul"><li>Install: one curl command on Mac, irm command on Windows (Git for Windows required)</li><li>Login: pick Claude account with subscription, complete browser OAuth, choose theme</li><li>Verify: claude --version, claude doctor, /doctor inside a session</li><li>Commands: /help, /clear, /exit (Ctrl+D), and ESC to interrupt</li><li>Plan mode: Shift+Tab cycle or /plan — review before Claude acts</li><li>CLAUDE.md: global (personal) — project (shared) — subfolder (scoped). More specific wins</li><li>Settings: settings.json for team rules, settings.local.json for personal machine only</li><li>MCP: claude mcp add --transport http [name] [url] — then /mcp to authenticate</li></ul></div>
+        </div><div class="pagenum">21 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">FAQ</div></div>
+          <h2 class="stitle">Five Questions You&#x27;ll Be Asked Back at Work</h2>
+          
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(5,1fr)"><div class="card"><span class="num">1</span><div class="ch">Claude Code vs Cursor / Windsurf?</div><div class="cdesc">Anthropic frames Claude Code as an agentic coding tool: it reads your codebase, edits files, runs commands. IDE chat tools suggest; Claude Code executes. CLAUDE.md and auto-memory persist across sessions.</div></div><div class="card"><span class="num">2</span><div class="ch">Is it safe to use Claude with company data and PII?</div><div class="cdesc">Anthropic policy: Pro and Max chats and coding sessions are NOT used for training by default. Training requires you to opt in via Privacy Settings or thumbs up / down. Teams and Enterprise add admin controls.</div></div><div class="card"><span class="num">3</span><div class="ch">Pro vs Max — which subscription?</div><div class="cdesc">Pro: $17/mo annual or $20/mo. Max: from $100/mo with 5x or 20x the Pro usage. Both include Claude Code, both run Sonnet and Opus. Start with Pro. Move to Max only if you hit limits.</div></div><div class="card"><span class="num">4</span><div class="ch">Will my old npm-installed Claude Code conflict with the native install?</div><div class="cdesc">Both methods install the same binary. If claude --version points to the old install or you see odd behavior, run: npm uninstall -g @anthropic-ai/claude-code, then reinstall native.</div></div><div class="card"><span class="num">5</span><div class="ch">Can I use Claude Code without a GitHub account or knowing git?</div><div class="cdesc">GitHub is not required. Git for Windows is recommended on native Windows so Claude can use the Bash tool. Without it, Claude Code falls back to PowerShell. Mac, Linux, and WSL do not need it.</div></div></div></div>
+          
+        </div><div class="pagenum">22 / 23</div></section>
+<section class="slide" data-kind="closing"><div class="slide-in hero">
+          <h1 class="htitle big">Questions?</h1>
+          <div class="who">Aman Parmar  ·  Senior Product Manager</div>
+          <div class="links"><a href="https://amanparmar3.substack.com/" target="_blank" rel="noopener"><span>Substack</span>https://amanparmar3.substack.com/</a><a href="https://www.linkedin.com/in/amanmparmar" target="_blank" rel="noopener"><span>LinkedIn</span>https://www.linkedin.com/in/amanmparmar</a><a href="https://github.com/qa-aman" target="_blank" rel="noopener"><span>GitHub</span>https://github.com/qa-aman</a><a href="https://github.com/qa-aman/next-leap-claude-code" target="_blank" rel="noopener"><span>Workshop repo</span>https://github.com/qa-aman/next-leap-claude-code</a></div>
+        </div><div class="pagenum">23 / 23</div></section>
+</div>
+<div id="nav">
+  <button onclick="prev()" aria-label="Previous">‹</button>
+  <div id="dots"></div>
+  <button onclick="next()" aria-label="Next">›</button>
+</div>
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+const dotsWrap=document.getElementById('dots');
+let cur=0;
+slides.forEach((_,i)=>{const d=document.createElement('div');d.className='dot';d.onclick=()=>go(i);dotsWrap.appendChild(d);});
+const dots=[...document.querySelectorAll('.dot')];
+function go(i){cur=Math.max(0,Math.min(slides.length-1,i));slides.forEach((s,j)=>s.classList.toggle('active',j===cur));dots.forEach((d,j)=>d.classList.toggle('on',j===cur));location.hash=cur+1;}
+function next(){go(cur+1)} function prev(){go(cur-1)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' ')  {e.preventDefault();next();}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev();}
+  else if(e.key==='Home'){go(0)} else if(e.key==='End'){go(slides.length-1)}
+  else if(e.key==='f'||e.key==='F'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+let sx=0;addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50){dx<0?next():prev();}},{passive:true});
+function fit(){const st=document.getElementById('stage');const sc=Math.min(st.clientWidth/1280,st.clientHeight/720)*0.96;slides.forEach(s=>s.style.transform='scale('+sc+')');}
+addEventListener('resize',fit);
+const h=parseInt(location.hash.replace('#',''));go(h>0?h-1:0);fit();
+</script>
+</body>
+</html>

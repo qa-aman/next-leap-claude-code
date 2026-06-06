@@ -11,6 +11,8 @@ Answers to open questions from workshop sessions, sourced from official Anthropi
 - **May 2026 Session 3 additions:** 17-05-2026 (Q32-Q45 - see "May 2026 - Session 3 Additions" section)
 - **May 2026 Session 4 additions:** 18-05-2026 (Q46-Q56 - see "May 2026 - Session 4 Additions" section)
 - **May 2026 Session 5 additions:** 23-05-2026 (Q57-Q70 - see "May 2026 - Session 5 Additions" section)
+- **May 2026 Session 6 additions:** 23-05-2026 (Q71-Q76 - Multi-agent architectures, afternoon - see "May 2026 - Session 6 Additions" section)
+- **May 2026 Session 7 additions:** 24-05-2026 (Q77-Q83 - Build Hours, Property Finder build - see "May 2026 - Session 7 Additions" section)
 
 If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
@@ -1460,5 +1462,208 @@ This is a **user-built convention**, not a built-in Claude Code feature. The hos
 **Sources:**
 - https://www.anthropic.com/engineering/built-multi-agent-research-system (verified 23-05-2026)
 - https://code.claude.com/docs/en/sub-agents (verified 23-05-2026)
+
+---
+
+# May 2026 - Session 6 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 23-05-2026 during Session 6 (Multi-agent architectures, afternoon - agent view, worktrees, agent teams, MCP connectors). All URLs verified 24-05-2026.
+
+---
+
+## Q71: How do I open "agent view" and run several tasks in parallel? How do I stop one?
+
+**Agent view** is the interface that shows every background task Claude Code is running, with status and elapsed time. You launch parallel work by asking Claude to run tasks concurrently, then watch them in agent view.
+
+- Each task runs in its own context. The view shows which tasks are running, which are waiting on your input or permission, and which are done.
+- To stop a single task, select it in the view and stop it - the others keep running.
+- This is the right tool for **background long-runs** (a competitive scan, a feedback synthesis) where you want to keep working while they execute.
+
+In the workshop, two tasks ran at once - a competitive-metrics refresh from `03-product-knowledge/competitive.md` and a churn-driver synthesis from `06-user-feedback/` - and one was stopped mid-run to demonstrate the control.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 24-05-2026)
+- https://code.claude.com/docs/en/common-workflows (verified 24-05-2026)
+
+---
+
+## Q72: Why did Claude create extra branches/folders (worktrees) when I ran parallel agents?
+
+A **Git worktree** is a second working copy of your repo on its own branch, sharing the same Git history. When tasks run in parallel and each may edit files, Claude isolates them in separate worktrees so they don't collide on the same files.
+
+- After a parallel run you'll see new folders/branches - one per task.
+- This lets two agents edit code concurrently without overwriting each other. You review and merge the branches afterward, like any Git workflow.
+- Use worktrees specifically when concurrent tasks touch the **same files**. For independent read-only tasks you don't strictly need them, but agent view may still create them.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 24-05-2026)
+
+---
+
+## Q73: How do I turn on "agent teams"? It's not showing up by default.
+
+Agent teams is an **experimental** feature, off by default. You enable it through `settings.json` and then restart Claude Code. In the session the flag used was `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`.
+
+Because experimental flags change between releases, **verify the exact key against the current settings docs before relying on it** - don't copy a flag name from memory.
+
+- Edit `settings.json` (project- or user-level), add the experimental flag, restart Claude Code.
+- If Claude blocks a shell command that edits its own settings (a self-modification guard), drag-and-drop `settings.json` into the conversation and ask Claude to edit the file directly.
+- Treat the feature as exploratory, not production-grade; report bugs with `/feedback`.
+
+**Sources:**
+- https://code.claude.com/docs/en/settings (verified 24-05-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 24-05-2026)
+
+---
+
+## Q74: How do the agents in a team actually communicate with each other?
+
+Through a **lead orchestrator**, not by talking peer-to-peer. The lead agent assigns each teammate a task, collects their written outputs, and decides the next step. In a multi-round run the lead feeds round-one outputs back into round-two prompts so each agent can respond to the others - but the routing always goes through the lead.
+
+- Coordination is in natural-language prompts and summaries the lead composes, not a hidden JSON protocol you configure.
+- The lead reads only the teammates' summaries, keeping its own context clean (the same pattern as sub-agents - see Q60, Q61).
+- You can inspect the exact prompts the lead generates for each teammate with `Ctrl+O` in the terminal.
+
+**Sources:**
+- https://www.anthropic.com/engineering/built-multi-agent-research-system (verified 24-05-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 24-05-2026)
+
+---
+
+## Q75: Why can the Google Drive connector create files but not edit existing ones?
+
+The Google Drive connector exposes a **read-and-create** tool set - copy, create, download, get metadata, get permissions, list recent, read, search - but no update/edit tool. So Claude can read your Drive and make new files, but it can't modify a file in place.
+
+Practical workaround used in session: have Claude generate the content locally as Markdown, convert it (e.g. a small `md_to_docx` Python script), and upload it as a **new** file rather than editing the original.
+
+Confluence's connector, by contrast, does support updating an existing page - so always **pull before you push**, or you risk overwriting a teammate's inline comments.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 24-05-2026)
+
+---
+
+## Q76: When should I build a custom skill instead of just using a raw MCP server?
+
+Use a **custom skill with a small script** when the same transformation runs repeatedly and the raw MCP server would load a large tool surface (and many tokens) into context each time.
+
+Concrete example from the session: pushing/pulling Confluence pages through the raw Confluence MCP loads all its tool definitions every run. The `confluence-to-md` / `md-to-confluence` skills wrap a Python script that does just the one job, so they cost far fewer tokens.
+
+Rule of thumb:
+- **One-off or genuinely interactive task** -> MCP server is fine.
+- **Repeated, well-defined transformation** -> wrap it in a skill (`.claude/skills/<name>/`) with a script, commit it, reuse it.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 24-05-2026)
+- https://code.claude.com/docs/en/slash-commands (verified 24-05-2026)
+
+---
+
+# May 2026 - Session 7 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 24-05-2026 during Session 7 (Build Hours - building a multi-agent Property Finder end to end). All URLs verified 24-05-2026.
+
+---
+
+## Q77: What does `/init` do, and do I have to run it?
+
+`/init` bootstraps a project for Claude Code. It scans the folder and creates a `CLAUDE.md` with a starting picture of the codebase; in a fresh project it can also scaffold a sensible folder structure based on what you tell it you're building.
+
+- You don't *have* to run it - Claude works without it - but a project with a `CLAUDE.md` and a clear structure gives much richer output than a blank folder (see Q57).
+- In the workshop, `/init` produced a hybrid layout: `docs/`, `src/`, `agents/`, `tests/`, and `.claude/` with `skills/` and `rules/`.
+- Re-running `/init` later refreshes `CLAUDE.md` against the current state of the repo.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 24-05-2026)
+- https://code.claude.com/docs/en/slash-commands (verified 24-05-2026)
+
+---
+
+## Q78: What is the usage/insights report and how do I get it?
+
+Claude Code can produce a usage report on how you've been working - message counts, lines created/removed, files touched, languages, session types, and peak hours - plus suggestions (in the session it surfaced the rubric-driven-refinement habit and offered a `CLAUDE.md` snippet to copy).
+
+- For an individual usage report, generate it from the CLI as shown in the analytics/costs docs; run it periodically (monthly is plenty) to spot patterns.
+- For **team-level** usage tracking, the Analytics dashboard is the official surface.
+- Newcomers will see thin data at first - it's worth running once anyway to see the shape of the report.
+
+**Sources:**
+- https://code.claude.com/docs/en/analytics (verified 24-05-2026)
+- https://code.claude.com/docs/en/costs (verified 24-05-2026)
+
+---
+
+## Q79: Plan mode vs Auto mode - what's the difference and how do I switch?
+
+Both are interactive modes you cycle through with **`Shift+Tab`**:
+
+- **Plan mode** - Claude investigates and proposes a plan *before* editing anything. It often spawns an explore sub-agent to map the project first. Best for any change touching several files.
+- **Auto mode (auto-accept edits)** - Claude carries out steps without pausing for per-action approval. Faster, but you give up the per-step checkpoint.
+- Default mode sits between them, asking permission for write actions.
+
+Press `Shift+Tab` repeatedly to rotate through the modes; the current mode shows in the input bar. If you don't see the toggle, keep pressing - some builds show it only after the first action.
+
+**Sources:**
+- https://code.claude.com/docs/en/interactive-mode (verified 24-05-2026)
+- https://code.claude.com/docs/en/common-workflows (verified 24-05-2026)
+
+---
+
+## Q80: How do I resume a Claude Code session after closing the terminal?
+
+Claude Code persists sessions, so you can pick up where you left off:
+
+- **`claude --continue`** resumes the most recent session in the current directory.
+- **`claude --resume`** lets you choose a past session from a list.
+
+The instructor's `ccs` ("Claude Code sessions") setup is a personal shell helper that registers a named session against its process ID so he can map sessions to features and reopen the right one - it's a convenience wrapper on top of the built-in resume, not a separate Claude feature. The built-in `--continue` / `--resume` flags are all you need to recover a session.
+
+**Sources:**
+- https://code.claude.com/docs/en/cli-reference (verified 24-05-2026)
+
+---
+
+## Q81: Where do global skills and CLAUDE.md live, and how do I create a global skill?
+
+There are two levels:
+
+- **Project-level:** `./.claude/` in the repo (skills in `./.claude/skills/`, plus the project `CLAUDE.md`). Shared with the team when you commit it.
+- **User (global) level:** `~/.claude/` in your home directory (`~/.claude/skills/`, and a user `CLAUDE.md`). Available in every project, personal to you.
+
+The `~` prefix is the tell: `~/.claude` is global, a bare `.claude` is the project's. On macOS, reveal the hidden `~/.claude` folder in Finder with `Command+Shift+.`.
+
+To make a skill global, create it under `~/.claude/skills/<name>/` (or ask Claude to create it at both project and user level). To borrow a skill from another project, copy its folder into `~/.claude/skills/`.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 24-05-2026)
+- https://code.claude.com/docs/en/slash-commands (verified 24-05-2026)
+
+---
+
+## Q82: I selected Opus, but Claude used a cheaper model for a sub-task. Why?
+
+That's expected. The model you pick is for the **main session**; when Claude spawns a sub-agent or sub-task it can route that work to a smaller, cheaper model when the task doesn't need the top model. A web-search or extraction step doesn't need Opus, so it may run on a Sonnet-class model to save tokens and time.
+
+- The lead/main agent stays on your chosen model for the reasoning that matters; helpers get right-sized models.
+- You can constrain models explicitly in configuration if you need to, but the default delegation is a cost optimization, not a bug.
+
+**Sources:**
+- https://code.claude.com/docs/en/model-config (verified 24-05-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 24-05-2026)
+
+---
+
+## Q83: How do I make sure my `.env` / API keys never get committed?
+
+Keep secrets in a `.env` file and add `.env` to `.gitignore` so Git never stages it. State the rule in your project `CLAUDE.md` (e.g. "never commit `.env`; secrets stay local") so Claude respects it too, and commit a `.env.example` with placeholder keys instead of real values.
+
+- Claude Code only writes inside the working folder and asks before write actions, but the durable guard is `.gitignore` + the explicit `CLAUDE.md` rule.
+- For shared repos, anyone cloning adds their own keys to a local `.env`; the keys are never in the repo.
+
+This is exactly how the Property Finder repo was shared: private repo, `.env` git-ignored, teammates add their Gemini and Google Maps keys after cloning.
+
+**Sources:**
+- https://code.claude.com/docs/en/settings (verified 24-05-2026)
+- https://code.claude.com/docs/en/memory (verified 24-05-2026)
 
 ---

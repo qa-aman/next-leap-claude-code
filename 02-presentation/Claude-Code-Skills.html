@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Claude Code Skills — Workshop</title>
+<style>
+:root{--bg:#0D0D0D;--accent:#D47A21;--accent2:#f0a44e;--white:#FFFFFF;--light:#CCCCCC;--mid:#888888;--tag-bg:#1E1E1E;--card:#161616;--card-bd:#262626;--code-bg:#0a0a0a;--code-bd:#242424;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#000;color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+code,pre{font-family:"JetBrains Mono","SF Mono",Menlo,Consolas,monospace}
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 120% at 50% -10%,#161310 0%,#000 60%);overflow:hidden}
+.slide{position:absolute;width:1280px;height:720px;background:var(--bg);border:1px solid #1c1c1c;border-radius:14px;overflow:hidden;padding:60px 70px 56px;display:none;box-shadow:0 30px 90px rgba(0,0,0,.6)}
+.slide::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.slide.active{display:block}
+.slide-in{height:100%;display:flex;flex-direction:column;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.tag{display:inline-block;color:var(--accent);font-size:13px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.live{align-self:flex-start;background:var(--accent);color:#0d0d0d;font-size:12px;font-weight:800;letter-spacing:.1em;padding:5px 12px;border-radius:6px;white-space:nowrap}
+.stitle{font-size:36px;line-height:1.12;font-weight:800;margin:12px 0 0;letter-spacing:-.5px}
+.lead{color:var(--light);font-size:18px;margin-top:13px;max-width:92%}
+.body{margin-top:24px;flex:1;min-height:0}
+.tipline{margin-top:14px;font-size:15px;color:var(--light);background:rgba(212,122,33,.08);border:1px solid rgba(212,122,33,.25);border-radius:8px;padding:11px 16px}
+.foot{margin-top:auto;padding-top:18px;color:var(--accent2);font-size:16px;font-style:italic;border-top:1px solid #1c1c1c}
+.pagenum{position:absolute;right:24px;bottom:18px;color:var(--mid);font-size:12px;letter-spacing:.1em}
+.hero{justify-content:center;text-align:left}
+.htitle{font-size:82px;font-weight:850;line-height:1;letter-spacing:-2px}
+.htitle span{color:var(--accent)}
+.htitle.big{font-size:120px}
+.hsub{margin-top:24px;font-size:26px;color:var(--light)}
+.hnote{margin-top:34px;font-size:17px;color:var(--mid);max-width:80%;line-height:1.6;border-left:3px solid var(--accent);padding-left:18px}
+.hmeta{margin-top:30px;font-size:14px;color:var(--mid);letter-spacing:.04em}
+.cmeta{margin-top:26px;font-size:13px;color:var(--mid);letter-spacing:.08em}
+.who{margin-top:28px;font-size:24px;color:var(--white);font-weight:600}
+.links{margin-top:26px;display:flex;flex-direction:column;gap:11px}
+.links a{color:var(--light);font-size:18px;display:flex;gap:14px;align-items:baseline}
+.links a span{color:var(--accent);font-weight:700;min-width:130px;display:inline-block}
+.links a:hover{color:var(--white)}
+.bul{list-style:none}
+.bul li{position:relative;padding:7px 0 7px 24px;color:var(--light);font-size:17px;line-height:1.5}
+.bul li::before{content:"";position:absolute;left:0;top:15px;width:8px;height:8px;background:var(--accent);border-radius:2px}
+.two{display:grid;gap:28px;height:100%}
+.code{background:var(--code-bg);border:1px solid var(--code-bd);border-radius:10px;padding:18px 20px;font-size:14.5px;line-height:1.55;color:#e8d9c8;height:100%;overflow:auto;white-space:pre}
+.code code{color:#e8d9c8}
+.cards{display:grid;gap:15px;height:100%}
+.card{background:var(--card);border:1px solid var(--card-bd);border-radius:12px;padding:17px 18px;display:flex;flex-direction:column;gap:7px;position:relative}
+.card .num{width:30px;height:30px;border-radius:8px;background:var(--accent);color:#0d0d0d;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center}
+.card .chip{align-self:flex-start;font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--accent);background:rgba(212,122,33,.12);border:1px solid rgba(212,122,33,.3);padding:3px 9px;border-radius:5px}
+.card .ch{font-size:17px;font-weight:700;color:var(--white);line-height:1.25}
+.card .csub{font-size:13px;color:var(--accent2);font-weight:600}
+.card .cdesc{font-size:14px;color:var(--mid);line-height:1.5}
+.panel{background:var(--card);border:1px solid var(--card-bd);border-radius:12px;padding:22px 24px}
+.phead{font-size:19px;font-weight:800;color:var(--accent);letter-spacing:.02em}
+.psub{font-size:15px;color:var(--light);margin:4px 0 10px}
+.pquote{font-size:18px;color:var(--white);font-weight:600;line-height:1.4;margin:6px 0 4px}
+.panel .bul li{font-size:16px}
+.prompts{display:grid;grid-template-columns:1fr 1fr;gap:12px 26px;height:100%;align-content:start}
+.prompt{display:flex;gap:14px;align-items:baseline;background:var(--card);border:1px solid var(--card-bd);border-radius:9px;padding:13px 16px}
+.prompt .pn{color:var(--accent);font-weight:800;font-size:16px;min-width:20px}
+.prompt .pt{color:var(--light);font-size:15.5px;line-height:1.4}
+.gloss{display:grid;grid-template-columns:1fr 1fr;gap:13px 30px;height:100%;align-content:start}
+.gitem{border-left:2px solid var(--accent);padding:2px 0 2px 16px}
+.gterm{font-weight:800;font-size:16px;color:var(--white)}
+.gdef{font-size:14px;color:var(--mid);line-height:1.45;margin-top:3px}
+#nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;z-index:30;background:rgba(20,20,20,.8);backdrop-filter:blur(8px);border:1px solid #2a2a2a;border-radius:30px;padding:8px 16px}
+#nav button{background:none;border:none;color:var(--light);font-size:18px;cursor:pointer;padding:2px 8px;border-radius:6px}
+#nav button:hover{color:var(--accent);background:#222}
+#dots{display:flex;gap:6px;max-width:430px;flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:50%;background:#444;cursor:pointer;transition:.2s}
+.dot.on{background:var(--accent);transform:scale(1.25)}
+#hint{position:fixed;top:14px;right:16px;color:#555;font-size:12px;z-index:30}
+@media print{@page{size:1280px 720px;margin:0}#nav,#hint{display:none}#stage{position:static;display:block;background:#000}.slide{display:block!important;position:relative;page-break-after:always;border-radius:0;margin:0;box-shadow:none;width:1280px;height:720px}}
+</style>
+</head>
+<body>
+<div id="hint">&larr; &rarr; navigate &middot; F fullscreen &middot; P print</div>
+<div id="stage">
+<section class="slide" data-kind="title"><div class="slide-in hero"><div class="tag">CLAUDE CODE WORKSHOP</div>
+          <h1 class="htitle">Claude Code <span>Skills</span></h1>
+          <div class="hsub">Teach Claude a habit. Use it forever.</div>
+          <div class="hnote">By the end of this session you will know: how a skill is structured, why the description field is the trigger mechanism, and how to build and invoke skills that stick.</div><div class="hmeta">Aman Parmar  ·  Senior Product Manager</div></div><div class="pagenum">01 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">AGENDA</div></div>
+          <h2 class="stitle">What We Cover Today</h2>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(4,1fr)"><div class="card"><div class="ch">What a skill is, and why it is different from CLAUDE.md</div><div class="csub">Part 1</div></div><div class="card"><div class="ch">The four Claude Code primitives, side by side</div><div class="csub">Part 2</div></div><div class="card"><div class="ch">Anatomy of SKILL.md, field by field</div><div class="csub">Part 3</div></div><div class="card"><div class="ch">The description field is the trigger</div><div class="csub">Part 4</div></div><div class="card"><div class="ch">Progressive disclosure, folder structure, the 500-line rule</div><div class="csub">Part 5</div></div><div class="card"><div class="ch">Three real skills from this repo, live</div><div class="csub">Part 6</div></div><div class="card"><div class="ch">When NOT to make a skill</div><div class="csub">Part 7</div></div><div class="card"><div class="ch">What&#x27;s next - prototypes with Claude Code</div><div class="csub">Part 8</div></div></div></div></div><div class="pagenum">02 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 1 · WHAT A SKILL IS</div></div>
+          <h2 class="stitle">A Skill Is a Reusable Workflow You Write Once and Invoke Forever</h2>
+          <div class="body"><ul class="bul"><li>A skill is a markdown file that gives Claude a named, repeatable procedure.</li><li>You keep pasting the same instructions? That belongs in a skill.</li><li>Unlike CLAUDE.md, the skill body only loads when you call it, saving context budget.</li><li>You can invoke it yourself (/skill-name) or let Claude recognize the pattern and load it.</li><li>No coding required. If you can write a checklist, you can write a skill.</li></ul></div><div class="foot">A skill is your standard operating procedure, stored where Claude can find and run it.</div></div><div class="pagenum">03 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 2 · FOUR PRIMITIVES</div></div>
+          <h2 class="stitle">Four Primitives in Claude Code - Know Which to Reach For</h2>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(4,1fr)"><div class="card"><span class="chip">SKILL</span><div class="ch">Reusable workflow</div><div class="cdesc">A markdown procedure Claude loads and follows. You or Claude can invoke it. Persistent across sessions.</div></div><div class="card"><span class="chip">SLASH COMMAND</span><div class="ch">One-off shortcut</div><div class="cdesc">A simple prompt shortcut, no supporting files. Skills have replaced custom commands - they work identically but skills are more powerful.</div></div><div class="card"><span class="chip">SUBAGENT</span><div class="ch">Isolated specialist</div><div class="cdesc">Runs in its own context window with its own tools. Keeps noisy exploration out of your main thread. Returns only a summary.</div></div><div class="card"><span class="chip">MCP SERVER</span><div class="ch">External tool bridge</div><div class="cdesc">Connects Claude to live systems: databases, Jira, Slack, GitHub. Skills tell Claude how to think. MCP gives Claude hands to act on outside data.</div></div></div></div><div class="foot">Start with a skill. Add a subagent when you need isolation. Add MCP when you need live data.</div></div><div class="pagenum">04 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 3 · ANATOMY OF SKILL.md</div><span class="live">LIVE DEMO</span></div>
+          <h2 class="stitle">A SKILL.md Has Two Parts: Frontmatter and Body</h2>
+          <div class="body"><div class="two" style="grid-template-columns:1.05fr .95fr"><ul class="bul"><li>YAML frontmatter (the --- block) tells Claude when and how to use the skill.</li><li>name: the display name and the /command you type. Optional - defaults to folder name.</li><li>description: the trigger. Claude reads this to decide whether to load the skill.</li><li>The markdown body is the instructions Claude follows when the skill runs.</li><li>Only description is recommended. All other frontmatter fields are optional.</li></ul><pre class="code"><code>---
+name: standup-summary
+description: |
+  Summarize daily standup notes
+  into a structured digest.
+  Trigger on &#x27;summarize the
+  standup&#x27; or standup-*.md files.
+---
+
+# Standup Summary
+
+Turn raw standup notes into a
+structured markdown summary.
+
+## Output template
+...</code></pre></div></div><div class="foot">YAML (pronounced &#x27;yam-ul&#x27;) is just structured text between --- markers. No code needed.</div></div><div class="pagenum">05 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 4 · THE TRIGGER MECHANISM</div></div>
+          <h2 class="stitle">Skills Load Only When Their Description Matches</h2>
+          <div class="lead">Skill descriptions are always in Claude&#x27;s context. The full body is not.</div><div class="body"><div class="cards" style="grid-template-columns:repeat(3,1fr)"><div class="card"><span class="chip">ALWAYS IN CONTEXT</span><div class="ch">description field (truncated at 1,536 characters)</div><div class="cdesc">Claude scans this every turn to decide whether to load the skill.</div></div><div class="card"><span class="chip">LOADS ON TRIGGER</span><div class="ch">full SKILL.md body + supporting files</div><div class="cdesc">Enters conversation when Claude matches the description or you type /skill-name.</div></div><div class="card"><span class="chip">LOADS ON DEMAND</span><div class="ch">references/, scripts/, assets/ subdirectories</div><div class="cdesc">Claude reads these only when the skill body explicitly points to them.</div></div></div></div><div class="foot">Put trigger phrases like &#x27;summarize the standup&#x27; or &#x27;draft an email&#x27; directly in description. That is the whole mechanism.</div></div><div class="pagenum">06 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 5 · PROGRESSIVE DISCLOSURE</div></div>
+          <h2 class="stitle">Three Layers Load in Order, Not All at Once</h2>
+          <div class="lead">Progressive disclosure means Claude pays only for what it actually needs.</div><div class="body"><div class="cards" style="grid-template-columns:repeat(3,1fr)"><div class="card"><span class="num">1</span><div class="ch">Metadata layer</div><div class="cdesc">Name + description. Always in context, zero extra cost. Claude uses this to decide.</div></div><div class="card"><span class="num">2</span><div class="ch">Body layer</div><div class="cdesc">SKILL.md instructions. Loads the moment the skill triggers. Stays for the rest of the session.</div></div><div class="card"><span class="num">3</span><div class="ch">Resource layer</div><div class="cdesc">references/, scripts/, assets/ files. Claude reads these only when the body explicitly points to them.</div></div></div></div><div class="foot">Keep the description sharp, keep the body focused, park heavy reference docs in subfolders.</div></div><div class="pagenum">07 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 5 · WHERE SKILLS LIVE</div></div>
+          <h2 class="stitle">Personal Skills Follow You. Project Skills Stay in the Repo.</h2>
+          <div class="body"><div class="two" style="grid-template-columns:1fr 1fr"><div class="panel"><div class="phead">PERSONAL</div><div class="psub">~/.claude/skills/&lt;skill-name&gt;/</div><ul class="bul"><li>Available in every project you open.</li><li>Only you can see and use them.</li><li>Best for: email drafting, standup summary, presentation builder, OKR writer.</li><li>Create once. Reuse across every workspace.</li></ul></div><div class="panel"><div class="phead">PROJECT</div><div class="psub">.claude/skills/&lt;skill-name&gt;/</div><ul class="bul"><li>Lives inside the repo. Shared with the team.</li><li>Committed to version control alongside code.</li><li>Best for: team-specific workflows, shared templates, project conventions.</li><li>Check it in once. The whole team benefits.</li></ul></div></div></div><div class="foot">Your personal skill folder is your private toolkit. The project folder is the team playbook.</div></div><div class="pagenum">08 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 5 · FOLDER STRUCTURE</div></div>
+          <h2 class="stitle">One Folder Per Skill. SKILL.md Under 500 Lines.</h2>
+          <div class="body"><div class="two" style="grid-template-columns:1.05fr .95fr"><ul class="bul"><li>Each skill gets its own folder. The folder name becomes the /command.</li><li>SKILL.md is required. All other files are optional but powerful.</li><li>references/ holds detailed docs Claude loads on demand, not on startup.</li><li>scripts/ holds code Claude can execute. assets/ holds templates, examples.</li><li>Body cap: keep SKILL.md under 500 lines. Overflow goes to subfolders.</li></ul><pre class="code"><code>my-skill/
+  SKILL.md          &lt;- required
+  references/
+    api-docs.md     &lt;- load on demand
+    style-guide.md  &lt;- load on demand
+  scripts/
+    validate.sh     &lt;- executed
+  assets/
+    template.md     &lt;- examples
+    sample.md       &lt;- examples</code></pre></div></div><div class="foot">If your SKILL.md is approaching 500 lines, move reference docs to references/ and link to them.</div></div><div class="pagenum">09 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 5 · WHEN TO CREATE A SKILL</div></div>
+          <h2 class="stitle">The 3-Repeat Rule: Paste It Three Times, Then Make It a Skill</h2>
+          <div class="body"><div class="two" style="grid-template-columns:1fr 1fr"><div class="panel"><div class="phead">SKIP THE SKILL</div><ul class="bul"><li>You did it once and won&#x27;t repeat it.</li><li>The task changes so much each time that no template fits.</li><li>You&#x27;re still figuring out the right format.</li><li>It&#x27;s a one-liner prompt with no real structure.</li></ul></div><div class="panel"><div class="phead">MAKE THE SKILL</div><ul class="bul"><li>You paste the same instructions 3 or more times.</li><li>A section of CLAUDE.md has grown into a procedure.</li><li>A team member asks &#x27;how do I get Claude to do X?&#x27;</li><li>The output format is stable and reusable.</li></ul></div></div></div><div class="foot">If the task is still evolving, keep it in CLAUDE.md. Once stable and repeated, graduate it to a skill.</div></div><div class="pagenum">10 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 5 · INVOCATION</div></div>
+          <h2 class="stitle">Two Ways to Invoke a Skill. Claude Decides or You Decide.</h2>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(2,1fr)"><div class="card"><span class="num">1</span><div class="ch">Auto-trigger</div><div class="cdesc">You say &#x27;summarize the standup&#x27;. Claude scans descriptions, finds a match, loads the skill. No /command needed. Best for: reference skills, knowledge skills, anything that should run silently when relevant.</div></div><div class="card"><span class="num">2</span><div class="ch">Direct invocation</div><div class="cdesc">You type /standup-summary. Claude loads the skill immediately, regardless of description match. Best for: workflow skills with side effects (send, commit, deploy) where you control timing.</div></div></div><div class="tipline">Tip: use disable-model-invocation: true in frontmatter to block auto-trigger. Claude can then only be called by you.</div></div><div class="foot">If the skill does something consequential (sends an email, updates a doc), force manual invocation.</div></div><div class="pagenum">11 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 6 · REAL SKILL: PPT-BUILDER</div><span class="live">LIVE DEMO</span></div>
+          <h2 class="stitle">ppt-builder: Say &#x27;Create a PPT&#x27;. Get a .pptx File.</h2>
+          <div class="body"><div class="two" style="grid-template-columns:1.05fr .95fr"><ul class="bul"><li>Trigger: &#x27;create a PPT&#x27;, &#x27;build slides&#x27;, &#x27;make a deck&#x27;, &#x27;turn this into slides&#x27;.</li><li>What Claude does: reads bundled scripts/build_ppt.py, maps your content to slide patterns.</li><li>Output: a dark-themed .pptx file saved to the path you specify.</li><li>Supporting files: scripts/build_ppt.py contains design system constants and helpers.</li><li>You are looking at output from this skill right now.</li></ul><pre class="code"><code># From ppt-builder/SKILL.md
+
+---
+name: ppt-builder
+description: Generate dark-themed
+  professional .pptx files. Invoke
+  when user says &#x27;create a PPT&#x27;,
+  &#x27;build slides&#x27;, &#x27;make a deck&#x27;,
+  or &#x27;turn this into slides&#x27;.
+---
+
+# PPT Builder
+Read scripts/build_ppt.py first.
+Never rewrite helpers from scratch.</code></pre></div></div><div class="foot">This skill builds this very deck. The trigger phrases are in the description. The instructions reference a bundled script.</div></div><div class="pagenum">12 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 6 · REAL SKILL: EMAIL-DRAFTER</div><span class="live">LIVE DEMO</span></div>
+          <h2 class="stitle">email-drafter: Say &#x27;Draft an Email&#x27;. Get a Structured Draft.</h2>
+          <div class="body"><div class="two" style="grid-template-columns:1.05fr .95fr"><ul class="bul"><li>Trigger: &#x27;draft an email&#x27;, &#x27;write an email to&#x27;, &#x27;follow up with&#x27;, &#x27;reply to this thread&#x27;.</li><li>Framework inside: Barbara Minto&#x27;s Pyramid Principle (BLUF, SCQA, MECE).</li><li>Output: Subject line + body. No preamble, no filler, ends on a clear next step.</li><li>The skill classifies intent first: executive update, decision request, cross-team ask.</li><li>Trigger also fires on indirect signals: &#x27;tell my VP the launch is slipping&#x27;.</li></ul><pre class="code"><code># Output example
+
+**Subject:** Decision needed
+by Wed: ship Smart Follow-Up
+April 24 or slip 2 weeks
+
+QA found a blocker in the
+confidence model Friday.
+Recommending a slip
+from Apr 24 to May 8.
+
+Two options:
+1. Ship Apr 24, 8% accuracy drop.
+2. Slip to May 8, fix the model.
+
+Can you confirm by Wednesday?</code></pre></div></div><div class="foot">BLUF means &#x27;Bottom Line Up Front&#x27;. Minto&#x27;s Pyramid means the most important point comes first, always.</div></div><div class="pagenum">13 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 6 · REAL SKILL: STANDUP-SUMMARY</div><span class="live">LIVE DEMO</span></div>
+          <h2 class="stitle">standup-summary: Point at a File. Get a 60-Second Digest.</h2>
+          <div class="body"><div class="two" style="grid-template-columns:1.05fr .95fr"><ul class="bul"><li>Trigger: &#x27;summarize the standup&#x27;, &#x27;what happened in standup&#x27;, or any daily-standup-*.md file.</li><li>What Claude does: reads the file end to end, extracts progress, blockers, decisions, actions.</li><li>Output: structured markdown saved to outputs/standup-summary-DD-MM-YYYY.md.</li><li>Every action item gets an owner AND a due date. Both are required by the skill instructions.</li><li>The skill converts all dates to DD-MM-YYYY, even if the notes use other formats.</li></ul><pre class="code"><code># Output structure
+
+## TL;DR
+- 3 bullets a skip-level
+  needs to know
+
+## Progress by person
+| Person | Yesterday | Today |
+|--------|-----------|-------|
+| Remi   | ... | ... |
+
+## Blockers and risks
+- corpus noise, owner: Remi
+
+## Action items
+- [ ] spot check corpus
+  owner: Remi, due: 20-03-2026</code></pre></div></div><div class="foot">This skill turns messy Slack-style standup notes into a digest your VP could read in 60 seconds.</div></div><div class="pagenum">14 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 7 · WHEN NOT TO MAKE A SKILL</div></div>
+          <h2 class="stitle">Not Every Repeated Task Earns a Skill</h2>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(2,1fr)"><div class="card"><span class="chip">SKIP THE SKILL</span><div class="ch">One-off tasks</div><div class="cdesc">You ran it once. You won&#x27;t run it again. Don&#x27;t build the abstraction.</div></div><div class="card"><span class="chip">BETTER ALTERNATIVE</span><div class="ch">Just paste the instructions directly. Save the 20 minutes.</div></div><div class="card"><span class="chip">SKIP THE SKILL</span><div class="ch">Hyper-specific to one meeting</div><div class="cdesc">The template only fits one context. It will confuse Claude elsewhere.</div></div><div class="card"><span class="chip">BETTER ALTERNATIVE</span><div class="ch">Add a one-off section to CLAUDE.md instead. Archive after the meeting.</div></div><div class="card"><span class="chip">SKIP THE SKILL</span><div class="ch">Workflow still evolving</div><div class="cdesc">Skill bodies stay in context after load. Instability costs tokens.</div></div><div class="card"><span class="chip">BETTER ALTERNATIVE</span><div class="ch">Keep it in CLAUDE.md until the format is stable, then graduate it.</div></div><div class="card"><span class="chip">SKIP THE SKILL</span><div class="ch">A fact, not a procedure</div><div class="cdesc">Single facts, rules, and preferences belong in CLAUDE.md, not a skill.</div></div><div class="card"><span class="chip">BETTER ALTERNATIVE</span><div class="ch">CLAUDE.md is always in context. Skills load on demand. Facts should always load.</div></div></div></div><div class="foot">Skills are for stable, repeated workflows. Facts belong in CLAUDE.md. One-offs go directly in chat.</div></div><div class="pagenum">15 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 7 · BUILD YOUR FIRST SKILL</div></div>
+          <h2 class="stitle">Five Steps from Zero to a Working Skill</h2>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(5,1fr)"><div class="card"><span class="num">1</span><div class="ch">Identify the pattern.</div><div class="cdesc">Pick a task you paste instructions for 3 or more times. That is your candidate.</div></div><div class="card"><span class="num">2</span><div class="ch">Create the folder.</div><div class="cdesc">mkdir -p ~/.claude/skills/my-skill/ for personal, or .claude/skills/my-skill/ for project.</div></div><div class="card"><span class="num">3</span><div class="ch">Write SKILL.md.</div><div class="cdesc">Frontmatter first: name, description with trigger phrases. Then instructions in markdown.</div></div><div class="card"><span class="num">4</span><div class="ch">Test auto-trigger.</div><div class="cdesc">In Antigravity IDE, say the trigger phrase naturally. Watch whether Claude loads the skill.</div></div><div class="card"><span class="num">5</span><div class="ch">Iterate the description.</div><div class="cdesc">If it does not trigger, add more trigger phrases. If it triggers too often, make it more specific.</div></div></div></div><div class="foot">Step 5 is the most important one. A skill that never triggers is just a markdown file nobody reads.</div></div><div class="pagenum">16 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 7 · WHERE DOES IT BELONG?</div></div>
+          <h2 class="stitle">One Question Tells You Where to Put It</h2>
+          <div class="lead">Ask: is this a fact, a preference, or a multi-step procedure?</div><div class="body"><div class="cards" style="grid-template-columns:repeat(3,1fr)"><div class="card"><span class="chip">FACT OR PREFERENCE</span><div class="ch">Put it in CLAUDE.md</div><div class="cdesc">Always loaded, zero invocation needed. Examples: date format rules, writing voice, stack choices, hard constraints.</div></div><div class="card"><span class="chip">STABLE PROCEDURE</span><div class="ch">Make it a skill</div><div class="cdesc">Loads on demand when description matches. Examples: standup summary, email drafter, PRD writer, OKR writer.</div></div><div class="card"><span class="chip">ONE-OFF TASK</span><div class="ch">Paste it in chat</div><div class="cdesc">No overhead, no maintenance, no file. Examples: analyzing a specific doc once, answering a question about one meeting.</div></div></div></div><div class="foot">When in doubt, start with CLAUDE.md. Graduate to a skill once the procedure is stable and you are repeating it.</div></div><div class="pagenum">17 / 22</div></section>
+<section class="slide" data-kind="summary"><div class="slide-in"><div class="tag">WRAP-UP · FIVE THINGS TO REMEMBER</div>
+          <h2 class="stitle">The Five Things That Actually Matter</h2>
+          <div class="body"><ul class="bul"><li>A skill is a markdown file with YAML frontmatter and an instructions body.</li><li>The description field is the trigger. Load trigger phrases there, not in the body.</li><li>Progressive disclosure: description always, body on trigger, resources on demand.</li><li>Three times pasting the same thing = time to make a skill.</li><li>Facts in CLAUDE.md. Procedures in skills. One-offs in chat.</li></ul></div><div class="foot">A skill is leverage. Build it once, use it on every project, share it with the team.</div></div><div class="pagenum">18 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">REFERENCE · GLOSSARY</div></div>
+          <h2 class="stitle">Glossary - Terms You&#x27;ll Hear All Workshop</h2>
+          <div class="body"><div class="gloss"><div class="gitem"><div class="gterm">Skill</div><div class="gdef">A markdown file that loads when its description matches your prompt.</div></div><div class="gitem"><div class="gterm">SKILL.md</div><div class="gdef">The file that defines a skill (YAML frontmatter + markdown body).</div></div><div class="gitem"><div class="gterm">Frontmatter</div><div class="gdef">The name + description block at the top of SKILL.md.</div></div><div class="gitem"><div class="gterm">Subagent</div><div class="gdef">A separate Claude instance with its own clean context window.</div></div><div class="gitem"><div class="gterm">Slash command</div><div class="gdef">A built-in command typed inside Claude (/help, /clear, /skill-name).</div></div><div class="gitem"><div class="gterm">MCP server</div><div class="gdef">A connector that lets Claude talk to an external tool (Jira, Figma).</div></div><div class="gitem"><div class="gterm">Progressive disclosure</div><div class="gdef">Metadata always in context, body loads on trigger, files load on demand.</div></div><div class="gitem"><div class="gterm">3+ repeat heuristic</div><div class="gdef">If you do a task three times, it is probably a skill.</div></div></div></div><div class="foot">Knowing the names makes the next session faster.</div></div><div class="pagenum">19 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">WHAT&#x27;S NEXT</div></div>
+          <h2 class="stitle">Prototypes with Claude Code</h2>
+          <div class="lead">Today you taught Claude habits. Next: you build the prototype.</div><div class="body"><ul class="bul"><li>From skills to full products - scoping what Claude can ship in a session.</li><li>Rapid prototyping loop: spec, build, test, iterate.</li><li>What you can actually build without an engineer.</li><li>Three live builds in session - you pick the prompts.</li><li>How to hand off a prototype for production engineering.</li></ul></div></div><div class="pagenum">20 / 22</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">REFERENCE · FAQ</div></div>
+          <h2 class="stitle">Five Questions You&#x27;ll Be Asked Back at Work</h2>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(5,1fr)"><div class="card"><span class="num">1</span><div class="ch">Skill vs Subagent vs MCP vs Plugin - what is the difference?</div><div class="cdesc">Per docs: a Skill is a SKILL.md file Claude loads when its description matches. A Subagent runs in its own context window. An MCP server is a connector to external tools. Plugins package skills with other extensions.</div></div><div class="card"><span class="num">2</span><div class="ch">Will Claude Code suggest skills, or do I have to know what to create?</div><div class="cdesc">Claude does not auto-suggest. Docs recommend creating one when you keep pasting the same instructions or a CLAUDE.md section grows into a procedure. Use the bundled skill-creator to scaffold.</div></div><div class="card"><span class="num">3</span><div class="ch">If I add a skill in this project, will it work in my other projects?</div><div class="cdesc">No. Project skills live in .claude/skills/ and load only in that repo. Personal skills live in ~/.claude/skills/ and apply across all your projects. Enterprise overrides both.</div></div><div class="card"><span class="num">4</span><div class="ch">How do I know if my skill description is good enough to trigger correctly?</div><div class="cdesc">Docs: include keywords users would naturally say; put the key use case first. The description is capped at 1,536 chars in the listing. Verify with &#x27;What skills are available?&#x27; inside Claude.</div></div><div class="card"><span class="num">5</span><div class="ch">What about Cursor rules - aren&#x27;t those the same as skills?</div><div class="cdesc">Different mechanic. Skills load only when their description matches and enter context only on invocation. Always-on rules consume context every turn. Skills follow the Agent Skills open standard.</div></div></div></div></div><div class="pagenum">21 / 22</div></section>
+<section class="slide" data-kind="closing"><div class="slide-in hero">
+          <h1 class="htitle big">Questions?</h1>
+          <div class="who">Aman Parmar  ·  Senior Product Manager</div>
+          <div class="links"><a href="https://amanparmar3.substack.com/" target="_blank" rel="noopener"><span>Substack</span>https://amanparmar3.substack.com/</a><a href="https://www.linkedin.com/in/amanmparmar" target="_blank" rel="noopener"><span>LinkedIn</span>https://www.linkedin.com/in/amanmparmar</a><a href="https://github.com/qa-aman" target="_blank" rel="noopener"><span>GitHub</span>https://github.com/qa-aman</a></div><div class="cmeta">Claude Code Workshop</div></div><div class="pagenum">22 / 22</div></section>
+</div>
+<div id="nav">
+  <button onclick="prev()" aria-label="Previous">&lsaquo;</button>
+  <div id="dots"></div>
+  <button onclick="next()" aria-label="Next">&rsaquo;</button>
+</div>
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+const dotsWrap=document.getElementById('dots');
+let cur=0;
+slides.forEach((_,i)=>{const d=document.createElement('div');d.className='dot';d.onclick=()=>go(i);dotsWrap.appendChild(d);});
+const dots=[...document.querySelectorAll('.dot')];
+function go(i){cur=Math.max(0,Math.min(slides.length-1,i));slides.forEach((s,j)=>s.classList.toggle('active',j===cur));dots.forEach((d,j)=>d.classList.toggle('on',j===cur));location.hash=cur+1;}
+function next(){go(cur+1)} function prev(){go(cur-1)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();next();}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev();}
+  else if(e.key==='Home'){go(0)} else if(e.key==='End'){go(slides.length-1)}
+  else if(e.key==='f'||e.key==='F'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+let sx=0;addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50){dx<0?next():prev();}},{passive:true});
+function fit(){const st=document.getElementById('stage');const sc=Math.min(st.clientWidth/1280,st.clientHeight/720)*0.96;slides.forEach(s=>s.style.transform='scale('+sc+')');}
+addEventListener('resize',fit);
+const h=parseInt(location.hash.replace('#',''));go(h>0?h-1:0);fit();
+</script>
+</body>
+</html>

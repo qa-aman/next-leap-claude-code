@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Important Links and Documents</title>
+<style>
+:root{--bg:#0D0D0D;--panel:#121212;--side:#0a0a0a;--card:#161616;--bd:#262626;
+--accent:#D47A21;--accent2:#f0a44e;--white:#fff;--light:#CFCFCF;--mid:#8A8A8A;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--light);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.6;display:flex;min-height:100vh}
+code,pre{font-family:"JetBrains Mono","SF Mono",Menlo,Consolas,monospace}
+
+/* sidebar */
+aside{width:312px;flex:0 0 312px;background:var(--side);border-right:1px solid var(--bd);position:sticky;top:0;height:100vh;overflow:auto;padding:26px 20px 40px}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.brand .dot{width:10px;height:10px;border-radius:3px;background:var(--accent)}
+.brand b{font-size:15px;color:var(--white);font-weight:800;letter-spacing:.01em}
+.brand-sub{font-size:11.5px;color:var(--mid);letter-spacing:.14em;text-transform:uppercase;margin:0 0 22px 20px}
+.toc-label{font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);margin:0 0 10px 6px}
+.toc-link{display:block;padding:8px 12px;border-radius:8px;color:var(--light);text-decoration:none;font-size:13.5px;border-left:2px solid transparent;transition:.15s;margin-bottom:2px}
+.toc-link:hover{background:#181818;color:var(--white)}
+.toc-link.active{background:rgba(212,122,33,.12);border-left-color:var(--accent);color:var(--accent2);font-weight:600}
+
+/* content */
+main{flex:1;min-width:0;display:flex;justify-content:center;padding:0 48px}
+.content{width:100%;max-width:860px;padding:54px 0 120px}
+.content::before{content:"";display:block;height:4px;width:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;margin-bottom:34px}
+h1{font-size:40px;font-weight:850;color:var(--white);letter-spacing:-1px;line-height:1.1}
+.content > p > em:first-child{color:var(--mid)}
+h2{font-size:24px;font-weight:800;color:var(--white);margin:46px 0 16px;padding-top:14px;letter-spacing:-.3px;scroll-margin-top:24px;border-top:1px solid var(--bd);padding-top:30px}
+.content > h1 + p{font-size:15px}
+h3{font-size:17px;font-weight:700;color:var(--accent2);margin:26px 0 10px;scroll-margin-top:24px}
+p{margin:12px 0;color:var(--light)}
+em{color:var(--mid);font-style:italic}
+strong{color:var(--white);font-weight:700}
+ul{list-style:none;margin:10px 0;padding:0}
+li{position:relative;padding:9px 0 9px 22px;border-bottom:1px solid #1a1a1a}
+li::before{content:"";position:absolute;left:2px;top:18px;width:7px;height:7px;background:var(--accent);border-radius:2px}
+li:last-child{border-bottom:none}
+a{color:var(--accent2);text-decoration:none;word-break:break-word}
+a:hover{text-decoration:underline;color:var(--accent)}
+li a{font-weight:600}
+hr{display:none}
+code{background:#1a1a1a;border:1px solid var(--bd);border-radius:5px;padding:1px 6px;font-size:.88em;color:#e8d9c8}
+.top{position:fixed;right:22px;bottom:22px;background:var(--card);border:1px solid var(--bd);color:var(--light);width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;font-size:18px;opacity:0;transition:.2s;z-index:20}
+.top.show{opacity:1}
+.top:hover{border-color:var(--accent);color:var(--accent)}
+
+/* mobile */
+.menu-btn{display:none}
+@media (max-width:880px){
+  body{flex-direction:column}
+  aside{position:static;width:100%;height:auto;flex:none;max-height:0;overflow:hidden;padding:0 20px;border-right:none;border-bottom:1px solid var(--bd)}
+  aside.open{max-height:70vh;overflow:auto;padding:20px}
+  .menu-btn{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:30;background:var(--side);border-bottom:1px solid var(--bd);padding:14px 20px;color:var(--white);font-weight:700;cursor:pointer}
+  .menu-btn .dot{width:10px;height:10px;border-radius:3px;background:var(--accent)}
+  main{padding:0 22px}
+  .content{padding:30px 0 90px}
+  h1{font-size:30px}
+}
+</style>
+</head>
+<body>
+<div class="menu-btn"><span class="dot"></span> Contents</div>
+<aside>
+  <div class="brand"><span class="dot"></span><b>Claude Code for PMs</b></div>
+  <div class="brand-sub">Reference Pack</div>
+  <div class="toc-label">On this page</div>
+  <nav><a class="toc-link" href="#1-workshop-author" data-target="1-workshop-author">1. Workshop &amp;amp; Author</a>
+<a class="toc-link" href="#2-claude-code-getting-started" data-target="2-claude-code-getting-started">2. Claude Code — Getting Started</a>
+<a class="toc-link" href="#3-prompting" data-target="3-prompting">3. Prompting</a>
+<a class="toc-link" href="#4-skills" data-target="4-skills">4. Skills</a>
+<a class="toc-link" href="#5-agents-sub-agents" data-target="5-agents-sub-agents">5. Agents (Sub-agents)</a>
+<a class="toc-link" href="#6-multi-agent-systems" data-target="6-multi-agent-systems">6. Multi-Agent Systems</a>
+<a class="toc-link" href="#7-mcp-model-context-protocol" data-target="7-mcp-model-context-protocol">7. MCP (Model Context Protocol)</a>
+<a class="toc-link" href="#8-hooks" data-target="8-hooks">8. Hooks</a>
+<a class="toc-link" href="#9-slash-commands" data-target="9-slash-commands">9. Slash Commands</a>
+<a class="toc-link" href="#10-plugins" data-target="10-plugins">10. Plugins</a>
+<a class="toc-link" href="#11-settings-configuration" data-target="11-settings-configuration">11. Settings &amp;amp; Configuration</a>
+<a class="toc-link" href="#12-recommended-mcp-servers" data-target="12-recommended-mcp-servers">12. Recommended MCP Servers</a>
+<a class="toc-link" href="#13-other-important-reads" data-target="13-other-important-reads">13. Other Important Reads</a></nav>
+</aside>
+<main>
+  <article class="content">
+  <h1 id="important-links-and-documents">Important Links and Documents</h1>
+<p><em>Claude Code for PMs — Official Reference Pack</em></p>
+<hr />
+<hr />
+<h2 id="1-workshop-author">1. Workshop &amp; Author</h2>
+<ul>
+<li><strong>Workshop repo (GitHub):</strong> <a target="_blank" rel="noopener" href="https://github.com/qa-aman/next-leap-claude-code">https://github.com/qa-aman/next-leap-claude-code</a></li>
+<li><strong>LinkedIn:</strong> <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/amanmparmar">https://www.linkedin.com/in/amanmparmar</a></li>
+<li><strong>Substack:</strong> <a target="_blank" rel="noopener" href="https://amanparmar3.substack.com/">https://amanparmar3.substack.com/</a></li>
+<li><strong>GitHub:</strong> <a target="_blank" rel="noopener" href="https://github.com/qa-aman">https://github.com/qa-aman</a></li>
+</ul>
+<p><strong>Aman's open-source repos to use &amp; remix:</strong></p>
+<ul>
+<li><strong>claude-skills</strong> — <a target="_blank" rel="noopener" href="https://github.com/qa-aman/claude-skills">https://github.com/qa-aman/claude-skills</a>
+  <em>Role-based Claude Code skills for every team — 137 skills across 21 roles (PM, QA, Engineer, Designer, DevOps, Leadership, CS, Sales, Marketing, Founder, and more). Each skill is grounded in a proven book or methodology (Shape Up, Inspired, SPIN Selling, Radical Candor, etc.). Install with a single command: <code>bash scripts/install.sh --role pm</code> (or <code>--all</code>), globally or per-project.</em></li>
+<li><strong>claude-code-sessions-registry (<code>ccs</code>)</strong> — <a target="_blank" rel="noopener" href="https://github.com/qa-aman/claude-code-sessions-registry">https://github.com/qa-aman/claude-code-sessions-registry</a>
+  <em>Tiny Claude Code session manager. Name, list, and resume sessions across terminals. Zero-dependency single-file bootstrap.</em></li>
+<li><strong>marketing-os</strong> — <a target="_blank" rel="noopener" href="https://github.com/qa-aman/marketing-os">https://github.com/qa-aman/marketing-os</a>
+  <em>A cloneable Marketing OS for Claude Code — one repo, one brand. 18 marketing skills (content, SEO, newsletters, ads, PR, case studies, ICP research, competitor analysis) plus an <code>/onboard</code> wizard that ingests your brand docs and gates completion at 95/100. Built for solo marketers, growth leads, CMOs, and agencies across any vertical.</em></li>
+</ul>
+<hr />
+<h2 id="2-claude-code-getting-started">2. Claude Code — Getting Started</h2>
+<ul>
+<li><strong>Overview:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/overview">https://code.claude.com/docs/en/overview</a></li>
+<li><strong>Quickstart:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/quickstart">https://code.claude.com/docs/en/quickstart</a></li>
+<li><strong>CLI reference:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/cli-reference">https://code.claude.com/docs/en/cli-reference</a></li>
+<li><strong>Common workflows:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/common-workflows">https://code.claude.com/docs/en/common-workflows</a></li>
+<li><strong>Best practices:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/best-practices">https://code.claude.com/docs/en/best-practices</a></li>
+<li><strong>Memory &amp; CLAUDE.md:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/memory">https://code.claude.com/docs/en/memory</a></li>
+<li><strong>Sessions:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/sessions">https://code.claude.com/docs/en/sessions</a></li>
+<li><strong>Changelog:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/changelog">https://code.claude.com/docs/en/changelog</a></li>
+</ul>
+<hr />
+<h2 id="3-prompting">3. Prompting</h2>
+<ul>
+<li><strong>Prompt library (Claude Code):</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/prompt-library">https://code.claude.com/docs/en/prompt-library</a></li>
+<li><strong>Prompt engineering overview:</strong> <a target="_blank" rel="noopener" href="https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview">https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview</a></li>
+<li><strong>Be clear and direct:</strong> <a target="_blank" rel="noopener" href="https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/be-clear-and-direct">https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/be-clear-and-direct</a></li>
+<li><strong>Multishot prompting:</strong> <a target="_blank" rel="noopener" href="https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/multishot-prompting">https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/multishot-prompting</a></li>
+<li><strong>Chain of thought:</strong> <a target="_blank" rel="noopener" href="https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/chain-of-thought">https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/chain-of-thought</a></li>
+</ul>
+<hr />
+<h2 id="4-skills">4. Skills</h2>
+<ul>
+<li><strong>Skills (Claude Code docs):</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/skills">https://code.claude.com/docs/en/skills</a></li>
+<li><strong>Anthropic Skills repo (reference implementations):</strong> <a target="_blank" rel="noopener" href="https://github.com/anthropics/skills">https://github.com/anthropics/skills</a></li>
+<li><strong>Skill Creator (the standard for authoring skills):</strong> <a target="_blank" rel="noopener" href="https://github.com/anthropics/skills/tree/main/skills/skill-creator">https://github.com/anthropics/skills/tree/main/skills/skill-creator</a></li>
+</ul>
+<hr />
+<h2 id="5-agents-sub-agents">5. Agents (Sub-agents)</h2>
+<ul>
+<li><strong>Run agents in parallel (overview):</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/agents">https://code.claude.com/docs/en/agents</a></li>
+<li><strong>Sub-agents:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/sub-agents">https://code.claude.com/docs/en/sub-agents</a></li>
+<li><strong>Agent view (dispatch &amp; monitor background sessions):</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/agent-view">https://code.claude.com/docs/en/agent-view</a></li>
+<li><strong>Worktrees (isolated parallel sessions):</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/worktrees">https://code.claude.com/docs/en/worktrees</a></li>
+<li><strong>Building Effective AI Agents (Anthropic research):</strong> <a target="_blank" rel="noopener" href="https://www.anthropic.com/research/building-effective-agents">https://www.anthropic.com/research/building-effective-agents</a></li>
+<li><strong>Claude Agent SDK:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/agent-sdk/overview">https://code.claude.com/docs/en/agent-sdk/overview</a></li>
+<li><strong>Agent SDK (Python):</strong> <a target="_blank" rel="noopener" href="https://github.com/anthropics/claude-agent-sdk-python">https://github.com/anthropics/claude-agent-sdk-python</a></li>
+</ul>
+<hr />
+<h2 id="6-multi-agent-systems">6. Multi-Agent Systems</h2>
+<ul>
+<li><strong>Agent teams (official Claude Code docs):</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/agent-teams">https://code.claude.com/docs/en/agent-teams</a></li>
+<li><strong>How we built our multi-agent research system:</strong> <a target="_blank" rel="noopener" href="https://www.anthropic.com/engineering/built-multi-agent-research-system">https://www.anthropic.com/engineering/built-multi-agent-research-system</a></li>
+<li><strong>Effective context engineering for AI agents:</strong> <a target="_blank" rel="noopener" href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents</a></li>
+<li><strong>Writing tools for agents:</strong> <a target="_blank" rel="noopener" href="https://www.anthropic.com/engineering/writing-tools-for-agents">https://www.anthropic.com/engineering/writing-tools-for-agents</a></li>
+<li><strong>Code execution with MCP (agent patterns):</strong> <a target="_blank" rel="noopener" href="https://www.anthropic.com/engineering/code-execution-with-mcp">https://www.anthropic.com/engineering/code-execution-with-mcp</a></li>
+</ul>
+<hr />
+<h2 id="7-mcp-model-context-protocol">7. MCP (Model Context Protocol)</h2>
+<ul>
+<li><strong>MCP in Claude Code:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/mcp">https://code.claude.com/docs/en/mcp</a></li>
+<li><strong>Configure MCP servers for Google Workspace</strong> (official Google guide): <a target="_blank" rel="noopener" href="https://developers.google.com/workspace/guides/configure-mcp-servers">https://developers.google.com/workspace/guides/configure-mcp-servers</a></li>
+</ul>
+<hr />
+<h2 id="8-hooks">8. Hooks</h2>
+<ul>
+<li><strong>Hooks reference:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/hooks">https://code.claude.com/docs/en/hooks</a></li>
+<li><strong>Hooks guide (walkthrough + examples):</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/hooks-guide">https://code.claude.com/docs/en/hooks-guide</a></li>
+</ul>
+<hr />
+<h2 id="9-slash-commands">9. Slash Commands</h2>
+<ul>
+<li><strong>Slash commands:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/slash-commands">https://code.claude.com/docs/en/slash-commands</a></li>
+</ul>
+<hr />
+<h2 id="10-plugins">10. Plugins</h2>
+<ul>
+<li><strong>Plugins overview:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/plugins">https://code.claude.com/docs/en/plugins</a></li>
+<li><strong>Plugin marketplaces:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/plugin-marketplaces">https://code.claude.com/docs/en/plugin-marketplaces</a></li>
+</ul>
+<hr />
+<h2 id="11-settings-configuration">11. Settings &amp; Configuration</h2>
+<ul>
+<li><strong>Settings reference:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/settings">https://code.claude.com/docs/en/settings</a></li>
+<li><strong>Permission modes:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/permission-modes">https://code.claude.com/docs/en/permission-modes</a></li>
+<li><strong>Identity &amp; access management (IAM):</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/iam">https://code.claude.com/docs/en/iam</a></li>
+<li><strong>Status line customization:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/statusline">https://code.claude.com/docs/en/statusline</a></li>
+<li><strong>Output styles:</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/output-styles">https://code.claude.com/docs/en/output-styles</a></li>
+<li><strong>Claude directory (<code>~/.claude/</code>):</strong> <a target="_blank" rel="noopener" href="https://code.claude.com/docs/en/claude-directory">https://code.claude.com/docs/en/claude-directory</a></li>
+</ul>
+<hr />
+<h2 id="12-recommended-mcp-servers">12. Recommended MCP Servers</h2>
+<ul>
+<li><strong>Figma Dev Mode MCP</strong> (official Figma): <a target="_blank" rel="noopener" href="https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Dev-Mode-MCP-Server">https://help.figma.com/hc/en-us/articles/32132100833559-Guide-to-the-Dev-Mode-MCP-Server</a></li>
+<li><strong>Chrome DevTools MCP</strong> (official Google Chrome team): <a target="_blank" rel="noopener" href="https://github.com/ChromeDevTools/chrome-devtools-mcp">https://github.com/ChromeDevTools/chrome-devtools-mcp</a></li>
+<li><strong>Playwright MCP</strong> (official Microsoft): <a target="_blank" rel="noopener" href="https://github.com/microsoft/playwright-mcp">https://github.com/microsoft/playwright-mcp</a></li>
+<li><strong>Context7 MCP</strong> (official Upstash, live library docs): <a target="_blank" rel="noopener" href="https://github.com/upstash/context7">https://github.com/upstash/context7</a></li>
+<li><strong>Atlassian Remote MCP</strong> (official Atlassian, Confluence + Jira): <a target="_blank" rel="noopener" href="https://www.atlassian.com/platform/remote-mcp-server">https://www.atlassian.com/platform/remote-mcp-server</a></li>
+<li><strong>Slack MCP</strong> (official Slack): <a target="_blank" rel="noopener" href="https://docs.slack.dev/tools/mcp">https://docs.slack.dev/tools/mcp</a></li>
+<li><strong>Google Workspace MCP setup</strong> (official Google, Drive + Gmail + Calendar + Docs): <a target="_blank" rel="noopener" href="https://developers.google.com/workspace/guides/configure-mcp-servers">https://developers.google.com/workspace/guides/configure-mcp-servers</a></li>
+</ul>
+<hr />
+<h2 id="13-other-important-reads">13. Other Important Reads</h2>
+<p>Curated reads on where PM and tech careers are headed in the AI era. Skim the summary, then open the link if it lands.</p>
+<ul>
+<li>
+<p><strong>"Your Job Is Changing Faster Than You Think"</strong> by Elena Verna — <a target="_blank" rel="noopener" href="https://www.elenaverna.com/p/youll-lose-your-job-in-2027">https://www.elenaverna.com/p/youll-lose-your-job-in-2027</a>
+  <em>A blunt warning that most tech roles will look very different by 2027. Verna lays out three moves: honestly audit whether you enjoy your job, build career optionality (solopreneurship, indie SaaS), and climb the AI-native skill ladder from "AI as writing buddy" up to "shipping production agents." Read it for a practical framework to future-proof your career.</em></p>
+</li>
+<li>
+<p><strong>"Why Half of Product Managers Are in Trouble"</strong> by Nikhyl Singhal (on Lenny's Podcast) — <a target="_blank" rel="noopener" href="https://www.lennysnewsletter.com/p/why-half-of-product-managers-are-in-trouble">https://www.lennysnewsletter.com/p/why-half-of-product-managers-are-in-trouble</a>
+  <em>Nikhyl Singhal (ex-Meta, ex-Google, founder of The Skip) argues half of today's PMs will be displaced in the next two years unless they reinvent around AI. The core message: brand-name resumes and "smiling exhaustion" won't save you - PMs who genuinely engage with AI tools and become AI-native operators will thrive while orgs restructure around them. Essential listen for any PM serious about staying relevant.</em></p>
+</li>
+<li>
+<p><strong>Lenny's Newsletter</strong> by Lenny Rachitsky — <a target="_blank" rel="noopener" href="https://www.lennysnewsletter.com/">https://www.lennysnewsletter.com/</a>
+  <em>The most-read publication for product, growth, and career advice (1.2M+ subscribers). Deeply researched essays and interviews with operators from the best product companies. Subscribe for a weekly source of frameworks, benchmarks, and tactical playbooks for PMs and founders.</em></p>
+</li>
+</ul>
+  </article>
+</main>
+<a href="#" class="top" aria-label="Back to top">&uarr;</a>
+<script>
+const links=[...document.querySelectorAll('.toc-link')];
+const map=new Map(links.map(l=>[l.dataset.target,l]));
+const heads=[...document.querySelectorAll('h2[id]')];
+const io=new IntersectionObserver((es)=>{
+  es.forEach(e=>{if(e.isIntersecting){
+    links.forEach(l=>l.classList.remove('active'));
+    const a=map.get(e.target.id); if(a){a.classList.add('active');
+      a.scrollIntoView({block:'nearest'});}
+  }});
+},{rootMargin:'0px 0px -75% 0px',threshold:0});
+heads.forEach(h=>io.observe(h));
+const top=document.querySelector('.top');
+addEventListener('scroll',()=>{top.classList.toggle('show',scrollY>500)});
+const aside=document.querySelector('aside');
+const mb=document.querySelector('.menu-btn');
+if(mb){mb.onclick=()=>aside.classList.toggle('open');
+  links.forEach(l=>l.addEventListener('click',()=>aside.classList.remove('open')));}
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 ---
 name: launch-announcement
-description: Generate a complete feature launch kit (announcement blurb, customer email, in-app banner copy, social post) grounded in MeetFlow repo files, using a three-layer framework stack - April Dunford positioning for grounding, StoryBrand SB7 for narrative structure, and the SUCCESs checklist for quality scoring. Use whenever the user mentions a launch announcement, launch kit, launch copy, launch messaging, GTM copy, release announcement, "announce [feature]", "marketing copy for [feature]", customer email for a launch, in-app banner, or wants any customer-facing copy for an upcoming or shipped feature - even if they never say the word "launch". Also use when a marketing teammate asks to "write copy" for a feature that exists in 08-product-features/ or 09-release-notes/.
+description: Generate a complete feature launch kit (announcement blurb, customer email, in-app banner copy, social post) grounded in project repo files, using a three-layer framework stack - April Dunford positioning for grounding, StoryBrand SB7 for narrative structure, and the SUCCESs checklist for quality scoring. Use whenever the user mentions a launch announcement, launch kit, launch copy, launch messaging, GTM copy, release announcement, "announce [feature]", "marketing copy for [feature]", customer email for a launch, in-app banner, press release for a feature, blog announcement, changelog copy, "write the email to customers about [feature]", or wants any customer-facing copy for an upcoming or shipped feature - even if they never say the word "launch". Also use when a marketing teammate asks to "write copy" for a feature that exists in 08-product-features/ or 09-release-notes/.
 ---
 
 # Launch Announcement Kit
@@ -9,7 +9,9 @@ Produce a four-part launch kit for a feature: announcement blurb, customer email
 
 ## Step 0 - Scope Check
 
-Before anything else, decide which outputs the user actually asked for. "The launch kit" or "announcement copy for the launch" means all four. "A customer email" or "a social post" means exactly that one output and nothing else - do not pad the deliverable with the other three. All three layers still run either way; positioning and QA are what make the single output good, but the user only receives what they asked for.
+Before anything else, decide which outputs the user actually asked for. "The launch kit" or "announcement copy for the launch" means all four. "A customer email" or "a social post" means exactly that one output and nothing else - do not pad the deliverable with the other three. All three layers still run either way; positioning and QA are what make the single output good, but the user only receives what they asked for. On a single-output request, keep loading lean: read each reference at its layer as usual, but apply only the sections that map to the requested format - do not draft or score the other three outputs.
+
+Then check the inputs. If the feature has no PRD or spec but does have release notes, use `09-release-notes/` as the capability source and say so in Sources. If the user pastes a feature brief into the chat, treat it as the PRD equivalent and cite it as "user-provided brief" in Sources.
 
 ## Layer 1 - Grounding (Dunford Positioning)
 
@@ -27,11 +29,11 @@ Source files to read:
 
 Fill the components in strict order: alternatives first, then capabilities, then value, then target customer, then category. The order matters because each component is only meaningful relative to the previous one - a capability is only "unique" against real alternatives, and value is only real if it flows from a unique capability.
 
-Write the completed positioning block at the top of your working notes. If the feature has no PRD or spec in the repo, stop and ask the user which feature they mean before inventing anything.
+Write the completed positioning block at the top of your working notes. If the feature has no PRD, spec, or release notes in the repo and the user has not provided a brief, stop and ask the user which feature they mean before inventing anything.
 
 ## Layer 2 - Writing (StoryBrand SB7)
 
-Read `references/storybrand-sb7.md` for the seven parts and per-format mappings. The non-negotiable rule: **the customer is the hero, the product is the guide.** If a draft opens with "We're excited to announce", it has made the brand the hero - rewrite it.
+Read `references/storybrand-sb7.md` for the seven parts and per-format mappings. The non-negotiable rule: **the customer is the hero, the product is the guide** - customers only act on messages about their own problem, not the company's story. If a draft opens with "We're excited to announce", it has made the brand the hero - rewrite it.
 
 Produce these four outputs, each structured by SB7 but compressed to fit its format:
 

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AI Agents — Workshop</title>
+<style>
+:root{--bg:#0D0D0D;--accent:#D47A21;--accent2:#f0a44e;--white:#FFFFFF;--light:#CCCCCC;--mid:#888888;--tag-bg:#1E1E1E;--card:#161616;--card-bd:#262626;--code-bg:#0a0a0a;--code-bd:#242424;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#000;color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+code,pre{font-family:"JetBrains Mono","SF Mono",Menlo,Consolas,monospace}
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(120% 120% at 50% -10%,#161310 0%,#000 60%);overflow:hidden}
+.slide{position:absolute;width:1280px;height:720px;background:var(--bg);border:1px solid #1c1c1c;border-radius:14px;overflow:hidden;padding:60px 70px 56px;display:none;box-shadow:0 30px 90px rgba(0,0,0,.6)}
+.slide::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.slide.active{display:block}
+.slide-in{height:100%;display:flex;flex-direction:column;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.srow{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.tag{display:inline-block;color:var(--accent);font-size:13px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.live{align-self:flex-start;background:var(--accent);color:#0d0d0d;font-size:12px;font-weight:800;letter-spacing:.1em;padding:5px 12px;border-radius:6px;white-space:nowrap}
+.stitle{font-size:36px;line-height:1.12;font-weight:800;margin:12px 0 0;letter-spacing:-.5px}
+.lead{color:var(--light);font-size:18px;margin-top:13px;max-width:92%}
+.body{margin-top:24px;flex:1;min-height:0}
+.tipline{margin-top:14px;font-size:15px;color:var(--light);background:rgba(212,122,33,.08);border:1px solid rgba(212,122,33,.25);border-radius:8px;padding:11px 16px}
+.foot{margin-top:auto;padding-top:18px;color:var(--accent2);font-size:16px;font-style:italic;border-top:1px solid #1c1c1c}
+.pagenum{position:absolute;right:24px;bottom:18px;color:var(--mid);font-size:12px;letter-spacing:.1em}
+.hero{justify-content:center;text-align:left}
+.htitle{font-size:82px;font-weight:850;line-height:1;letter-spacing:-2px}
+.htitle span{color:var(--accent)}
+.htitle.big{font-size:120px}
+.hsub{margin-top:24px;font-size:26px;color:var(--light)}
+.hnote{margin-top:34px;font-size:17px;color:var(--mid);max-width:80%;line-height:1.6;border-left:3px solid var(--accent);padding-left:18px}
+.hmeta{margin-top:30px;font-size:14px;color:var(--mid);letter-spacing:.04em}
+.cmeta{margin-top:26px;font-size:13px;color:var(--mid);letter-spacing:.08em}
+.who{margin-top:28px;font-size:24px;color:var(--white);font-weight:600}
+.links{margin-top:26px;display:flex;flex-direction:column;gap:11px}
+.links a{color:var(--light);font-size:18px;display:flex;gap:14px;align-items:baseline}
+.links a span{color:var(--accent);font-weight:700;min-width:130px;display:inline-block}
+.links a:hover{color:var(--white)}
+.bul{list-style:none}
+.bul li{position:relative;padding:7px 0 7px 24px;color:var(--light);font-size:17px;line-height:1.5}
+.bul li::before{content:"";position:absolute;left:0;top:15px;width:8px;height:8px;background:var(--accent);border-radius:2px}
+.two{display:grid;gap:28px;height:100%}
+.code{background:var(--code-bg);border:1px solid var(--code-bd);border-radius:10px;padding:18px 20px;font-size:14.5px;line-height:1.55;color:#e8d9c8;height:100%;overflow:auto;white-space:pre}
+.code code{color:#e8d9c8}
+.cards{display:grid;gap:15px;height:100%}
+.card{background:var(--card);border:1px solid var(--card-bd);border-radius:12px;padding:17px 18px;display:flex;flex-direction:column;gap:7px;position:relative}
+.card .num{width:30px;height:30px;border-radius:8px;background:var(--accent);color:#0d0d0d;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center}
+.card .chip{align-self:flex-start;font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--accent);background:rgba(212,122,33,.12);border:1px solid rgba(212,122,33,.3);padding:3px 9px;border-radius:5px}
+.card .ch{font-size:17px;font-weight:700;color:var(--white);line-height:1.25}
+.card .csub{font-size:13px;color:var(--accent2);font-weight:600}
+.card .cdesc{font-size:14px;color:var(--mid);line-height:1.5}
+.panel{background:var(--card);border:1px solid var(--card-bd);border-radius:12px;padding:22px 24px}
+.phead{font-size:19px;font-weight:800;color:var(--accent);letter-spacing:.02em}
+.psub{font-size:15px;color:var(--light);margin:4px 0 10px}
+.pquote{font-size:18px;color:var(--white);font-weight:600;line-height:1.4;margin:6px 0 4px}
+.panel .bul li{font-size:16px}
+.prompts{display:grid;grid-template-columns:1fr 1fr;gap:12px 26px;height:100%;align-content:start}
+.prompt{display:flex;gap:14px;align-items:baseline;background:var(--card);border:1px solid var(--card-bd);border-radius:9px;padding:13px 16px}
+.prompt .pn{color:var(--accent);font-weight:800;font-size:16px;min-width:20px}
+.prompt .pt{color:var(--light);font-size:15.5px;line-height:1.4}
+.gloss{display:grid;grid-template-columns:1fr 1fr;gap:13px 30px;height:100%;align-content:start}
+.gitem{border-left:2px solid var(--accent);padding:2px 0 2px 16px}
+.gterm{font-weight:800;font-size:16px;color:var(--white)}
+.gdef{font-size:14px;color:var(--mid);line-height:1.45;margin-top:3px}
+#nav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:14px;align-items:center;z-index:30;background:rgba(20,20,20,.8);backdrop-filter:blur(8px);border:1px solid #2a2a2a;border-radius:30px;padding:8px 16px}
+#nav button{background:none;border:none;color:var(--light);font-size:18px;cursor:pointer;padding:2px 8px;border-radius:6px}
+#nav button:hover{color:var(--accent);background:#222}
+#dots{display:flex;gap:6px;max-width:430px;flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:50%;background:#444;cursor:pointer;transition:.2s}
+.dot.on{background:var(--accent);transform:scale(1.25)}
+#hint{position:fixed;top:14px;right:16px;color:#555;font-size:12px;z-index:30}
+@media print{@page{size:1280px 720px;margin:0}#nav,#hint{display:none}#stage{position:static;display:block;background:#000}.slide{display:block!important;position:relative;page-break-after:always;border-radius:0;margin:0;box-shadow:none;width:1280px;height:720px}}
+</style>
+</head>
+<body>
+<div id="hint">&larr; &rarr; navigate &middot; F fullscreen &middot; P print</div>
+<div id="stage">
+<section class="slide" data-kind="title"><div class="slide-in hero"><div class="tag">CLAUDE CODE WORKSHOP</div>
+          <h1 class="htitle">AI <span>Agents</span></h1>
+          <div class="hsub">What agents are, how they work, when to use them, where they break.</div>
+          <div class="hnote">By the end of this session you will know: when to use an agent, the four parts that make one work, and how to ship one with Claude Code.</div><div class="hmeta">Aman Parmar  ·  Senior Product Manager</div></div><div class="pagenum">01 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">AGENDA</div></div>
+          <h2 class="stitle">What We&#x27;re Covering Today</h2>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(3,1fr)"><div class="card"><div class="ch">Why agents matter - the shift from prompts to agents</div><div class="csub">Part 1</div></div><div class="card"><div class="ch">How agents work - the loop and the four workers inside</div><div class="csub">Part 2</div></div><div class="card"><div class="ch">When to use them - the ARR framework</div><div class="csub">Part 3</div></div><div class="card"><div class="ch">Where they break - vague humans, confident agents</div><div class="csub">Part 4</div></div><div class="card"><div class="ch">Hands-on - subagents in Claude Code</div><div class="csub">Part 5</div></div><div class="card"><div class="ch">Your move - one agent you ship this week</div><div class="csub">Part 6</div></div></div></div></div><div class="pagenum">02 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 1 · WHY IT MATTERS</div></div>
+          <h2 class="stitle">A Chatbot Answers. An Agent Gets It Done.</h2>
+          <div class="body"><ul class="bul"><li>ChatGPT in 2023: you ask, it replies, you copy-paste the answer.</li><li>An agent: you give it a goal, it plans, it acts, it iterates.</li><li>The shift is from AI that talks to AI that takes actions in the world.</li><li>Booking flights, writing code, running research - without you in every step.</li><li>This is the difference between a tool and a teammate.</li></ul></div><div class="foot">The gap between people who get this and people who don&#x27;t is about to get expensive.</div></div><div class="pagenum">03 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 1 · WHY IT MATTERS</div></div>
+          <h2 class="stitle">Prompt vs Agent - The Driver Analogy</h2>
+          <div class="body"><div class="two" style="grid-template-columns:1fr 1fr"><div class="panel"><div class="phead">PROMPT = STUDENT DRIVER</div><div class="psub">You sit next to them.</div><ul class="bul"><li>You guide every turn.</li><li>You correct mistakes in real time.</li><li>You stay alert the whole drive.</li><li>Stop guiding - the car stops.</li></ul></div><div class="panel"><div class="phead">AGENT = HIRED DRIVER</div><div class="psub">You sit in the back seat.</div><ul class="bul"><li>You set the destination.</li><li>It picks the route.</li><li>It handles traffic and detours.</li><li>It makes every step-by-step call.</li></ul></div></div></div></div><div class="pagenum">04 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 1 · WHY IT MATTERS</div></div>
+          <h2 class="stitle">Same Goal, Two Worlds Apart</h2>
+          <div class="body"><div class="two" style="grid-template-columns:1fr 1fr"><div class="panel"><div class="phead">PROMPT</div><div class="pquote">&quot;Write me a LinkedIn post.&quot;</div></div><div class="panel"><div class="phead">AGENT</div><div class="psub">Watch my industry every Monday.</div><ul class="bul"><li>Find the three most relevant stories.</li><li>Study my previous posts to learn my voice.</li><li>Draft a new post in that voice.</li><li>Revise against my style guide.</li><li>Schedule for Tuesday morning.</li></ul></div></div></div><div class="foot">A prompt asks for an output. An agent runs a process.</div></div><div class="pagenum">05 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 2 · HOW THEY WORK</div></div>
+          <h2 class="stitle">An AI Agent: The Simple Definition</h2>
+          <div class="lead">A system that uses an LLM to decide what to do next, takes that action, and uses the result to decide what to do after that.</div><div class="body"><ul class="bul"><li>The LLM is the brain. It reasons, it picks the next step.</li><li>Tools are the hands. The agent calls them to act on the world.</li><li>The loop is what matters. Decide, do, observe, decide again.</li></ul></div></div><div class="pagenum">06 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 2 · HOW THEY WORK</div></div>
+          <h2 class="stitle">The Loop That Makes an Agent - OODA</h2>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(4,1fr)"><div class="card"><span class="chip">O</span><div class="ch">OBSERVE</div><div class="cdesc">See what just happened. Read the new state.</div></div><div class="card"><span class="chip">O</span><div class="ch">ORIENT</div><div class="cdesc">Understand what it means. Update context.</div></div><div class="card"><span class="chip">D</span><div class="ch">DECIDE</div><div class="cdesc">Choose the next action, even if it&#x27;s a detour.</div></div><div class="card"><span class="chip">A</span><div class="ch">ACT</div><div class="cdesc">Execute. Then loop back and observe again.</div></div></div></div><div class="foot">When the first path breaks, can the agent find another? That&#x27;s the test.</div></div><div class="pagenum">07 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 2 · HOW THEY WORK</div></div>
+          <h2 class="stitle">Inside the Agent - The LLM Plus Four Workers</h2>
+          <div class="lead">A chatbot predicts the next word. An agent decides the next action - through four roles.</div><div class="body"><div class="cards" style="grid-template-columns:repeat(4,1fr)"><div class="card"><span class="chip">01</span><div class="ch">ANALYST</div><div class="csub">Finds the pattern.</div><div class="cdesc">Reads tickets, notes, logs. Surfaces what recurs.</div></div><div class="card"><span class="chip">02</span><div class="ch">PLANNER</div><div class="csub">Decides the plan.</div><div class="cdesc">Picks what matters. Builds the structure.</div></div><div class="card"><span class="chip">03</span><div class="ch">OPERATOR</div><div class="csub">Does the work.</div><div class="cdesc">Writes, sends, executes the action.</div></div><div class="card"><span class="chip">04</span><div class="ch">AUDITOR</div><div class="csub">Checks the result.</div><div class="cdesc">Catches weak logic. Refines before delivery.</div></div></div></div><div class="foot">One agent. The job of four people.</div></div><div class="pagenum">08 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 2 · HOW THEY WORK</div></div>
+          <h2 class="stitle">Workflow vs Agent - Grocery on Friday</h2>
+          <div class="lead">Same job: every Friday, check prices, build my list, place the order.</div><div class="body"><div class="two" style="grid-template-columns:1fr 1fr"><div class="panel"><div class="phead">WORKFLOW</div><div class="psub">Designed to be obedient.</div><ul class="bul"><li>Same script every Friday.</li><li>Item out of stock - breaks.</li><li>Six guests Saturday? Doesn&#x27;t notice.</li><li>Cannot reroute.</li></ul></div><div class="panel"><div class="phead">AGENT</div><div class="psub">Designed to adapt.</div><ul class="bul"><li>Out of stock - finds substitutes.</li><li>Checks calendar, sees the dinner.</li><li>Adjusts quantities for six.</li><li>Rebuilds the order around context.</li></ul></div></div></div></div><div class="pagenum">09 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 3 · WHEN TO USE</div></div>
+          <h2 class="stitle">The ARR Test - Is This an Agent or a Prompt?</h2>
+          <div class="lead">If a task is Autonomous, Recurring, and Reviewable - it&#x27;s an agent. If it needs live judgment, happens once, or can&#x27;t be reviewed - keep it a prompt.</div><div class="body"><div class="cards" style="grid-template-columns:repeat(3,1fr)"><div class="card"><span class="chip">A</span><div class="ch">Autonomous</div><div class="cdesc">Can run without you stepping in at every decision.</div></div><div class="card"><span class="chip">R</span><div class="ch">Recurring</div><div class="cdesc">Happens again - daily, weekly, on a trigger.</div></div><div class="card"><span class="chip">R</span><div class="ch">Reviewable</div><div class="cdesc">You can tell if the output is good or bad.</div></div></div></div></div><div class="pagenum">10 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 4 · WHERE THEY BREAK</div></div>
+          <h2 class="stitle">An Agent Is a Multiplier, Not Magic</h2>
+          <div class="lead">An agent will do the wrong thing faster and with more confidence than you ever could. It doesn&#x27;t fix bad thinking - it formalizes it.</div><div class="body"><ul class="bul"><li>Most AI problems are human problems in disguise.</li><li>An agent is a mirror. It reflects the quality of your thinking back.</li><li>Vague goals + sloppy directions = the car hits the tree, faster.</li><li>Usually the agent didn&#x27;t fail. The human was vague.</li></ul></div></div><div class="pagenum">11 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 4 · WHERE THEY BREAK</div></div>
+          <h2 class="stitle">Before You Build - Run the GPS Check</h2>
+          <div class="lead">Goal, Proof, Steps. If you can&#x27;t answer all three, don&#x27;t ship the agent.</div><div class="body"><div class="cards" style="grid-template-columns:repeat(3,1fr)"><div class="card"><span class="chip">G</span><div class="ch">GOAL</div><div class="cdesc">Can I state the goal in one clear sentence?</div></div><div class="card"><span class="chip">P</span><div class="ch">PROOF</div><div class="cdesc">Can I tell what good looks like? How will I know it got it right?</div></div><div class="card"><span class="chip">S</span><div class="ch">STEPS</div><div class="cdesc">Can I describe each step clearly - no hand-waving?</div></div></div></div></div><div class="pagenum">12 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 4 · WHERE THEY BREAK</div></div>
+          <h2 class="stitle">The Gap Between Vague and Precise Is Where the Mess Lives</h2>
+          <div class="body"><div class="two" style="grid-template-columns:1fr 1fr"><div class="panel"><div class="phead">VAGUE</div><div class="pquote">&quot;Summarize my emails every morning.&quot;</div></div><div class="panel"><div class="phead">PRECISE</div><div class="pquote">&quot;Every morning at 7am, read my unread emails, categorize them by urgency, draft replies to routine messages, and flag anything from my top five customers.&quot;</div></div></div></div><div class="foot">Winners aren&#x27;t engineers. They&#x27;re people who understand their work deeply enough to describe it.</div></div><div class="pagenum">13 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 5 · HANDS ON WITH CLAUDE CODE</div></div>
+          <h2 class="stitle">Claude Code Subagents - Agents You Can Actually Ship</h2>
+          <div class="lead">A subagent is a specialized assistant inside Claude Code - its own context, its own tools, its own permissions.</div><div class="body"><ul class="bul"><li>Runs in its own context window - keeps noise out of your main chat.</li><li>Has its own system prompt - specialized for one job.</li><li>Has its own tool list - least-privilege by design.</li><li>Returns only a summary. Verbose work stays isolated.</li></ul></div></div><div class="pagenum">14 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 5 · HANDS ON WITH CLAUDE CODE</div></div>
+          <h2 class="stitle">Skill vs Subagent - What&#x27;s the Difference?</h2>
+          <div class="lead">Think of it like a kitchen. A Skill is the recipe. A Subagent is the cook.</div><div class="body"><div class="two" style="grid-template-columns:1fr 1fr"><div class="panel"><div class="phead">SKILL</div><div class="psub">The recipe.</div><ul class="bul"><li>Instructions Claude follows when the moment fits.</li><li>You write it once. Reuse it every time.</li><li>Lives in your project - the whole team gets it.</li><li>Best for: playbooks, frameworks, checklists.</li><li>Example: &#x27;Write a PRD the way our team does.&#x27;</li></ul></div><div class="panel"><div class="phead">SUBAGENT</div><div class="psub">The cook.</div><ul class="bul"><li>A worker Claude sends off to do a job.</li><li>Works in its own room - no mess in your chat.</li><li>Comes back with just the answer.</li><li>Best for: research, audits, deep file reading.</li><li>Example: &#x27;Read all 12 interviews. Tell me the top 3.&#x27;</li></ul></div></div></div><div class="foot">You give Claude the recipe. Claude can either follow it itself, or hand it to a cook.</div></div><div class="pagenum">15 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 5 · HANDS ON WITH CLAUDE CODE</div></div>
+          <h2 class="stitle">A Subagent Is Just a Markdown File</h2>
+          <div class="body"><div class="two" style="grid-template-columns:1.05fr .95fr"><ul class="bul"><li>YAML frontmatter at the top - name, description, tools, model.</li><li>Markdown body becomes the system prompt.</li><li>Only name and description are required.</li><li>Store in .claude/agents/ (project) or ~/.claude/agents/ (you).</li><li>Use /agents in Claude Code to create one interactively.</li></ul><pre class="code"><code>---
+name: code-reviewer
+description: Expert code
+  reviewer. Use proactively
+  after code changes.
+tools: Read, Grep, Glob, Bash
+model: sonnet
+memory: project
+---
+
+You are a senior code
+reviewer. Focus on quality,
+security, and best practices.</code></pre></div></div><div class="foot">Use /agents in Claude Code to create one interactively - it scaffolds the file for you.</div></div><div class="pagenum">16 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 5 · HANDS ON WITH CLAUDE CODE</div></div>
+          <h2 class="stitle">Three Subagents Are Built In</h2>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(3,1fr)"><div class="card"><span class="chip">HAIKU · READ-ONLY</span><div class="ch">Explore</div><div class="cdesc">Fast codebase search. Quick / medium / very thorough.</div></div><div class="card"><span class="chip">INHERITS · READ-ONLY</span><div class="ch">Plan</div><div class="cdesc">Used by Plan mode to research before showing a plan.</div></div><div class="card"><span class="chip">INHERITS · ALL TOOLS</span><div class="ch">General-Purpose</div><div class="cdesc">Complex multi-step work that mixes research and changes.</div></div></div></div></div><div class="pagenum">17 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 5 · HANDS ON WITH CLAUDE CODE</div></div>
+          <h2 class="stitle">Three Patterns You&#x27;ll Use Every Day</h2>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(3,1fr)"><div class="card"><span class="num">1</span><div class="ch">Isolate noise</div><div class="cdesc">Run tests, fetch big docs, or scan logs in a subagent. Only the summary returns to the main thread.</div></div><div class="card"><span class="num">2</span><div class="ch">Parallel research</div><div class="cdesc">Spawn subagents to explore auth, DB, and API at once. Claude synthesizes the findings.</div></div><div class="card"><span class="num">3</span><div class="ch">Chain steps</div><div class="cdesc">code-reviewer finds issues - optimizer fixes them. One agent&#x27;s output feeds the next.</div></div></div></div></div><div class="pagenum">18 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">PART 6 · YOUR MOVE</div></div>
+          <h2 class="stitle">Your Move This Week</h2>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(5,1fr)"><div class="card"><span class="num">1</span><div class="ch">Pick one repeatable task you do every week.</div><div class="cdesc">Make it boring on purpose.</div></div><div class="card"><span class="num">2</span><div class="ch">Run the GPS check - Goal, Proof, Steps.</div><div class="cdesc">Write it down.</div></div><div class="card"><span class="num">3</span><div class="ch">Apply the ARR test - Autonomous, Recurring, Reviewable.</div><div class="cdesc">If yes, go.</div></div><div class="card"><span class="num">4</span><div class="ch">Open Claude Code - /agents - Generate with Claude.</div><div class="cdesc">Describe the job.</div></div><div class="card"><span class="num">5</span><div class="ch">Lock down tools. Add memory: project.</div><div class="cdesc">Save. Run it tomorrow.</div></div></div></div><div class="foot">The smallest agent that works beats the smartest one that doesn&#x27;t.</div></div><div class="pagenum">19 / 23</div></section>
+<section class="slide" data-kind="summary"><div class="slide-in"><div class="tag">PART 6 · YOUR MOVE</div>
+          <h2 class="stitle">The Five Things to Remember</h2>
+          <div class="body"><ul class="bul"><li>An agent is an LLM in a loop that uses tools to reach a goal.</li><li>Four roles inside every agent: Analyst, Planner, Operator, Auditor.</li><li>Use the ARR test to decide: Autonomous, Recurring, Reviewable.</li><li>Run the GPS check before you build: Goal, Proof, Steps.</li><li>In Claude Code, ship your first one as a subagent - a Markdown file.</li></ul></div><div class="foot">You&#x27;re not behind. The field is two years old. The gap is about to get expensive - start tonight.</div></div><div class="pagenum">20 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">REFERENCE · GLOSSARY</div></div>
+          <h2 class="stitle">Glossary - Terms You&#x27;ll Hear All Workshop</h2>
+          <div class="body"><div class="gloss"><div class="gitem"><div class="gterm">Agent</div><div class="gdef">A Claude instance that decides its own next step and uses tools to act.</div></div><div class="gitem"><div class="gterm">Subagent</div><div class="gdef">A separate Claude instance dispatched by a main agent, with its own context.</div></div><div class="gitem"><div class="gterm">LLM</div><div class="gdef">The language model underneath (Sonnet, Opus, Haiku) that does the reasoning.</div></div><div class="gitem"><div class="gterm">Tool use</div><div class="gdef">An agent calling external functions (web search, file read, an API).</div></div><div class="gitem"><div class="gterm">Orchestrator</div><div class="gdef">An agent whose job is to delegate to other agents and combine results.</div></div><div class="gitem"><div class="gterm">Fan-out / fan-in</div><div class="gdef">Dispatch many subagents in parallel, then merge what they return.</div></div><div class="gitem"><div class="gterm">Context window</div><div class="gdef">The limited memory budget each agent works with per turn.</div></div><div class="gitem"><div class="gterm">Hallucination</div><div class="gdef">When an agent confidently outputs something that is not true.</div></div></div></div><div class="foot">Knowing the names makes the agent traces readable.</div></div><div class="pagenum">21 / 23</div></section>
+<section class="slide" data-kind="content"><div class="slide-in">
+          <div class="srow"><div class="tag">REFERENCE · FAQ</div></div>
+          <h2 class="stitle">Five Questions You&#x27;ll Be Asked Back at Work</h2>
+          <div class="body"><div class="cards" style="grid-template-columns:repeat(5,1fr)"><div class="card"><span class="num">1</span><div class="ch">Skill vs Subagent - what is the practical difference?</div><div class="cdesc">Per docs: a Skill is an instruction file. A Subagent is a specialized assistant that runs in its own context window with its own system prompt, tools, and permissions. Different mechanics.</div></div><div class="card"><span class="num">2</span><div class="ch">Do agents still hallucinate?</div><div class="cdesc">Yes - any LLM-based agent can. Docs recommend isolating side work in Subagents (separate context) and reviewing diffs before accepting. Plan mode inspects the plan before any edit lands.</div></div><div class="card"><span class="num">3</span><div class="ch">How do I keep agent costs from blowing up?</div><div class="cdesc">Docs: route routine tasks to faster, cheaper models like Haiku via Subagents. Reserve Opus for hard reasoning. Subagents preserve main context, avoiding repeat setup. Watch the token counter.</div></div><div class="card"><span class="num">4</span><div class="ch">One big agent or many small subagents in parallel?</div><div class="cdesc">One main agent for sequential steps that depend on each other. Delegate side work to Subagents when it would otherwise flood the main context with file reads, logs, or search output.</div></div><div class="card"><span class="num">5</span><div class="ch">Can a Claude-built agent run in production?</div><div class="cdesc">Production use needs monitoring, retries, rate-limit handling, and a budget cap. For internal tools and overnight batch jobs, agents are stable today. Plan and review diffs first.</div></div></div></div></div><div class="pagenum">22 / 23</div></section>
+<section class="slide" data-kind="closing"><div class="slide-in hero">
+          <h1 class="htitle big">Questions?</h1>
+          <div class="who">Aman Parmar  ·  Senior Product Manager</div>
+          <div class="links"><a href="https://amanparmar3.substack.com/" target="_blank" rel="noopener"><span>Substack</span>https://amanparmar3.substack.com/</a><a href="https://www.linkedin.com/in/amanmparmar" target="_blank" rel="noopener"><span>LinkedIn</span>https://www.linkedin.com/in/amanmparmar</a><a href="https://github.com/qa-aman" target="_blank" rel="noopener"><span>GitHub</span>https://github.com/qa-aman</a><a href="https://github.com/qa-aman/next-leap-claude-code" target="_blank" rel="noopener"><span>Workshop repo</span>https://github.com/qa-aman/next-leap-claude-code</a></div><div class="cmeta">Claude Code Workshop</div></div><div class="pagenum">23 / 23</div></section>
+</div>
+<div id="nav">
+  <button onclick="prev()" aria-label="Previous">&lsaquo;</button>
+  <div id="dots"></div>
+  <button onclick="next()" aria-label="Next">&rsaquo;</button>
+</div>
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+const dotsWrap=document.getElementById('dots');
+let cur=0;
+slides.forEach((_,i)=>{const d=document.createElement('div');d.className='dot';d.onclick=()=>go(i);dotsWrap.appendChild(d);});
+const dots=[...document.querySelectorAll('.dot')];
+function go(i){cur=Math.max(0,Math.min(slides.length-1,i));slides.forEach((s,j)=>s.classList.toggle('active',j===cur));dots.forEach((d,j)=>d.classList.toggle('on',j===cur));location.hash=cur+1;}
+function next(){go(cur+1)} function prev(){go(cur-1)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();next();}
+  else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev();}
+  else if(e.key==='Home'){go(0)} else if(e.key==='End'){go(slides.length-1)}
+  else if(e.key==='f'||e.key==='F'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+let sx=0;addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50){dx<0?next():prev();}},{passive:true});
+function fit(){const st=document.getElementById('stage');const sc=Math.min(st.clientWidth/1280,st.clientHeight/720)*0.96;slides.forEach(s=>s.style.transform='scale('+sc+')');}
+addEventListener('resize',fit);
+const h=parseInt(location.hash.replace('#',''));go(h>0?h-1:0);fit();
+</script>
+</body>
+</html>

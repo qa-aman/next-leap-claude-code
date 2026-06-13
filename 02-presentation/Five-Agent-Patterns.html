@@ -6,14 +6,14 @@
 <title>Five Agent Patterns via /agents - MeetFlow Workshop</title>
 <style>
   :root {
-    --bg: #0f0f10;
+    --bg: #0D0D0D;
     --panel: #1a1a1d;
     --panel-2: #232327;
     --border: #2e2e33;
     --text: #ececec;
     --muted: #9a9aa0;
-    --accent: #f08a24;
-    --accent-soft: #f08a2420;
+    --accent: #D47A21;
+    --accent-soft: #D47A2120;
     --code-bg: #141416;
     --green: #4ade80;
   }
@@ -209,9 +209,50 @@
     font-weight: 700;
     margin-bottom: 8px;
   }
+  /* ---- left-sidebar table of contents (matches Multi-Agent-Architectures.html) ---- */
+  html { scroll-behavior: smooth; }
+  .wrap { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; align-items: start; }
+  aside {
+    position: sticky; top: 0; height: 100vh; overflow-y: auto;
+    padding: 28px 20px; border-right: 1px solid var(--border); background: var(--panel);
+  }
+  aside .toc-h { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 0 0 14px; }
+  aside ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
+  aside li { counter-increment: toc; margin: 0; }
+  aside li a {
+    display: block; padding: 9px 10px; border-radius: 6px; color: var(--text);
+    font-size: 13.5px; line-height: 1.35; border-bottom: none;
+  }
+  aside li a::before { content: counter(toc) "."; color: var(--muted); margin-right: 8px; font-variant-numeric: tabular-nums; }
+  aside li a:hover { background: var(--panel-2); border-bottom: none; }
+  aside li a.active { background: var(--accent-soft); color: var(--accent); }
+  .wrap > .container { margin: 0; }
+  h2[id], section[id], .pattern[id] { scroll-margin-top: 20px; }
+  .menu-toggle { display: none; }
+  @media (max-width: 880px) {
+    .wrap { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; max-height: 0; overflow: hidden; padding: 0 20px; border-right: none; border-bottom: 1px solid var(--border); }
+    aside.open { max-height: 70vh; overflow: auto; padding: 20px; }
+    .menu-toggle { display: block; position: sticky; top: 0; z-index: 20; background: var(--panel); border: none; border-bottom: 1px solid var(--border); color: var(--text); font: inherit; font-weight: 600; text-align: left; padding: 14px 20px; cursor: pointer; width: 100%; }
+    .wrap > .container { margin: 0 auto; }
+  }
 </style>
 </head>
 <body>
+<div class="wrap">
+<button class="menu-toggle" aria-label="Toggle contents">☰ Contents</button>
+<aside>
+  <div class="toc-h">Contents</div>
+  <ol>
+    <li><a href="#how-the-wizard-works">The /agents wizard — 7 screens</a></li>
+    <li><a href="#prompt-chaining">Prompt Chaining</a></li>
+    <li><a href="#routing">Routing</a></li>
+    <li><a href="#parallelization">Parallelization</a></li>
+    <li><a href="#orchestrator-workers">Orchestrator-Workers</a></li>
+    <li><a href="#evaluator-optimizer">Evaluator-Optimizer</a></li>
+    <li><a href="#finished">Nine agents, five patterns</a></li>
+  </ol>
+</aside>
 <div class="container">
 
 <header>
@@ -566,7 +607,7 @@ Use this agent FIRST for any open-ended PM request, or when the user says
 
 <div class="wizard-step">
 <div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
-<div class="you-pick"><strong>Suggested:</strong> Orange <span class="color-swatch" style="background:#f08a24;"></span></div>
+<div class="you-pick"><strong>Suggested:</strong> Orange <span class="color-swatch" style="background:#D47A21;"></span></div>
 </div>
 
 <div class="wizard-step tight">
@@ -953,10 +994,31 @@ pass engineering review.</code></pre>
 <div class="footer">
   <p>Source pattern set: Anthropic, "Building Effective Agents."<br>
   Wizard flow reference: <a href="https://code.claude.com/docs/en/sub-agents#quickstart-create-your-first-subagent">code.claude.com/docs/en/sub-agents</a><br>
-  Project context: MeetFlow workshop repo on GitHub. All file paths refer to that repo.<br>
-  Workshop date: May 2026.</p>
+  Project context: MeetFlow workshop repo on GitHub. All file paths refer to that repo.<br></p>
 </div>
 
 </div>
+</div>
+<script>
+  const links = [...document.querySelectorAll('aside li a')];
+  const map = new Map(links.map(l => [l.getAttribute('href').slice(1), l]));
+  const targets = [...map.keys()].map(id => document.getElementById(id)).filter(Boolean);
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = map.get(e.target.id);
+        if (a) { a.classList.add('active'); a.scrollIntoView({ block: 'nearest' }); }
+      }
+    });
+  }, { rootMargin: '0px 0px -75% 0px', threshold: 0 });
+  targets.forEach(t => io.observe(t));
+  const aside = document.querySelector('aside');
+  const toggle = document.querySelector('.menu-toggle');
+  if (toggle) {
+    toggle.onclick = () => aside.classList.toggle('open');
+    links.forEach(l => l.addEventListener('click', () => aside.classList.remove('open')));
+  }
+</script>
 </body>
 </html>

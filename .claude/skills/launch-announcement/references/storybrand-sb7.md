@@ -41,3 +41,19 @@ Rewrites that pass:
 ## Empathy Before Competence
 
 When the guide (product) appears, lead with empathy, then proof. Proof must be a real number from a repo file with its source noted, never an invented stat.
+
+## Calibration Examples (not canned answers)
+
+These show the bar for the two most compressed formats. Match the shape - pain-first subject, customer as grammatical subject, one CTA - not the words.
+
+**In-app banner** (under 90 characters + CTA label):
+
+> Your follow-up email, drafted before the meeting ends. [Button: Try it]
+
+54 characters, problem and plan fused into one line, CTA on the button.
+
+**Social post** (under 280 characters):
+
+> You leave a meeting with ten action items and zero time to chase them. Now the follow-up drafts itself from your own meeting notes, ready before you are back at your desk. Commitments get owned, not forgotten.
+
+Pain hook, success close, no company-as-subject sentence anywhere.

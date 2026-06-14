@@ -25,7 +25,7 @@ Invoke these skills via the `Skill` tool at the moments specified. Do not skip t
 
 ## Goal
 
-Produce one Markdown report at `./outputs/code-review-<DD-MM-YYYY>-<short-slug>.md` that lists every issue worth a human's attention, ranked by severity, each with file:line, evidence, and a concrete fix. Done condition: the report exists, every issue has a verifiable file:line citation, and the self-audit checklist at the bottom of the report is filled in with "pass" or "fail" per item.
+Produce one Markdown report at `./outputs/code-review-<short-slug>.md` (no date in the filename) that lists every issue worth a human's attention, ranked by severity, each with file:line, evidence, and a concrete fix. Done condition: the report exists, every issue has a verifiable file:line citation, and the self-audit checklist at the bottom of the report is filled in with "pass" or "fail" per item.
 
 ## Inputs
 
@@ -39,7 +39,7 @@ Produce one Markdown report at `./outputs/code-review-<DD-MM-YYYY>-<short-slug>.
 
 ## Outputs
 
-- One file: `./outputs/code-review-<DD-MM-YYYY>-<short-slug>.md` (date format strictly DD-MM-YYYY).
+- One file: `./outputs/code-review-<short-slug>.md` (no date in the filename).
 - Structure (use these exact headings):
   1. `## Summary` - 3-5 bullets: scope reviewed, files touched count, lines changed count, overall verdict (Approve / Approve with comments / Request changes / Block).
   2. `## Blockers` - issues that must be fixed before merge. Each: `**[B#]** file_path:line - <one-line title>` then 2-4 lines of evidence + fix.

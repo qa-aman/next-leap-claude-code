@@ -1,107 +1,109 @@
 # User Interview Synthesis
 
 **Date:** 23-05-2026
-**Source:** 4 interviews in `07-user-interviews/`
-**Method:** Parallel extraction (one subagent per transcript), then cross-interview synthesis
+**Source files:** `07-user-interviews/interview-01-sarah-chen.md`, `interview-02-marcus-okafor.md`, `interview-03-priya-nair.md`, `interview-04-james-whitfield.md`
+**Method:** One Explore subagent read each transcript. Each pulled the top 3 pain points, a frequency tag, a severity tag, and an exact quote. This document synthesizes across all four.
+
+Frequency tag = one-off (happens once) or recurring (happens repeatedly).
+Severity tag = annoying, blocking (stops a workflow), or show-stopper (could end use of the product).
 
 ---
 
-## Interviewees
+## Per-Interview Pain Points
 
-| User | Role | Plan |
-|---|---|---|
-| Sarah Chen | Head of Product, Series C startup | Pro |
-| Marcus Okafor | Engineering Manager, Enterprise fintech | Team (120 seats) |
-| Priya Nair | Chief of Staff, Growth-stage startup | Pro |
-| James Whitfield | Sales Director, Mid-market SaaS | Team (22 seats) |
+### Sarah Chen (`interview-01-sarah-chen.md`)
 
----
-
-## Raw Pain Points (per user)
-
-### Sarah Chen — Pro
-
-1. **Action item accuracy unreliable** | Recurring | Show-stopper
+1. **Action item accuracy is unreliable.** Recurring. Blocking.
    > "I double-check the action items manually. Which defeats the purpose. If I'm going to review every item anyway, why not just take notes myself?"
-2. **Implicit commitments missed entirely** | Recurring | Blocking
+2. **Implicit commitments are missed entirely.** Recurring. Show-stopper.
    > "When someone says 'I'll circle back on that,' that's a commitment. MeetFlow doesn't catch it. When my CEO says 'let's think about whether we should revisit pricing,' that's an action item for me. MeetFlow sees it as a discussion point."
-3. **Trust erosion blocks adoption of new features** | Recurring | Blocking
+3. **Distrust blocks adoption of new features.** Recurring. Blocking.
    > "I don't trust the AI enough to give me meeting analytics. If it can't get action items right, why would I trust it to tell me how I spend my time?"
 
-### Marcus Okafor — Team
+### Marcus Okafor (`interview-02-marcus-okafor.md`)
 
-1. **Privacy and data security concerns** | Recurring | Show-stopper
+1. **Privacy and data control is a dealbreaker.** Recurring. Show-stopper.
    > "I don't trust any system that records my engineering reviews. We discuss production incidents, security vulnerabilities, sometimes compensation. Where does that data go? Who at MeetFlow can access it?"
-2. **No perceived value from AI features** | Recurring | Blocking
-   > "My team uses it because IT deployed it. Nobody reads the summaries. We have our own Google Docs process for sprint reviews and retros. MeetFlow runs in the background, I forget it's there most days."
-3. **Contract renewal at risk due to low adoption** | One-off | Show-stopper
-   > "When the contract comes up, I'll tell [VP] that we're paying for a tool most of my team ignores. That's not a quality issue, it's an adoption issue."
+2. **The team uses the tool passively, with no perceived value.** Recurring. Blocking.
+   > "My team uses it because IT deployed it. Nobody reads the summaries. We have our own Google Docs process for sprint reviews and retros. MeetFlow runs in the background — I forget it's there most days."
+3. **He rejects the premise of AI meeting tools.** Recurring. Blocking.
+   > "Honestly? Probably not. I don't think meetings need AI. I think meetings need to be shorter and fewer. But if you're going to record them, at least let me control where the data lives."
 
-### Priya Nair — Pro
+### Priya Nair (`interview-03-priya-nair.md`)
 
-1. **Summaries too long, require skimming** | Recurring | Annoying
-   > "The summaries are, like, 6 paragraphs? I skim them. My CEO skims them. I want 3-4 bullet points, the decisions that were made and who's doing what. That's it."
-2. **Price feels high relative to usage frequency** | Recurring | Annoying
+1. **Summaries are too long to skim.** Recurring. Blocking.
+   > "The summaries are, like, 6 paragraphs? I skim them. My CEO skims them. I want 3-4 bullet points — the decisions that were made and who's doing what. That's it."
+2. **Price feels high for light usage.** Recurring. Annoying.
    > "Fifteen dollars a month for something I use twice a week... I keep it because the Slack thing is so convenient, but it feels like a lot. If it were $8, I wouldn't think about it."
-3. **Notion bundling threat** | One-off | Show-stopper
-   > "We live in Notion. Everything, docs, projects, OKRs. If Notion added meeting summaries that auto-posted into our meeting notes pages... honestly, I'd switch."
+3. **Notion bundling would make her switch.** Recurring. Show-stopper.
+   > "We live in Notion. Everything — docs, projects, OKRs. If Notion added meeting summaries that auto-posted into our meeting notes pages... honestly, I'd switch. It would just make more sense to have everything in one place."
 
-### James Whitfield — Team
+### James Whitfield (`interview-04-james-whitfield.md`)
 
-1. **No Salesforce integration** | Recurring | Show-stopper
+1. **No Salesforce integration means hours of manual copying.** Recurring. Show-stopper.
    > "Right now my team manually copies meeting summaries into Salesforce. That's 10-15 minutes per call. With 15 reps doing 4-5 calls a day, that's 10+ hours of daily admin work across the team."
-2. **Fireflies competitive threat via Salesforce auto-log** | Recurring | Show-stopper
+2. **Fireflies can replace MeetFlow on integration alone.** Recurring. Show-stopper.
    > "I don't want to switch. MeetFlow's summaries are better than Fireflies. But 'better summaries' doesn't beat 'summaries that are actually in Salesforce.' Integration wins over quality when quality isn't in my workflow."
-3. **Action item accuracy damages client trust** | Recurring | Blocking
+3. **Wrong action items damage client relationships.** Recurring. Blocking.
    > "The accuracy thing is real. Maybe 1 in 3 calls has an action item that's wrong enough to matter. For sales, wrong follow-up is worse than no follow-up."
 
 ---
 
 ## Top 5 Themes by Frequency
 
-Ranked by how many of the 4 users surfaced the theme (severity as tiebreaker).
+Frequency here means how many of the four users raised the theme. Ties break on severity.
 
-| Rank | Theme | Mentioned by | Severity mix |
+| Rank | Theme | Users | Source files |
 |---|---|---|---|
-| 1 | **Action item accuracy (explicit + implicit)** | Sarah (x2), James | Show-stopper / Blocking |
-| 2 | **Trust / value erosion blocks expansion** | Sarah, Marcus | Blocking / Show-stopper |
-| 3 | **Workflow integration gaps (Salesforce, Notion)** | James, Priya | Show-stopper |
-| 4 | **Summary format wrong for the reader** | Priya, Marcus (ignored) | Annoying / Blocking |
-| 5 | **Price-to-value mismatch / renewal risk** | Priya, Marcus | Annoying / Show-stopper |
+| 1 | **Workflow integration fit.** The tool must deliver into the system the user already works in. | 3 | James (Salesforce), Priya (Notion, Slack), Marcus (own Google Docs process) |
+| 2 | **Action item accuracy and AI trust.** | 2 | Sarah (two pain points), James |
+| 3 | **Competitive displacement risk.** A rival could take the account. | 2 | James (Fireflies), Priya (Notion) |
+| 4 | **Data privacy and governance.** | 1 | Marcus |
+| 5 | **Summary too long to skim.** | 1 | Priya |
+
+The most common thread is not accuracy. It is integration. Three of four users judge MeetFlow by where its output lands. Accuracy ranks second. It is the loudest complaint, but fewer users raised it.
 
 ---
 
 ## Top 5 Themes by Severity
 
-Ranked by how damaging the issue is (show-stoppers first), regardless of count.
+Severity orders show-stopper above blocking above annoying. Each theme takes its highest severity from any user.
 
-| Rank | Theme | Severity | Why it kills value |
+| Rank | Theme | Peak severity | Driver |
 |---|---|---|---|
-| 1 | **Workflow integration absence (Salesforce / Notion)** | Show-stopper | Active churn consideration from both James and Priya |
-| 2 | **Action item accuracy below trust threshold** | Show-stopper | Defeats the core promise; Sarah manually reviews everything |
-| 3 | **Data privacy and security gaps for enterprise** | Show-stopper | Blocks 40+ of a 120-seat contract |
-| 4 | **Passive adoption leads to non-renewal** | Show-stopper | Marcus will recommend cancelling 120 seats |
-| 5 | **Implicit commitments missed** | Blocking | Drives manual review even when extraction "works" |
+| 1 | **Data privacy and governance.** | Show-stopper | Marcus ties renewal to data control. He has no confidence in where recordings go. |
+| 2 | **Salesforce integration gap.** | Show-stopper | James loses 10+ hours of team admin a day. Output outside the workflow does not count. |
+| 3 | **Competitive displacement.** | Show-stopper | Priya would move to Notion. James would move to Fireflies despite preferring MeetFlow. |
+| 4 | **Missed implicit commitments.** | Show-stopper | Sarah's most important action items get filed as discussion, not action. |
+| 5 | **Summary too long to skim.** | Blocking | Priya and her CEO skim 6-paragraph summaries. They want 3-4 bullets. |
+
+Five themes reach blocking or worse. Four of them are show-stoppers carried by a single user each. Severity is concentrated, not shared. Each show-stopper is a different exit door.
 
 ---
 
 ## 3 Surprising Findings (Low Frequency, High Severity)
 
-### 1. The "silent ignorer" is more dangerous than the loud complainer
-Marcus's team uses MeetFlow without complaint because IT mandated it. No support tickets, no detractor signal, healthy login telemetry. Yet 120 seats are at renewal risk. **Implication:** Team plan account health cannot be measured by usage volume alone, it needs depth signals (summaries opened, action items acted on).
+Each was raised by only one user. Frequency would let you dismiss them. Each is a show-stopper that maps to a known company risk.
 
-### 2. Better summary quality loses to worse-but-integrated competitors
-James explicitly says MeetFlow summaries are better than Fireflies, and would still switch. Quality without distribution into the system of record has zero value to him. **Implication:** the May 2026 Salesforce integration is not an enhancement, it is the difference between retaining and losing the sales-led segment.
+### 1. Privacy is a renewal dealbreaker (Marcus only)
+Only one of four users raised data governance. For him it ends the contract, not a feature. He asks where recordings go and who can read them (`interview-02-marcus-okafor.md`).
+This is the exact objection the Enterprise tier is built to answer (see `03-product-knowledge/company.md`). It likely under-shows in this small sample and over-shows in the enterprise pipeline.
 
-### 3. The Notion bundling threat is a one-off but existential for Pro
-Priya mentioned it once and almost casually, but the consequence is full account churn the moment Notion ships meeting summaries. One user, but likely representative of the entire Notion-native Pro sub-segment. **Implication:** the defensible moat is not summary quality, it is workflow surfaces (Slack delivery, Salesforce write-back) that Notion cannot easily replicate.
+### 2. Notion bundling triggers active switching (Priya only)
+Only Priya named it. She is past complaint and into intent to leave (`interview-03-priya-nair.md`).
+One casual user voicing churn is a leading signal for the whole Notion-native free segment. The company already flags Notion AI as a top risk (`03-product-knowledge/company.md`).
+
+### 3. The most important action items fail silently (Sarah only)
+Only Sarah named the implicit-commitment gap (`interview-01-sarah-chen.md`).
+A silent miss is worse than a visible error. The user cannot see what was dropped. This reframes the accuracy problem from "wrong items" to "invisible omissions."
 
 ---
 
-## Recommended Next Actions
+## Lead's Take
 
-1. Confirm Smart Follow-Up (April 2026) addresses Sarah's and James's accuracy and implicit-commitment gaps before launch.
-2. Pull forward Salesforce integration messaging to James-style accounts. This is a churn-prevention release, not a growth release.
-3. Build an enterprise-readiness one-pager (data residency, access controls, retention) for Marcus-type renewals ahead of Enterprise GA in June.
-4. Test a "5-bullet summary" format toggle for Pro users like Priya. Low-cost win on the annoyance tier.
-5. Instrument depth-of-use (summary opens, action item acceptance) on Team accounts to catch silent ignorers before renewal.
+Integration is the widest pain. Three of four users raised it.
+The show-stoppers are spread across four different exit doors. Each is owned by one user. No single fix closes them all.
+Two roadmap bets already answer two doors. Salesforce integration (May 2026) covers James. Enterprise and privacy (June 2026) covers Marcus. Both dates are in `04-strategy/product-vision.md`.
+Two doors are not yet covered by a dated bet. Notion displacement (Priya) and silent omission of implicit commitments (Sarah). Both came from single users here. Validate both with a larger sample before sizing.
+
+*All quotes and figures are taken verbatim from the four transcripts. No metrics were added.*

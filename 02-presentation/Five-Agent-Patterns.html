@@ -347,12 +347,12 @@ mention each theme. Tag severity as workflow-breaker / annoyance / nice-to-fix.
 Produce a ranked table: theme | interview count | severity | top quote.
 
 STAGE 4 — Write the brief: save a 1-page Markdown synthesis to
-outputs/interview-synthesis-DD-MM-YYYY.md (DD-MM-YYYY format only).
+outputs/interview-synthesis.md (no date in the filename; overwrite if it exists).
 Structure: TL;DR (3 bullets) → top 3 themes (each with quote + count) →
 recommendations (1 line each).
 
 Rules: cite the interview filename for every quote. Never invent quotes.
-Always use DD-MM-YYYY date format.
+Never put a date in the output filename.
 
 Use this agent when the user asks to synthesize user interviews, find common
 pain points, or build a research brief from interview transcripts.</code></pre>
@@ -428,7 +428,7 @@ Output structure (Markdown, saved to outputs/):
 5. Risks (top 3, concrete)
 6. Out of scope (top 3)
 
-Filename: outputs/prd-{feature-name}-DD-MM-YYYY.md
+Filename: outputs/prd-{feature-name}.md (no date in the filename)
 
 Use this agent when the user asks for a feature spec, PRD, one-pager, or
 product requirements doc.</code></pre>
@@ -474,7 +474,7 @@ product requirements doc.</code></pre>
 Before writing, read 03-product-knowledge/competitive.md for our existing
 intel on competitors.
 
-Output (Markdown, saved to outputs/competitor-snapshot-{name}-DD-MM-YYYY.md):
+Output (Markdown, saved to outputs/competitor-snapshot-{name}.md, no date in the filename):
 1. Their positioning (1 line)
 2. Where they beat MeetFlow (3 bullets)
 3. Where MeetFlow beats them (3 bullets)
@@ -525,7 +525,7 @@ users are leaving. Pro monthly churn is currently 4.1%.
 Reads: 06-user-feedback/ (Q1 survey), 07-user-interviews/ (qualitative), and
 03-product-knowledge/company.md (baseline).
 
-Output (Markdown, saved to outputs/churn-diagnosis-DD-MM-YYYY.md):
+Output (Markdown, saved to outputs/churn-diagnosis.md, no date in the filename):
 1. Top 3 churn drivers, each with: evidence from at least 2 sources, source
    files cited.
 2. Quick wins (things we could ship in &lt; 2 sprints)
@@ -672,11 +672,11 @@ Workflow:
 2. When all three return, find issues that appear in 2 or 3 sources
    (triangulated). Rank them.
 
-3. Save to outputs/triangulated-feedback-DD-MM-YYYY.md with two sections:
+3. Save to outputs/triangulated-feedback.md (no date in the filename) with two sections:
    - Triangulated issues (appears in 2+ sources) — these are top priorities.
    - Source-specific issues (appears in only 1) — needs more investigation.
 
-Always cite source files. Use DD-MM-YYYY date format.
+Always cite source files. Never put a date in the output filename.
 
 Use this agent when the user wants a triangulated view of user feedback
 across multiple sources.</code></pre>
@@ -755,7 +755,7 @@ Workflow:
    one angle only.
 
 5. When workers return, synthesize into
-   outputs/competitor-deepdive-{name}-DD-MM-YYYY.md. Structure: TL;DR →
+   outputs/competitor-deepdive-{name}.md (no date in the filename). Structure: TL;DR →
    Where they beat us → Where we beat them → Strategic implications for
    MeetFlow (cite 04-strategy/product-vision.md).
 
@@ -904,7 +904,7 @@ Loop protocol:
 2. Draft v1 of the PRD using the structure below.
 3. Dispatch the prd-critic agent via the Agent tool. Pass it the draft.
 4. Wait for the critic's score.
-5. If score &gt;= 8: write final to outputs/prd-{feature}-DD-MM-YYYY.md. Stop.
+5. If score &gt;= 8: write final to outputs/prd-{feature}.md (no date in the filename). Stop.
 6. If score &lt; 8: revise addressing EVERY critique point. Increment version.
    Go to step 3.
 7. Max 3 iterations. If still &lt; 8 after 3, write the latest version plus a

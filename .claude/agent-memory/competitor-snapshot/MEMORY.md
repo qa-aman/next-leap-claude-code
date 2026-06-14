@@ -1,0 +1,2 @@
+- [Granola Intel](granola-intel.md) — Granola positioning, MeetFlow head-to-head, intel gaps, and strategic implication as of 17-03-2026
+- [MeetFlow Competitive Pattern](meetflow-competitive-pattern.md) — Recurring win/loss dimensions across all competitors; accuracy as the load-bearing moat

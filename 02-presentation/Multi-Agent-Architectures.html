@@ -570,13 +570,13 @@ After all subagents return, synthesize across them:
 - Top 5 themes ranked by severity
 - 3 surprising findings (low frequency but high severity)
 
-Save the output to outputs/interview-synthesis-23-05-2026.md.</code></pre>
+Save the output to outputs/interview-synthesis.md.</code></pre>
 
         <h5>What success looks like</h5>
         <ul>
           <li>You see the Explore subagents being dispatched (one per file).</li>
           <li>The lead's main chat stays clean — only summaries come back, not transcripts.</li>
-          <li>A markdown file lands at <code>outputs/interview-synthesis-23-05-2026.md</code> with ranked themes and quotes.</li>
+          <li>A markdown file lands at <code>outputs/interview-synthesis.md</code> with ranked themes and quotes.</li>
         </ul>
       </div>
 
@@ -672,7 +672,7 @@ Always cite the line from the file where each quote came from.</code></pre>
           <li>Press <kbd>s</kbd> to save. The file lands at <code>.claude/agents/churn-pattern-analyst.md</code>.</li>
           <li>Use it on real data:
 <pre><code>Use the churn-pattern-analyst agent on 06-user-feedback/.
-Save the report to outputs/churn-drivers-23-05-2026.md.</code></pre>
+Save the report to outputs/churn-drivers.md.</code></pre>
           </li>
         </ol>
 
@@ -713,12 +713,12 @@ Save the report to outputs/churn-drivers-23-05-2026.md.</code></pre>
 for the starting list. For each competitor: pricing tiers, free-tier
 limits, top 3 differentiators on the homepage, any product launches in
 the last 90 days. Cite source URLs for every claim. Save to
-outputs/competitive-scan-23-05-2026.md.</code></pre>
+outputs/competitive-scan.md.</code></pre>
           </li>
           <li>Type a second task and press <kbd>Enter</kbd> — it dispatches alongside the first:
 <pre><code>Synthesize the Q1 2026 feedback in 06-user-feedback/. Extract the
 top 5 churn drivers with verbatim quotes. Save to
-outputs/churn-drivers-23-05-2026.md.</code></pre>
+outputs/churn-drivers.md.</code></pre>
           </li>
           <li>Use <kbd>↑</kbd> / <kbd>↓</kbd> to move between rows. Press <kbd>Space</kbd> to peek inside one.</li>
           <li>Press <kbd>Enter</kbd> or <kbd>→</kbd> on a row to attach (jump into that full session). Press <kbd>←</kbd> on an empty input to detach.</li>
@@ -771,9 +771,14 @@ outputs/churn-drivers-23-05-2026.md.</code></pre>
           <li>Restart Claude Code so it picks up the new env.</li>
           <li>Open Claude Code in the repo: <code>claude</code></li>
           <li>Paste the prompt below. The lead will create the team and spawn teammates.</li>
+          <li>If Claude blocks the shell command that edits its own <code>settings.json</code> (a self-modification guard), drag and drop the file into the conversation and ask Claude to edit it directly.</li>
           <li>While they run, use <kbd>Shift</kbd> + <kbd>↓</kbd> to flip through teammates and listen in. Press <kbd>Enter</kbd> to focus a teammate; <kbd>Esc</kbd> to come back to the lead.</li>
           <li>When done, tell the lead: <code>Clean up the team.</code></li>
         </ol>
+        <div class="callout warn" style="margin-top:14px;">
+          <div class="label">Verify before you copy</div>
+          Experimental flag names and version gates change between releases. Confirm the exact env key and the current minimum version against the live settings docs (<code>code.claude.com/docs/en/settings</code>) before relying on them. Do not trust a flag or version number quoted from memory or a slide.
+        </div>
 
         <h5>The prompt</h5>
 <pre><code>Create an agent team to pressure-test the Smart Follow-Up PRD
@@ -793,7 +798,7 @@ Have them debate openly for 2 rounds. Then the lead writes:
 - 3 questions I need answers to before the meeting
 - 1 thing in the PRD that's strong and should stay
 
-Save to outputs/smart-followup-pressure-test-23-05-2026.md.</code></pre>
+Save to outputs/smart-followup-pressure-test.md.</code></pre>
 
         <h5>What success looks like</h5>
         <ul>
@@ -839,13 +844,13 @@ Save to outputs/smart-followup-pressure-test-23-05-2026.md.</code></pre>
 Use the PRD template in 14-templates/. Ground the content in
 03-product-knowledge/ and 04-strategy/product-vision.md. Don't invent
 metrics — only use numbers that appear in repo files.
-Save to 08-product-features/smart-followup-prd-23-05-2026.md.</code></pre>
+Save to 08-product-features/smart-followup-prd.md.</code></pre>
           </li>
           <li>In terminal #2, paste a PRD-drafting prompt for Salesforce:
 <pre><code>Draft a PRD for the Salesforce integration (planned launch May 2026).
 Use the PRD template in 14-templates/. Ground in 03-product-knowledge/
 and 04-strategy/product-vision.md. Don't invent metrics.
-Save to 08-product-features/salesforce-prd-23-05-2026.md.</code></pre>
+Save to 08-product-features/salesforce-prd.md.</code></pre>
           </li>
           <li>When done, exit Claude in each worktree. If you made changes, Claude prompts you to keep or remove the worktree. To remove later:
 <pre><code>git worktree list
@@ -931,14 +936,14 @@ After all helpers report back, combine into:
 - 3 strategic threats to MeetFlow ranked by urgency
 - 3 strategic openings we could exploit
 
-Save to outputs/competitive-scan-23-05-2026.md.
+Save to outputs/competitive-scan.md.
 Also propose specific updates to 03-product-knowledge/competitive.md
 but do NOT apply them yet — ask me to confirm.</code></pre>
 
         <h5>What success looks like</h5>
         <ul>
           <li>You see helpers being dispatched in parallel in the output.</li>
-          <li>A fresh matrix lands at <code>outputs/competitive-scan-23-05-2026.md</code> with source URLs.</li>
+          <li>A fresh matrix lands at <code>outputs/competitive-scan.md</code> with source URLs.</li>
           <li>The lead asks you to confirm the updates to <code>competitive.md</code> rather than silently overwriting.</li>
         </ul>
       </div>
@@ -1039,7 +1044,7 @@ of competitors. Then:
    - A "Top 3 risks to MeetFlow" subsection
    - A "Sources" subsection listing every URL used
 
-Save to outputs/competitive-risk-prd-section-23-05-2026.md.</code></pre>
+Save to outputs/competitive-risk-prd-section.md.</code></pre>
 
         <h5>What success looks like</h5>
         <ul>
@@ -1167,7 +1172,7 @@ After I approve the plan, spawn the helpers in parallel
 - Top 3 risks
 - 3 next steps if we proceed
 
-Save to outputs/auto-action-item-validation-23-05-2026.md.</code></pre>
+Save to outputs/auto-action-item-validation.md.</code></pre>
 
         <h5>What success looks like</h5>
         <ul>
@@ -1181,6 +1186,11 @@ Save to outputs/auto-action-item-validation-23-05-2026.md.</code></pre>
       <div class="callout warn">
         <div class="label">Production reality</div>
         Agents remember the past, and small mistakes early on snowball into big problems 20 steps later. Build your runs so you can resume from where it broke, not restart from scratch.
+      </div>
+
+      <div class="callout warn">
+        <div class="label">Field notes from live sessions</div>
+        Two things that bit the cohort mid-run. <strong>Stalled sub-agent:</strong> if a helper shows activity but no file ever lands, press <kbd>Ctrl</kbd>+<kbd>C</kbd> and type <code>continue</code> to resume. Don&#x27;t kill the whole session, you&#x27;ll lose context. <strong>Google Drive connector:</strong> it can read and create files but cannot edit one in place (no update tool). Have Claude generate the content locally and upload it as a new file. Confluence&#x27;s connector does update existing pages, so pull before you push.
       </div>
     </section>
 
@@ -1236,7 +1246,7 @@ Then synthesize:
 - For each: the supporting signals (which sources point to it)
 - 1 risk per theme
 
-Save to outputs/q3-2026-themes-23-05-2026.md.</code></pre>
+Save to outputs/q3-2026-themes.md.</code></pre>
 
         <h5>What success looks like</h5>
         <ul>
@@ -1339,7 +1349,7 @@ The lead writes:
 - The 2 next most likely alternatives
 - 3 next investigations to confirm
 
-Save to outputs/pro-churn-rca-23-05-2026.md.</code></pre>
+Save to outputs/pro-churn-rca.md.</code></pre>
 
         <h5>What success looks like</h5>
         <ul>

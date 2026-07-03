@@ -723,6 +723,7 @@ across multiple sources.</code></pre>
 
 <h3>The agent: <code>competitor-deep-dive</code></h3>
 <p>Given any competitor name, this agent picks 3-5 research angles that matter for THAT competitor, then spawns workers on those angles.</p>
+<div class="callout"><strong>Heads up:</strong> the repo already ships <code>competitor-intel-analyst</code>, a single-agent competitor researcher (no worker fan-out). The one you build here, <code>competitor-deep-dive</code>, is the multi-worker orchestrator version, so the names differ on purpose. Building it adds a new file next to the ones already in <code>.claude/agents/</code>.</div>
 
 <div class="wizard-step tight">
 <div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>

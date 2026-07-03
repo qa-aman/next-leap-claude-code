@@ -1,0 +1,3 @@
+- [Triangulated Signals (17-03-2026)](project_triangulated-signals.md) - 3/3: action item accuracy, summary length. 2/3: Salesforce, false confidence labels, privacy, price/value.
+- [Source File Map](reference_source-file-map.md) - Which files contain key evidence for interviews, survey, and churn per triangulation source.
+- [Cross-Source Phrase Mapping](reference_phrase-mapping.md) - How the same issue is phrased across interviews vs survey vs churn data - use for future normalization.

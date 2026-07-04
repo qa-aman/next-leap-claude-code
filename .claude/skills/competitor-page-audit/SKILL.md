@@ -15,7 +15,9 @@ description: >
 
 It compares one product page (yours) against one competitor page across four lenses, walks both as a real user persona, and produces a shareable visual scorecard. Its whole reason to exist is to never return a vague suggestion. Tools like an N8N workflow say "modify your search bar" and leave you with nothing to do. This skill forces every finding to name the exact element, what the competitor does, what you do, why the gap matters, and the precise change - so you can act on it the same day.
 
-Read `references/scoring-rubric.md` before scoring (it defines each 1-5 value per lens) and use `references/scorecard-template.html` as the artifact skeleton.
+Read `references/scoring-rubric.md` before scoring (it defines each 1-5 value per lens), `references/sales-benchmarks.md` before citing any conversion stat (it is the only source you may quote from without fresh validation), and use `references/scorecard-template.html` as the artifact skeleton.
+
+The output is built to be executed, not just read. A diagnosis does not move revenue; ship-ready action items, a sales-impact frame, a sequenced roadmap, and a way to prove the lift do. Every run produces all four (see Step 5).
 
 ## The 5-part finding rule (non-negotiable)
 
@@ -73,11 +75,19 @@ Produce a self-contained, theme-aware HTML artifact via the Artifact tool, using
 
 - **Header** - the persona and goal the run used, and overall You vs Competitor scores.
 - **Lens heatmap** - four lenses, rows for You / Competitor / Gap, colored: green where you lead, grey for a tie, red where you trail (larger deltas darker).
-- **Per lens** - the score, a short reasoning line, and the 5-part findings as cards.
+- **Per lens** - the score, a short reasoning line, and the 5-part findings as cards. Tag each finding with the one **conversion lever** it pulls (decision confidence, friction, trust/risk reversal, findability, relevance/basket size, first-screen commitment) so the reader sees why it matters for sales, not just usability.
 - **Friction log** - the walkthrough narrated step by step, marking where the persona stalled. Live-URL runs only; for screenshot runs, show a short note that the flow could not be walked.
-- **Prioritized fixes** - a ranked list at the bottom, ordered by impact against effort. This is the "do these first" list the user acts on.
+
+Then the four things that make it a sales tool, not just a diagnosis:
+
+- **Sales impact (validated benchmarks)** - for the highest-leverage gaps, one card each linking the gap to a documented conversion lever, with the figure and a validated source link. Cite only from `references/sales-benchmarks.md`, or a source you validated the same way this run. Frame as industry benchmarks, not the client's numbers, and never assert a precise revenue figure.
+- **Ship-ready action items** - a numbered ticket per fix (A1, A2, ...) with: the **literal copy to paste** (write the real corrected description, placeholder, assembly block, trust strip - not a description of it), exact placement, acceptance criteria ("done when"), effort (S/M/L), and owner (content / eng / merch / creative). Any value you cannot verify from the page (warranty period, return window, assembly time) is a bracketed `[confirm]` placeholder with a note never to ship a guessed number - this respects the no-invented-metrics rule.
+- **ROI-sequenced roadmap** - three buckets, This week / This sprint / This quarter, sequenced by sales impact against effort. Put low-effort trust fixes first; end the quarter bucket with the template-level move (roll the fixes into the PDP template so every SKU inherits them) - that is usually the real revenue prize, not the single page.
+- **Experiment plan for the top 2 bets** - for the two highest-impact fixes, a short block: hypothesis, primary/secondary/guardrail metric, A/B or pre-post design, and a minimum detectable effect. This is how a benchmark becomes the client's own defensible number.
 
 Set a clear `<title>`, pass a one-line `description`, and a favicon emoji. Keep the favicon stable if the user asks for a re-run of the same audit.
+
+The action items are the heart of the upgrade. "Add reviews" is a suggestion; a ticket with the seed copy, the placement, and the acceptance criteria is something a team ships on Monday. Always push to the second form.
 
 ## Two limits to state in the output
 

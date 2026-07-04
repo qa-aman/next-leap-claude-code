@@ -4,35 +4,40 @@
     --bg: #ffffff; --fg: #1a1a1a; --muted: #5c5c5c; --card: #f6f6f7;
     --border: #e2e2e5; --lead: #1a7f4b; --lead-bg: #e3f5ea;
     --tie: #6b6b6b; --tie-bg: #ededed; --trail: #b4231f; --trail-bg: #fbe4e3;
-    --trail-bg-strong: #f6cfcd; --accent: #2f5fe0;
+    --trail-bg-strong: #f6cfcd; --accent: #2f5fe0; --accent-bg: #eaf0fe;
+    --code-bg: #f0f1f3;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #16171a; --fg: #ececee; --muted: #9a9aa2; --card: #202126;
       --border: #303138; --lead: #4fd99a; --lead-bg: #123524;
       --tie: #a0a0a8; --tie-bg: #2a2b30; --trail: #ff7a75; --trail-bg: #3a1817;
-      --trail-bg-strong: #571f1c; --accent: #7aa0ff;
+      --trail-bg-strong: #571f1c; --accent: #7aa0ff; --accent-bg: #1a2136;
+      --code-bg: #16171a;
     }
   }
   :root[data-theme="dark"] {
     --bg: #16171a; --fg: #ececee; --muted: #9a9aa2; --card: #202126;
     --border: #303138; --lead: #4fd99a; --lead-bg: #123524;
     --tie: #a0a0a8; --tie-bg: #2a2b30; --trail: #ff7a75; --trail-bg: #3a1817;
-    --trail-bg-strong: #571f1c; --accent: #7aa0ff;
+    --trail-bg-strong: #571f1c; --accent: #7aa0ff; --accent-bg: #1a2136; --code-bg: #16171a;
   }
   :root[data-theme="light"] {
     --bg: #ffffff; --fg: #1a1a1a; --muted: #5c5c5c; --card: #f6f6f7;
     --border: #e2e2e5; --lead: #1a7f4b; --lead-bg: #e3f5ea;
     --tie: #6b6b6b; --tie-bg: #ededed; --trail: #b4231f; --trail-bg: #fbe4e3;
-    --trail-bg-strong: #f6cfcd; --accent: #2f5fe0;
+    --trail-bg-strong: #f6cfcd; --accent: #2f5fe0; --accent-bg: #eaf0fe; --code-bg: #f0f1f3;
   }
   * { box-sizing: border-box; }
   body, .wrap { color: var(--fg); background: var(--bg); }
-  .wrap { max-width: 900px; margin: 0 auto; padding: 32px 20px 64px;
+  .wrap { max-width: 940px; margin: 0 auto; padding: 32px 20px 64px;
     font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
   h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
-  h2 { font-size: 20px; margin: 40px 0 12px; letter-spacing: -0.01em; }
+  h2 { font-size: 21px; margin: 44px 0 6px; letter-spacing: -0.01em; padding-top: 8px; }
+  h2 .lens-score { color: var(--muted); font-weight: 500; font-size: 15px; }
+  h3 { font-size: 16px; margin: 22px 0 8px; }
   .sub { color: var(--muted); margin: 0 0 24px; }
+  .kicker { text-transform: uppercase; letter-spacing: 0.08em; font-size: 12px; font-weight: 700; color: var(--accent); margin: 0 0 6px; }
   .persona { background: var(--card); border: 1px solid var(--border);
     border-radius: 10px; padding: 14px 16px; margin: 0 0 24px; }
   .persona b { color: var(--accent); }
@@ -51,35 +56,67 @@
   .cell-tie  { background: var(--tie-bg);  color: var(--tie);  font-weight: 700; }
   .cell-trail{ background: var(--trail-bg);color: var(--trail);font-weight: 700; }
   .cell-trail-strong{ background: var(--trail-bg-strong); color: var(--trail); font-weight: 700; }
-  .lens-score { color: var(--muted); font-weight: 500; font-size: 15px; }
   .card { border: 1px solid var(--border); border-left: 3px solid var(--accent);
     border-radius: 8px; background: var(--card); padding: 14px 16px; margin: 12px 0; }
   .card.crit { border-left-color: var(--trail); }
-  .card .el { font-weight: 700; margin: 0 0 8px; }
+  .card .el { font-weight: 700; margin: 0 0 4px; }
   .card .el .tag { font-size: 11px; font-weight: 700; color: #fff; background: var(--trail);
     border-radius: 4px; padding: 2px 6px; margin-left: 8px; vertical-align: middle; letter-spacing: 0.03em; }
+  .lever { font-size: 12px; color: var(--muted); margin: 0 0 10px; }
+  .lever b { color: var(--accent); text-transform: uppercase; letter-spacing: 0.04em; font-size: 11px; }
   .card dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; }
   .card dt { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; padding-top: 2px; }
   .card dd { margin: 0; }
   .card .fix { color: var(--fg); font-weight: 600; }
-  .friction { list-style: none; padding: 0; margin: 8px 0 0; counter-reset: f; }
-  .friction li { border-left: 2px solid var(--border); padding: 6px 0 6px 14px; margin: 0 0 4px; position: relative; }
+  .friction { list-style: none; padding: 0; margin: 8px 0 0; }
+  .friction li { border-left: 2px solid var(--border); padding: 6px 0 6px 14px; margin: 0 0 4px; }
   .friction li.stall { border-left-color: var(--trail); }
   .friction li.stall b { color: var(--trail); }
-  table.fixes { border-collapse: collapse; width: 100%; min-width: 620px; margin: 8px 0 0; }
-  table.fixes th, table.fixes td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
-  table.fixes th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
-  .rank { font-weight: 700; color: var(--accent); }
+
+  /* action item tickets */
+  .ticket { border: 1px solid var(--border); border-radius: 10px; background: var(--card); padding: 16px 18px; margin: 14px 0; }
+  .ticket .top { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 10px; }
+  .ticket .id { font-weight: 700; color: var(--accent); font-size: 14px; }
+  .ticket .ttl { font-weight: 700; flex: 1; min-width: 200px; }
+  .ticket .row { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; margin: 6px 0; }
+  .ticket .row .k { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; padding-top: 3px; }
+  .paste { background: var(--code-bg); border: 1px dashed var(--border); border-radius: 6px;
+    padding: 10px 12px; font: 13.5px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+  .ac { margin: 4px 0 0 0; padding-left: 18px; }
+  .ac li { margin: 2px 0; }
   .pill { font-size: 12px; font-weight: 700; border-radius: 999px; padding: 2px 9px; white-space: nowrap; }
   .p-high { background: var(--lead-bg); color: var(--lead); }
   .p-med  { background: var(--tie-bg); color: var(--tie); }
   .p-low  { background: var(--tie-bg); color: var(--muted); }
+  .eff-s { background: var(--lead-bg); color: var(--lead); }
+  .eff-m { background: var(--accent-bg); color: var(--accent); }
+  .owner { background: var(--accent-bg); color: var(--accent); }
+
+  /* roadmap */
+  .road { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 8px 0 0; }
+  .road .col { border: 1px solid var(--border); border-radius: 10px; padding: 14px; background: var(--card); }
+  .road .col h4 { margin: 0 0 4px; font-size: 15px; }
+  .road .col .when { color: var(--muted); font-size: 12px; margin: 0 0 10px; }
+  .road .col ul { margin: 0; padding-left: 16px; }
+  .road .col li { margin: 5px 0; font-size: 14.5px; }
+  @media (max-width: 680px) { .road { grid-template-columns: 1fr; } }
+
+  .note { background: var(--accent-bg); border-radius: 8px; padding: 12px 14px; font-size: 14.5px; margin: 12px 0; }
+  .bench { border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin: 10px 0; background: var(--card); }
+  .bench b { color: var(--accent); }
+  .bench .src { font-size: 12.5px; color: var(--muted); }
+  .bench .src a { color: var(--accent); }
+  .exp { border: 1px solid var(--border); border-left: 3px solid var(--lead); border-radius: 8px; background: var(--card); padding: 14px 16px; margin: 12px 0; }
+  .exp .row { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; margin: 5px 0; }
+  .exp .row .k { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; padding-top: 2px; }
   .limits { border-top: 1px solid var(--border); margin-top: 44px; padding-top: 16px; color: var(--muted); font-size: 14px; }
+  .limits a { color: var(--accent); }
+  code.inl { background: var(--code-bg); border-radius: 4px; padding: 1px 5px; font: 13px ui-monospace, Menlo, monospace; }
 </style>
 
 <div class="wrap">
   <h1>Page audit: vidaXL vs IKEA</h1>
-  <p class="sub">Your bathroom wall cabinet page against IKEA's ENHET cabinet page. Both walked live. Audited 04-07-2026.</p>
+  <p class="sub">Your bathroom wall cabinet page against IKEA's ENHET cabinet page. Both walked live. Audited 04-07-2026. Built to be executed, not just read.</p>
 
   <div class="persona">
     Walked as <b>Mark, a cautious DIY homeowner</b>, trying to <b>verify the material, read reviews, and gauge assembly effort before adding to cart</b>.<br>
@@ -89,6 +126,10 @@
   <div class="overall">
     <div class="box"><div class="num">10/20</div><div class="lbl">Your page (vidaXL)</div></div>
     <div class="box win"><div class="num">17/20</div><div class="lbl">IKEA</div></div>
+  </div>
+
+  <div class="note" style="margin-top:16px">
+    <b>The one-line story for sales:</b> your cabinet is solid pine; IKEA's is particleboard. The product is arguably better - the page tells a weaker story and loses the cautious buyer on trust and detail. Most of these gaps are <b>template-level</b>, so fixing them lifts far more than this one SKU. That is where the real revenue is.
   </div>
 
   <h2>Where you stand</h2>
@@ -105,63 +146,56 @@
       </tbody>
     </table>
   </div>
-  <p class="sub" style="margin-top:12px">You trail on every lens. The widest gap is feature parity: IKEA's page carries the trust and detail elements a cautious buyer needs, and yours is missing most of them. Note the irony - your cabinet is solid pine, IKEA's is particleboard. The product is arguably better; the page tells a weaker story.</p>
 
   <!-- ===== Lens 1 ===== -->
   <h2>Usability / UX flow <span class="lens-score">- you 2/5, IKEA 4/5</span></h2>
-  <p class="sub">Mark can find your material copy, but hits dead ends on reviews and assembly - two of his three goals - and a spec contradiction stops him mid-check.</p>
+  <p class="sub">Mark finds your material copy, but hits dead ends on reviews and assembly, and a spec contradiction stops him mid-check.</p>
 
   <div class="card">
     <p class="el">Customer rating and reviews section</p>
+    <p class="lever"><b>Conversion lever:</b> decision confidence / social proof</p>
     <dl>
       <dt>IKEA</dt><dd>Shows "4.6 (34)" stars directly under the price, plus a full "Customer reviews" section with a "Show all reviews" button.</dd>
       <dt>You</dt><dd>No rating, no review count, no reviews section anywhere. A stray "0.0" sits by the Wishlist icon and can be misread as a zero rating.</dd>
       <dt>Gap</dt><dd>A cautious buyer's first move is to read what others said. With nothing there, Mark has no social proof and stalls. (Nielsen: visibility of system status.)</dd>
-      <dt>Fix</dt><dd class="fix">Add a star rating by the price and a reviews block below the description, seeded from your marketplace reviews. Remove or relabel the stray "0.0" so it is not mistaken for a score.</dd>
+      <dt>Fix</dt><dd class="fix">Add a star rating by the price and a reviews block below the description, seeded from your marketplace reviews. Remove or relabel the stray "0.0". See ticket A2.</dd>
     </dl>
   </div>
 
   <div class="card">
     <p class="el">Assembly guidance</p>
+    <p class="lever"><b>Conversion lever:</b> friction / effort certainty</p>
     <dl>
       <dt>IKEA</dt><dd>An "Assembly and documents" section with a downloadable manual, a "What's included" tab listing parts, and an optional paid Assembly Service.</dd>
       <dt>You</dt><dd>Specs state "Assembly required: Yes" and nothing more - no manual, no time estimate, no tools list.</dd>
       <dt>Gap</dt><dd>Mark wants to judge effort before he commits. "Yes" with no detail leaves him guessing, so he hesitates at the buy button. (Nielsen: help and documentation.)</dd>
-      <dt>Fix</dt><dd class="fix">Add an "Assembly" line: estimated time, tools needed, number of parts, and a link to the PDF manual. This answers the exact question blocking his add-to-cart.</dd>
+      <dt>Fix</dt><dd class="fix">Add an "Assembly" line: estimated time, tools, part count, and a link to the PDF manual. See ticket A3.</dd>
     </dl>
   </div>
 
   <!-- ===== Lens 2 ===== -->
   <h2>Feature / attribute parity <span class="lens-score">- you 2/5, IKEA 5/5</span></h2>
-  <p class="sub">The elements a durable-goods buyer expects are largely missing from your page and all present on IKEA's.</p>
+  <p class="sub">The reassurance elements a durable-goods buyer expects are largely missing from your page and all present on IKEA's.</p>
 
   <div class="card">
-    <p class="el">Warranty statement</p>
+    <p class="el">Warranty and returns on the page</p>
+    <p class="lever"><b>Conversion lever:</b> risk reversal</p>
     <dl>
-      <dt>IKEA</dt><dd>"10 year warranty" listed under Product features.</dd>
-      <dt>You</dt><dd>No warranty mentioned anywhere on the page.</dd>
-      <dt>Gap</dt><dd>Warranty is core reassurance for furniture. Its absence reads as lower quality, even though your solid pine is arguably sturdier than IKEA's particleboard.</dd>
-      <dt>Fix</dt><dd class="fix">State the warranty period near the price or in specs. If you offer a guarantee, surface it as a labeled trust badge in the buy box.</dd>
-    </dl>
-  </div>
-
-  <div class="card">
-    <p class="el">Returns policy on the product page</p>
-    <dl>
-      <dt>IKEA</dt><dd>"It's OK to change your mind - Return within 365 days for a full refund," stated inline near the buy area.</dd>
-      <dt>You</dt><dd>Returns are only reachable through a footer Help Center link, never stated on the page.</dd>
-      <dt>Gap</dt><dd>Mark weighs return risk before a furniture purchase. Burying it in the footer adds doubt at the moment of decision. (Nielsen: user control and freedom.)</dd>
-      <dt>Fix</dt><dd class="fix">Add a one-line returns statement beside Add to Cart (e.g. "30-day returns") linking to the full policy.</dd>
+      <dt>IKEA</dt><dd>"10 year warranty" under Product features, and "Return within 365 days for a full refund" stated inline near the buy area.</dd>
+      <dt>You</dt><dd>No warranty anywhere; returns are only reachable via a footer Help Center link, never stated on the page.</dd>
+      <dt>Gap</dt><dd>Mark weighs warranty and return risk before furniture. Their absence reads as lower quality and adds doubt at the decision point, even though your solid pine is arguably sturdier than particleboard. (Nielsen: user control and freedom.)</dd>
+      <dt>Fix</dt><dd class="fix">State the warranty period and a returns line in the buy box. See ticket A4.</dd>
     </dl>
   </div>
 
   <div class="card">
     <p class="el">Product video in the media gallery</p>
+    <p class="lever"><b>Conversion lever:</b> decision confidence</p>
     <dl>
       <dt>IKEA</dt><dd>The gallery includes a product video alongside the photos.</dd>
       <dt>You</dt><dd>12 photos, no video.</dd>
       <dt>Gap</dt><dd>A cautious buyer uses video to judge build quality and true scale. Photos alone leave proportions and assembly ambiguous.</dd>
-      <dt>Fix</dt><dd class="fix">Add a short 360 or assembly clip as the second gallery item. You already have 12 images; one video closes the "how does it really look and build" question.</dd>
+      <dt>Fix</dt><dd class="fix">Add a short 360 or assembly clip as gallery item 2. See ticket A6.</dd>
     </dl>
   </div>
 
@@ -171,21 +205,23 @@
 
   <div class="card crit">
     <p class="el">Description vs Specifications <span class="tag">CRITICAL</span></p>
+    <p class="lever"><b>Conversion lever:</b> trust / error prevention</p>
     <dl>
       <dt>IKEA</dt><dd>Title, description, and measurements tab all agree: 60x32x60 cm, one shelf and door.</dd>
       <dt>You</dt><dd>Your Description says "Measuring a convenient 60 x 40 x 80 cm" and "three adjustable shelves," while the title and Specifications say "35 x 30 x 60 cm" and "With 1 adjustable shelf."</dd>
-      <dt>Gap</dt><dd>Contradictory dimensions and shelf count are trust-killing for a detail-driven buyer. Mark cannot tell which is true and may abandon rather than risk it. (Nielsen: consistency and standards; error prevention.)</dd>
-      <dt>Fix</dt><dd class="fix">Rewrite the description to match the real specs (35x30x60 cm, 1 shelf). This is a copy defect, not a design choice - fix it before anything else on this list.</dd>
+      <dt>Gap</dt><dd>Contradictory dimensions and shelf count are trust-killing for a detail-driven buyer. Mark cannot tell which is true and may abandon rather than risk it. It also risks wrong-size returns. (Nielsen: consistency and standards; error prevention.)</dd>
+      <dt>Fix</dt><dd class="fix">Rewrite the description to match the real specs. Fix this before anything else. See ticket A1.</dd>
     </dl>
   </div>
 
   <div class="card">
     <p class="el">Header search placeholder text</p>
+    <p class="lever"><b>Conversion lever:</b> findability</p>
     <dl>
       <dt>IKEA</dt><dd>"What are you looking for?" - invites a query - plus a search-by-photo option.</dd>
       <dt>You</dt><dd>Placeholder reads "Find the next purchase" - brand-speak that does not tell the user what to type.</dd>
       <dt>Gap</dt><dd>The placeholder is the one spot to teach search. "Find the next purchase" teaches nothing, so a hesitant user doesn't know it accepts an item number. (Nielsen: match between system and the real world.) <em>This is the concrete answer to your original "what do I even change on the search bar" question - it's the placeholder copy.</em></dd>
-      <dt>Fix</dt><dd class="fix">Change the placeholder to "Search products or item number," matching what the box actually accepts.</dd>
+      <dt>Fix</dt><dd class="fix">Change the placeholder to "Search products or item number". See ticket A7.</dd>
     </dl>
   </div>
 
@@ -195,21 +231,23 @@
 
   <div class="card">
     <p class="el">Trust anchor above the fold</p>
+    <p class="lever"><b>Conversion lever:</b> first-screen commitment</p>
     <dl>
       <dt>IKEA</dt><dd>The 4.6 star rating sits directly under the price, anchoring trust before any scroll.</dd>
-      <dt>You</dt><dd>Above the fold shows price, colour, and Add to Cart, but no rating or trust badge. Trust items (secure checkout, free shipping) sit lower down.</dd>
+      <dt>You</dt><dd>Above the fold shows price, colour, and Add to Cart, but no rating or trust badge. Trust items sit lower down.</dd>
       <dt>Gap</dt><dd>The first screen is where Mark decides whether to keep going. With no trust anchor there, he has less reason to commit.</dd>
-      <dt>Fix</dt><dd class="fix">Once reviews exist, surface the rating into the buy box, plus one trust badge (returns or secure checkout) near the price.</dd>
+      <dt>Fix</dt><dd class="fix">Once reviews exist, surface the rating into the buy box plus one trust badge (returns or secure checkout) near the price. See tickets A2 and A4.</dd>
     </dl>
   </div>
 
   <div class="card">
     <p class="el">"Items bought by others" recommendations</p>
+    <p class="lever"><b>Conversion lever:</b> relevance / basket size</p>
     <dl>
       <dt>IKEA</dt><dd>"Related products," "Explore more options," and "Get the look" all show ENHET-range parts - doors, organisers, legs - relevant to the cabinet.</dd>
       <dt>You</dt><dd>"Items bought by others" shows tent pegs, garden chairs, sandbags, a cat scratching post, and a Christmas cactus - unrelated to a bathroom cabinet.</dd>
-      <dt>Gap</dt><dd>Irrelevant cross-sell signals a generic, untargeted store and wastes space that could upsell matching bathroom pieces. It quietly erodes a cautious buyer's confidence.</dd>
-      <dt>Fix</dt><dd class="fix">Replace the generic carousel with same-range or bathroom items - your "Frequently Bought Together" already surfaces the matching FLORO drawer cabinet. Relevance both reassures and lifts basket size.</dd>
+      <dt>Gap</dt><dd>Irrelevant cross-sell signals a generic, untargeted store and wastes space that could upsell matching bathroom pieces. It quietly erodes confidence and leaves basket value on the table.</dd>
+      <dt>Fix</dt><dd class="fix">Swap the generic feed for same-range / bathroom items. See ticket A5.</dd>
     </dl>
   </div>
 
@@ -222,30 +260,146 @@
     <li class="stall"><b>Stalled:</b> scrolled the whole page for a reviews section - there is none. Dead end on his main goal.</li>
     <li>Read the Description for material - "solid pine wood, waxed finish" - reassuring.</li>
     <li class="stall"><b>Stalled:</b> cross-checked the Specifications and hit a contradiction - description says 60x40x80 cm and three shelves, specs say 35x30x60 cm and one shelf. Which is right?</li>
-    <li class="stall"><b>Stalled:</b> looked for assembly detail - specs say "Assembly required: Yes" and nothing else. No manual, no effort estimate.</li>
+    <li class="stall"><b>Stalled:</b> looked for assembly detail - specs say "Assembly required: Yes" and nothing else.</li>
     <li class="stall"><b>Stalled:</b> scanned "Items bought by others" hoping for matching pieces - saw tent pegs and a cat scratching post. Confidence dips.</li>
     <li>Reached Add to Cart still unsure about reviews and assembly - would hesitate to buy.</li>
   </ol>
 
-  <!-- ===== Prioritized fixes ===== -->
-  <h2>Do these first</h2>
-  <div class="scroll">
-    <table class="fixes">
-      <thead><tr><th>#</th><th>Fix</th><th>Impact</th><th>Effort</th></tr></thead>
-      <tbody>
-        <tr><td class="rank">1</td><td>Rewrite the description to match the real specs (35x30x60 cm, 1 shelf). Kill the contradiction.</td><td><span class="pill p-high">High</span></td><td><span class="pill p-low">Low</span></td></tr>
-        <tr><td class="rank">2</td><td>Add a star rating by the price and a customer reviews section below the description.</td><td><span class="pill p-high">High</span></td><td><span class="pill p-med">Medium</span></td></tr>
-        <tr><td class="rank">3</td><td>Add assembly detail: time, tools, part count, and a link to the PDF manual.</td><td><span class="pill p-high">High</span></td><td><span class="pill p-low">Low</span></td></tr>
-        <tr><td class="rank">4</td><td>State warranty and a returns line near the buy box.</td><td><span class="pill p-med">Medium</span></td><td><span class="pill p-low">Low</span></td></tr>
-        <tr><td class="rank">5</td><td>Replace the irrelevant cross-sell carousel with same-range / bathroom items.</td><td><span class="pill p-med">Medium</span></td><td><span class="pill p-med">Medium</span></td></tr>
-        <tr><td class="rank">6</td><td>Add a short product or assembly video to the gallery.</td><td><span class="pill p-med">Medium</span></td><td><span class="pill p-med">Medium</span></td></tr>
-        <tr><td class="rank">7</td><td>Change the search placeholder to "Search products or item number".</td><td><span class="pill p-low">Low</span></td><td><span class="pill p-low">Low</span></td></tr>
-      </tbody>
-    </table>
+  <!-- ===== Sales impact ===== -->
+  <h2>Why these move sales (validated benchmarks)</h2>
+  <p class="sub">Industry research, not your numbers - which is exactly why the experiments below matter. Each links a gap on your page to a documented conversion lever.</p>
+
+  <div class="bench">
+    <b>Reviews are one of the strongest documented levers.</b> A product with five reviews is <b>270% more likely to be purchased</b> than one with none; the lift reaches <b>+380% for higher-priced items</b>, and purchase likelihood peaks at <b>4.0-4.7 stars</b>. Your page has none. At &pound;49.94 this is a considered purchase, so the higher-price effect is the relevant one.
+    <div class="src">Source: Medill Spiegel Research Center, Northwestern University - <a href="https://spiegel.medill.northwestern.edu/how-online-reviews-influence-sales/">how-online-reviews-influence-sales</a> (validated 04-07-2026)</div>
+  </div>
+
+  <div class="bench">
+    <b>The page has almost no margin for doubt.</b> The average documented cart abandonment rate is <b>70.22%</b> across 50 studies. Most sessions already leak before purchase, so every unanswered question (reviews, assembly, warranty, a spec that contradicts itself) compounds an already-steep drop-off.
+    <div class="src">Source: Baymard Institute - <a href="https://baymard.com/lists/cart-abandonment-rate">cart-abandonment-rate</a> (validated 04-07-2026)</div>
+  </div>
+
+  <div class="bench">
+    <b>PDP fundamentals are a catalogue-wide lever.</b> Baymard's large-scale product-page research finds most e-commerce PDPs carry significant UX problems. Because your gaps are template-level, fixing the template compounds across every SKU, not just this cabinet.
+    <div class="src">Source: Baymard Institute - <a href="https://baymard.com/blog/product-page-usability-report-and-benchmark">product-page-usability-report-and-benchmark</a> (validated 04-07-2026)</div>
+  </div>
+
+  <!-- ===== Ship-ready action items ===== -->
+  <h2>Ship-ready action items</h2>
+  <p class="sub">Copy you can paste, where it goes, how you know it's done, effort, and owner. Bracketed values marked <code class="inl">[confirm]</code> need a real product number before publishing - do not ship a guessed figure.</p>
+
+  <div class="ticket">
+    <div class="top"><span class="id">A1</span><span class="ttl">Fix the description/spec contradiction</span>
+      <span class="pill p-high">Impact High</span><span class="pill eff-s">Effort S</span><span class="pill owner">Owner: Content</span></div>
+    <div class="row"><span class="k">Paste this</span><div class="paste">The vidaXL Bathroom Wall Cabinet FLORO brings contemporary style and practical storage to compact bathrooms. Measuring 35 x 30 x 60 cm (L x W x H), its clean lines and wall-mounted design free up floor space while a single hinged door keeps toiletries tidy. Crafted from solid pine wood with a durable waxed finish that resists bathroom moisture and brings out the natural grain. Includes one adjustable shelf with three height settings, so you can size the interior to bottles, jars or folded towels. Indoor use only. Assembly required.</div></div>
+    <div class="row"><span class="k">Placement</span><div>Replace the entire Description paragraph. Delete every mention of "60 x 40 x 80 cm" and "three adjustable shelves".</div></div>
+    <div class="row"><span class="k">Done when</span><div><ul class="ac"><li>Every dimension and the shelf count in the description match the Specifications block exactly.</li><li>No instance of "60 x 40 x 80" or "three shelves" remains.</li></ul></div></div>
+  </div>
+
+  <div class="ticket">
+    <div class="top"><span class="id">A2</span><span class="ttl">Add rating + customer reviews</span>
+      <span class="pill p-high">Impact High</span><span class="pill eff-m">Effort M</span><span class="pill owner">Owner: Eng + Merch</span></div>
+    <div class="row"><span class="k">Build</span><div>Rating chip (stars + count) in the buy box beside the price. A "Customer reviews" section below Specifications, seeded from your existing Flowbox/marketplace reviews. Add a "Verified buyer" badge where available (documented ~15% purchase-odds lift).</div></div>
+    <div class="row"><span class="k">Copy</span><div class="paste">Customer reviews
+[4.x] out of 5  ·  [n] reviews  ·  Verified buyers</div></div>
+    <div class="row"><span class="k">Placement</span><div>Rating chip: directly under the price (above the fold). Reviews section: immediately after the Specifications block.</div></div>
+    <div class="row"><span class="k">Done when</span><div><ul class="ac"><li>Rating is visible above the fold without scrolling.</li><li>Reviews section renders at least the latest reviews with date and verified flag.</li><li>The stray "0.0" near the Wishlist icon is removed or relabeled.</li></ul></div></div>
+  </div>
+
+  <div class="ticket">
+    <div class="top"><span class="id">A3</span><span class="ttl">Add assembly detail + manual link</span>
+      <span class="pill p-high">Impact High</span><span class="pill eff-s">Effort S</span><span class="pill owner">Owner: Content + Eng</span></div>
+    <div class="row"><span class="k">Paste this</span><div class="paste">Assembly: required · approx. [confirm] min · 1 person · tools needed: [confirm, e.g. Phillips screwdriver] (not included)
+In the box: 1 x wall cabinet, fixings, wall bracket
+Download assembly manual (PDF): [link]</div></div>
+    <div class="row"><span class="k">Placement</span><div>New "Assembly" line in the Specifications block, plus the PDF link in the buy box.</div></div>
+    <div class="row"><span class="k">Done when</span><div><ul class="ac"><li>Page states an assembly time, tools, and part count with real product values.</li><li>Manual PDF opens and matches this SKU.</li></ul></div></div>
+  </div>
+
+  <div class="ticket">
+    <div class="top"><span class="id">A4</span><span class="ttl">Surface warranty + returns in the buy box</span>
+      <span class="pill p-med">Impact Med</span><span class="pill eff-s">Effort S</span><span class="pill owner">Owner: Content</span></div>
+    <div class="row"><span class="k">Paste this</span><div class="paste">✓ [confirm]-day returns   ✓ [confirm]-year warranty   ✓ Secure checkout</div></div>
+    <div class="row"><span class="k">Placement</span><div>A trust strip directly under Add to Cart, beside the existing "Free shipping over £70" line.</div></div>
+    <div class="row"><span class="k">Done when</span><div><ul class="ac"><li>Return window and warranty period are shown on the page and link to the full policy.</li><li>Values are confirmed real, not placeholder.</li></ul></div></div>
+  </div>
+
+  <div class="ticket">
+    <div class="top"><span class="id">A5</span><span class="ttl">Make cross-sell relevant</span>
+      <span class="pill p-med">Impact Med</span><span class="pill eff-m">Effort M</span><span class="pill owner">Owner: Merch + Eng</span></div>
+    <div class="row"><span class="k">Change</span><div>Replace the generic "Items bought by others" feed with a same-range / same-category source (FLORO range and bathroom furniture). Your "Frequently Bought Together" already surfaces the matching FLORO drawer cabinet - use that logic for the main carousel.</div></div>
+    <div class="row"><span class="k">Done when</span><div><ul class="ac"><li>No unrelated categories (garden, pets, camping) appear on a bathroom PDP.</li><li>At least 4 same-range or bathroom items render.</li></ul></div></div>
+  </div>
+
+  <div class="ticket">
+    <div class="top"><span class="id">A6</span><span class="ttl">Add a product/assembly video</span>
+      <span class="pill p-med">Impact Med</span><span class="pill eff-m">Effort M</span><span class="pill owner">Owner: Creative</span></div>
+    <div class="row"><span class="k">Change</span><div>Add a short 360 or assembly video as gallery item 2, so it sits second in the existing 12-image gallery.</div></div>
+    <div class="row"><span class="k">Done when</span><div><ul class="ac"><li>Video plays inline in the gallery on desktop and mobile.</li><li>It shows scale and the assembled result.</li></ul></div></div>
+  </div>
+
+  <div class="ticket">
+    <div class="top"><span class="id">A7</span><span class="ttl">Fix the search placeholder</span>
+      <span class="pill p-low">Impact Low</span><span class="pill eff-s">Effort S</span><span class="pill owner">Owner: Content + Eng</span></div>
+    <div class="row"><span class="k">Change</span><div>Header search placeholder from <code class="inl">Find the next purchase</code> to <code class="inl">Search products or item number</code>. Site-wide, not just this page.</div></div>
+    <div class="row"><span class="k">Done when</span><div><ul class="ac"><li>Placeholder reads the new text on every page.</li><li>It matches the box's real behaviour (keyword or item no.).</li></ul></div></div>
+  </div>
+
+  <!-- ===== Roadmap ===== -->
+  <h2>ROI-sequenced roadmap</h2>
+  <p class="sub">Sequenced by sales impact against effort. Ship the low-effort, high-trust fixes now; the two structural bets follow.</p>
+  <div class="road">
+    <div class="col">
+      <h4>This week</h4>
+      <p class="when">Low effort, high trust. All copy/config.</p>
+      <ul>
+        <li><b>A1</b> - kill the spec contradiction</li>
+        <li><b>A3</b> - assembly detail + manual</li>
+        <li><b>A4</b> - warranty + returns strip</li>
+        <li><b>A7</b> - search placeholder</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h4>This sprint</h4>
+      <p class="when">Structural, highest sales upside.</p>
+      <ul>
+        <li><b>A2</b> - ratings + reviews (the single biggest lever)</li>
+        <li><b>A5</b> - relevant cross-sell</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h4>This quarter</h4>
+      <p class="when">Scale the wins beyond one SKU.</p>
+      <ul>
+        <li><b>A6</b> - product video</li>
+        <li>Roll A1-A5 into the <b>PDP template</b> so every SKU inherits the fix</li>
+        <li>Audit the catalogue for the same spec-contradiction pattern</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== Experiments ===== -->
+  <h2>Prove it: experiment plan for the top 2 bets</h2>
+  <p class="sub">Benchmarks are industry averages. These tests turn them into your numbers, so you can defend the investment.</p>
+
+  <div class="exp">
+    <div class="row"><span class="k">Bet</span><div><b>Ratings + reviews on the PDP (A2)</b></div></div>
+    <div class="row"><span class="k">Hypothesis</span><div>Showing a star rating and reviews on the PDP raises add-to-cart rate for considered-purchase categories.</div></div>
+    <div class="row"><span class="k">Metric</span><div>Primary: PDP → add-to-cart rate. Secondary: PDP → purchase. Guardrail: return rate.</div></div>
+    <div class="row"><span class="k">Design</span><div>A/B on a category cohort. Control = no reviews; variant = rating chip + reviews section. Split traffic 50/50.</div></div>
+    <div class="row"><span class="k">MDE</span><div>Power the test to detect a conservative <b>+5% relative</b> lift in add-to-cart at 95% confidence, even though the benchmark implies far more. Watch the 4.0-4.7 star sweet spot - suppress or contextualise very low-rated SKUs.</div></div>
+  </div>
+
+  <div class="exp">
+    <div class="row"><span class="k">Bet</span><div><b>Copy accuracy - fixing spec contradictions (A1)</b></div></div>
+    <div class="row"><span class="k">Hypothesis</span><div>Removing description/spec contradictions reduces bounce and wrong-size returns and lifts add-to-cart on affected PDPs.</div></div>
+    <div class="row"><span class="k">Metric</span><div>Primary: add-to-cart rate on corrected PDPs. Secondary: bounce rate and "wrong item/size" return rate.</div></div>
+    <div class="row"><span class="k">Design</span><div>This is a defect fix, so a pre/post on a cohort of corrected PDPs is enough; keep a small holdout if you want a clean read. Track returns for 60-90 days post-fix.</div></div>
+    <div class="row"><span class="k">MDE</span><div>Target a measurable drop in wrong-size returns on corrected SKUs; even a small reduction pays back the low effort many times over.</div></div>
   </div>
 
   <p class="limits">
-    This is a fast first pass, not real user research. It catches the obvious breaks that are easy to miss when you see your own page every day; it does not measure emotional reaction or edge-case confusion. Use it to decide where to point real research - for example, whether the missing reviews or the spec contradiction is what actually loses buyers.
-    Both pages were live URLs, so no lens was downgraded. Scores follow the fixed 1-5 rubric in the skill, anchored to each lens definition rather than a head-to-head guess.
+    This is a fast first pass, not real user research. It catches the obvious breaks that are easy to miss when you see your own page every day; it does not measure emotional reaction or edge-case confusion. The benchmark figures are industry research (linked and validated 04-07-2026), not your store's numbers - the experiment plan above is how you convert them into defensible, client-specific results. Both pages were live URLs, so no lens was downgraded. Scores follow the fixed 1-5 rubric in the skill.
+    <br><br>Sources: <a href="https://spiegel.medill.northwestern.edu/how-online-reviews-influence-sales/">Spiegel Research Center (reviews &amp; conversion)</a> · <a href="https://baymard.com/lists/cart-abandonment-rate">Baymard (cart abandonment)</a> · <a href="https://baymard.com/blog/product-page-usability-report-and-benchmark">Baymard (product page UX)</a>.
   </p>
 </div>

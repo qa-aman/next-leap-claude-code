@@ -112,9 +112,10 @@
   <h2>Usability / UX flow <span class="lens-score">- you {{U_YOU}}/5, {{COMPETITOR_NAME}} {{U_COMP}}/5</span></h2>
   <p class="sub">{{ONE_LINE_REASONING_FOR_THIS_LENS}}</p>
 
-  <!-- Repeat one card per finding. Every card MUST carry all five parts. -->
+  <!-- Repeat one card per finding. Every card MUST carry all five parts + the conversion lever. -->
   <div class="card">
     <p class="el">{{ELEMENT}}</p>
+    <p class="lever"><b>Conversion lever:</b> {{ONE_OF: decision confidence / friction / trust-risk reversal / findability / relevance-basket size / first-screen commitment}}</p>
     <dl>
       <dt>{{COMPETITOR_NAME}}</dt><dd>{{COMPETITOR_TREATMENT}}</dd>
       <dt>You</dt><dd>{{YOUR_TREATMENT}}</dd>
@@ -136,18 +137,43 @@
   <div class="note">Flow could not be walked - this page was supplied as a screenshot, so the usability lens reflects only what a static frame shows.</div>
   -->
 
-  <h2>Do these first</h2>
-  <div class="scroll">
-    <table class="fixes">
-      <thead><tr><th>#</th><th>Fix</th><th>Impact</th><th>Effort</th></tr></thead>
-      <tbody>
-        <!-- Ranked by impact against effort, highest-leverage first. -->
-        <tr><td class="rank">1</td><td>{{FIX_SUMMARY}}</td><td>{{IMPACT}}</td><td>{{EFFORT}}</td></tr>
-        <tr><td class="rank">2</td><td>{{FIX_SUMMARY}}</td><td>{{IMPACT}}</td><td>{{EFFORT}}</td></tr>
-        <!-- ...more rows... -->
-      </tbody>
-    </table>
+  <!-- ===== Sales impact: one bench card per high-leverage gap. Cite ONLY from sales-benchmarks.md or a freshly validated source. ===== -->
+  <h2>Why these move sales (validated benchmarks)</h2>
+  <div class="bench">
+    {{PLAIN_LANGUAGE_LINK_FROM_GAP_TO_LEVER_WITH_THE_FIGURE}}
+    <div class="src">Source: {{SOURCE_NAME}} - <a href="{{VALIDATED_URL}}">{{SHORT_LABEL}}</a> (validated DD-MM-YYYY)</div>
   </div>
+  <!-- ...more bench cards... -->
+
+  <!-- ===== Ship-ready action items: one ticket per fix. Paste = literal copy, not a description of it. ===== -->
+  <h2>Ship-ready action items</h2>
+  <div class="ticket">
+    <div class="top"><span class="id">A1</span><span class="ttl">{{FIX_TITLE}}</span>
+      <span class="pill p-high">Impact {{HIGH_MED_LOW}}</span><span class="pill eff-s">Effort {{S_M_L}}</span><span class="pill owner">Owner: {{TEAM}}</span></div>
+    <div class="row"><span class="k">Paste this</span><div class="paste">{{LITERAL_COPY_TO_PASTE_OR_BUILD_NOTE. Use [confirm] for any value not verifiable from the page - never ship a guessed number}}</div></div>
+    <div class="row"><span class="k">Placement</span><div>{{EXACT_PLACEMENT}}</div></div>
+    <div class="row"><span class="k">Done when</span><div><ul class="ac"><li>{{ACCEPTANCE_CRITERION}}</li></ul></div></div>
+  </div>
+  <!-- ...more tickets A2, A3... -->
+
+  <!-- ===== ROI-sequenced roadmap ===== -->
+  <h2>ROI-sequenced roadmap</h2>
+  <div class="road">
+    <div class="col"><h4>This week</h4><p class="when">{{THEME}}</p><ul><li>{{TICKET_REFS}}</li></ul></div>
+    <div class="col"><h4>This sprint</h4><p class="when">{{THEME}}</p><ul><li>{{TICKET_REFS}}</li></ul></div>
+    <div class="col"><h4>This quarter</h4><p class="when">{{THEME}}</p><ul><li>{{TICKET_REFS}}</li><li>Roll the fixes into the PDP/page template so every page inherits them</li></ul></div>
+  </div>
+
+  <!-- ===== Experiment plan: the top 2 bets only ===== -->
+  <h2>Prove it: experiment plan for the top 2 bets</h2>
+  <div class="exp">
+    <div class="row"><span class="k">Bet</span><div><b>{{FIX_NAME}}</b></div></div>
+    <div class="row"><span class="k">Hypothesis</span><div>{{HYPOTHESIS}}</div></div>
+    <div class="row"><span class="k">Metric</span><div>Primary: {{METRIC}}. Secondary: {{METRIC}}. Guardrail: {{METRIC}}.</div></div>
+    <div class="row"><span class="k">Design</span><div>{{AB_OR_PREPOST}}</div></div>
+    <div class="row"><span class="k">MDE</span><div>{{MINIMUM_DETECTABLE_EFFECT}}</div></div>
+  </div>
+  <!-- second bet ... -->
 
   <p class="limits">
     This is a fast first pass, not real user research. It catches the obvious breaks that are easy to miss when you see the page every day; it does not measure emotional reaction or edge-case confusion. Use it to decide where to point real research.

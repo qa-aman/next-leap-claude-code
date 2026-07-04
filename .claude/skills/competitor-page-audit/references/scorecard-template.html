@@ -1,0 +1,156 @@
+<!--
+  Scorecard skeleton for competitor-page-audit.
+  This is a STARTING POINT, not a fixed form. Fill every {{PLACEHOLDER}}, repeat the
+  repeatable blocks (lens sections, finding cards, friction rows, fix rows), and delete
+  anything a given run does not have (e.g. the friction log for a screenshot-only run).
+  Ship it via the Artifact tool. Do NOT include <!doctype>, <html>, <head>, or <body> -
+  the Artifact tool wraps the file. Write page content directly, styles inline in <style>.
+  Keep it theme-aware: it must read well in both light and dark.
+-->
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1a1a1a; --muted: #5c5c5c; --card: #f6f6f7;
+    --border: #e2e2e5; --lead: #1a7f4b; --lead-bg: #e3f5ea;
+    --tie: #6b6b6b; --tie-bg: #ededed; --trail: #b4231f; --trail-bg: #fbe4e3;
+    --accent: #2f5fe0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16171a; --fg: #ececee; --muted: #9a9aa2; --card: #202126;
+      --border: #303138; --lead: #4fd99a; --lead-bg: #123524;
+      --tie: #a0a0a8; --tie-bg: #2a2b30; --trail: #ff7a75; --trail-bg: #3a1817;
+      --accent: #7aa0ff;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #16171a; --fg: #ececee; --muted: #9a9aa2; --card: #202126;
+    --border: #303138; --lead: #4fd99a; --lead-bg: #123524;
+    --tie: #a0a0a8; --tie-bg: #2a2b30; --trail: #ff7a75; --trail-bg: #3a1817;
+    --accent: #7aa0ff;
+  }
+  :root[data-theme="light"] {
+    --bg: #ffffff; --fg: #1a1a1a; --muted: #5c5c5c; --card: #f6f6f7;
+    --border: #e2e2e5; --lead: #1a7f4b; --lead-bg: #e3f5ea;
+    --tie: #6b6b6b; --tie-bg: #ededed; --trail: #b4231f; --trail-bg: #fbe4e3;
+    --accent: #2f5fe0;
+  }
+  * { box-sizing: border-box; }
+  body, .wrap { color: var(--fg); background: var(--bg); }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 32px 20px 64px;
+    font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
+  h2 { font-size: 20px; margin: 40px 0 12px; letter-spacing: -0.01em; }
+  .sub { color: var(--muted); margin: 0 0 24px; }
+  .persona { background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px; margin: 0 0 28px; }
+  .persona b { color: var(--accent); }
+  .overall { display: flex; gap: 16px; margin: 8px 0 0; }
+  .overall .box { flex: 1; text-align: center; border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px; background: var(--card); }
+  .overall .num { font-size: 34px; font-weight: 700; letter-spacing: -0.03em; }
+  .overall .lbl { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .scroll { overflow-x: auto; }
+  table.heat { border-collapse: collapse; width: 100%; min-width: 520px; margin: 8px 0 0; }
+  table.heat th, table.heat td { padding: 10px 12px; text-align: center; border: 1px solid var(--border); }
+  table.heat th:first-child, table.heat td:first-child { text-align: left; font-weight: 600; }
+  .cell-lead { background: var(--lead-bg); color: var(--lead); font-weight: 700; }
+  .cell-tie  { background: var(--tie-bg);  color: var(--tie);  font-weight: 700; }
+  .cell-trail{ background: var(--trail-bg);color: var(--trail);font-weight: 700; }
+  .lens-score { color: var(--muted); font-weight: 500; font-size: 15px; }
+  .card { border: 1px solid var(--border); border-left: 3px solid var(--accent);
+    border-radius: 8px; background: var(--card); padding: 14px 16px; margin: 12px 0; }
+  .card .el { font-weight: 700; margin: 0 0 8px; }
+  .card dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 4px 12px; }
+  .card dt { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .card dd { margin: 0; }
+  .card .fix { color: var(--fg); font-weight: 600; }
+  .friction { list-style: none; padding: 0; margin: 8px 0 0; }
+  .friction li { border-left: 2px solid var(--border); padding: 6px 0 6px 14px; margin: 0 0 4px; }
+  .friction li.stall { border-left-color: var(--trail); }
+  .friction li.stall b { color: var(--trail); }
+  table.fixes { border-collapse: collapse; width: 100%; min-width: 560px; margin: 8px 0 0; }
+  table.fixes th, table.fixes td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+  table.fixes th { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .rank { font-weight: 700; color: var(--accent); }
+  .note { background: var(--tie-bg); border-radius: 8px; padding: 12px 14px; color: var(--muted); font-size: 14px; margin: 12px 0; }
+  .limits { border-top: 1px solid var(--border); margin-top: 40px; padding-top: 16px; color: var(--muted); font-size: 14px; }
+</style>
+
+<div class="wrap">
+  <h1>Page audit: {{YOUR_PAGE_NAME}} vs {{COMPETITOR_NAME}}</h1>
+  <p class="sub">{{ONE_LINE_WHAT_THIS_IS}}</p>
+
+  <div class="persona">
+    Walked as <b>{{PERSONA_NAME_AND_ROLE}}</b> trying to <b>{{PERSONA_GOAL}}</b>.<br>
+    <span style="color:var(--muted); font-size:14px">
+      Your page: {{YOUR_INPUT_TYPE_AND_FIDELITY}} &middot; Competitor: {{COMP_INPUT_TYPE_AND_FIDELITY}}
+    </span>
+  </div>
+
+  <div class="overall">
+    <div class="box"><div class="num">{{YOUR_TOTAL}}/20</div><div class="lbl">Your page</div></div>
+    <div class="box"><div class="num">{{COMP_TOTAL}}/20</div><div class="lbl">{{COMPETITOR_NAME}}</div></div>
+  </div>
+
+  <h2>Where you stand</h2>
+  <div class="scroll">
+    <table class="heat">
+      <thead>
+        <tr><th>Lens</th><th>You</th><th>{{COMPETITOR_NAME}}</th><th>Gap</th></tr>
+      </thead>
+      <tbody>
+        <!-- One row per lens. Class the Gap cell: cell-lead (you ahead), cell-tie (equal), cell-trail (you behind). -->
+        <tr><td>Usability / UX flow</td><td>{{U_YOU}}</td><td>{{U_COMP}}</td><td class="cell-trail">{{U_GAP}}</td></tr>
+        <tr><td>Feature / attribute parity</td><td>{{F_YOU}}</td><td>{{F_COMP}}</td><td class="cell-tie">{{F_GAP}}</td></tr>
+        <tr><td>Messaging &amp; copy</td><td>{{M_YOU}}</td><td>{{M_COMP}}</td><td class="cell-lead">{{M_GAP}}</td></tr>
+        <tr><td>Visual &amp; conversion design</td><td>{{V_YOU}}</td><td>{{V_COMP}}</td><td class="cell-trail">{{V_GAP}}</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== Repeat one block per lens ===== -->
+  <h2>Usability / UX flow <span class="lens-score">- you {{U_YOU}}/5, {{COMPETITOR_NAME}} {{U_COMP}}/5</span></h2>
+  <p class="sub">{{ONE_LINE_REASONING_FOR_THIS_LENS}}</p>
+
+  <!-- Repeat one card per finding. Every card MUST carry all five parts. -->
+  <div class="card">
+    <p class="el">{{ELEMENT}}</p>
+    <dl>
+      <dt>{{COMPETITOR_NAME}}</dt><dd>{{COMPETITOR_TREATMENT}}</dd>
+      <dt>You</dt><dd>{{YOUR_TREATMENT}}</dd>
+      <dt>Gap</dt><dd>{{WHY_IT_MATTERS}}</dd>
+      <dt>Fix</dt><dd class="fix">{{EXACT_CHANGE_AND_WHY}}</dd>
+    </dl>
+  </div>
+  <!-- ...more cards... -->
+  <!-- ===== End lens block; repeat for the other three lenses ===== -->
+
+  <h2>Friction log</h2>
+  <!-- Live-URL runs only. For screenshot-only runs, replace this whole list with the note below. -->
+  <ol class="friction">
+    <li>{{STEP_THAT_WENT_FINE}}</li>
+    <li class="stall"><b>Stalled:</b> {{WHERE_AND_WHY_THE_PERSONA_STALLED}}</li>
+    <!-- ...more steps... -->
+  </ol>
+  <!-- Screenshot fallback:
+  <div class="note">Flow could not be walked - this page was supplied as a screenshot, so the usability lens reflects only what a static frame shows.</div>
+  -->
+
+  <h2>Do these first</h2>
+  <div class="scroll">
+    <table class="fixes">
+      <thead><tr><th>#</th><th>Fix</th><th>Impact</th><th>Effort</th></tr></thead>
+      <tbody>
+        <!-- Ranked by impact against effort, highest-leverage first. -->
+        <tr><td class="rank">1</td><td>{{FIX_SUMMARY}}</td><td>{{IMPACT}}</td><td>{{EFFORT}}</td></tr>
+        <tr><td class="rank">2</td><td>{{FIX_SUMMARY}}</td><td>{{IMPACT}}</td><td>{{EFFORT}}</td></tr>
+        <!-- ...more rows... -->
+      </tbody>
+    </table>
+  </div>
+
+  <p class="limits">
+    This is a fast first pass, not real user research. It catches the obvious breaks that are easy to miss when you see the page every day; it does not measure emotional reaction or edge-case confusion. Use it to decide where to point real research.
+    {{IF_ANY_LENS_DOWNGRADED_SAY_WHICH_AND_WHY}}
+  </p>
+</div>

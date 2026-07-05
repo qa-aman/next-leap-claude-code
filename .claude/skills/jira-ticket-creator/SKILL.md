@@ -37,6 +37,30 @@ Parse any input into structured Jira tickets. Works with meeting action items, u
 - Contains "investigate", "research", "spike" -> Task
 - Everything else -> Story
 
+## User Story Format
+
+When the ticket is a **Story** (or the user asks to "create a user story"), the description MUST follow this exact structure. Do not use bare "As a user..." one-liners for stories.
+
+**Title** (the ticket summary):
+`As a [role], I want [capability] so that [benefit]`
+
+**Description body** (three labeled sections, in this order):
+
+1. **Problem Statement** — the current state and why it is a problem. Name the specific gap, the affected surface, and the business or UX cost (missed monetization, fragmented experience, lost conversions). Ground it in real context, no filler.
+2. **Objective** — what will be implemented and the intended outcome. One tight paragraph: the change, the mechanism (e.g. backend mappings, entity type), and the result it drives (consistency, engagement, conversions).
+
+Acceptance criteria are optional but, when present, go under a third **Acceptance Criteria** bullet list after Objective.
+
+### Reference example
+
+> **Title:** As a user, I want to see relevant sticky CTA ads on news detail pages so that I can easily take action based on the content I am consuming
+>
+> **Problem Statement**
+> Currently, predefined ad types such as sticky strip ads are not being shown on news detail pages, despite these pages being one of the highest traffic drivers on the website. This leads to missed monetization and conversion opportunities. Additionally, inconsistent CTA behavior across different entities (exam, college, others) results in a fragmented user experience.
+>
+> **Objective**
+> To implement sticky strip ads on news detail pages with dynamic CTA behavior based on backend mappings and entity type, ensuring consistency, improved engagement, and maximized conversions.
+
 ## Workflow
 
 1. **Parse** — extract individual ticket items from input
@@ -74,5 +98,6 @@ Proceed? (y/n/edit)
 
 - [ ] Every ticket has a clear summary
 - [ ] Type correctly inferred or specified
+- [ ] Stories use the User Story Format: "As a [role]... so that [benefit]" title + Problem Statement + Objective
 - [ ] User confirmed before creation
 - [ ] Total story points shown

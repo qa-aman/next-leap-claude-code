@@ -13,6 +13,8 @@ Answers to open questions from workshop sessions, sourced from official Anthropi
 - **May 2026 Session 5 additions:** 23-05-2026 (Q57-Q70 - see "May 2026 - Session 5 Additions" section)
 - **May 2026 Session 6 additions:** 23-05-2026 (Q71-Q76 - Multi-agent architectures, afternoon - see "May 2026 - Session 6 Additions" section)
 - **May 2026 Session 7 additions:** 24-05-2026 (Q77-Q83 - Build Hours, Property Finder build - see "May 2026 - Session 7 Additions" section)
+- **July 2026 Session 1 additions:** 04-07-2026 (Q84-Q89 - new cohort, Claude Code Setup - see "July 2026 - Session 1 Additions" section)
+- **July 2026 Session 2 additions:** 04-07-2026 (Q90-Q95 - Skills, Plugins, and Practical Examples - see "July 2026 - Session 2 Additions" section)
 
 If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
@@ -1665,5 +1667,178 @@ This is exactly how the Property Finder repo was shared: private repo, `.env` gi
 **Sources:**
 - https://code.claude.com/docs/en/settings (verified 24-05-2026)
 - https://code.claude.com/docs/en/memory (verified 24-05-2026)
+
+---
+
+# July 2026 - Session 1 Additions
+
+New questions raised by a new NextLeap Applied Generative AI Bootcamp cohort on 04-07-2026 during Session 1 (Claude Code Setup, morning). All URLs verified 05-07-2026.
+
+---
+
+## Q84: What's the difference between Claude Chat, Claude Cowork, and Claude Code?
+
+**Short answer:** They are three separate surfaces with increasing capability. Chat is a plain conversational interface. Cowork has access to a local folder but not to skills, plugins, or MCP servers. Claude Code is the terminal-based tool with the full skill/plugin/MCP architecture, and it works inside any IDE (Antigravity, Cursor, VS Code) or a bare terminal.
+
+- If a command like `/database` or a custom skill only responds inside a terminal running `claude`, that's the tell you're in Claude Code, not Cowork or Chat.
+- The VS Code extension is a graphical wrapper around the same Claude Code CLI, so it supports most but not all CLI features (see Q90).
+- An IDE's own built-in agent panel (e.g. Antigravity's Gemini-based agent) is a separate product from Claude Code, even when it can also call Claude models - see Q95.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
+- https://code.claude.com/docs/en/vs-code (verified 05-07-2026)
+
+---
+
+## Q85: Do I need Antigravity (or any specific IDE) to use Claude Code?
+
+**Short answer:** No. Claude Code is a standalone CLI that works in any terminal or any IDE's integrated terminal - Antigravity, Cursor, VS Code, JetBrains, or a bare shell.
+
+- Antigravity is a personal workflow preference (single-window layout: file explorer, file viewer, and the Claude Code terminal side by side), not a requirement.
+- If your employer restricts installing new IDEs, you can still install the standalone Claude Code CLI and run `claude` in whatever terminal you already have access to.
+- The VS Code extension is a separate, optional graphical layer on top of the same CLI; it does not require Antigravity either.
+
+**Sources:**
+- https://code.claude.com/docs/en/vs-code (verified 05-07-2026)
+
+---
+
+## Q86: I get "command not found: claude" (or "'claude' is not recognized") after installing on Windows. How do I fix it?
+
+**Short answer:** The install succeeded but the install directory isn't on your PATH yet. Add `%USERPROFILE%\.local\bin` to your User PATH and open a new terminal.
+
+In PowerShell:
+
+```powershell
+$currentPath = [Environment]::GetEnvironmentVariable('PATH', 'User')
+[Environment]::SetEnvironmentVariable('PATH', "$currentPath;$env:USERPROFILE\.local\bin", 'User')
+```
+
+Then close and reopen the terminal and re-check with `claude --version`. This was the single most common install blocker in session - closing memory-heavy apps (extra Chrome tabs, the Claude desktop app) before installing also resolved several stalls, since Claude Code needs roughly 512 MB of free memory to install.
+
+**Sources:**
+- https://code.claude.com/docs/en/troubleshoot-install (verified 05-07-2026)
+- https://code.claude.com/docs/en/troubleshooting (verified 05-07-2026)
+
+---
+
+## Q87: Can I use my company's shared Claude account instead of buying my own Pro subscription?
+
+**Short answer:** Only if your company's policy explicitly allows it, and be aware a shared team account exposes your chat history to whoever else has access. For a workshop or personal exploration, a personal $20/month Pro subscription keeps your sessions private and is the safer default.
+
+- A shared/team account means other members with access can see your conversation history and session data.
+- If your company later approves a tool, you can simply cancel the personal subscription - there's no lock-in.
+
+**Sources:**
+- https://code.claude.com/docs/en/settings (verified 05-07-2026)
+
+---
+
+## Q88: What's the practical difference between Windows PowerShell and Command Prompt when installing Claude Code?
+
+**Short answer:** Both can install Claude Code, but they use different installer commands and PATH mechanics, so copying a command meant for one shell into the other is the most common install failure.
+
+- PowerShell: `irm https://claude.ai/install.ps1 | iex`
+- Command Prompt (cmd.exe): `curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd`
+- Running the PowerShell command in cmd.exe fails with "'irm' is not recognized"; running the cmd.exe command in PowerShell fails on the `&&` operator or on curl being aliased to `Invoke-WebRequest`.
+- If unsure which shell you're in, open PowerShell specifically from the Start menu (not "PowerShell (x86)") and use the PowerShell installer.
+
+**Sources:**
+- https://code.claude.com/docs/en/troubleshoot-install (verified 05-07-2026)
+
+---
+
+## Q89: What does `/plugins` do, and how do I pick which ones to install?
+
+**Short answer:** `/plugins` opens an interactive picker where you toggle plugins with Space and install the selected set with `i`. Plugins bundle skills, agents, and MCP servers that aren't available in a plain chat model or a generic IDE agent.
+
+- After installing, run `/reload` (or the reload-plugins command shown in the picker) to activate them in the current session.
+- A reasonable starter set for a PM/product workshop: front-end design, superpowers (brainstorming), code-review, context7, skill-creator, code-simplifier, Playwright, Chrome DevTools, security guidance, and TypeScript - add Figma if you work in design.
+- Plugins installed this way are available across any project you open with Claude Code, not just the one you were in when you installed them.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
+
+---
+
+# July 2026 - Session 2 Additions
+
+New questions raised by the same NextLeap Applied Generative AI Bootcamp cohort on 04-07-2026 during Session 2 (Skills, Plugins, and Practical Examples, afternoon). All URLs verified 05-07-2026.
+
+---
+
+## Q90: Why does the Claude Code terminal show more information (status line) than Cowork or the VS Code extension?
+
+**Short answer:** The status line is a Claude Code CLI feature - a customizable bar that runs a shell script and can display model, effort level, context window usage, cost, git branch, and your 5-hour/7-day usage window. Cowork and the more limited surfaces don't expose this level of customization.
+
+- Configure it under `/statusline` or in `settings.json`; the script receives session data as JSON on stdin and prints whatever you want shown.
+- The VS Code extension shows an equivalent breakdown in its own Account & Usage dialog, but it isn't the same customizable status line.
+
+**Sources:**
+- https://code.claude.com/docs/en/statusline (verified 05-07-2026)
+- https://code.claude.com/docs/en/vs-code (verified 05-07-2026)
+
+---
+
+## Q91: Should I save a new skill at the project level or the global level?
+
+**Short answer:** Project level (`.claude/skills/`) if the skill only makes sense for that codebase; global level (`~/.claude/skills/`) if you want it available in every project. A common pattern is to keep a copy at both levels - project level for visibility inside that repo, global level so it follows you everywhere.
+
+- A skill created at project scope will not show up in the `/` menu of a different project unless it's also copied to `~/.claude/skills/`.
+- When copying a skill between projects, ask Claude to strip project-specific context and re-add context for the new project rather than reusing it verbatim.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
+
+---
+
+## Q92: My skill file is getting long. When should I split content into a references/ folder?
+
+**Short answer:** Keep the `SKILL.md` body itself short - long reference material (a scoring rubric, a research benchmark, a detailed template) should live in a `references/` file that the skill points to, since a skill's body loads only when it's invoked and long inline content costs context on every run.
+
+- In the session's Competitor Page Audit skill, the scoring rubric and a sales-benchmark writeup were moved into separate `references/` files rather than bloating the main skill.
+- If a skill keeps growing past what feels manageable, ask Claude directly to split it - it will extract detail into references and leave the procedure in the main file.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
+
+---
+
+## Q93: I want a skill for an open-ended task like brainstorming. Should I build it right away?
+
+**Short answer:** Not immediately. Open-ended, judgment-heavy tasks don't compress well into a fixed skill on the first try. Instead, work the problem in a dedicated chat for a while and have Claude maintain a `learnings.md` file of the decisions, corrections, and paths you actually took. After a month or two of real usage, that file has enough context to generate a genuinely useful skill or agent.
+
+- Treat the eventual skill or agent like a new hire: it only works well once it has the same context a person would need to make the same calls you do.
+- A skill built without that accumulated context tends to produce generic, low-value output on a task that's inherently about judgment rather than a fixed procedure.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 05-07-2026)
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
+
+---
+
+## Q94: What is "effort level" in Claude Code, and how does it affect cost?
+
+**Short answer:** Effort level controls how much extended-thinking budget a model uses per request. Medium effort is the default recommendation for most day-to-day work; higher effort levels (high, very high) spend more thinking tokens and cost more, and are best reserved for genuinely complex reasoning or planning tasks.
+
+- Switch model and effort with `/model`, or change effort alone with `/effort`.
+- Combine with model choice for cost control: Sonnet at medium effort covers most day-to-day work; reserve Opus and higher effort for complex architectural or multi-step reasoning tasks.
+
+**Sources:**
+- https://code.claude.com/docs/en/model-config (verified 05-07-2026)
+- https://code.claude.com/docs/en/costs (verified 05-07-2026)
+
+---
+
+## Q95: Why does Antigravity's built-in agent panel behave differently from Claude Code, even though both can use Claude models?
+
+**Short answer:** They're different products with different tool access, not just different chat windows. Antigravity's native agent panel is Antigravity's own agent (it can call several model providers, including Claude models), while Claude Code is Anthropic's own CLI with its own skill, plugin, and MCP architecture. Selecting a Claude model inside Antigravity's panel does not give you Claude Code's skills - you still need to run `claude` in a terminal to access those.
+
+- A skill invoked with `/skill-name` only works inside an actual Claude Code session (terminal or the Claude Code VS Code extension), not inside a generic IDE agent panel, even one powered by the same underlying model.
+- This is why the workshop repeatedly moves the Claude Code terminal into the IDE's secondary sidebar rather than relying on the IDE's own agent panel.
+
+**Sources:**
+- https://code.claude.com/docs/en/vs-code (verified 05-07-2026)
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
 
 ---

@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>People & Compensation Dashboard</title>
+<style>
+  :root{
+    --navy:#1f3a5f; --blue:#2e5e8c; --teal:#2c7a7b; --amber:#b7791f;
+    --ink:#1a2230; --muted:#6b7480; --line:#e2e8f0; --bg:#f4f7fa; --card:#ffffff;
+    --shadow:0 1px 3px rgba(16,24,40,.06),0 1px 2px rgba(16,24,40,.04);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.4}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+  header.top{background:var(--navy);color:#fff;border-radius:14px;padding:22px 26px;margin-bottom:22px}
+  header.top h1{margin:0;font-size:22px;font-weight:700;letter-spacing:-.01em}
+  header.top p{margin:6px 0 0;font-size:13px;color:#c7d4e2}
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:26px}
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 16px 14px;box-shadow:var(--shadow)}
+  .kpi .label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .kpi .val{font-size:26px;font-weight:750;color:var(--navy);margin-top:8px;letter-spacing:-.02em}
+  .kpi .cap{font-size:11px;color:var(--muted);margin-top:2px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;box-shadow:var(--shadow)}
+  .panel h2{margin:0 0 16px;font-size:14px;font-weight:700;color:var(--navy)}
+  /* bar chart */
+  .bars{display:flex;flex-direction:column;gap:11px}
+  .bar-row{display:grid;grid-template-columns:96px 1fr 62px;align-items:center;gap:10px;font-size:12.5px}
+  .bar-row .name{color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .track{background:#eef2f7;border-radius:6px;height:20px;overflow:hidden}
+  .fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--blue),var(--navy))}
+  .bar-row .amt{text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+  .col-chart{display:flex;align-items:flex-end;gap:14px;height:180px;padding-top:8px}
+  .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%}
+  .col .colfill{width:100%;max-width:52px;border-radius:6px 6px 0 0;background:linear-gradient(180deg,var(--teal),#1f5657)}
+  .col .clabel{font-size:11.5px;color:var(--ink);font-weight:600}
+  .col .cval{font-size:11px;color:var(--muted)}
+  /* donut legend */
+  .donut-wrap{display:flex;align-items:center;gap:18px}
+  .legend{display:flex;flex-direction:column;gap:8px;font-size:12.5px}
+  .legend .li{display:flex;align-items:center;gap:8px}
+  .swatch{width:12px;height:12px;border-radius:3px;flex:none}
+  .legend .lname{font-weight:600}
+  .legend .lval{color:var(--muted)}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);cursor:pointer;user-select:none;white-space:nowrap}
+  th:hover{color:var(--navy)}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  tbody tr:hover{background:#f7fafc}
+  .table-panel{margin-top:4px}
+  .table-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:12px;flex-wrap:wrap}
+  .search{border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px;width:220px;outline:none}
+  .search:focus{border-color:var(--blue)}
+  .count{font-size:12px;color:var(--muted)}
+  .foot{margin-top:24px;font-size:11.5px;color:var(--muted);text-align:center}
+  @media(max-width:900px){.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>People &amp; Compensation Dashboard</h1>
+    <p id="subtitle"></p>
+  </header>
+
+  <section class="kpis" id="kpis"></section>
+
+  <div class="grid">
+    <div class="panel"><h2>Average Salary by Department</h2><div class="bars" id="deptBars"></div></div>
+    <div class="panel"><h2>Headcount by Location</h2><div class="col-chart" id="locCols"></div></div>
+  </div>
+
+  <div class="grid">
+    <div class="panel"><h2>Average Salary by Experience Band</h2><div class="bars" id="expBars"></div></div>
+    <div class="panel">
+      <h2>Gender &amp; Employment Type</h2>
+      <div style="display:flex;gap:28px;flex-wrap:wrap">
+        <div class="donut-wrap"><div id="genderDonut"></div><div class="legend" id="genderLegend"></div></div>
+        <div class="donut-wrap"><div id="empDonut"></div><div class="legend" id="empLegend"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel table-panel">
+    <div class="table-head">
+      <h2 style="margin:0">People (<span id="rowTotal"></span>)</h2>
+      <input class="search" id="search" placeholder="Search name, dept, role, location...">
+    </div>
+    <div style="overflow-x:auto">
+      <table id="tbl">
+        <thead><tr>
+          <th data-k="name">Name</th><th data-k="dept">Department</th><th data-k="role">Role</th>
+          <th data-k="loc">Location</th><th data-k="exp" class="num">Exp (yrs)</th>
+          <th data-k="type">Type</th><th data-k="gender">Gender</th>
+          <th data-k="joined">Joined</th><th data-k="salary" class="num">Salary</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="count" id="filterCount" style="margin-top:10px"></div>
+  </div>
+
+  <div class="foot">Sample data. Generated 05-07-2026. Self-contained file, works offline.</div>
+</div>
+
+<script>
+const DATA = [
+ ["Aisha Khan","Engineering","Senior Engineer","Bangalore",7,"Full-time","Female","12-01-2022",118000],
+ ["Ben Torres","Sales","Account Executive","Mumbai",4,"Full-time","Male","23-03-2023",84500],
+ ["Chen Wei","Engineering","Staff Engineer","Remote",10,"Full-time","Male","05-02-2020",152000],
+ ["Diya Patel","Marketing","Content Lead","Delhi",5,"Full-time","Female","18-06-2022",78000],
+ ["Ethan Brooks","Product","Product Manager","Bangalore",6,"Full-time","Male","02-09-2021",112000],
+ ["Farah Nasser","Design","Product Designer","Pune",3,"Full-time","Female","14-11-2023",72000],
+ ["Grace Lin","Engineering","Engineering Manager","Remote",11,"Full-time","Female","27-04-2019",168000],
+ ["Hassan Ali","Operations","Ops Analyst","Delhi",2,"Full-time","Male","09-01-2024",56000],
+ ["Ivy Nguyen","Product","Senior PM","Mumbai",8,"Full-time","Female","21-07-2020",134000],
+ ["Jack Owens","Sales","SDR","Bangalore",1,"Full-time","Male","03-02-2025",48000],
+ ["Kavya Reddy","Engineering","Backend Engineer","Bangalore",4,"Full-time","Female","16-05-2023",92000],
+ ["Liam Scott","Marketing","Growth Marketer","Remote",6,"Contract","Male","28-08-2021",88000],
+ ["Maya Singh","Design","Design Lead","Delhi",9,"Full-time","Female","11-03-2020",128000],
+ ["Noah Clark","Engineering","Frontend Engineer","Pune",3,"Full-time","Male","24-10-2023",86000],
+ ["Omar Farooq","Operations","Ops Manager","Mumbai",8,"Full-time","Male","07-06-2020",108000],
+ ["Priya Nair","Product","Product Manager","Bangalore",5,"Full-time","Female","19-09-2022",106000],
+ ["Quinn Davis","Sales","Account Executive","Remote",5,"Full-time","Other","31-01-2022",90000],
+ ["Riya Kapoor","Engineering","Senior Engineer","Mumbai",7,"Full-time","Female","13-04-2021",122000],
+ ["Sam Nolan","Marketing","Marketing Analyst","Delhi",2,"Part-time","Male","26-11-2024",44000],
+ ["Tara Menon","Design","Product Designer","Bangalore",4,"Full-time","Female","08-07-2023",80000],
+ ["Umar Sheikh","Engineering","DevOps Engineer","Remote",6,"Full-time","Male","20-02-2022",104000],
+ ["Vera Popov","Product","Group PM","Mumbai",12,"Full-time","Female","02-05-2018",176000],
+ ["Will Baker","Sales","Sales Manager","Delhi",9,"Full-time","Male","15-08-2019",142000],
+ ["Xin Zhao","Engineering","ML Engineer","Bangalore",5,"Full-time","Other","27-03-2022",126000],
+ ["Yara Haddad","Operations","Ops Analyst","Pune",3,"Contract","Female","10-12-2023",58000],
+ ["Zane Cooper","Marketing","Brand Lead","Remote",8,"Full-time","Male","23-06-2020",110000],
+ ["Anaya Bose","Engineering","Backend Engineer","Mumbai",4,"Full-time","Female","05-01-2023",94000],
+ ["Boris Ivanov","Product","Product Analyst","Delhi",3,"Full-time","Male","18-09-2023",76000],
+ ["Cara Mendes","Design","UX Researcher","Bangalore",6,"Full-time","Female","30-04-2021",98000],
+ ["Dev Malhotra","Sales","Account Executive","Pune",4,"Full-time","Male","12-11-2022",82000],
+ ["Elena Rossi","Engineering","Staff Engineer","Remote",11,"Full-time","Female","24-02-2019",158000],
+ ["Faisal Rahman","Operations","Ops Lead","Mumbai",7,"Full-time","Male","06-07-2020",100000],
+ ["Gita Sharma","Marketing","SEO Specialist","Delhi",3,"Part-time","Female","19-10-2023",50000],
+ ["Hugo Martin","Engineering","Frontend Engineer","Bangalore",2,"Full-time","Male","01-02-2024",78000],
+ ["Isla Fraser","Product","Senior PM","Remote",8,"Full-time","Female","14-05-2020",138000],
+ ["Jamal Idris","Design","Product Designer","Pune",5,"Contract","Male","27-08-2022",84000]
+].map(r=>({name:r[0],dept:r[1],role:r[2],loc:r[3],exp:r[4],type:r[5],gender:r[6],joined:r[7],salary:r[8]}));
+
+const fmt = n => n.toLocaleString('en-US');
+const money = n => '$'+fmt(Math.round(n));
+const sum = a => a.reduce((x,y)=>x+y,0);
+const avg = a => a.length? sum(a)/a.length : 0;
+const median = a => { if(!a.length) return 0; const s=[...a].sort((x,y)=>x-y); const m=Math.floor(s.length/2); return s.length%2? s[m] : (s[m-1]+s[m])/2; };
+
+const salaries = DATA.map(d=>d.salary);
+
+// ---- subtitle
+document.getElementById('subtitle').textContent =
+  DATA.length+' people | sample data. Overwrite the array in this file or the Excel Data sheet to update everything.';
+
+// ---- KPIs
+const kpis = [
+  ["Headcount", fmt(DATA.length), "people"],
+  ["Average Salary", money(avg(salaries)), "mean"],
+  ["Highest Salary", money(Math.max(...salaries)), "max"],
+  ["Lowest Salary", money(Math.min(...salaries)), "min"],
+  ["Median Salary", money(median(salaries)), "50th pct"]
+];
+document.getElementById('kpis').innerHTML = kpis.map(k=>
+  `<div class="kpi"><div class="label">${k[0]}</div><div class="val">${k[1]}</div><div class="cap">${k[2]}</div></div>`).join('');
+
+// ---- group helpers
+function groupBy(key){ const m={}; DATA.forEach(d=>{ (m[d[key]]=m[d[key]]||[]).push(d); }); return m; }
+
+// ---- Avg salary by department (bar)
+(function(){
+  const g = groupBy('dept');
+  const rows = Object.keys(g).map(k=>({name:k,val:avg(g[k].map(d=>d.salary)),n:g[k].length}))
+              .sort((a,b)=>b.val-a.val);
+  const max = Math.max(...rows.map(r=>r.val));
+  document.getElementById('deptBars').innerHTML = rows.map(r=>
+    `<div class="bar-row"><span class="name" title="${r.name} (${r.n})">${r.name}</span>
+     <span class="track"><span class="fill" style="width:${(r.val/max*100).toFixed(1)}%"></span></span>
+     <span class="amt">${money(r.val)}</span></div>`).join('');
+})();
+
+// ---- Headcount by location (columns)
+(function(){
+  const g = groupBy('loc');
+  const rows = Object.keys(g).map(k=>({name:k,n:g[k].length})).sort((a,b)=>b.n-a.n);
+  const max = Math.max(...rows.map(r=>r.n));
+  document.getElementById('locCols').innerHTML = rows.map(r=>
+    `<div class="col"><span class="cval">${r.n}</span>
+      <div class="colfill" style="height:${(r.n/max*100).toFixed(1)}%"></div>
+      <span class="clabel">${r.name}</span></div>`).join('');
+})();
+
+// ---- Avg salary by experience band (bar)
+(function(){
+  const bands = [
+    ["0-2 yrs", d=>d.exp<=2],
+    ["3-5 yrs", d=>d.exp>=3&&d.exp<=5],
+    ["6-9 yrs", d=>d.exp>=6&&d.exp<=9],
+    ["10+ yrs", d=>d.exp>=10]
+  ].map(b=>{ const g=DATA.filter(b[1]); return {name:b[0],val:avg(g.map(d=>d.salary)),n:g.length}; });
+  const max = Math.max(...bands.map(b=>b.val));
+  document.getElementById('expBars').innerHTML = bands.map(r=>
+    `<div class="bar-row"><span class="name">${r.name} <span style="color:var(--muted);font-weight:400">(${r.n})</span></span>
+     <span class="track"><span class="fill" style="width:${max?(r.val/max*100).toFixed(1):0}%"></span></span>
+     <span class="amt">${money(r.val)}</span></div>`).join('');
+})();
+
+// ---- Donut renderer
+function donut(el, legendEl, key, colors){
+  const g = groupBy(key);
+  const items = Object.keys(g).map(k=>({name:k,n:g[k].length})).sort((a,b)=>b.n-a.n);
+  const total = sum(items.map(i=>i.n));
+  const R=52, C=2*Math.PI*(R-11), cx=60, cy=60;
+  let offset=0, segs='';
+  items.forEach((it,i)=>{
+    const frac=it.n/total, len=frac*C, col=colors[i%colors.length];
+    segs+=`<circle cx="${cx}" cy="${cy}" r="${R-11}" fill="none" stroke="${col}" stroke-width="22"
+      stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-offset}"
+      transform="rotate(-90 ${cx} ${cy})"></circle>`;
+    offset+=len;
+  });
+  document.getElementById(el).innerHTML =
+    `<svg width="120" height="120" viewBox="0 0 120 120">${segs}
+      <circle cx="${cx}" cy="${cy}" r="${R-22}" fill="#fff"></circle>
+      <text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="20" font-weight="700" fill="#1f3a5f">${total}</text>
+      <text x="${cx}" y="${cy+15}" text-anchor="middle" font-size="10" fill="#6b7480">total</text></svg>`;
+  document.getElementById(legendEl).innerHTML = items.map((it,i)=>
+    `<div class="li"><span class="swatch" style="background:${colors[i%colors.length]}"></span>
+     <span class="lname">${it.name}</span>
+     <span class="lval">${it.n} (${Math.round(it.n/total*100)}%)</span></div>`).join('');
+}
+donut('genderDonut','genderLegend','gender',['#2e5e8c','#2c7a7b','#b7791f']);
+donut('empDonut','empLegend','type',['#1f3a5f','#4a8fb8','#cbd5e0']);
+
+// ---- Table with sort + search
+let sortKey='salary', sortDir=-1;
+function toDate(s){ const p=s.split('-'); return new Date(+p[2],+p[1]-1,+p[0]).getTime(); }
+function renderTable(){
+  const q=document.getElementById('search').value.trim().toLowerCase();
+  let rows=DATA.filter(d=> !q || [d.name,d.dept,d.role,d.loc,d.type,d.gender].join(' ').toLowerCase().includes(q));
+  rows.sort((a,b)=>{
+    let x=a[sortKey],y=b[sortKey];
+    if(sortKey==='joined'){x=toDate(a.joined);y=toDate(b.joined);}
+    if(typeof x==='string'){return sortDir*x.localeCompare(y);}
+    return sortDir*(x-y);
+  });
+  document.getElementById('tbody').innerHTML = rows.map(d=>
+    `<tr><td>${d.name}</td><td>${d.dept}</td><td>${d.role}</td><td>${d.loc}</td>
+     <td class="num">${d.exp}</td><td>${d.type}</td><td>${d.gender}</td>
+     <td>${d.joined}</td><td class="num">${money(d.salary)}</td></tr>`).join('');
+  document.getElementById('filterCount').textContent =
+    `Showing ${rows.length} of ${DATA.length}. Click a column header to sort.`;
+}
+document.getElementById('rowTotal').textContent = DATA.length;
+document.querySelectorAll('#tbl th').forEach(th=>th.addEventListener('click',()=>{
+  const k=th.dataset.k; if(k===sortKey) sortDir*=-1; else {sortKey=k; sortDir=(k==='salary'||k==='exp')?-1:1;}
+  renderTable();
+}));
+document.getElementById('search').addEventListener('input',renderTable);
+renderTable();
+</script>
+</body>
+</html>

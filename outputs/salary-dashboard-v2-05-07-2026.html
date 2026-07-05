@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>People &amp; Compensation Dashboard</title>
+<style>
+  /* ---- design tokens (light is base; dark overrides) ---- */
+  :root{
+    --page:#f9f9f7; --surface:#fcfcfb;
+    --text-primary:#0b0b0b; --text-secondary:#52514e; --muted:#898781;
+    --grid:#e1e0d9; --baseline:#c3c2b7; --border:rgba(11,11,11,0.10);
+    --good:#006300;
+    --series-1:#2a78d6;                 /* sequential blue, magnitude bars */
+    --cat-1:#2a78d6; --cat-2:#1baf7a; --cat-3:#eda100;   /* categorical, validated */
+    --tip-bg:#0b0b0b; --tip-ink:#fcfcfb;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --page:#0d0d0d; --surface:#1a1a19;
+      --text-primary:#ffffff; --text-secondary:#c3c2b7; --muted:#898781;
+      --grid:#2c2c2a; --baseline:#383835; --border:rgba(255,255,255,0.10);
+      --good:#0ca30c;
+      --series-1:#3987e5;
+      --cat-1:#3987e5; --cat-2:#199e70; --cat-3:#c98500;
+      --tip-bg:#ffffff; --tip-ink:#0b0b0b;
+    }
+  }
+  :root[data-theme="light"]{
+    --page:#f9f9f7; --surface:#fcfcfb; --text-primary:#0b0b0b; --text-secondary:#52514e;
+    --muted:#898781; --grid:#e1e0d9; --baseline:#c3c2b7; --border:rgba(11,11,11,0.10);
+    --good:#006300; --series-1:#2a78d6; --cat-1:#2a78d6; --cat-2:#1baf7a; --cat-3:#eda100;
+    --tip-bg:#0b0b0b; --tip-ink:#fcfcfb;
+  }
+  :root[data-theme="dark"]{
+    --page:#0d0d0d; --surface:#1a1a19; --text-primary:#ffffff; --text-secondary:#c3c2b7;
+    --muted:#898781; --grid:#2c2c2a; --baseline:#383835; --border:rgba(255,255,255,0.10);
+    --good:#0ca30c; --series-1:#3987e5; --cat-1:#3987e5; --cat-2:#199e70; --cat-3:#c98500;
+    --tip-bg:#ffffff; --tip-ink:#0b0b0b;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--page);color:var(--text-primary);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.45;font-size:14px}
+  .wrap{max-width:1180px;margin:0 auto;padding:26px 20px 64px}
+
+  header.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:24px}
+  header.top h1{margin:0;font-size:22px;font-weight:680;letter-spacing:-.02em}
+  header.top p{margin:6px 0 0;font-size:13px;color:var(--text-secondary);max-width:640px}
+  .toggle{border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);
+    border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+  .toggle:hover{color:var(--text-primary)}
+
+  /* ---- stat tiles ---- */
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:26px}
+  .kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px}
+  .kpi .label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .kpi .val{font-size:27px;font-weight:700;color:var(--text-primary);margin-top:9px;letter-spacing:-.02em}
+  .kpi .cap{font-size:11.5px;color:var(--text-secondary);margin-top:3px}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+  .panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+  .panel h2{margin:0 0 4px;font-size:14px;font-weight:680;color:var(--text-primary)}
+  .panel .sub{margin:0 0 16px;font-size:11.5px;color:var(--muted)}
+
+  /* ---- horizontal bars (single-hue magnitude) ---- */
+  .bars{display:flex;flex-direction:column;gap:12px}
+  .bar-row{display:grid;grid-template-columns:104px 1fr 66px;align-items:center;gap:12px;font-size:12.5px}
+  .bar-row .name{color:var(--text-secondary);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .track{position:relative;height:18px}
+  .fill{height:100%;border-radius:3px;background:var(--series-1);min-width:2px;transition:opacity .12s}
+  .bar-row:hover .fill{opacity:.82;cursor:default}
+  .bar-row .amt{text-align:right;color:var(--text-secondary);font-variant-numeric:tabular-nums}
+
+  /* ---- donuts ---- */
+  .donuts{display:flex;gap:30px;flex-wrap:wrap}
+  .donut-unit{display:flex;align-items:center;gap:16px}
+  .legend{display:flex;flex-direction:column;gap:9px;font-size:12.5px}
+  .legend .li{display:flex;align-items:center;gap:8px;cursor:default}
+  .swatch{width:11px;height:11px;border-radius:3px;flex:none}
+  .legend .lname{font-weight:600;color:var(--text-primary)}
+  .legend .lval{color:var(--text-secondary);font-variant-numeric:tabular-nums}
+  .donut-cap{font-size:11.5px;color:var(--muted);margin:0 0 12px}
+  .donut svg circle.seg{transition:opacity .12s;cursor:default}
+
+  /* ---- table ---- */
+  .table-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--border)}
+  th{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);cursor:pointer;user-select:none;white-space:nowrap}
+  th:hover{color:var(--text-primary)}
+  th .arrow{opacity:.55;font-size:9px}
+  td{color:var(--text-secondary)}
+  td.name{color:var(--text-primary);font-weight:600}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  tbody tr:hover{background:color-mix(in srgb,var(--series-1) 6%,transparent)}
+  .search{border:1px solid var(--border);background:var(--surface);color:var(--text-primary);
+    border-radius:8px;padding:8px 12px;font-size:13px;width:230px;outline:none}
+  .search:focus{border-color:var(--series-1)}
+  .count{font-size:11.5px;color:var(--muted);margin-top:12px}
+
+  .foot{margin-top:26px;font-size:11.5px;color:var(--muted);text-align:center}
+
+  /* ---- tooltip ---- */
+  #tip{position:fixed;pointer-events:none;z-index:50;background:var(--tip-bg);color:var(--tip-ink);
+    font-size:12px;line-height:1.35;padding:7px 10px;border-radius:7px;opacity:0;transition:opacity .1s;
+    box-shadow:0 4px 14px rgba(0,0,0,.22);max-width:230px}
+  #tip b{font-weight:700}
+  #tip .k{color:var(--tip-ink);opacity:.7}
+
+  @media(max-width:900px){
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    .grid{grid-template-columns:1fr}
+    header.top{flex-direction:column}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>People &amp; Compensation Dashboard</h1>
+      <p id="subtitle"></p>
+    </div>
+    <button class="toggle" id="themeBtn" aria-label="Toggle colour theme">Dark mode</button>
+  </header>
+
+  <section class="kpis" id="kpis"></section>
+
+  <div class="grid">
+    <div class="panel">
+      <h2>Average Salary by Department</h2>
+      <p class="sub">Mean base salary, sorted high to low</p>
+      <div class="bars" id="deptBars"></div>
+    </div>
+    <div class="panel">
+      <h2>Headcount by Location</h2>
+      <p class="sub">People per office / remote</p>
+      <div class="bars" id="locBars"></div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <h2>Average Salary by Experience Band</h2>
+      <p class="sub">Mean base salary across tenure groups</p>
+      <div class="bars" id="expBars"></div>
+    </div>
+    <div class="panel">
+      <h2>Workforce Composition</h2>
+      <p class="sub">Share of headcount</p>
+      <div class="donuts">
+        <div class="donut-unit"><div class="donut" id="genderDonut"></div>
+          <div><p class="donut-cap">Gender</p><div class="legend" id="genderLegend"></div></div></div>
+        <div class="donut-unit"><div class="donut" id="empDonut"></div>
+          <div><p class="donut-cap">Employment type</p><div class="legend" id="empLegend"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="table-head">
+      <div><h2 style="margin:0">People</h2><p class="sub" style="margin:2px 0 0">Table view — the complete dataset</p></div>
+      <input class="search" id="search" placeholder="Search name, dept, role, location…">
+    </div>
+    <div style="overflow-x:auto">
+      <table id="tbl">
+        <thead><tr>
+          <th data-k="name">Name</th><th data-k="dept">Department</th><th data-k="role">Role</th>
+          <th data-k="loc">Location</th><th data-k="exp" class="num">Exp (yrs)</th>
+          <th data-k="type">Type</th><th data-k="gender">Gender</th>
+          <th data-k="joined">Joined</th><th data-k="salary" class="num">Salary</th>
+        </tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="count" id="filterCount"></div>
+  </div>
+
+  <div class="foot">Sample data. Generated 05-07-2026. Self-contained, offline, colour palette validated for colour-blind safety.</div>
+</div>
+<div id="tip"></div>
+
+<script>
+const DATA = [
+ ["Aisha Khan","Engineering","Senior Engineer","Bangalore",7,"Full-time","Female","12-01-2022",118000],
+ ["Ben Torres","Sales","Account Executive","Mumbai",4,"Full-time","Male","23-03-2023",84500],
+ ["Chen Wei","Engineering","Staff Engineer","Remote",10,"Full-time","Male","05-02-2020",152000],
+ ["Diya Patel","Marketing","Content Lead","Delhi",5,"Full-time","Female","18-06-2022",78000],
+ ["Ethan Brooks","Product","Product Manager","Bangalore",6,"Full-time","Male","02-09-2021",112000],
+ ["Farah Nasser","Design","Product Designer","Pune",3,"Full-time","Female","14-11-2023",72000],
+ ["Grace Lin","Engineering","Engineering Manager","Remote",11,"Full-time","Female","27-04-2019",168000],
+ ["Hassan Ali","Operations","Ops Analyst","Delhi",2,"Full-time","Male","09-01-2024",56000],
+ ["Ivy Nguyen","Product","Senior PM","Mumbai",8,"Full-time","Female","21-07-2020",134000],
+ ["Jack Owens","Sales","SDR","Bangalore",1,"Full-time","Male","03-02-2025",48000],
+ ["Kavya Reddy","Engineering","Backend Engineer","Bangalore",4,"Full-time","Female","16-05-2023",92000],
+ ["Liam Scott","Marketing","Growth Marketer","Remote",6,"Contract","Male","28-08-2021",88000],
+ ["Maya Singh","Design","Design Lead","Delhi",9,"Full-time","Female","11-03-2020",128000],
+ ["Noah Clark","Engineering","Frontend Engineer","Pune",3,"Full-time","Male","24-10-2023",86000],
+ ["Omar Farooq","Operations","Ops Manager","Mumbai",8,"Full-time","Male","07-06-2020",108000],
+ ["Priya Nair","Product","Product Manager","Bangalore",5,"Full-time","Female","19-09-2022",106000],
+ ["Quinn Davis","Sales","Account Executive","Remote",5,"Full-time","Other","31-01-2022",90000],
+ ["Riya Kapoor","Engineering","Senior Engineer","Mumbai",7,"Full-time","Female","13-04-2021",122000],
+ ["Sam Nolan","Marketing","Marketing Analyst","Delhi",2,"Part-time","Male","26-11-2024",44000],
+ ["Tara Menon","Design","Product Designer","Bangalore",4,"Full-time","Female","08-07-2023",80000],
+ ["Umar Sheikh","Engineering","DevOps Engineer","Remote",6,"Full-time","Male","20-02-2022",104000],
+ ["Vera Popov","Product","Group PM","Mumbai",12,"Full-time","Female","02-05-2018",176000],
+ ["Will Baker","Sales","Sales Manager","Delhi",9,"Full-time","Male","15-08-2019",142000],
+ ["Xin Zhao","Engineering","ML Engineer","Bangalore",5,"Full-time","Other","27-03-2022",126000],
+ ["Yara Haddad","Operations","Ops Analyst","Pune",3,"Contract","Female","10-12-2023",58000],
+ ["Zane Cooper","Marketing","Brand Lead","Remote",8,"Full-time","Male","23-06-2020",110000],
+ ["Anaya Bose","Engineering","Backend Engineer","Mumbai",4,"Full-time","Female","05-01-2023",94000],
+ ["Boris Ivanov","Product","Product Analyst","Delhi",3,"Full-time","Male","18-09-2023",76000],
+ ["Cara Mendes","Design","UX Researcher","Bangalore",6,"Full-time","Female","30-04-2021",98000],
+ ["Dev Malhotra","Sales","Account Executive","Pune",4,"Full-time","Male","12-11-2022",82000],
+ ["Elena Rossi","Engineering","Staff Engineer","Remote",11,"Full-time","Female","24-02-2019",158000],
+ ["Faisal Rahman","Operations","Ops Lead","Mumbai",7,"Full-time","Male","06-07-2020",100000],
+ ["Gita Sharma","Marketing","SEO Specialist","Delhi",3,"Part-time","Female","19-10-2023",50000],
+ ["Hugo Martin","Engineering","Frontend Engineer","Bangalore",2,"Full-time","Male","01-02-2024",78000],
+ ["Isla Fraser","Product","Senior PM","Remote",8,"Full-time","Female","14-05-2020",138000],
+ ["Jamal Idris","Design","Product Designer","Pune",5,"Contract","Male","27-08-2022",84000]
+].map(r=>({name:r[0],dept:r[1],role:r[2],loc:r[3],exp:r[4],type:r[5],gender:r[6],joined:r[7],salary:r[8]}));
+
+const fmt=n=>n.toLocaleString('en-US');
+const money=n=>'$'+fmt(Math.round(n));
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const avg=a=>a.length?sum(a)/a.length:0;
+const median=a=>{if(!a.length)return 0;const s=[...a].sort((x,y)=>x-y);const m=Math.floor(s.length/2);return s.length%2?s[m]:(s[m-1]+s[m])/2;};
+const groupBy=k=>{const m={};DATA.forEach(d=>{(m[d[k]]=m[d[k]]||[]).push(d);});return m;};
+const salaries=DATA.map(d=>d.salary);
+
+/* ---- tooltip ---- */
+const tip=document.getElementById('tip');
+function showTip(html,e){tip.innerHTML=html;tip.style.opacity='1';moveTip(e);}
+function moveTip(e){
+  const pad=14; let x=e.clientX+pad, y=e.clientY+pad;
+  const w=tip.offsetWidth, h=tip.offsetHeight;
+  if(x+w>innerWidth-8)x=e.clientX-w-pad;
+  if(y+h>innerHeight-8)y=e.clientY-h-pad;
+  tip.style.left=x+'px'; tip.style.top=y+'px';
+}
+function hideTip(){tip.style.opacity='0';}
+
+/* ---- subtitle ---- */
+document.getElementById('subtitle').textContent =
+  DATA.length+' people across 6 departments and 5 locations. Sample data — replace the array in this file to update every tile, chart, and the table.';
+
+/* ---- KPIs ---- */
+[
+  ["Headcount",fmt(DATA.length),"people"],
+  ["Average Salary",money(avg(salaries)),"mean base"],
+  ["Highest Salary",money(Math.max(...salaries)),"top earner"],
+  ["Lowest Salary",money(Math.min(...salaries)),"lowest paid"],
+  ["Median Salary",money(median(salaries)),"50th percentile"]
+].forEach(k=>{
+  const el=document.createElement('div');el.className='kpi';
+  el.innerHTML=`<div class="label">${k[0]}</div><div class="val">${k[1]}</div><div class="cap">${k[2]}</div>`;
+  document.getElementById('kpis').appendChild(el);
+});
+
+/* ---- single-hue horizontal bars ---- */
+function bars(elId, rows, valFmt, tipLabel){
+  const max=Math.max(...rows.map(r=>r.val))||1;
+  const host=document.getElementById(elId); host.innerHTML='';
+  rows.forEach(r=>{
+    const row=document.createElement('div');row.className='bar-row';
+    row.innerHTML=`<span class="name" title="${r.name}">${r.name}</span>
+      <span class="track"><span class="fill" style="width:${(r.val/max*100).toFixed(1)}%"></span></span>
+      <span class="amt">${valFmt(r.val)}</span>`;
+    row.addEventListener('mouseenter',e=>showTip(`<b>${r.name}</b><br><span class="k">${tipLabel}:</span> ${valFmt(r.val)}${r.n!=null?`<br><span class="k">Headcount:</span> ${r.n}`:''}`,e));
+    row.addEventListener('mousemove',moveTip);
+    row.addEventListener('mouseleave',hideTip);
+    host.appendChild(row);
+  });
+}
+
+// Avg salary by department
+(function(){
+  const g=groupBy('dept');
+  const rows=Object.keys(g).map(k=>({name:k,val:avg(g[k].map(d=>d.salary)),n:g[k].length})).sort((a,b)=>b.val-a.val);
+  bars('deptBars',rows,money,'Avg salary');
+})();
+// Headcount by location
+(function(){
+  const g=groupBy('loc');
+  const rows=Object.keys(g).map(k=>({name:k,val:g[k].length,n:g[k].length,avgSal:avg(g[k].map(d=>d.salary))})).sort((a,b)=>b.val-a.val);
+  const max=Math.max(...rows.map(r=>r.val))||1;
+  const host=document.getElementById('locBars');host.innerHTML='';
+  rows.forEach(r=>{
+    const row=document.createElement('div');row.className='bar-row';
+    row.innerHTML=`<span class="name">${r.name}</span>
+      <span class="track"><span class="fill" style="width:${(r.val/max*100).toFixed(1)}%"></span></span>
+      <span class="amt">${r.val}</span>`;
+    row.addEventListener('mouseenter',e=>showTip(`<b>${r.name}</b><br><span class="k">Headcount:</span> ${r.val}<br><span class="k">Avg salary:</span> ${money(r.avgSal)}`,e));
+    row.addEventListener('mousemove',moveTip);row.addEventListener('mouseleave',hideTip);
+    host.appendChild(row);
+  });
+})();
+// Avg salary by experience band (ordered)
+(function(){
+  const defs=[["0-2 yrs",d=>d.exp<=2],["3-5 yrs",d=>d.exp>=3&&d.exp<=5],["6-9 yrs",d=>d.exp>=6&&d.exp<=9],["10+ yrs",d=>d.exp>=10]];
+  const rows=defs.map(b=>{const g=DATA.filter(b[1]);return{name:b[0],val:avg(g.map(d=>d.salary)),n:g.length};});
+  bars('expBars',rows,money,'Avg salary');
+})();
+
+/* ---- donut (categorical, 2px surface gap, legend carries labels) ---- */
+const CAT=['var(--cat-1)','var(--cat-2)','var(--cat-3)'];
+function donut(donutId,legendId,key){
+  const g=groupBy(key);
+  const items=Object.keys(g).map(k=>({name:k,n:g[k].length})).sort((a,b)=>b.n-a.n);
+  const total=sum(items.map(i=>i.n));
+  const size=124,cx=62,cy=62,r=44,sw=20;
+  const C=2*Math.PI*r, gap=4;                    // 4px path gap => ~2px surface each side
+  let off=0,segs='';
+  items.forEach((it,i)=>{
+    const frac=it.n/total, len=Math.max(frac*C-gap,0.5);
+    segs+=`<circle class="seg" data-i="${i}" cx="${cx}" cy="${cy}" r="${r}" fill="none"
+      stroke="${CAT[i%CAT.length]}" stroke-width="${sw}"
+      stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}"
+      transform="rotate(-90 ${cx} ${cy})"></circle>`;
+    off+=frac*C;
+  });
+  document.getElementById(donutId).innerHTML=
+    `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="${key} split">
+       ${segs}
+       <text x="${cx}" y="${cy-1}" text-anchor="middle" font-size="21" font-weight="700"
+         fill="var(--text-primary)" font-family="system-ui">${total}</text>
+       <text x="${cx}" y="${cy+15}" text-anchor="middle" font-size="10"
+         fill="var(--muted)" font-family="system-ui">total</text>
+     </svg>`;
+  document.getElementById(legendId).innerHTML=items.map((it,i)=>
+    `<div class="li" data-i="${i}"><span class="swatch" style="background:${CAT[i%CAT.length]}"></span>
+     <span class="lname">${it.name}</span><span class="lval">${it.n} · ${Math.round(it.n/total*100)}%</span></div>`).join('');
+  // hover link between svg segment + legend
+  const svg=document.getElementById(donutId), leg=document.getElementById(legendId);
+  function hi(i,e,it){
+    svg.querySelectorAll('.seg').forEach(s=>s.style.opacity=(+s.dataset.i===i)?'1':'.35');
+    if(it)showTip(`<b>${it.name}</b><br><span class="k">${key}:</span> ${it.n} (${Math.round(it.n/total*100)}%)`,e);
+  }
+  function clr(){svg.querySelectorAll('.seg').forEach(s=>s.style.opacity='1');hideTip();}
+  svg.querySelectorAll('.seg').forEach(s=>{
+    const i=+s.dataset.i;
+    s.addEventListener('mouseenter',e=>hi(i,e,items[i]));
+    s.addEventListener('mousemove',moveTip);s.addEventListener('mouseleave',clr);
+  });
+  leg.querySelectorAll('.li').forEach(l=>{
+    const i=+l.dataset.i;
+    l.addEventListener('mouseenter',e=>hi(i,e,items[i]));
+    l.addEventListener('mousemove',moveTip);l.addEventListener('mouseleave',clr);
+  });
+}
+donut('genderDonut','genderLegend','gender');
+donut('empDonut','empLegend','type');
+
+/* ---- table: sortable + searchable ---- */
+let sortKey='salary',sortDir=-1;
+const toDate=s=>{const p=s.split('-');return new Date(+p[2],+p[1]-1,+p[0]).getTime();};
+function renderTable(){
+  const q=document.getElementById('search').value.trim().toLowerCase();
+  let rows=DATA.filter(d=>!q||[d.name,d.dept,d.role,d.loc,d.type,d.gender].join(' ').toLowerCase().includes(q));
+  rows.sort((a,b)=>{
+    let x=a[sortKey],y=b[sortKey];
+    if(sortKey==='joined'){x=toDate(a.joined);y=toDate(b.joined);}
+    return typeof x==='string'?sortDir*x.localeCompare(y):sortDir*(x-y);
+  });
+  document.getElementById('tbody').innerHTML=rows.map(d=>
+    `<tr><td class="name">${d.name}</td><td>${d.dept}</td><td>${d.role}</td><td>${d.loc}</td>
+     <td class="num">${d.exp}</td><td>${d.type}</td><td>${d.gender}</td><td>${d.joined}</td>
+     <td class="num">${money(d.salary)}</td></tr>`).join('');
+  document.querySelectorAll('#tbl th').forEach(th=>{
+    const a=th.querySelector('.arrow'); if(a)a.remove();
+    if(th.dataset.k===sortKey){const s=document.createElement('span');s.className='arrow';s.textContent=sortDir<0?' ▼':' ▲';th.appendChild(s);}
+  });
+  document.getElementById('filterCount').textContent=`Showing ${rows.length} of ${DATA.length}. Click a column header to sort.`;
+}
+document.querySelectorAll('#tbl th').forEach(th=>th.addEventListener('click',()=>{
+  const k=th.dataset.k;
+  if(k===sortKey)sortDir*=-1; else{sortKey=k;sortDir=(k==='salary'||k==='exp')?-1:1;}
+  renderTable();
+}));
+document.getElementById('search').addEventListener('input',renderTable);
+renderTable();
+
+/* ---- theme toggle (overrides system default) ---- */
+const btn=document.getElementById('themeBtn');
+function sysDark(){return matchMedia('(prefers-color-scheme:dark)').matches;}
+function curDark(){const t=document.documentElement.getAttribute('data-theme');return t?t==='dark':sysDark();}
+function paint(){btn.textContent=curDark()?'Light mode':'Dark mode';}
+btn.addEventListener('click',()=>{document.documentElement.setAttribute('data-theme',curDark()?'light':'dark');paint();});
+paint();
+</script>
+</body>
+</html>

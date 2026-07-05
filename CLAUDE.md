@@ -33,7 +33,33 @@ Workshop workspace for the "Claude Code for PMs" course. It contains realistic p
 | `12-project-tracking/` | Weekly status reports and project tracking |
 | `13-teams/` | Team structure and RACI for key features |
 | `14-templates/` | Reusable PM artifact templates (PRDs, OKRs, retros, status reports, etc.) |
+| `15-prototype/` | Runnable Next.js 14 prototype of the MeetFlow UI (the "ux-zone"). The only executable code in the repo. |
+| `16-zomato/` | A second `ux-zone` prototype variant plus its build-prompt chain. |
 | `outputs/` | Write all generated content here |
+
+## Prototype (the only runnable code)
+
+`15-prototype/` is a Next.js 14 App Router app (React 18, Tailwind 3, TypeScript). Everything else in the repo is Markdown/PPTX content. Run commands from inside `15-prototype/`:
+
+- `npm run dev` - local dev server
+- `npm run build` - production build
+- `npm run typecheck` - `tsc --noEmit`, the fastest correctness gate; run this after editing any `.tsx`
+- `npm run start` - serve the production build
+
+There is no test runner or linter wired up; `typecheck` is the check to run before considering a UI change done. When touching prototype UI, the `.claude/rules/ui-design-quality.md` rules auto-load and are binding (they encode real bugs that shipped - invisible ghost buttons, buttons overflowing card borders).
+
+## Claude Code Infrastructure (`.claude/`)
+
+This repo is also a live Claude Code toolkit. Before hand-rolling a PM artifact, check whether a skill or agent already does it.
+
+- **`.claude/skills/`** (40+ skills) - PM deliverable generators: `write-prd`, `feature-spec`, `okr-writer`, `prioritization`, `write-user-stories`, `stakeholder-update`, `jira-ticket-creator`, `mom` (Smart Brevity meeting minutes), plus publishing skills (`md-to-confluence`, `ppt-builder`) and writing skills. Invoke with `/<skill-name>`.
+- **`.claude/agents/`** - specialized subagents: `pm-request-router` (triages vague requests), `prd-drafter` / `prd-quality-loop` / `prd-critic` (PRD pipeline), `churn-diagnoser`, `interview-insight-synthesizer`, `competitor-snapshot`, `feedback-triangulator`, `senior-code-reviewer`. Prefer these over ad-hoc work for their domains.
+- **`.claude/rules/`** - path-triggered rules that auto-load when you touch matching files. Know these fire without being asked:
+  - `08-product-features/**` -> PRDs must cite a persona, use real baselines, include a "What we're NOT building" section, link to Q2 OKRs.
+  - `03-product-knowledge/**`, `05/06/07-*` -> cite source file/line for every metric and quote; never invent numbers or user quotes.
+  - `outputs/**` -> short sentences, no unexplained jargon, cross-reference source files.
+  - `15-prototype/**` (and any `ux-zone`/`prototype` `.tsx`) -> the UI design-quality rules above.
+  - `outputs/*prompt*.md`, `prompts/**` -> the prompt-writing rubric (self-score >95 before delivering).
 
 ## Rules
 

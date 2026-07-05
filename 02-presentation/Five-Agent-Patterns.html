@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Five Agent Patterns via /agents - MeetFlow Workshop</title>
+<title>Five Agent Patterns - MeetFlow Workshop</title>
 <style>
   :root {
     --bg: #0D0D0D;
@@ -16,6 +16,7 @@
     --accent-soft: #D47A2120;
     --code-bg: #141416;
     --green: #4ade80;
+    --blue: #3b82f6;
   }
   * { box-sizing: border-box; }
   html, body {
@@ -61,6 +62,21 @@
     line-height: 1.55;
   }
   pre code { background: none; border: none; padding: 0; color: var(--text); font-size: 13px; }
+  pre.file { border-left-color: var(--blue); }
+  .pre-label {
+    display: inline-block;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 11px; letter-spacing: 0.5px;
+    color: var(--muted);
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    padding: 4px 10px;
+    margin-bottom: -1px;
+  }
+  .pre-label.file { color: var(--blue); }
+  .pre-label.ask { color: var(--accent); }
   .pattern {
     background: var(--panel);
     border: 1px solid var(--border);
@@ -85,61 +101,35 @@
     border-radius: 4px;
   }
   .callout strong { color: var(--accent); }
-  .wizard-step {
+  .method {
     background: var(--panel-2);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 16px 20px;
-    margin: 10px 0;
+    padding: 4px 20px 16px;
+    margin: 16px 0;
   }
-  .wizard-step.tight { padding: 10px 16px; }
-  .wizard-step-head {
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 8px;
+  .method-head {
+    display: flex; align-items: center; gap: 10px;
+    margin: 14px 0 6px;
+    font-weight: 700;
   }
-  .wizard-step.tight .wizard-step-head { margin-bottom: 0; }
-  .wizard-step-num {
+  .method-badge {
     background: var(--accent); color: #000;
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center; justify-content: center;
-    font-weight: 700; font-size: 13px;
+    padding: 2px 10px; border-radius: 4px;
+    font-size: 12px; letter-spacing: 0.5px;
     flex-shrink: 0;
   }
-  .wizard-step.tight .wizard-step-num {
-    width: 24px; height: 24px; font-size: 12px;
-  }
-  .wizard-prompt {
-    color: var(--muted);
-    font-style: italic;
-    font-size: 14px;
-  }
-  .you-pick {
-    background: var(--code-bg);
-    border: 1px dashed var(--accent);
-    border-radius: 4px;
-    padding: 8px 12px;
-    margin: 8px 0;
-    font-family: "SF Mono", Menlo, monospace;
-    font-size: 13px;
-    color: var(--green);
-  }
-  .you-pick strong { color: var(--accent); }
-  .quick-do {
-    color: var(--text);
-    font-size: 14px;
-  }
-  .quick-do strong { color: var(--accent); }
+  .method-badge.b { background: var(--blue); color: #fff; }
   ul, ol { padding-left: 22px; }
   ul li, ol li { margin: 6px 0; }
   table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
   th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; vertical-align: top; }
   th { background: var(--panel-2); color: var(--accent); font-weight: 600; }
+  td code { white-space: nowrap; }
   .checkbox-list { list-style: none; padding-left: 0; }
   .checkbox-list li { padding-left: 28px; position: relative; margin: 10px 0; }
   .checkbox-list li::before {
-    content: "☐"; position: absolute; left: 0; top: 0;
+    content: "\2610"; position: absolute; left: 0; top: 0;
     color: var(--accent); font-size: 18px;
   }
   .tag {
@@ -170,46 +160,7 @@
   .toc ol { margin: 12px 0 0; }
   .toc a { border-bottom: none; color: var(--text); }
   .toc a:hover { color: var(--accent); }
-  .tool-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 6px;
-    margin: 8px 0;
-  }
-  .tool-pill {
-    background: var(--code-bg);
-    border: 1px solid var(--green);
-    color: var(--green);
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-family: "SF Mono", Menlo, monospace;
-    font-size: 12px;
-    text-align: center;
-  }
-  .tool-pill.off {
-    border-color: var(--border);
-    color: var(--muted);
-  }
-  .color-swatch {
-    display: inline-block;
-    width: 14px; height: 14px;
-    border-radius: 3px;
-    vertical-align: middle;
-    margin-right: 6px;
-    border: 1px solid var(--border);
-  }
-  .wizard-block {
-    margin: 18px 0;
-  }
-  .wizard-block-title {
-    color: var(--accent);
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-  /* ---- left-sidebar table of contents (matches Multi-Agent-Architectures.html) ---- */
+  /* ---- left-sidebar table of contents ---- */
   html { scroll-behavior: smooth; }
   .wrap { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; align-items: start; }
   aside {
@@ -240,11 +191,11 @@
 </head>
 <body>
 <div class="wrap">
-<button class="menu-toggle" aria-label="Toggle contents">☰ Contents</button>
+<button class="menu-toggle" aria-label="Toggle contents">Contents</button>
 <aside>
   <div class="toc-h">Contents</div>
   <ol>
-    <li><a href="#how-the-wizard-works">The /agents wizard — 7 screens</a></li>
+    <li><a href="#how-it-works">How to create a subagent now</a></li>
     <li><a href="#prompt-chaining">Prompt Chaining</a></li>
     <li><a href="#routing">Routing</a></li>
     <li><a href="#parallelization">Parallelization</a></li>
@@ -256,53 +207,91 @@
 <div class="container">
 
 <header>
-  <div class="eyebrow">Claude Code for PMs — Hands-on Lab</div>
-  <h1>Build Five Agents Using the <code>/agents</code> Command</h1>
-  <p class="lead">No file editing. No copy-pasting Markdown. Open Claude Code, type <code>/agents</code>, and follow the 7-screen wizard. By the end of this handout you'll have built nine subagents across five workflow patterns.</p>
-  <p class="muted" style="font-size: 13px; margin-top: 12px;">Reference: <a href="https://code.claude.com/docs/en/sub-agents#quickstart-create-your-first-subagent">Anthropic's official subagents quickstart</a>. This handout adapts the same flow for MeetFlow.</p>
+  <div class="eyebrow">Claude Code for PMs - Hands-on Lab</div>
+  <h1>Build Five Agents by Describing Them to Claude</h1>
+  <p class="lead">A subagent is one Markdown file with a bit of YAML on top. You do not hand-write it: you tell Claude what you want, it writes the file into <code>.claude/agents/</code>. This handout walks you through nine subagents across the five classic workflow patterns.</p>
+  <p class="muted" style="font-size: 13px; margin-top: 12px;">Reference: <a href="https://code.claude.com/docs/en/sub-agents">Anthropic's official subagents guide</a>. Pattern set: Anthropic, "Building Effective Agents." All file paths refer to this MeetFlow workshop repo.</p>
 </header>
+
+<div class="callout">
+<strong>The <code>/agents</code> wizard is gone.</strong> As of Claude Code v2.1.198, typing <code>/agents</code> no longer opens the interactive creation wizard (the old Running and Library tabs). It just prints a reminder to ask Claude or edit <code>.claude/agents/</code> directly. Everything else is unchanged: the file format, the frontmatter fields, and the <code>.claude/agents/</code> (project) and <code>~/.claude/agents/</code> (personal) locations all still work. This handout uses the current flow.
+</div>
+
+<div class="callout">
+<strong>You are building these from a clean slate.</strong> For this lab the eight prebuilt agents have been cleared out of <code>.claude/agents/</code>, so you create each one fresh (the ninth, <code>competitor-deep-dive</code>, is new anyway). If your copy of the repo still has any of them, creating an agent with the same <code>name</code> just overwrites it, which is fine here.
+</div>
+
+<div class="callout">
+<strong>Build order matters in two places.</strong> Create the three Routing specialists (<code>prd-drafter</code>, <code>competitor-snapshot</code>, <code>churn-diagnoser</code>) before the <code>pm-request-router</code>, and create <code>prd-critic</code> before <code>prd-quality-loop</code>. A dispatcher that points at an agent you have not built yet fails at runtime. Each section below flags this where it applies.
+</div>
 
 <div class="toc">
   <h3>What you will build</h3>
   <ol>
-    <li><a href="#prompt-chaining">Prompt Chaining → <strong>interview-insight-synthesizer</strong></a></li>
-    <li><a href="#routing">Routing → <strong>pm-request-router</strong> (+ 3 specialists)</a></li>
-    <li><a href="#parallelization">Parallelization → <strong>feedback-triangulator</strong></a></li>
-    <li><a href="#orchestrator-workers">Orchestrator-Workers → <strong>competitor-deep-dive</strong></a></li>
-    <li><a href="#evaluator-optimizer">Evaluator-Optimizer → <strong>prd-quality-loop</strong> (+ critic)</a></li>
+    <li><a href="#prompt-chaining">Prompt Chaining &rarr; <strong>interview-insight-synthesizer</strong></a></li>
+    <li><a href="#routing">Routing &rarr; <strong>pm-request-router</strong> (+ 3 specialists)</a></li>
+    <li><a href="#parallelization">Parallelization &rarr; <strong>feedback-triangulator</strong></a></li>
+    <li><a href="#orchestrator-workers">Orchestrator-Workers &rarr; <strong>competitor-deep-dive</strong></a></li>
+    <li><a href="#evaluator-optimizer">Evaluator-Optimizer &rarr; <strong>prd-quality-loop</strong> (+ critic)</a></li>
   </ol>
 </div>
 
 <!-- ============================================ -->
-<!-- HOW THE WIZARD WORKS                          -->
+<!-- HOW IT WORKS                                  -->
 <!-- ============================================ -->
-<h2 id="how-the-wizard-works">The <code>/agents</code> wizard — 7 screens</h2>
+<h2 id="how-it-works">How to create a subagent now</h2>
 
-<p>Every agent you build goes through these seven screens, in this order:</p>
+<p>There are two ways. Use the first for every agent in this handout. The second is what the first one produces, so it is worth seeing once.</p>
+
+<div class="method">
+<div class="method-head"><span class="method-badge">Method A</span> Ask Claude (recommended)</div>
+<p>In the Claude Code chat, describe the agent and where to save it. Claude writes the file, fills in the frontmatter, and writes the system prompt for you.</p>
+<span class="pre-label ask">you, in chat</span>
+<pre><code>Create a project subagent in .claude/agents/ called "code-improver" that
+scans files and suggests improvements for readability, performance, and
+best practices. Make it read-only and have it use Sonnet.</code></pre>
+</div>
+
+<div class="method">
+<div class="method-head"><span class="method-badge b">Method B</span> Write the file yourself</div>
+<p>A subagent is just a Markdown file: YAML frontmatter on top, the system prompt as the body. Drop it in <code>.claude/agents/</code>.</p>
+<span class="pre-label file">.claude/agents/code-improver.md</span>
+<pre class="file"><code>---
+name: code-improver
+description: Scans files and suggests improvements for readability,
+  performance, and best practices. Use after writing or modifying code.
+tools: Read, Grep, Glob
+model: sonnet
+---
+
+You are a code improvement specialist. For each issue you find, explain
+the problem, show the current code, and provide an improved version.</code></pre>
+</div>
+
+<h3>The frontmatter fields you will use today</h3>
+<p>Only <code>name</code> and <code>description</code> are required. The rest have sensible defaults.</p>
 
 <table>
-<thead><tr><th>#</th><th>Screen</th><th>What you do</th></tr></thead>
+<thead><tr><th>Field</th><th>What it does</th><th>This workshop</th></tr></thead>
 <tbody>
-<tr><td>1</td><td>Open subagents interface</td><td>Run <code>/agents</code> in Claude Code chat</td></tr>
-<tr><td>2</td><td>Location</td><td><strong>Library</strong> tab → <strong>Create new agent</strong> → pick <strong>Project</strong></td></tr>
-<tr><td>3</td><td>Generate with Claude</td><td>Paste a paragraph describing the agent. Claude scaffolds identifier, description, system prompt</td></tr>
-<tr><td>4</td><td>Select tools</td><td>Multi-select. Pick only what the agent needs</td></tr>
-<tr><td>5</td><td>Select model</td><td><strong>Sonnet</strong> for all five patterns</td></tr>
-<tr><td>6</td><td>Choose a color</td><td>Any color — helps you spot which agent is running</td></tr>
-<tr><td>7</td><td>Configure memory</td><td><strong>None</strong> — workshop agents are stateless</td></tr>
+<tr><td><code>name</code></td><td>Unique id, lowercase and hyphens. How you and the router refer to the agent</td><td>Required</td></tr>
+<tr><td><code>description</code></td><td>When Claude should delegate to it. This is the trigger. Write it well</td><td>Required</td></tr>
+<tr><td><code>tools</code></td><td>Allowlist of tools. Omit to inherit all. Grant only what the agent needs</td><td>Set per agent</td></tr>
+<tr><td><code>model</code></td><td><code>sonnet</code>, <code>opus</code>, <code>haiku</code>, <code>fable</code>, a full id, or <code>inherit</code>. Defaults to <code>inherit</code></td><td><code>sonnet</code></td></tr>
+<tr><td><code>color</code></td><td>Display color in the task list: red, blue, green, yellow, purple, orange, pink, cyan</td><td>Suggested per agent</td></tr>
 </tbody>
 </table>
 
 <div class="callout">
-<strong>For every agent below</strong>, screens <strong>1, 2, 5, 7</strong> are identical (run <code>/agents</code> → Library tab → Create new agent → Project; pick Sonnet; memory None). What changes per agent is screen <strong>3</strong> (the description you paste), screen <strong>4</strong> (which tools to check), and screen <strong>6</strong> (a suggested color). Each agent section below shows you all 7 screens so nothing feels skipped.
+<strong>Project vs personal.</strong> <code>.claude/agents/</code> saves the agent inside this repo, so it gets committed and shared with the cohort. <code>~/.claude/agents/</code> saves to your global folder, available in every project on your machine. Use project scope for workshop agents.
 </div>
 
 <div class="callout">
-<strong>Why Project (not Personal).</strong> Project saves the agent inside this repo's <code>.claude/agents/</code> — it gets committed and shared with the cohort. Personal saves to your global folder. Use Project for workshop agents.
+<strong>No restart needed, usually.</strong> Claude Code watches both agent folders and picks up new or edited files within a few seconds. The main exception: if <code>.claude/agents/</code> did not exist when you started your session, create your first agent, then restart Claude Code once so the watcher sees the new folder. (The watcher is also off entirely if you launched with <code>--disable-slash-commands</code>, which you will not be using today.)
 </div>
 
 <div class="callout">
-<strong>Why memory = None.</strong> Memory makes an agent accumulate insights across runs. Useful for a real long-running reviewer. Bad for a workshop, because every student's agent would slowly drift. None keeps outputs reproducible and predictable.
+<strong>To edit an agent later,</strong> just open its <code>.md</code> file and change any field, or ask Claude to edit it for you: <em>"update the churn-diagnoser agent to also read 05-user-personas/."</em> The change takes effect on the next delegation.
 </div>
 
 <hr class="divider">
@@ -316,77 +305,73 @@
 <p class="lead">Decompose a task into sequential stages. Each stage has a quality gate before moving on.</p>
 
 <h3>The agent: <code>interview-insight-synthesizer</code></h3>
-<p>Reads every transcript in <code>07-user-interviews/</code> and produces a ranked synthesis brief. Chains four stages: extract pains → cluster into themes → rank by frequency → write the brief.</p>
+<p>Reads every transcript in <code>07-user-interviews/</code> and produces a ranked synthesis brief. Chains four stages: extract pains &rarr; cluster into themes &rarr; rank by frequency &rarr; write the brief. Single agent, no fan-out.</p>
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> type <code>/agents</code> in Claude Code chat</div></div>
-</div>
+<div class="method">
+<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this in chat</div>
+<pre><code>Create a project subagent in .claude/agents/ called
+"interview-insight-synthesizer" for MeetFlow, using Sonnet, color blue.
+Give it Read, Glob, and Write only.
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library tab → Create new agent → <strong>Project</strong></div></div>
-</div>
+It reads every transcript in 07-user-interviews/ and produces a ranked
+synthesis brief in FOUR sequential stages with a quality gate between each:
 
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
-<pre><code>A user-research synthesis agent named "interview-insight-synthesizer" for
-MeetFlow. It reads every transcript in 07-user-interviews/ and produces a
-ranked synthesis brief.
+STAGE 1 - Extract raw pains: use Glob to list all files in
+07-user-interviews/, read each transcript, extract every distinct user
+pain, frustration, or unmet need. Gate: if fewer than 3 pains per
+interview, re-read that interview.
 
-The agent MUST work in four sequential stages with a quality gate between each:
-
-STAGE 1 — Extract raw pains: use Glob to list all files in 07-user-interviews/,
-read each transcript, extract every distinct user pain, frustration, or unmet
-need. Output as a list: { interview: filename, pains: [...] }.
-Gate: if fewer than 3 pains per interview, re-read that interview.
-
-STAGE 2 — Cluster into themes: group all pains into 4-7 themes based on
+STAGE 2 - Cluster into themes: group all pains into 4-7 themes by
 semantic similarity. Gate: no theme may have only 1 pain (merge singletons).
 
-STAGE 3 — Rank by frequency and severity: count how many distinct interviews
-mention each theme. Tag severity as workflow-breaker / annoyance / nice-to-fix.
-Produce a ranked table: theme | interview count | severity | top quote.
+STAGE 3 - Rank by frequency and severity: count how many distinct
+interviews mention each theme. Tag severity as workflow-breaker /
+annoyance / nice-to-fix. Produce a ranked table.
 
-STAGE 4 — Write the brief: save a 1-page Markdown synthesis to
-outputs/interview-synthesis.md (no date in the filename; overwrite if it exists).
-Structure: TL;DR (3 bullets) → top 3 themes (each with quote + count) →
-recommendations (1 line each).
+STAGE 4 - Write the brief: save a 1-page Markdown synthesis to
+outputs/interview-synthesis.md (no date in the filename; overwrite if it
+exists). Structure: TL;DR (3 bullets) -&gt; top 3 themes (each with quote +
+count) -&gt; recommendations (1 line each).
 
 Rules: cite the interview filename for every quote. Never invent quotes.
-Never put a date in the output filename.
 
-Use this agent when the user asks to synthesize user interviews, find common
+Trigger it when the user asks to synthesize user interviews, find common
 pain points, or build a research brief from interview transcripts.</code></pre>
 </div>
 
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools — check only these:</strong></div>
-<div class="tool-grid">
-  <div class="tool-pill">✓ Read</div>
-  <div class="tool-pill">✓ Glob</div>
-  <div class="tool-pill">✓ Write</div>
-  <div class="tool-pill off">Edit</div>
-  <div class="tool-pill off">Bash</div>
-  <div class="tool-pill off">WebFetch</div>
-  <div class="tool-pill off">Agent</div>
-</div>
-<p class="muted">No Agent tool needed — this pattern is single-agent.</p>
+<div class="method">
+<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+<span class="pre-label file">.claude/agents/interview-insight-synthesizer.md</span>
+<pre class="file"><code>---
+name: interview-insight-synthesizer
+description: Synthesizes user interviews into a ranked research brief.
+  Use when asked to find common pain points or build a research brief
+  from the transcripts in 07-user-interviews/.
+tools: Read, Glob, Write
+model: sonnet
+color: blue
+---
+
+You synthesize MeetFlow user interviews into a ranked brief. Work in four
+sequential stages, with a quality gate before moving on:
+
+1. EXTRACT - Glob 07-user-interviews/, read each transcript, list every
+   distinct pain. Gate: fewer than 3 pains in an interview means re-read it.
+2. CLUSTER - group pains into 4-7 themes by similarity. Gate: merge any
+   single-pain theme into a larger one.
+3. RANK - count distinct interviews per theme; tag severity as
+   workflow-breaker / annoyance / nice-to-fix. Build a ranked table.
+4. WRITE - save outputs/interview-synthesis.md (overwrite, no date):
+   TL;DR (3 bullets), top 3 themes (quote + count each), recommendations.
+
+Cite the interview filename for every quote. Never invent quotes.</code></pre>
 </div>
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
-<div class="you-pick"><strong>Suggested:</strong> Blue <span class="color-swatch" style="background:#3b82f6;"></span></div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
-</div>
+<h4>Why these tools</h4>
+<p>Read and Glob to walk the transcripts, Write to save the brief. No <code>Agent</code> tool: this pattern is a single agent working through stages, not a dispatcher.</p>
 
 <h3>Test it</h3>
-<p>Back in chat: <em>"Synthesize the user interviews and tell me the top 3 frustrations."</em> Claude Code should dispatch this agent. Watch it move through all four stages and write the file to <code>outputs/</code>.</p>
+<p>In chat: <em>"Synthesize the user interviews and tell me the top 3 frustrations."</em> Claude should delegate to this agent. Watch it move through all four stages and write the file to <code>outputs/</code>.</p>
 </div>
 
 
@@ -396,230 +381,172 @@ pain points, or build a research brief from interview transcripts.</code></pre>
 <div class="pattern" id="routing">
 <span class="pattern-num">PATTERN 02</span>
 <h2>Routing</h2>
-<p class="lead">One agent classifies the request, then dispatches to a specialist. Run the wizard four times — three specialists, then the router.</p>
+<p class="lead">One agent classifies the request, then dispatches to a specialist. You build four agents: three specialists, then the router that calls them.</p>
 
 <div class="callout">
-<strong>Build order matters.</strong> Build 2A, 2B, and 2C before 2D. The router (2D) dispatches to specialists by name — if the specialists don't exist yet, the router will fail at runtime.
+<strong>Build order matters.</strong> Create the three specialists (2A, 2B, 2C) before the router (2D). The router dispatches to specialists by name. If they do not exist yet, it fails at runtime.
 </div>
 
 <h3>Agent 2A: <code>prd-drafter</code> (specialist 1)</h3>
+<div class="method">
+<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+<pre><code>Create a project subagent in .claude/agents/ called "prd-drafter" for
+MeetFlow, Sonnet, color green, with Read, Glob, Write.
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
-</div>
+It writes a concise one-page PRD. Before writing it reads
+03-product-knowledge/company.md and 04-strategy/product-vision.md.
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
-<pre><code>A PRD writing agent named "prd-drafter" for MeetFlow. It writes a concise
-one-page PRD for a feature.
-
-Before writing, the agent reads 03-product-knowledge/company.md and
-04-strategy/product-vision.md for context.
-
-Output structure (Markdown, saved to outputs/):
-1. Problem (3 lines max, with one stat from 06-user-feedback/ or 07-user-interviews/)
+Output (Markdown, saved to outputs/prd-{feature-name}.md, no date):
+1. Problem (3 lines, one stat from 06-user-feedback/ or 07-user-interviews/)
 2. Target user (which persona from 05-user-personas/)
 3. Solution (5 bullets, no implementation detail)
-4. Success metric (1 metric with current baseline + target)
+4. Success metric (1 metric, current baseline + target)
 5. Risks (top 3, concrete)
 6. Out of scope (top 3)
 
-Filename: outputs/prd-{feature-name}.md (no date in the filename)
-
-Use this agent when the user asks for a feature spec, PRD, one-pager, or
+Trigger it when the user asks for a feature spec, PRD, one-pager, or
 product requirements doc.</code></pre>
 </div>
+<div class="method">
+<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+<span class="pre-label file">.claude/agents/prd-drafter.md</span>
+<pre class="file"><code>---
+name: prd-drafter
+description: Writes a concise one-page PRD for a MeetFlow feature. Use when
+  the user asks for a feature spec, PRD, one-pager, or requirements doc.
+tools: Read, Glob, Write
+model: sonnet
+color: green
+---
 
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
-<div class="tool-grid">
-  <div class="tool-pill">✓ Read</div>
-  <div class="tool-pill">✓ Glob</div>
-  <div class="tool-pill">✓ Write</div>
+Write a one-page PRD. First read 03-product-knowledge/company.md and
+04-strategy/product-vision.md. Save to outputs/prd-{feature-name}.md
+(no date). Sections: Problem (with one real stat), Target user (a named
+persona from 05-user-personas/), Solution (5 bullets, no implementation),
+Success metric (baseline + target), Risks (top 3), Out of scope (top 3).</code></pre>
 </div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
-<div class="you-pick"><strong>Suggested:</strong> Green <span class="color-swatch" style="background:#4ade80;"></span></div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
-</div>
-
 
 <h3>Agent 2B: <code>competitor-snapshot</code> (specialist 2)</h3>
+<div class="method">
+<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+<pre><code>Create a project subagent in .claude/agents/ called "competitor-snapshot"
+for MeetFlow, Sonnet, color yellow, with Read, Glob, Write.
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
-</div>
+Before writing it reads 03-product-knowledge/competitive.md.
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
-<pre><code>A quick competitive read agent named "competitor-snapshot" for MeetFlow.
-
-Before writing, read 03-product-knowledge/competitive.md for our existing
-intel on competitors.
-
-Output (Markdown, saved to outputs/competitor-snapshot-{name}.md, no date in the filename):
+Output (Markdown, saved to outputs/competitor-snapshot-{name}.md, no date):
 1. Their positioning (1 line)
 2. Where they beat MeetFlow (3 bullets)
 3. Where MeetFlow beats them (3 bullets)
 4. One strategic implication for our roadmap
 
-Use this agent when the user asks for a competitor analysis, feature
+Trigger it when the user asks for a competitor analysis, feature
 comparison, or positioning read on a specific competitor by name.</code></pre>
 </div>
+<div class="method">
+<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+<span class="pre-label file">.claude/agents/competitor-snapshot.md</span>
+<pre class="file"><code>---
+name: competitor-snapshot
+description: Quick positioning read on a named MeetFlow competitor. Use when
+  the user asks how MeetFlow compares to a specific competitor by name.
+tools: Read, Glob, Write
+model: sonnet
+color: yellow
+---
 
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
-<div class="tool-grid">
-  <div class="tool-pill">✓ Read</div>
-  <div class="tool-pill">✓ Glob</div>
-  <div class="tool-pill">✓ Write</div>
+Read 03-product-knowledge/competitive.md first. Then save
+outputs/competitor-snapshot-{name}.md (no date): their positioning (1 line),
+where they beat MeetFlow (3 bullets), where MeetFlow beats them (3 bullets),
+one strategic implication for our roadmap.</code></pre>
 </div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
-<div class="you-pick"><strong>Suggested:</strong> Yellow <span class="color-swatch" style="background:#facc15;"></span></div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
-</div>
-
 
 <h3>Agent 2C: <code>churn-diagnoser</code> (specialist 3)</h3>
+<div class="method">
+<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+<pre><code>Create a project subagent in .claude/agents/ called "churn-diagnoser" for
+MeetFlow, Sonnet, color red, with Read, Glob, Write.
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
-<pre><code>A churn analysis agent named "churn-diagnoser" for MeetFlow. It diagnoses why
-users are leaving. Pro monthly churn is currently 4.1%.
-
-Reads: 06-user-feedback/ (Q1 survey), 07-user-interviews/ (qualitative), and
+It diagnoses why users leave. Pro monthly churn is currently 4.1%. It reads
+06-user-feedback/ (Q1 survey), 07-user-interviews/ (qualitative), and
 03-product-knowledge/company.md (baseline).
 
-Output (Markdown, saved to outputs/churn-diagnosis.md, no date in the filename):
-1. Top 3 churn drivers, each with: evidence from at least 2 sources, source
-   files cited.
-2. Quick wins (things we could ship in &lt; 2 sprints)
-3. Structural fixes (things that require quarter-level work)
+Output (Markdown, saved to outputs/churn-diagnosis.md, no date):
+1. Top 3 churn drivers, each with evidence from at least 2 sources, files cited
+2. Quick wins (shippable in under 2 sprints)
+3. Structural fixes (quarter-level work)
 
-Use this agent when the user asks about churn, retention, why users are
+Trigger it when the user asks about churn, retention, why users are
 leaving, or how to improve Pro stickiness.</code></pre>
 </div>
+<div class="method">
+<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+<span class="pre-label file">.claude/agents/churn-diagnoser.md</span>
+<pre class="file"><code>---
+name: churn-diagnoser
+description: Diagnoses MeetFlow churn drivers. Use when the user asks about
+  churn, retention, why users leave, or improving Pro stickiness.
+tools: Read, Glob, Write
+model: sonnet
+color: red
+---
 
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
-<div class="tool-grid">
-  <div class="tool-pill">✓ Read</div>
-  <div class="tool-pill">✓ Glob</div>
-  <div class="tool-pill">✓ Write</div>
+Diagnose why MeetFlow users churn (Pro monthly churn is 4.1%). Read
+06-user-feedback/, 07-user-interviews/, and 03-product-knowledge/company.md.
+Save outputs/churn-diagnosis.md (no date): top 3 drivers (each backed by 2+
+sources, files cited), quick wins (under 2 sprints), structural fixes.</code></pre>
 </div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
-<div class="you-pick"><strong>Suggested:</strong> Red <span class="color-swatch" style="background:#f87171;"></span></div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
-</div>
-
 
 <h3>Agent 2D: <code>pm-request-router</code> (the router)</h3>
+<div class="method">
+<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+<pre><code>Create a project subagent in .claude/agents/ called "pm-request-router" for
+MeetFlow, Sonnet, color orange. Give it the Agent tool only.
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
-<pre><code>A triage agent named "pm-request-router" for incoming PM requests on MeetFlow.
-
-The agent's ONLY job is classification and dispatch. It must NEVER answer the
+Its ONLY job is classification and dispatch. It must NEVER answer the
 request itself.
 
 Workflow:
 1. Read the user's request.
 2. Classify into exactly one of: PRD, COMPETITOR, CHURN, UNCLEAR.
-3. State the classification out loud: "Classified as: X. Dispatching Y."
+3. Say it out loud: "Classified as: X. Dispatching Y."
 4. Dispatch the matching specialist via the Agent tool:
-   - PRD → prd-drafter
-   - COMPETITOR → competitor-snapshot
-   - CHURN → churn-diagnoser
+   PRD -&gt; prd-drafter, COMPETITOR -&gt; competitor-snapshot,
+   CHURN -&gt; churn-diagnoser.
 5. Pass the user's original request verbatim to the specialist.
 6. If UNCLEAR, ask ONE clarifying question. Never guess.
 
-Use this agent FIRST for any open-ended PM request, or when the user says
+Trigger it FIRST for any open-ended PM request, or when the user says
 "help me with..." without specifying what they need.</code></pre>
 </div>
+<div class="method">
+<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+<span class="pre-label file">.claude/agents/pm-request-router.md</span>
+<pre class="file"><code>---
+name: pm-request-router
+description: Triage agent for open-ended MeetFlow PM requests. Use first
+  when the user says "help me with..." without naming a deliverable.
+tools: Agent
+model: sonnet
+color: orange
+---
 
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
-<div class="tool-grid">
-  <div class="tool-pill">✓ Agent</div>
-  <div class="tool-pill">✓ Read</div>
-  <div class="tool-pill off">Glob</div>
-  <div class="tool-pill off">Write</div>
+Your ONLY job is classification and dispatch. Never answer the request
+yourself. Steps: read the request, classify as PRD / COMPETITOR / CHURN /
+UNCLEAR, announce "Classified as: X. Dispatching Y.", then dispatch via the
+Agent tool (PRD to prd-drafter, COMPETITOR to competitor-snapshot, CHURN to
+churn-diagnoser), passing the request verbatim. If UNCLEAR, ask exactly one
+clarifying question. Never guess.</code></pre>
 </div>
-<p class="muted">The router must have the <code>Agent</code> tool — that's how it dispatches to specialists.</p>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
-<div class="you-pick"><strong>Suggested:</strong> Orange <span class="color-swatch" style="background:#D47A21;"></span></div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
-</div>
+<h4>Why these tools</h4>
+<p>The router needs only the <code>Agent</code> tool. That is what lets one subagent dispatch to another (a subagent can spawn its own subagents). Without it, the router can classify but cannot hand off. It reads no files and writes nothing: it classifies the request in front of it and passes it on, and the specialists do all the reading and writing.</p>
 
 <h3>Test the routing</h3>
 <p>Try three requests and watch which specialist gets dispatched:</p>
 <ul>
-  <li><em>"Help me write a spec for Smart Follow-Up."</em> → PRD (green agent runs)</li>
-  <li><em>"How does Granola compare to us?"</em> → COMPETITOR (yellow agent runs)</li>
-  <li><em>"Why are Pro users leaving?"</em> → CHURN (red agent runs)</li>
+  <li><em>"Help me write a spec for Smart Follow-Up."</em> &rarr; PRD (green agent runs)</li>
+  <li><em>"How does Granola compare to us?"</em> &rarr; COMPETITOR (yellow agent runs)</li>
+  <li><em>"Why are Pro users leaving?"</em> &rarr; CHURN (red agent runs)</li>
 </ul>
 </div>
 
@@ -630,84 +557,69 @@ Use this agent FIRST for any open-ended PM request, or when the user says
 <div class="pattern" id="parallelization">
 <span class="pattern-num">PATTERN 03</span>
 <h2>Parallelization</h2>
-<p class="lead">One agent fires three workers in parallel, then merges their outputs.</p>
+<p class="lead">One agent fires three workers at once, then merges their outputs.</p>
 
 <h3>The agent: <code>feedback-triangulator</code></h3>
-<p>Reads three independent sources at once — interviews, Q1 survey, churn data — and surfaces issues that appear in MORE than one source.</p>
+<p>Dispatches three workers in parallel - interviews, Q1 survey, churn data - then surfaces issues that appear in MORE than one source.</p>
 
 <div class="callout">
-<strong>Parallelization vs Orchestrator-Workers (don't confuse them).</strong> Parallelization uses a FIXED set of workers — always the same three sources, no matter what the user asks. Orchestrator-Workers (Pattern 04) uses a DYNAMIC set — the agent picks which workers to spawn based on the input. Same parallel mechanics underneath, different decision-making.
+<strong>Parallelization vs Orchestrator-Workers (do not confuse them).</strong> Parallelization uses a FIXED set of workers: always the same three sources, no matter the request. Orchestrator-Workers (Pattern 04) uses a DYNAMIC set: the agent picks which workers to spawn based on the input. Same parallel mechanics, different decision-making.
 </div>
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
+<div class="method">
+<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+<pre><code>Create a project subagent in .claude/agents/ called "feedback-triangulator"
+for MeetFlow, Sonnet, color purple, with Agent, Read, Glob, Write.
+
+It triangulates user feedback from three independent sources in parallel.
+
+1. Dispatch THREE workers IN PARALLEL via the Agent tool, all in a SINGLE
+   message (do not wait between them). Use the general-purpose subagent type.
+   Worker A: "Read every file in 07-user-interviews/. Return the top 5 user
+   issues: title, 1-line description, source filename. Read nothing else."
+   Worker B: "Read 06-user-feedback/. Return the top 5 issues from the Q1
+   2026 survey: title, % of respondents, exact phrase. Read nothing else."
+   Worker C: "Read 03-product-knowledge/company.md and any churn-related
+   files. Return the top 5 issues tied to Pro churn (4.1% monthly): title,
+   evidence, source file. Read nothing else."
+
+2. When all three return, find issues that appear in 2 or 3 sources. Rank them.
+
+3. Save outputs/triangulated-feedback.md (no date), two sections:
+   Triangulated issues (2+ sources) = top priorities.
+   Source-specific issues (1 source) = needs more investigation.
+
+Always cite source files.
+
+Trigger it when the user wants a triangulated view of feedback across
+multiple sources.</code></pre>
 </div>
+<div class="method">
+<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+<span class="pre-label file">.claude/agents/feedback-triangulator.md</span>
+<pre class="file"><code>---
+name: feedback-triangulator
+description: Cross-references interviews, survey, and churn data to find
+  issues confirmed by 2+ sources. Use when the user wants a triangulated
+  view of MeetFlow feedback.
+tools: Agent, Read, Glob, Write
+model: sonnet
+color: purple
+---
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
+Dispatch THREE workers in a SINGLE message (general-purpose type) so they
+run in parallel: A reads 07-user-interviews/, B reads 06-user-feedback/,
+C reads 03-product-knowledge/company.md plus churn files. Each returns its
+top 5 issues with source citations and reads nothing else. When all return,
+rank issues by how many sources mention them. Save
+outputs/triangulated-feedback.md (no date): triangulated issues (2+ sources)
+first, then source-specific issues. Always cite source files.</code></pre>
 </div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
-<pre><code>A triangulation agent named "feedback-triangulator" for MeetFlow that
-triangulates user feedback from three independent sources in parallel.
-
-Workflow:
-1. Dispatch THREE workers IN PARALLEL using the Agent tool. All three must be
-   dispatched in a SINGLE message — do not wait between dispatches. Use the
-   general-purpose subagent type for each.
-
-   Worker A prompt: "Read every file in 07-user-interviews/. Return the top
-   5 user issues. For each: title, 1-line description, source filename.
-   Do NOT read any other folder."
-
-   Worker B prompt: "Read 06-user-feedback/. Return the top 5 issues from the
-   Q1 2026 survey. For each: title, % of respondents, exact phrase used.
-   Do NOT read any other folder."
-
-   Worker C prompt: "Read 03-product-knowledge/company.md and any churn-
-   related files. Return the top 5 issues linked to Pro churn (currently
-   4.1% monthly). For each: title, evidence, source file."
-
-2. When all three return, find issues that appear in 2 or 3 sources
-   (triangulated). Rank them.
-
-3. Save to outputs/triangulated-feedback.md (no date in the filename) with two sections:
-   - Triangulated issues (appears in 2+ sources) — these are top priorities.
-   - Source-specific issues (appears in only 1) — needs more investigation.
-
-Always cite source files. Never put a date in the output filename.
-
-Use this agent when the user wants a triangulated view of user feedback
-across multiple sources.</code></pre>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
-<div class="tool-grid">
-  <div class="tool-pill">✓ Agent</div>
-  <div class="tool-pill">✓ Read</div>
-  <div class="tool-pill">✓ Glob</div>
-  <div class="tool-pill">✓ Write</div>
-</div>
-<p class="muted">The <code>Agent</code> tool is what enables parallel dispatch.</p>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
-<div class="you-pick"><strong>Suggested:</strong> Purple <span class="color-swatch" style="background:#a855f7;"></span></div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
-</div>
+<h4>Why these tools</h4>
+<p>The <code>Agent</code> tool is what enables the parallel dispatch. Read and Glob let the merge step re-check sources; Write saves the final brief.</p>
 
 <h3>Test it</h3>
-<p><em>"Triangulate the feedback. What's the top issue across sources?"</em> In Claude Code's UI you'll see three sub-agents running side by side — that's the parallel dispatch working.</p>
+<p><em>"Triangulate the feedback. What is the top issue across sources?"</em> In the subagent panel you will see three workers running at once. That is the parallel dispatch working.</p>
 </div>
 
 
@@ -719,85 +631,70 @@ across multiple sources.</code></pre>
 <h2>Orchestrator-Workers</h2>
 <p class="lead">The orchestrator decides which workers to spawn based on the input. Different inputs produce different worker sets.</p>
 
-<p class="muted">Unlike Routing (Pattern 02), which picks ONE specialist from a fixed menu, the orchestrator picks N workers — and the worker list changes per input. Unlike Parallelization (Pattern 03), which always dispatches the same fixed workers, the orchestrator decides the worker set at runtime.</p>
+<p class="muted">Unlike Routing (Pattern 02), which picks ONE specialist from a fixed menu, the orchestrator picks N workers, and the worker list changes per input. Unlike Parallelization (Pattern 03), which always dispatches the same fixed workers, the orchestrator decides the worker set at runtime.</p>
 
 <h3>The agent: <code>competitor-deep-dive</code></h3>
-<p>Given any competitor name, this agent picks 3-5 research angles that matter for THAT competitor, then spawns workers on those angles.</p>
-<div class="callout"><strong>Heads up:</strong> the repo already ships <code>competitor-intel-analyst</code>, a single-agent competitor researcher (no worker fan-out). The one you build here, <code>competitor-deep-dive</code>, is the multi-worker orchestrator version, so the names differ on purpose. Building it adds a new file next to the ones already in <code>.claude/agents/</code>.</div>
+<p>Given any competitor name, this agent picks 3-5 research angles that matter for THAT competitor, then spawns a worker per angle.</p>
+<div class="callout"><strong>Heads up:</strong> the repo already ships <code>competitor-intel-analyst</code>, a single-agent researcher with no worker fan-out. The one you build here, <code>competitor-deep-dive</code>, is the multi-worker orchestrator version. The names differ on purpose, so building it adds a new file next to the existing ones in <code>.claude/agents/</code>.</div>
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
-</div>
+<div class="method">
+<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+<pre><code>Create a project subagent in .claude/agents/ called "competitor-deep-dive"
+for MeetFlow, Sonnet, color cyan, with Agent, WebFetch, Read, Glob, Write.
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
-</div>
+It runs deep competitive analysis on a named competitor.
 
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
-<pre><code>A competitive intelligence orchestrator named "competitor-deep-dive" for
-MeetFlow. It runs deep competitive analysis on a named competitor.
-
-Workflow:
-1. Read 03-product-knowledge/competitive.md to learn what we already know
-   about this competitor.
-
-2. Decide which research angles matter for THIS specific competitor. Available
-   angles: Pricing &amp; packaging, Feature surface, User reviews (G2/Reddit/X),
-   Recent product launches (last 90 days), Funding &amp; team size, Positioning &amp;
-   ICP, Integration ecosystem.
-
-3. Pick 3-5 angles. Justify the pick out loud BEFORE dispatching. Example:
+1. Read 03-product-knowledge/competitive.md for what we already know.
+2. Decide which research angles matter for THIS competitor. Available angles:
+   Pricing &amp; packaging, Feature surface, User reviews (G2/Reddit/X), Recent
+   launches (last 90 days), Funding &amp; team size, Positioning &amp; ICP,
+   Integration ecosystem.
+3. Pick 3-5 angles. Justify the pick OUT LOUD before dispatching. Example:
    "For Granola, prioritizing Feature Surface, User Reviews, and Positioning
-   — they're a prosumer Mac-native play, so pricing matters less than design."
+   - they are a prosumer Mac-native play, so pricing matters less than design."
+4. Dispatch one worker per chosen angle IN PARALLEL via the Agent tool
+   (general-purpose type). Each worker gets one angle only.
+5. Synthesize into outputs/competitor-deepdive-{name}.md (no date):
+   TL;DR -&gt; Where they beat us -&gt; Where we beat them -&gt; Strategic
+   implications (cite 04-strategy/product-vision.md).
 
-4. Dispatch one worker per chosen angle IN PARALLEL via the Agent tool (use
-   the general-purpose subagent type). Each worker gets a focused prompt for
-   one angle only.
-
-5. When workers return, synthesize into
-   outputs/competitor-deepdive-{name}.md (no date in the filename). Structure: TL;DR →
-   Where they beat us → Where we beat them → Strategic implications for
-   MeetFlow (cite 04-strategy/product-vision.md).
-
-Rules: ALWAYS justify angle selection before dispatch. Workers must run in
+Rules: ALWAYS justify angle selection before dispatch. Workers run in
 parallel (one message). Cite worker outputs in the final brief.
 
-Use this agent when the user wants a deep analysis of a specific competitor
+Trigger it when the user wants a deep analysis of a specific competitor
 by name.</code></pre>
 </div>
+<div class="method">
+<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+<span class="pre-label file">.claude/agents/competitor-deep-dive.md</span>
+<pre class="file"><code>---
+name: competitor-deep-dive
+description: Multi-worker deep dive on a named competitor. Picks research
+  angles per competitor, then fans out workers. Use for a deep, multi-angle
+  analysis of one competitor by name.
+tools: Agent, WebFetch, Read, Glob, Write
+model: sonnet
+color: cyan
+---
 
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
-<div class="tool-grid">
-  <div class="tool-pill">✓ Agent</div>
-  <div class="tool-pill">✓ WebFetch</div>
-  <div class="tool-pill">✓ Read</div>
-  <div class="tool-pill">✓ Glob</div>
-  <div class="tool-pill">✓ Write</div>
+Read 03-product-knowledge/competitive.md. Then pick 3-5 research angles that
+matter for THIS competitor from: pricing, feature surface, user reviews,
+recent launches, funding/team, positioning/ICP, integrations. Justify the
+pick out loud BEFORE dispatching. Fan out one worker per angle in a single
+message (general-purpose type), one angle each. Synthesize into
+outputs/competitor-deepdive-{name}.md (no date): TL;DR, where they beat us,
+where we beat them, strategic implications (cite 04-strategy/product-vision.md).
+Always cite worker outputs.</code></pre>
 </div>
-<p class="muted">WebFetch lets workers pull from competitor sites if needed.</p>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
-<div class="you-pick"><strong>Suggested:</strong> Cyan <span class="color-swatch" style="background:#22d3ee;"></span></div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
-</div>
+<h4>Why these tools</h4>
+<p>Same as parallelization plus <code>WebFetch</code>, so workers can pull from competitor sites when the repo does not have the answer.</p>
 
 <h3>Test it twice</h3>
 <ul>
   <li><em>"Deep dive on Granola."</em></li>
   <li><em>"Deep dive on Fireflies."</em></li>
 </ul>
-<p>Verify the orchestrator picks <strong>different</strong> angles for each. If it picks the same angles for both, the orchestrator is being lazy — re-open <code>/agents</code>, edit this agent, and tighten the angle-selection rules.</p>
+<p>Verify the orchestrator picks <strong>different</strong> angles for each. If it picks the same angles for both, the angle-selection rule is too loose. Edit the agent file (or ask Claude to) and tighten it.</p>
 </div>
 
 
@@ -810,149 +707,110 @@ by name.</code></pre>
 <p class="lead">Two agents in a feedback loop. One writes. One critiques. The writer revises until the critic is satisfied.</p>
 
 <div class="callout">
-<strong>Build order matters.</strong> Build 5A (the critic) first. The writer (5B) dispatches to the critic by name — if the critic doesn't exist yet, the writer's loop will fail.
+<strong>Build order matters.</strong> Build 5A (the critic) first. The writer (5B) dispatches to the critic by name. If the critic does not exist yet, the loop fails.
 </div>
 
 <h3>Agent 5A: <code>prd-critic</code> (the critic)</h3>
+<div class="method">
+<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+<pre><code>Create a project subagent in .claude/agents/ called "prd-critic" for
+MeetFlow, Sonnet, color pink, with the Read tool only.
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
-<pre><code>A PRD critic agent named "prd-critic" that scores draft PRDs for MeetFlow
-against a strict 5-dimension rubric.
-
-You are a senior engineering manager. Be skeptical, specific, and brief.
+It scores draft PRDs against a strict 5-dimension rubric. Persona: a
+skeptical senior engineering manager. Be specific and brief.
 
 Rubric (score each 0-2, total out of 10):
-1. Problem clarity — is the problem stated with a real stat from real users?
-   (0 = no stat, 2 = specific number + source)
-2. User specificity — is the target user a named persona, not "users"?
-   (0 = generic, 2 = named persona with context)
-3. Solution scope — 5 bullets, no implementation detail, no scope creep?
-   (0 = jumbled, 2 = tight)
-4. Measurability — success metric with current baseline + target?
-   (0 = vague, 2 = both numbers)
-5. Risks — top 3 risks concrete and prioritized?
-   (0 = generic, 2 = specific)
+1. Problem clarity - real stat from real users? (0 none, 2 number + source)
+2. User specificity - a named persona, not "users"? (0 generic, 2 named)
+3. Solution scope - 5 bullets, no implementation, no creep? (0 jumbled, 2 tight)
+4. Measurability - metric with current baseline + target? (0 vague, 2 both)
+5. Risks - top 3 concrete and prioritized? (0 generic, 2 specific)
 
-Output format:
-Score: X/10
-- Problem clarity: X/2 — [one-line reason]
-- User specificity: X/2 — [one-line reason]
-- Solution scope: X/2 — [one-line reason]
-- Measurability: X/2 — [one-line reason]
-- Risks: X/2 — [one-line reason]
+Output: "Score: X/10", then one line per dimension with a reason. If the
+score is under 8, add "Top fixes" with 3 specific changes, each naming the
+exact section and exact fix.
 
-Top fixes (only if score &lt; 8):
-1. [specific change to make — name the exact section and exact fix]
-2. [specific change]
-3. [specific change]
+Rules: NEVER give a 10 - there is always something. Fixes must be specific,
+e.g. "add the 34% action item accuracy stat from
+04-strategy/product-vision.md," not "make the problem clearer."
 
-Rules: NEVER give a 10. There's always something. Be specific in fixes:
-not "make problem clearer" — say "add the 34% action item accuracy stat from
-04-strategy/product-vision.md."
-
-Use this agent only when dispatched by prd-quality-loop.</code></pre>
+Note it is used only when dispatched by prd-quality-loop.</code></pre>
 </div>
+<div class="method">
+<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+<span class="pre-label file">.claude/agents/prd-critic.md</span>
+<pre class="file"><code>---
+name: prd-critic
+description: Scores a draft MeetFlow PRD against a 5-dimension rubric. Used
+  only when dispatched by prd-quality-loop.
+tools: Read
+model: sonnet
+color: pink
+---
 
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
-<div class="tool-grid">
-  <div class="tool-pill">✓ Read</div>
+You are a skeptical senior engineering manager. Score the draft PRD 0-2 on
+each of: problem clarity (real stat + source), user specificity (named
+persona), solution scope (5 bullets, no implementation), measurability
+(baseline + target), risks (top 3 concrete). Output "Score: X/10" then one
+line per dimension. If under 8, add three specific fixes, each naming the
+exact section and exact change. NEVER give a 10 - there is always something.</code></pre>
 </div>
-<p class="muted">Critic only needs Read — it scores a draft passed to it, no writing needed.</p>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
-<div class="you-pick"><strong>Suggested:</strong> Pink <span class="color-swatch" style="background:#ec4899;"></span></div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
-</div>
-
+<h4>Why these tools</h4>
+<p>Read only. The critic scores a draft passed to it. It does not write anything.</p>
 
 <h3>Agent 5B: <code>prd-quality-loop</code> (the writer + loop)</h3>
+<div class="method">
+<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+<pre><code>Create a project subagent in .claude/agents/ called "prd-quality-loop" for
+MeetFlow, Sonnet, color green, with Agent, Read, Glob, Write.
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">1</span><div class="quick-do"><strong>Open:</strong> <code>/agents</code></div></div>
-</div>
+It writes engineering-ready PRDs using a critique loop with prd-critic.
 
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">2</span><div class="quick-do"><strong>Location:</strong> Library → Create new agent → <strong>Project</strong></div></div>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">3</span><strong>Generate with Claude — paste this:</strong></div>
-<pre><code>An iterative PRD writer agent named "prd-quality-loop" for MeetFlow. It
-writes engineering-ready PRDs using a critique loop with the prd-critic agent.
-
-Loop protocol:
-1. Read 04-strategy/product-vision.md and any relevant feedback/interview
-   files for context.
-2. Draft v1 of the PRD using the structure below.
-3. Dispatch the prd-critic agent via the Agent tool. Pass it the draft.
-4. Wait for the critic's score.
-5. If score &gt;= 8: write final to outputs/prd-{feature}.md (no date in the filename). Stop.
+Loop:
+1. Read 04-strategy/product-vision.md and any relevant feedback/interview files.
+2. Draft v1 of the PRD.
+3. Dispatch prd-critic via the Agent tool, passing it the draft.
+4. Wait for the score.
+5. If score &gt;= 8: write final to outputs/prd-{feature-name}.md (no date). Stop.
 6. If score &lt; 8: revise addressing EVERY critique point. Increment version.
    Go to step 3.
-7. Max 3 iterations. If still &lt; 8 after 3, write the latest version plus a
+7. Max 3 iterations. If still &lt; 8 after 3, write the latest version with a
    "Remaining gaps" section at the top.
 
-PRD structure (every version):
-1. Problem (with 1 stat from real feedback)
-2. Target user (persona name from 05-user-personas/)
-3. Solution (5 bullets, no implementation detail)
-4. Success metric (current baseline + target)
-5. Risks (top 3)
-6. Out of scope (top 3)
+PRD structure every version: Problem (1 real stat), Target user (persona
+from 05-user-personas/), Solution (5 bullets), Success metric (baseline +
+target), Risks (top 3), Out of scope (top 3).
 
-Rules:
-- After each critique, list which specific feedback points you addressed.
-- Never argue with the critic. Revise.
-- Track iteration count visibly: "Iteration 2 of 3 — Score from last: 6/10."
+Rules: after each critique, list which points you addressed. Never argue
+with the critic - revise. Track the count visibly: "Iteration 2 of 3 -
+last score 6/10."
 
-Use this agent when the user asks to write a high-quality PRD that will
-pass engineering review.</code></pre>
+Trigger it when the user asks for a high-quality PRD that will pass
+engineering review.</code></pre>
 </div>
+<div class="method">
+<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+<span class="pre-label file">.claude/agents/prd-quality-loop.md</span>
+<pre class="file"><code>---
+name: prd-quality-loop
+description: Writes an engineering-ready PRD via a critique loop with
+  prd-critic. Use when the user wants a PRD that will pass eng review.
+tools: Agent, Read, Glob, Write
+model: sonnet
+color: green
+---
 
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">4</span><strong>Tools:</strong></div>
-<div class="tool-grid">
-  <div class="tool-pill">✓ Agent</div>
-  <div class="tool-pill">✓ Read</div>
-  <div class="tool-pill">✓ Glob</div>
-  <div class="tool-pill">✓ Write</div>
-</div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">5</span><div class="quick-do"><strong>Model:</strong> Sonnet</div></div>
-</div>
-
-<div class="wizard-step">
-<div class="wizard-step-head"><span class="wizard-step-num">6</span><strong>Color:</strong></div>
-<div class="you-pick"><strong>Suggested:</strong> Teal <span class="color-swatch" style="background:#14b8a6;"></span></div>
-</div>
-
-<div class="wizard-step tight">
-<div class="wizard-step-head"><span class="wizard-step-num">7</span><div class="quick-do"><strong>Memory:</strong> None</div></div>
+Read 04-strategy/product-vision.md and relevant feedback files. Draft the
+PRD (Problem with a real stat, named persona, 5-bullet solution, metric with
+baseline + target, top 3 risks, out of scope). Dispatch prd-critic with the
+draft. If it scores 8+, save outputs/prd-{feature-name}.md (no date) and stop. If
+under 8, revise every point and re-score. Max 3 loops; after that, ship the
+latest with a "Remaining gaps" note on top. Never argue with the critic;
+revise. Log each iteration: "Iteration 2 of 3 - last score 6/10."</code></pre>
 </div>
 
 <h3>Test it</h3>
-<p><em>"Use prd-quality-loop to write a PRD for Smart Follow-Up."</em> Watch the loop run — draft v1 → score → revise → score → ship. The final PRD should log a score of 8/10 or higher at the top.</p>
+<p><em>"Use prd-quality-loop to write a PRD for Smart Follow-Up."</em> Watch the loop run: draft v1 &rarr; score &rarr; revise &rarr; score &rarr; ship. The final PRD should log a score of 8/10 or higher at the top.</p>
 </div>
 
 
@@ -971,17 +829,17 @@ pass engineering review.</code></pre>
   <li><code>prd-critic</code> + <code>prd-quality-loop</code> <span class="tag green">Evaluator-Optimizer</span></li>
 </ul>
 
-<p>Verify by running <code>ls .claude/agents/</code> in your terminal — every agent should show up as a <code>.md</code> file.</p>
+<p>Verify by running <code>ls .claude/agents/</code> in your terminal. Every agent should show up as a <code>.md</code> file.</p>
 
-<h3>How to edit an agent later</h3>
-<p>Type <code>/agents</code> again. Switch to the <strong>Library</strong> tab, pick the agent from your list, and modify any field — name, description, tools, model, color, memory, or system prompt. The wizard saves the change. No file editing needed.</p>
+<h3>Editing an agent later</h3>
+<p>Two ways, both live within seconds, no restart: open the <code>.md</code> file and change any field, or ask Claude - <em>"give churn-diagnoser access to 05-user-personas/ too."</em> Claude edits the frontmatter or body for you.</p>
 
-<h3>Quick reference — which pattern when</h3>
+<h3>Quick reference - which pattern when</h3>
 <table>
 <thead><tr><th>If your task...</th><th>Use</th></tr></thead>
 <tbody>
 <tr><td>Has clear sequential stages with quality gates</td><td>Prompt Chaining</td></tr>
-<tr><td>Mixes different request types needing different handling</td><td>Routing</td></tr>
+<tr><td>Mixes request types needing different handling</td><td>Routing</td></tr>
 <tr><td>Has independent subtasks that can all run at once</td><td>Parallelization</td></tr>
 <tr><td>Needs a different decomposition for each input</td><td>Orchestrator-Workers</td></tr>
 <tr><td>Has checkable quality that improves with iteration</td><td>Evaluator-Optimizer</td></tr>
@@ -989,13 +847,13 @@ pass engineering review.</code></pre>
 </table>
 
 <div class="callout">
-<strong>Homework.</strong> Build one more agent for a real workflow you do every week — sprint prep, weekly status update, stakeholder digest. Pick the pattern that fits. Run <code>/agents</code>. You don't need permission. Share what you built in the cohort channel.
+<strong>Homework.</strong> Build one more agent for a real workflow you do every week - sprint prep, weekly status, stakeholder digest. Pick the pattern that fits. Describe it to Claude, or drop a <code>.md</code> file in <code>.claude/agents/</code>. Share what you built in the cohort channel.
 </div>
 
 <div class="footer">
-  <p>Source pattern set: Anthropic, "Building Effective Agents."<br>
-  Wizard flow reference: <a href="https://code.claude.com/docs/en/sub-agents#quickstart-create-your-first-subagent">code.claude.com/docs/en/sub-agents</a><br>
-  Project context: MeetFlow workshop repo on GitHub. All file paths refer to that repo.<br></p>
+  <p>Pattern set: Anthropic, "Building Effective Agents."<br>
+  Subagent reference: <a href="https://code.claude.com/docs/en/sub-agents">code.claude.com/docs/en/sub-agents</a><br>
+  Project context: MeetFlow workshop repo. All file paths refer to that repo.</p>
 </div>
 
 </div>

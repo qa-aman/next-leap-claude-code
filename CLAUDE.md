@@ -54,6 +54,7 @@ This repo is also a live Claude Code toolkit. Before hand-rolling a PM artifact,
 
 - **`.claude/skills/`** (40+ skills) - PM deliverable generators: `write-prd`, `feature-spec`, `okr-writer`, `prioritization`, `write-user-stories`, `stakeholder-update`, `jira-ticket-creator`, `mom` (Smart Brevity meeting minutes), plus publishing skills (`md-to-confluence`, `ppt-builder`) and writing skills. Invoke with `/<skill-name>`.
 - **`.claude/agents/`** - specialized subagents: `pm-request-router` (triages vague requests), `prd-drafter` / `prd-quality-loop` / `prd-critic` (PRD pipeline), `churn-diagnoser`, `interview-insight-synthesizer`, `competitor-snapshot`, `feedback-triangulator`, `senior-code-reviewer`. Prefer these over ad-hoc work for their domains.
+- **`.claude/hooks/`** - `refresh-docs.sh` is a Stop hook (wired via `.claude/settings.local.json`) that auto-updates CLAUDE.md and README.md from the diff after a turn changes source files but leaves the docs stale.
 - **`.claude/rules/`** - path-triggered rules that auto-load when you touch matching files. Know these fire without being asked:
   - `08-product-features/**` -> PRDs must cite a persona, use real baselines, include a "What we're NOT building" section, link to Q2 OKRs.
   - `03-product-knowledge/**`, `05/06/07-*` -> cite source file/line for every metric and quote; never invent numbers or user quotes.

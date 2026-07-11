@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Commands Reference</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --border:#2a3140;
+    --text:#e6edf3; --muted:#9aa7b5; --accent:#d97757; --accent2:#7aa2f7;
+    --green:#3fb950; --mono:"SF Mono",ui-monospace,"Cascadia Code","JetBrains Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme: light){
+    :root{--bg:#f6f8fa;--panel:#ffffff;--panel2:#f0f3f6;--border:#d8dee4;--text:#1f2328;--muted:#59636e;--accent:#c4552f;--accent2:#3b5bdb;}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55;font-size:15px}
+  a{color:var(--accent2);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+  header{border-bottom:1px solid var(--border);background:linear-gradient(180deg,var(--panel2),var(--bg));padding:44px 0 28px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 10px}
+  h1{margin:0 0 12px;font-size:34px;line-height:1.15;letter-spacing:-0.02em}
+  .lede{margin:0;color:var(--muted);max-width:70ch;font-size:16px}
+  .meta{margin-top:18px;display:flex;flex-wrap:wrap;gap:8px}
+  .pill{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:20px;padding:4px 12px;background:var(--panel)}
+  .pill a{color:var(--muted)}
+  .toolbar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--border);padding:14px 0}
+  .toolbar .wrap{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  #search{flex:1;min-width:220px;font-family:var(--mono);font-size:14px;background:var(--panel);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:10px 14px;outline:none}
+  #search:focus{border-color:var(--accent)}
+  .count{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{font-family:var(--mono);font-size:12px;padding:6px 11px;border-radius:16px;border:1px solid var(--border);background:var(--panel);color:var(--muted);cursor:pointer;user-select:none}
+  .chip:hover{color:var(--text)}
+  .chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+  main{padding:26px 0 60px}
+  section{margin:0 0 40px;scroll-margin-top:80px}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin:0 0 4px;flex-wrap:wrap}
+  .sec-head h2{font-size:21px;margin:0;letter-spacing:-0.01em}
+  .sec-head .tag{font-family:var(--mono);font-size:11px;color:var(--accent);border:1px solid var(--accent);border-radius:4px;padding:1px 7px;opacity:.85}
+  .sec-desc{color:var(--muted);margin:2px 0 16px;font-size:14px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px 16px;transition:border-color .15s,transform .15s}
+  .card:hover{border-color:var(--accent)}
+  .card .cmd{font-family:var(--mono);font-size:14.5px;color:var(--accent);font-weight:600;word-break:break-word}
+  .card .cmd .arg{color:var(--muted);font-weight:400}
+  .card .desc{margin:7px 0 0;font-size:13.5px;color:var(--text)}
+  .card .link{margin-top:9px;font-family:var(--mono);font-size:11.5px}
+  .card .link a{color:var(--muted)}
+  .card .link a:hover{color:var(--accent2)}
+  .star{color:var(--green);font-size:11px;font-family:var(--mono);margin-left:6px;vertical-align:middle}
+  .kbd{display:inline-block;font-family:var(--mono);font-size:12px;background:var(--panel2);border:1px solid var(--border);border-bottom-width:2px;border-radius:5px;padding:1px 7px;color:var(--text);white-space:nowrap}
+  .kbd-row{display:flex;gap:14px;padding:9px 2px;border-bottom:1px solid var(--border);align-items:baseline;flex-wrap:wrap}
+  .kbd-row:last-child{border-bottom:none}
+  .kbd-keys{min-width:150px;flex-shrink:0}
+  .kbd-desc{color:var(--muted);font-size:13.5px}
+  .noresult{display:none;text-align:center;color:var(--muted);padding:40px;font-family:var(--mono)}
+  footer{border-top:1px solid var(--border);padding:26px 0 46px;color:var(--muted);font-size:13px}
+  footer a{color:var(--muted)}
+  .legend{font-size:12.5px;color:var(--muted);margin-top:10px}
+  @media(max-width:600px){h1{font-size:26px}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">Claude Code for PMs &middot; Workshop Reference</p>
+    <h1>Claude Code Commands Reference</h1>
+    <p class="lede">Every slash command, CLI command, keyboard shortcut, and input mode worth knowing, grouped by how often you reach for them. Sourced from the official Claude Code documentation. <span class="star">&#9733;</span> marks the everyday essentials.</p>
+    <div class="meta">
+      <span class="pill">Verified against <a href="https://code.claude.com/docs/en/commands">code.claude.com/docs</a></span>
+      <span class="pill">Updated 11-07-2026</span>
+      <span class="pill">Type <b>/</b> in Claude Code to see this live menu</span>
+    </div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="wrap">
+    <input id="search" type="text" placeholder="Filter commands…  try 'context', 'review', 'resume'" autocomplete="off">
+    <div class="chips" id="chips">
+      <span class="chip active" data-f="all">All</span>
+      <span class="chip" data-f="essential">&#9733; Essentials</span>
+      <span class="chip" data-f="slash">Slash</span>
+      <span class="chip" data-f="cli">CLI</span>
+      <span class="chip" data-f="keys">Keys</span>
+    </div>
+    <span class="count" id="count"></span>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- 1. ESSENTIALS -->
+  <section data-cat="essential slash" id="essentials">
+    <div class="sec-head"><h2>The daily drivers</h2><span class="tag">MOST USED</span></div>
+    <p class="sec-desc">The handful you will type in almost every session. Learn these first.</p>
+    <div class="grid">
+      <div class="card" data-cat="essential slash"><div class="cmd">/clear <span class="arg">[name]</span><span class="star">&#9733;</span></div><p class="desc">Start a fresh conversation with empty context. The fastest way to reset when Claude gets confused or you switch tasks. The old session is preserved and resumable.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="essential slash"><div class="cmd">/compact <span class="arg">[instructions]</span><span class="star">&#9733;</span></div><p class="desc">Summarize the conversation so far to free up context without losing the thread. Add instructions to steer what gets kept.</p><div class="link"><a href="https://code.claude.com/docs/en/costs">docs / context</a></div></div>
+      <div class="card" data-cat="essential slash"><div class="cmd">/context <span class="arg">[all]</span><span class="star">&#9733;</span></div><p class="desc">Visualize how much of the context window is used as a colored grid. Check this when responses start to feel lossy.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="essential slash"><div class="cmd">/model <span class="arg">[model]</span><span class="star">&#9733;</span></div><p class="desc">Switch the model (opus, sonnet, haiku, fable) and save it as default. Opus for hard reasoning, Haiku for quick lookups.</p><div class="link"><a href="https://code.claude.com/docs/en/model-config">docs / model</a></div></div>
+      <div class="card" data-cat="essential slash"><div class="cmd">/config <span class="arg">[key=value]</span><span class="star">&#9733;</span></div><p class="desc">Open the settings interface: theme, model, editor mode, output style, and every session preference.</p><div class="link"><a href="https://code.claude.com/docs/en/settings">docs / settings</a></div></div>
+      <div class="card" data-cat="essential slash"><div class="cmd">/init<span class="star">&#9733;</span></div><p class="desc">Scan the repo and generate a CLAUDE.md guide so Claude understands your project on every future session.</p><div class="link"><a href="https://code.claude.com/docs/en/memory">docs / memory</a></div></div>
+      <div class="card" data-cat="essential slash"><div class="cmd">/memory<span class="star">&#9733;</span></div><p class="desc">Edit your CLAUDE.md memory files and manage auto-memory. Where you teach Claude durable facts and preferences.</p><div class="link"><a href="https://code.claude.com/docs/en/memory">docs / memory</a></div></div>
+      <div class="card" data-cat="essential slash"><div class="cmd">/resume <span class="arg">[session]</span><span class="star">&#9733;</span></div><p class="desc">Reopen a past conversation by ID or name and pick up exactly where you left off.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="essential slash"><div class="cmd">/rewind<span class="star">&#9733;</span></div><p class="desc">Roll the conversation and/or your code back to an earlier checkpoint. Also on double-<b>Esc</b>. Your undo button.</p><div class="link"><a href="https://code.claude.com/docs/en/checkpointing">docs / checkpointing</a></div></div>
+      <div class="card" data-cat="essential slash"><div class="cmd">/help<span class="star">&#9733;</span></div><p class="desc">Show help and the list of available commands. When in doubt, start here.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="essential slash"><div class="cmd">/usage <span class="arg">&middot; /cost</span><span class="star">&#9733;</span></div><p class="desc">View token usage and cost for the current session. <span style="color:var(--muted)">/cost</span> and <span style="color:var(--muted)">/stats</span> are aliases.</p><div class="link"><a href="https://code.claude.com/docs/en/costs">docs / costs</a></div></div>
+      <div class="card" data-cat="essential slash"><div class="cmd">/agents<span class="star">&#9733;</span></div><p class="desc">Create, edit, and manage specialized subagents that run tasks in their own context window.</p><div class="link"><a href="https://code.claude.com/docs/en/sub-agents">docs / sub-agents</a></div></div>
+    </div>
+  </section>
+
+  <!-- 2. PLANNING & AUTONOMY -->
+  <section data-cat="slash" id="planning">
+    <div class="sec-head"><h2>Planning &amp; autonomy</h2><span class="tag">SLASH</span></div>
+    <p class="sec-desc">Control how much Claude thinks before acting, and how long it runs on its own.</p>
+    <div class="grid">
+      <div class="card" data-cat="slash"><div class="cmd">/plan <span class="arg">[description]</span><span class="star">&#9733;</span></div><p class="desc">Enter plan mode: Claude researches and proposes an approach before touching any files. Use for anything spanning 3+ files.</p><div class="link"><a href="https://code.claude.com/docs/en/common-workflows">docs / workflows</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/goal <span class="arg">[condition]</span></div><p class="desc">Set a target condition and Claude keeps working until it is met. Pass <span style="color:var(--muted)">clear</span> to remove it.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/loop <span class="arg">[interval] [prompt]</span></div><p class="desc"><b>Skill.</b> Run a prompt repeatedly on an interval, or omit the interval to let the model self-pace. Good for polling status or babysitting a task.</p><div class="link"><a href="https://code.claude.com/docs/en/skills">docs / skills</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/schedule <span class="arg">[description]</span></div><p class="desc">Create, list, or run cron-scheduled cloud agents (routines) that fire on a recurring schedule.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/fork <span class="arg">&lt;directive&gt;</span></div><p class="desc">Spawn a forked subagent that inherits the full conversation, so you can branch an experiment without losing the main thread.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/branch <span class="arg">[name]</span></div><p class="desc">Create a branch of the current conversation at this point to explore an alternative path.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/background <span class="arg">[prompt]</span></div><p class="desc">Detach the current session to run as a background agent and free your terminal.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/tasks</div><p class="desc">List background tasks, running shells, and subagents in the current session.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+    </div>
+  </section>
+
+  <!-- 3. SESSION & CONTEXT -->
+  <section data-cat="slash" id="session">
+    <div class="sec-head"><h2>Session &amp; context</h2><span class="tag">SLASH</span></div>
+    <p class="sec-desc">Move, save, recap, and reshape the current conversation.</p>
+    <div class="grid">
+      <div class="card" data-cat="slash"><div class="cmd">/recap</div><p class="desc">Generate a one-line summary of what has happened in the session so far.</p><div class="link"><a href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/export <span class="arg">[filename]</span></div><p class="desc">Export the current conversation as plain text.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/copy <span class="arg">[N]</span></div><p class="desc">Copy the last assistant response (or the Nth-latest) to your clipboard.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/btw <span class="arg">&lt;question&gt;</span></div><p class="desc">Ask a quick side question without adding it to the conversation history. Sees full context, has no tools.</p><div class="link"><a href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/cd <span class="arg">&lt;path&gt;</span></div><p class="desc">Move this session to a new working directory.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/add-dir <span class="arg">&lt;path&gt;</span></div><p class="desc">Add another working directory so Claude can read files outside the current project.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/rename <span class="arg">[name]</span></div><p class="desc">Rename the current session so it is easy to find in <span style="color:var(--muted)">/resume</span>.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/diff</div><p class="desc">Open an interactive diff viewer showing your uncommitted changes.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/desktop <span class="arg">&middot; /mobile</span></div><p class="desc">Continue the session in the Claude Code desktop app, or show a QR code for the mobile app.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/exit</div><p class="desc">Exit the CLI.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+    </div>
+  </section>
+
+  <!-- 4. CODE QUALITY SKILLS -->
+  <section data-cat="slash" id="quality">
+    <div class="sec-head"><h2>Code quality &amp; delivery</h2><span class="tag">BUNDLED SKILLS</span></div>
+    <p class="sec-desc">Bundled skills that review, debug, and drive your actual code.</p>
+    <div class="grid">
+      <div class="card" data-cat="slash"><div class="cmd">/code-review <span class="arg">[level] [--fix]</span><span class="star">&#9733;</span></div><p class="desc">Review the current diff for correctness bugs and cleanups. Pass <span style="color:var(--muted)">--fix</span> to apply, or <span style="color:var(--muted)">ultra</span> for a deep multi-agent cloud review.</p><div class="link"><a href="https://code.claude.com/docs/en/skills">docs / skills</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/security-review</div><p class="desc">Analyze pending changes for security vulnerabilities before you ship.</p><div class="link"><a href="https://code.claude.com/docs/en/skills">docs / skills</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/simplify <span class="arg">[target]</span></div><p class="desc">Review changed code for reuse, simplification, and efficiency cleanups, then apply the fixes. Quality only, not bug-hunting.</p><div class="link"><a href="https://code.claude.com/docs/en/skills">docs / skills</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/debug <span class="arg">[description]</span></div><p class="desc">Turn on debug logging for the session and troubleshoot what is going wrong.</p><div class="link"><a href="https://code.claude.com/docs/en/skills">docs / skills</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/run</div><p class="desc">Launch and drive your project's app so you can see a change actually working, not just passing tests.</p><div class="link"><a href="https://code.claude.com/docs/en/skills">docs / skills</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/verify</div><p class="desc">Launch the app and verify a change end-to-end by exercising the affected flow.</p><div class="link"><a href="https://code.claude.com/docs/en/skills">docs / skills</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/deep-research <span class="arg">&lt;question&gt;</span></div><p class="desc"><b>Workflow.</b> Fan out web searches, fetch and cross-check sources, then synthesize a cited report.</p><div class="link"><a href="https://code.claude.com/docs/en/skills">docs / skills</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/batch <span class="arg">&lt;instruction&gt;</span></div><p class="desc">Orchestrate large-scale changes across a codebase in parallel.</p><div class="link"><a href="https://code.claude.com/docs/en/skills">docs / skills</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/dataviz <span class="arg">[request]</span></div><p class="desc">Design guidance for charts, graphs, and dashboards.</p><div class="link"><a href="https://code.claude.com/docs/en/skills">docs / skills</a></div></div>
+    </div>
+  </section>
+
+  <!-- 5. SETUP & CONFIG -->
+  <section data-cat="slash" id="setup">
+    <div class="sec-head"><h2>Setup, config &amp; integrations</h2><span class="tag">SLASH</span></div>
+    <p class="sec-desc">Configure permissions, hooks, MCP servers, and the terminal.</p>
+    <div class="grid">
+      <div class="card" data-cat="slash"><div class="cmd">/permissions<span class="star">&#9733;</span></div><p class="desc">Manage allow, ask, and deny rules for tools. Where you decide what Claude can run without asking.</p><div class="link"><a href="https://code.claude.com/docs/en/permission-modes">docs / permissions</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/mcp <span class="arg">[reconnect]</span></div><p class="desc">Manage Model Context Protocol server connections and OAuth authentication.</p><div class="link"><a href="https://code.claude.com/docs/en/mcp">docs / mcp</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/hooks</div><p class="desc">View and configure hooks that fire on tool events (before/after edits, on session start, etc.).</p><div class="link"><a href="https://code.claude.com/docs/en/hooks">docs / hooks</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/skills</div><p class="desc">List available skills with filtering and sorting.</p><div class="link"><a href="https://code.claude.com/docs/en/skills">docs / skills</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/plugin <span class="arg">[subcommand]</span></div><p class="desc">Install and manage Claude Code plugins.</p><div class="link"><a href="https://code.claude.com/docs/en/plugins">docs / plugins</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/terminal-setup</div><p class="desc">Configure terminal integration, including Shift+Enter for multiline in VS Code, Cursor, and others.</p><div class="link"><a href="https://code.claude.com/docs/en/terminal-config">docs / terminal-config</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/statusline</div><p class="desc">Configure the status line shown at the bottom of the session.</p><div class="link"><a href="https://code.claude.com/docs/en/statusline">docs / statusline</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/keybindings</div><p class="desc">Open your keyboard shortcuts file to customize bindings.</p><div class="link"><a href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/vim</div><p class="desc">Toggle Vim key bindings in the prompt editor.</p><div class="link"><a href="https://code.claude.com/docs/en/interactive-mode">docs / vim mode</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/ide</div><p class="desc">Manage IDE integrations and show connection status.</p><div class="link"><a href="https://code.claude.com/docs/en/ide-integrations">docs / ide</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/doctor</div><p class="desc"><b>Skill.</b> Run a setup checkup that diagnoses install and config issues, and can fix them.</p><div class="link"><a href="https://code.claude.com/docs/en/skills">docs / skills</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/fast <span class="arg">[on|off]</span></div><p class="desc">Toggle fast mode. Uses Opus with faster output on eligible plans, not a smaller model.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/login <span class="arg">&middot; /logout</span></div><p class="desc">Sign in to or out of your Anthropic account.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/install-github-app</div><p class="desc">Install the Claude GitHub App on a repository for PR reviews and automation.</p><div class="link"><a href="https://code.claude.com/docs/en/github-actions">docs / github</a></div></div>
+      <div class="card" data-cat="slash"><div class="cmd">/feedback <span class="arg">&middot; /bug</span></div><p class="desc">Submit feedback, report a bug, or share your conversation with the team.</p><div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div></div>
+    </div>
+  </section>
+
+  <!-- 6. CLI -->
+  <section data-cat="cli" id="cli">
+    <div class="sec-head"><h2>Terminal (CLI) commands</h2><span class="tag">CLI</span></div>
+    <p class="sec-desc">What you type in your shell before Claude Code even opens. Run <span class="kbd">claude --help</span> for the full list.</p>
+    <div class="grid">
+      <div class="card" data-cat="cli"><div class="cmd">claude<span class="star">&#9733;</span></div><p class="desc">Start an interactive session in the current directory.</p><div class="link"><a href="https://code.claude.com/docs/en/cli-reference">docs / cli-reference</a></div></div>
+      <div class="card" data-cat="cli"><div class="cmd">claude <span class="arg">"query"</span><span class="star">&#9733;</span></div><p class="desc">Start interactive with an initial prompt already typed.</p><div class="link"><a href="https://code.claude.com/docs/en/cli-reference">docs / cli-reference</a></div></div>
+      <div class="card" data-cat="cli"><div class="cmd">claude -p <span class="arg">"query"</span><span class="star">&#9733;</span></div><p class="desc">Print mode: run the query non-interactively and exit. The scripting workhorse.</p><div class="link"><a href="https://code.claude.com/docs/en/cli-reference">docs / cli-reference</a></div></div>
+      <div class="card" data-cat="cli"><div class="cmd">claude -c<span class="star">&#9733;</span></div><p class="desc">Continue the most recent conversation in this directory.</p><div class="link"><a href="https://code.claude.com/docs/en/cli-reference">docs / cli-reference</a></div></div>
+      <div class="card" data-cat="cli"><div class="cmd">claude -r <span class="arg">"&lt;session&gt;"</span></div><p class="desc">Resume a specific session by ID or name.</p><div class="link"><a href="https://code.claude.com/docs/en/cli-reference">docs / cli-reference</a></div></div>
+      <div class="card" data-cat="cli"><div class="cmd">cat file | claude -p <span class="arg">"query"</span></div><p class="desc">Pipe file contents or command output straight into Claude.</p><div class="link"><a href="https://code.claude.com/docs/en/cli-reference">docs / cli-reference</a></div></div>
+      <div class="card" data-cat="cli"><div class="cmd">claude --model <span class="arg">opus</span></div><p class="desc">Start with a specific model (sonnet, opus, haiku, fable, or full name).</p><div class="link"><a href="https://code.claude.com/docs/en/cli-reference">docs / cli-reference</a></div></div>
+      <div class="card" data-cat="cli"><div class="cmd">claude -w <span class="arg">&middot; --worktree</span></div><p class="desc">Start in an isolated git worktree so parallel work does not collide.</p><div class="link"><a href="https://code.claude.com/docs/en/cli-reference">docs / cli-reference</a></div></div>
+      <div class="card" data-cat="cli"><div class="cmd">claude --permission-mode <span class="arg">plan</span></div><p class="desc">Begin in a specific permission mode (default, acceptEdits, plan, auto, bypassPermissions).</p><div class="link"><a href="https://code.claude.com/docs/en/permission-modes">docs / permission-modes</a></div></div>
+      <div class="card" data-cat="cli"><div class="cmd">claude --add-dir <span class="arg">&lt;path&gt;</span></div><p class="desc">Add extra working directories at launch.</p><div class="link"><a href="https://code.claude.com/docs/en/cli-reference">docs / cli-reference</a></div></div>
+      <div class="card" data-cat="cli"><div class="cmd">claude --output-format <span class="arg">json</span></div><p class="desc">Choose print-mode output: text, json, or stream-json. Pairs with <span style="color:var(--muted)">--verbose</span>.</p><div class="link"><a href="https://code.claude.com/docs/en/cli-reference">docs / cli-reference</a></div></div>
+      <div class="card" data-cat="cli"><div class="cmd">claude mcp</div><p class="desc">Configure Model Context Protocol servers from the shell.</p><div class="link"><a href="https://code.claude.com/docs/en/mcp">docs / mcp</a></div></div>
+      <div class="card" data-cat="cli"><div class="cmd">claude update</div><p class="desc">Update Claude Code to the latest version.</p><div class="link"><a href="https://code.claude.com/docs/en/cli-reference">docs / cli-reference</a></div></div>
+      <div class="card" data-cat="cli"><div class="cmd">claude doctor</div><p class="desc">Print installation and settings diagnostics.</p><div class="link"><a href="https://code.claude.com/docs/en/cli-reference">docs / cli-reference</a></div></div>
+      <div class="card" data-cat="cli"><div class="cmd">claude --dangerously-skip-permissions</div><p class="desc">Skip all permission prompts. Powerful and risky, use only in trusted, sandboxed contexts.</p><div class="link"><a href="https://code.claude.com/docs/en/cli-reference">docs / cli-reference</a></div></div>
+    </div>
+  </section>
+
+  <!-- 7. INPUT MODES -->
+  <section data-cat="keys slash" id="input">
+    <div class="sec-head"><h2>Input modes</h2><span class="tag">PROMPT</span></div>
+    <p class="sec-desc">Special first characters that change what the prompt does.</p>
+    <div class="grid">
+      <div class="card" data-cat="keys slash"><div class="cmd">/ <span class="arg">at start</span><span class="star">&#9733;</span></div><p class="desc">Open the command and skill menu. Type letters to filter.</p><div class="link"><a href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div></div>
+      <div class="card" data-cat="keys slash"><div class="cmd">! <span class="arg">at start</span><span class="star">&#9733;</span></div><p class="desc">Shell mode. Run a command directly, drop its output into context, and have Claude respond to it.</p><div class="link"><a href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div></div>
+      <div class="card" data-cat="keys slash"><div class="cmd">@ <span class="arg">anywhere</span><span class="star">&#9733;</span></div><p class="desc">File path mention. Triggers autocomplete to reference a specific file in your prompt.</p><div class="link"><a href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div></div>
+      <div class="card" data-cat="keys slash"><div class="cmd"># <span class="arg">at start</span></div><p class="desc">Quick-add a memory to CLAUDE.md without opening <span style="color:var(--muted)">/memory</span>.</p><div class="link"><a href="https://code.claude.com/docs/en/memory">docs / memory</a></div></div>
+    </div>
+  </section>
+
+  <!-- 8. KEYBOARD -->
+  <section data-cat="keys" id="keys">
+    <div class="sec-head"><h2>Keyboard shortcuts</h2><span class="tag">KEYS</span></div>
+    <p class="sec-desc">The controls worth muscle-memorizing. macOS Alt/Option shortcuts need Option-as-Meta configured in your terminal.</p>
+    <div class="card" style="padding:6px 16px">
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Esc</span></span><span class="kbd-desc">Interrupt Claude mid-turn, or close an open dialog. Work done so far is kept.</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Esc</span> <span class="kbd">Esc</span></span><span class="kbd-desc">Clear the input draft, or if empty, open the rewind menu to restore a previous state.</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Ctrl+C</span></span><span class="kbd-desc">Interrupt a running operation, or clear input. Press twice on empty input to exit.</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Ctrl+D</span></span><span class="kbd-desc">Exit the Claude Code session (EOF).</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Shift+Tab</span></span><span class="kbd-desc">Cycle permission modes: Manual &rarr; acceptEdits &rarr; plan &rarr; any others you enabled.</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Ctrl+O</span></span><span class="kbd-desc">Toggle the transcript viewer for detailed tool usage and execution.</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Ctrl+R</span></span><span class="kbd-desc">Reverse-search your command history. Press again to cycle older matches.</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Ctrl+T</span></span><span class="kbd-desc">Toggle Claude's to-do task checklist in the status area.</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Ctrl+B</span></span><span class="kbd-desc">Move a running Bash command or agent to the background. Tmux users press twice.</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Ctrl+G</span></span><span class="kbd-desc">Open your prompt in your default external text editor.</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Ctrl+L</span></span><span class="kbd-desc">Redraw the screen if the display gets garbled. History is kept.</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Ctrl+V</span> / <span class="kbd">Cmd+V</span></span><span class="kbd-desc">Paste an image from the clipboard as an [Image #N] chip.</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Option+P</span></span><span class="kbd-desc">Switch model without clearing your prompt (Alt+P on Windows/Linux).</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Option+T</span></span><span class="kbd-desc">Toggle extended thinking (Alt+T on Windows/Linux).</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Option+O</span></span><span class="kbd-desc">Toggle fast mode (Alt+O on Windows/Linux).</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Up</span> / <span class="kbd">Down</span></span><span class="kbd-desc">Move the cursor in multiline input; at the edges, navigate command history.</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Shift+Enter</span></span><span class="kbd-desc">Multiline input. Native in iTerm2, Ghostty, Kitty, Warp; run /terminal-setup for VS Code.</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Ctrl+J</span></span><span class="kbd-desc">Insert a newline in any terminal without configuration.</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">\</span> + <span class="kbd">Enter</span></span><span class="kbd-desc">Quick multiline escape that works everywhere.</span></div>
+      <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Tab</span> / <span class="kbd">&rarr;</span></span><span class="kbd-desc">Accept the grayed-out prompt suggestion.</span></div>
+    </div>
+    <p class="legend">Full list, including text-editing and Vim bindings, in the <a href="https://code.claude.com/docs/en/interactive-mode">interactive mode reference</a>.</p>
+  </section>
+
+  <div class="noresult" id="noresult">No commands match that filter.</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b>Sources</b> (official Claude Code docs, verified 11-07-2026):
+      <a href="https://code.claude.com/docs/en/commands">Commands</a> &middot;
+      <a href="https://code.claude.com/docs/en/cli-reference">CLI reference</a> &middot;
+      <a href="https://code.claude.com/docs/en/interactive-mode">Interactive mode</a> &middot;
+      <a href="https://code.claude.com/docs/en/skills">Skills</a> &middot;
+      <a href="https://code.claude.com/docs/en/checkpointing">Checkpointing</a> &middot;
+      <a href="https://code.claude.com/docs/en/sub-agents">Subagents</a> &middot;
+      <a href="https://code.claude.com/docs/en/mcp">MCP</a> &middot;
+      <a href="https://code.claude.com/docs/en/memory">Memory</a>
+    </p>
+    <p>Commands and availability change with each release. Type <span class="kbd">/</span> in Claude Code or run <span class="kbd">/release-notes</span> for the version-accurate list on your machine.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var search=document.getElementById('search');
+  var chips=document.querySelectorAll('.chip');
+  var sections=document.querySelectorAll('section');
+  var count=document.getElementById('count');
+  var noresult=document.getElementById('noresult');
+  var filter='all';
+
+  function apply(){
+    var q=search.value.trim().toLowerCase();
+    var shown=0;
+    sections.forEach(function(sec){
+      var cards=sec.querySelectorAll('.card, .kbd-row');
+      var visibleInSec=0;
+      cards.forEach(function(el){
+        var cat=(el.getAttribute('data-cat')||sec.getAttribute('data-cat')||'');
+        var text=el.textContent.toLowerCase();
+        var matchFilter = filter==='all' || cat.indexOf(filter)>-1 ||
+          (filter==='essential' && el.querySelector('.star'));
+        var matchSearch = !q || text.indexOf(q)>-1;
+        var show = matchFilter && matchSearch;
+        el.style.display = show ? '' : 'none';
+        if(show){visibleInSec++;shown++;}
+      });
+      sec.style.display = visibleInSec>0 ? '' : 'none';
+    });
+    noresult.style.display = shown===0 ? 'block' : 'none';
+    count.textContent = shown+' shown';
+  }
+
+  search.addEventListener('input',apply);
+  chips.forEach(function(c){
+    c.addEventListener('click',function(){
+      chips.forEach(function(x){x.classList.remove('active')});
+      c.classList.add('active');
+      filter=c.getAttribute('data-f');
+      apply();
+    });
+  });
+  apply();
+})();
+</script>
+
+</body>
+</html>

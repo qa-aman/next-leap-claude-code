@@ -69,6 +69,7 @@ Start Claude Code (`claude`) in this directory, then try:
 ## Key Files
 
 - **CLAUDE.md** - Project context Claude reads every session. Start here.
+- **.claude/hooks/** - `refresh-docs.sh`, a Stop hook that auto-refreshes CLAUDE.md and README.md from the diff after source files change.
 - **.claude/rules/** - Path-specific rules that load automatically: `feature-writing`, `outputs`, `product-knowledge`, `prompt-writing`, `user-research`.
 - **.claude/skills/** - 35+ PM skills covering the full lifecycle: discovery (`product-discovery`, `discovery-interview-prep`, `opportunity-solution-tree`), strategy (`okr-writer`, `product-thinking`, `competitive-analysis`, `prioritization`), specs (`write-prd`, `feature-spec`, `write-user-stories`, `epic-breakdown`, `spec-reviewer`, `technical-review`, `compliance-auditor`), delivery (`jira-ticket-creator`, `standup-summary`, `retro-synthesizer`, `risk-register`, `stakeholder-update`, `release-notes-writer`, `go-to-market-checklist`), and content (`ppt-builder`, `pptx-editor`, `flowchart`, `email-drafter`, `md-to-confluence`, `confluence-to-md`, `youtube-transcript`).
 - **14-templates/** - Blank templates for every PM artifact in this repo.

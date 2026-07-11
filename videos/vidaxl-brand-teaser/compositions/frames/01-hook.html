@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- head is ignored by the runtime; everything live lives in <template> -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "Poppins"; font-weight: 400; font-style: normal; font-display: block; src: url(assets/fonts/Poppins-400.woff2) format("woff2"); }
+        @font-face { font-family: "Poppins"; font-weight: 500; font-style: normal; font-display: block; src: url(assets/fonts/Poppins-500.woff2) format("woff2"); }
+        @font-face { font-family: "Poppins"; font-weight: 600; font-style: normal; font-display: block; src: url(assets/fonts/Poppins-600.woff2) format("woff2"); }
+        @font-face { font-family: "Poppins"; font-weight: 700; font-style: normal; font-display: block; src: url(assets/fonts/Poppins-700.woff2) format("woff2"); }
+
+        #root {
+          position: absolute;
+          inset: 0;
+          width: 1080px;
+          height: 1920px;
+          overflow: hidden;
+          background: #420839;
+          font-family: "Poppins", system-ui, sans-serif;
+        }
+        #root .bg { position: absolute; inset: 0; overflow: hidden; }
+        #root .bg img { width: 100%; height: 100%; object-fit: cover; transform-origin: 52% 42%; will-change: transform; }
+        /* plum scrim — heavier at top (text lives high) and a base darken for legibility */
+        #root .scrim {
+          position: absolute; inset: 0;
+          background:
+            linear-gradient(180deg, rgba(37,4,32,0.94) 0%, rgba(37,4,32,0.88) 42%, rgba(37,4,32,0.55) 60%, rgba(37,4,32,0.18) 74%, rgba(37,4,32,0.62) 100%);
+        }
+        #root .bloom {
+          position: absolute; left: -12%; top: 6%; width: 78%; height: 46%;
+          background: radial-gradient(circle at 40% 45%, rgba(243,208,24,0.55) 0%, rgba(243,208,24,0.20) 34%, rgba(243,208,24,0.0) 66%);
+          mix-blend-mode: screen; filter: blur(6px);
+        }
+        #root .logo { position: absolute; left: 64px; top: 70px; width: 300px; }
+        #root .logo img { width: 100%; display: block; }
+        #root .label {
+          position: absolute; left: 66px; top: 300px;
+          font-weight: 600; font-size: 34px; letter-spacing: 0.34em; text-transform: uppercase;
+          color: #F3D018;
+        }
+        #root .headline {
+          position: absolute; left: 60px; top: 366px; width: 900px;
+          font-weight: 700; font-size: 158px; line-height: 1.12; letter-spacing: -0.02em;
+          color: #FBF7F0; text-shadow: 0 3px 30px rgba(37,4,32,0.65);
+        }
+        #root .headline .em {
+          color: #FBF7F0;
+          background: linear-gradient(#F3D018, #F3D018) left 88% / 100% 0.09em no-repeat;
+        }
+        #root .sub {
+          position: absolute; left: 66px; top: 760px; width: 720px;
+          font-weight: 500; font-size: 40px; line-height: 1.32; color: #FBF7F0; opacity: 0.95;
+          text-shadow: 0 2px 20px rgba(37,4,32,0.7);
+        }
+        #root .word { display: inline-block; }
+      </style>
+
+      <div id="root" data-composition-id="01-hook" data-width="1080" data-height="1920">
+        <div class="bg clip" data-layout-allow-overflow data-start="0" data-duration="4" data-track-index="0">
+          <img src="assets/img/living.jpg" alt="" />
+        </div>
+        <div class="scrim clip" data-start="0" data-duration="4" data-track-index="1"></div>
+        <div class="bloom clip" data-layout-allow-overflow data-start="0" data-duration="4" data-track-index="2"></div>
+
+        <div class="logo clip" data-start="0" data-duration="4" data-track-index="3">
+          <img src="assets/brand/vidaxl-logo-cream.svg" alt="vidaXL" />
+        </div>
+        <div class="label clip" data-start="0" data-duration="4" data-track-index="4">Get inspired</div>
+        <h1 class="headline clip" data-start="0" data-duration="4" data-track-index="5">
+          <span class="word">Every</span> <span class="word">space,</span> <span class="word em">a&nbsp;story.</span>
+        </h1>
+        <div class="sub clip" data-start="0" data-duration="4" data-track-index="6">Home &amp; garden, beautifully within reach.</div>
+      </div>
+
+      <script>
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        // slow ken-burns underneath the whole shot (seek-safe, ease none)
+        tl.fromTo("#root .bg img", { scale: 1.12 }, { scale: 1.0, duration: 4, ease: "none" }, 0);
+        // scrim + bloom settle in
+        tl.from("#root .scrim", { opacity: 0, duration: 0.6, ease: "power1.out" }, 0);
+        tl.from("#root .bloom", { opacity: 0, duration: 1.0, ease: "power1.out" }, 0.15);
+        // brand + label
+        tl.from("#root .logo", { opacity: 0, y: -16, duration: 0.6, ease: "power2.out" }, 0.1);
+        tl.from("#root .label", { opacity: 0, y: 14, duration: 0.5, ease: "power2.out" }, 0.35);
+        // headline words rise, paced across the read (not front-loaded)
+        tl.from("#root .headline .word", { opacity: 0, y: 40, duration: 0.7, ease: "power3.out", stagger: 0.16 }, 0.55);
+        // sub arrives in the back half
+        tl.from("#root .sub", { opacity: 0, y: 18, duration: 0.7, ease: "power2.out" }, 1.9);
+        window.__timelines["01-hook"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

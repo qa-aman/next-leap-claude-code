@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "Poppins"; font-weight: 400; font-style: normal; font-display: block; src: url(assets/fonts/Poppins-400.woff2) format("woff2"); }
+        @font-face { font-family: "Poppins"; font-weight: 600; font-style: normal; font-display: block; src: url(assets/fonts/Poppins-600.woff2) format("woff2"); }
+        @font-face { font-family: "Poppins"; font-weight: 700; font-style: normal; font-display: block; src: url(assets/fonts/Poppins-700.woff2) format("woff2"); }
+
+        #root {
+          position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden;
+          background: #F3D018; font-family: "Poppins", system-ui, sans-serif;
+        }
+        #root .panel { position: absolute; inset: 0; background: #F3D018; }
+        #root .panel .sheen {
+          position: absolute; inset: 0;
+          background: radial-gradient(120% 60% at 50% 30%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.0) 55%);
+        }
+        #root .kicker {
+          position: absolute; left: 90px; top: 560px;
+          font-weight: 600; font-size: 34px; letter-spacing: 0.3em; text-transform: uppercase; color: #93117E;
+        }
+        #root .poster {
+          position: absolute; left: 84px; top: 634px; width: 920px;
+          font-weight: 700; font-size: 188px; line-height: 0.92; letter-spacing: -0.03em; color: #420839;
+        }
+        #root .poster .line { display: block; overflow: hidden; }
+        #root .poster .line span { display: inline-block; }
+        #root .poster .em { color: #93117E; }
+        #root .rule {
+          position: absolute; left: 92px; top: 1080px; width: 300px; height: 8px; background: #93117E; transform-origin: left center;
+        }
+      </style>
+
+      <div id="root" data-composition-id="05-promise" data-width="1080" data-height="1920">
+        <div class="panel clip" data-start="0" data-duration="2.5" data-track-index="0">
+          <div class="sheen"></div>
+        </div>
+        <div class="kicker clip" data-start="0" data-duration="2.5" data-track-index="1">One destination</div>
+        <div class="poster clip" data-start="0" data-duration="2.5" data-track-index="2">
+          <span class="line"><span class="l1">All in</span></span>
+          <span class="line"><span class="l2 em">one place.</span></span>
+        </div>
+        <div class="rule clip" data-start="0" data-duration="2.5" data-track-index="3"></div>
+      </div>
+
+      <script>
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        tl.from("#root .kicker", { opacity: 0, y: 12, duration: 0.4, ease: "power2.out" }, 0.05);
+        tl.from("#root .poster .l1", { yPercent: 120, duration: 0.5, ease: "power3.out" }, 0.18);
+        tl.from("#root .poster .l2", { yPercent: 120, duration: 0.55, ease: "power3.out" }, 0.36);
+        tl.fromTo("#root .rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power3.out" }, 0.7);
+        window.__timelines["05-promise"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

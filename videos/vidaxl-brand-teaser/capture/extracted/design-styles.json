@@ -1,0 +1,267 @@
+{
+  "typography": [
+    {
+      "role": "heading",
+      "fontFamily": "system-ui",
+      "fontSize": "64px",
+      "fontWeight": "700",
+      "lineHeight": "67.5px",
+      "letterSpacing": "normal",
+      "color": "#000000",
+      "sampleText": "-60%"
+    },
+    {
+      "role": "display",
+      "fontFamily": "system-ui",
+      "fontSize": "45.008px",
+      "fontWeight": "700",
+      "lineHeight": "19.2px",
+      "letterSpacing": "normal",
+      "color": "#000000",
+      "sampleText": "Your one-stop shop for home and garden essentials"
+    },
+    {
+      "role": "heading-2",
+      "fontFamily": "system-ui",
+      "fontSize": "24px",
+      "fontWeight": "700",
+      "lineHeight": "36px",
+      "letterSpacing": "normal",
+      "color": "#000000",
+      "sampleText": "Categories Recommended Categories"
+    },
+    {
+      "role": "heading-2",
+      "fontFamily": "system-ui",
+      "fontSize": "18px",
+      "fontWeight": "700",
+      "lineHeight": "19.2px",
+      "letterSpacing": "normal",
+      "color": "#000000",
+      "sampleText": "Auctions"
+    },
+    {
+      "role": "link",
+      "fontFamily": "system-ui",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "lineHeight": "24px",
+      "letterSpacing": "normal",
+      "color": "#000000",
+      "sampleText": "Skip to main content"
+    },
+    {
+      "role": "label",
+      "fontFamily": "system-ui",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "lineHeight": "21px",
+      "letterSpacing": "normal",
+      "color": "#6A6A6A",
+      "sampleText": "Time left:"
+    }
+  ],
+  "spacing": {
+    "observed": [
+      2,
+      4,
+      8,
+      12,
+      15,
+      16,
+      24,
+      32,
+      110
+    ],
+    "baseUnit": 8
+  },
+  "radius": [
+    "992px"
+  ],
+  "shadows": [],
+  "buttons": [
+    {
+      "label": "Previous",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#000000",
+      "padding": "0px",
+      "borderRadius": "0px",
+      "border": "0px none rgb(0, 0, 0)",
+      "boxShadow": "none",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "height": "1px"
+    },
+    {
+      "label": "Free shipping over £ 70",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#313131",
+      "padding": "0px",
+      "borderRadius": "0px",
+      "border": "0px none rgb(49, 49, 49)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "31.7812px"
+    },
+    {
+      "label": "button",
+      "background": "#FFFFFF",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#93117E",
+      "padding": "4px",
+      "borderRadius": "992px",
+      "border": "0px none rgb(239, 219, 236)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "32px"
+    },
+    {
+      "label": "Categories",
+      "background": "#93117E",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#F9F1F7",
+      "padding": "12px 24px",
+      "borderRadius": "992px",
+      "border": "2px solid rgb(147, 17, 126)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "height": "52px"
+    },
+    {
+      "label": "button",
+      "background": "#FFFFFF",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#000000",
+      "padding": "12px",
+      "borderRadius": "992px",
+      "border": "2px solid rgb(227, 227, 227)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "48px"
+    },
+    {
+      "label": "Shop now",
+      "background": "#000000",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#F9F1F7",
+      "padding": "12px 24px",
+      "borderRadius": "992px",
+      "border": "2px solid rgb(0, 0, 0)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "48px"
+    }
+  ],
+  "cards": [
+    {
+      "label": "card",
+      "background": "#FFFFFF",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#000000",
+      "padding": "0px",
+      "borderRadius": "8px",
+      "border": "0px none rgb(0, 0, 0)",
+      "boxShadow": "none",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "height": "599.625px"
+    },
+    {
+      "label": "card",
+      "background": "transparent",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#000000",
+      "padding": "0px",
+      "borderRadius": "0px",
+      "border": "0px none rgb(0, 0, 0)",
+      "boxShadow": "none",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "height": "599.625px"
+    },
+    {
+      "label": "card",
+      "background": "#F5F5F5",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#000000",
+      "padding": "32px",
+      "borderRadius": "8px 0px 0px 8px",
+      "border": "0px none rgb(0, 0, 0)",
+      "boxShadow": "none",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "height": "599.625px"
+    }
+  ],
+  "nav": null,
+  "chips": [
+    {
+      "label": "Shop now",
+      "background": "#000000",
+      "color": "#F9F1F7",
+      "padding": "12px 24px",
+      "borderRadius": "992px",
+      "border": "2px solid rgb(0, 0, 0)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "48px"
+    },
+    {
+      "label": "Tables",
+      "background": "#FFFFFF",
+      "color": "#000000",
+      "padding": "8px 16px",
+      "borderRadius": "992px",
+      "border": "2px solid rgb(227, 227, 227)",
+      "boxShadow": "none",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "height": "44px"
+    },
+    {
+      "label": "Recommended",
+      "background": "#FFFFFF",
+      "color": "#000000",
+      "padding": "8px 12px",
+      "borderRadius": "992px",
+      "border": "2px solid rgb(147, 17, 126)",
+      "boxShadow": "none",
+      "fontSize": "14px",
+      "fontWeight": "600",
+      "height": "32px"
+    },
+    {
+      "label": "Recommended",
+      "background": "transparent",
+      "color": "#93117E",
+      "padding": "0px",
+      "borderRadius": "0px",
+      "border": "0px none rgb(147, 17, 126)",
+      "boxShadow": "none",
+      "fontSize": "14px",
+      "fontWeight": "600",
+      "height": "21px"
+    }
+  ],
+  "statCells": [],
+  "tabs": [],
+  "backgrounds": [],
+  "glass": []
+}

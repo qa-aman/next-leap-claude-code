@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #232323;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.5px;
+      }
+    </style>
+  </defs>
+  <g id="HomeAndGarden_category_536_master">
+    <path class="cls-1" d="M4.23,15.85l2.88-1.03-2.59-3.68c-.42-.59-.35-1.4.16-1.91l4.93-4.98c.54-.55,1.41-.59,2-.11l8.76,7.09c.67.54.74,1.53.17,2.17l-6.76,7.47c-.62.69-1.71.65-2.28-.08l-1.65-2.09-6.45-.14h0c-.69-.96-.28-2.31.84-2.71Z"/>
+  </g>
+  <path class="cls-1" d="M19.6,9.65c1.33-1.77.97-4.27-.79-5.6s-4.27-.97-5.6.79"/>
+</svg>

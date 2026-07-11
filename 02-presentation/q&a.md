@@ -15,6 +15,8 @@ Answers to open questions from workshop sessions, sourced from official Anthropi
 - **May 2026 Session 7 additions:** 24-05-2026 (Q77-Q83 - Build Hours, Property Finder build - see "May 2026 - Session 7 Additions" section)
 - **July 2026 Session 1 additions:** 04-07-2026 (Q84-Q89 - new cohort, Claude Code Setup - see "July 2026 - Session 1 Additions" section)
 - **July 2026 Session 2 additions:** 04-07-2026 (Q90-Q95 - Skills, Plugins, and Practical Examples - see "July 2026 - Session 2 Additions" section)
+- **July 2026 Session 3 additions:** 05-07-2026 (Q96-Q105 - Skills Creation and PM Frameworks - see "July 2026 - Session 3 Additions" section)
+- **July 2026 Session 4 additions:** 05-07-2026 (Q106-Q116 - Building and Using Agents - see "July 2026 - Session 4 Additions" section)
 
 If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
@@ -1840,5 +1842,274 @@ New questions raised by the same NextLeap Applied Generative AI Bootcamp cohort 
 **Sources:**
 - https://code.claude.com/docs/en/vs-code (verified 05-07-2026)
 - https://code.claude.com/docs/en/skills (verified 05-07-2026)
+
+---
+
+# July 2026 - Session 3 Additions
+
+New questions raised by the same NextLeap Applied Generative AI Bootcamp cohort on 05-07-2026 during Session 3 (Skills Creation and Product Management Frameworks, morning). All URLs verified 05-07-2026.
+
+---
+
+## Q96: When should something become a Claude Code skill versus just a one-off prompt?
+
+**Short answer:** Build a skill only when the output is stable and repeatable, a defined format you produce the same way each time. If the task needs fresh logical judgment on every run (open-ended strategy, brainstorming), it is not a good skill yet.
+
+- A skill captures a repeatable workflow you can invoke in one shot; it does not capture a decision that changes shape every time.
+- For judgment-heavy tasks, work the problem in a chat first, accumulate real examples over time, then generate a skill once the pattern is stable.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
+
+---
+
+## Q97: How long should a SKILL.md file be, and what do I do when it gets too long?
+
+**Short answer:** Keep the body in the 100-200 line range. When it overflows, do not split into multiple skills, move the long material (rubrics, benchmarks, templates) into a `references/` subfolder that the skill points to.
+
+- The skill body loads into context when invoked, so long inline content costs tokens on every run; reference files are pulled only when needed.
+- If a skill keeps growing, ask Claude to improve or refactor it and it will extract detail into `references/` while leaving the procedure in the main file.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
+
+---
+
+## Q98: How do I log improvement ideas for a skill without bloating its context?
+
+**Short answer:** Keep a separate feedback file (for example `improvements.md`) that is deliberately NOT referenced inside `SKILL.md`, so it never loads into context automatically. Add as much detail as possible per entry, including a screenshot of the exact iteration you are critiquing.
+
+- Because the file is not linked from the skill, it costs nothing at runtime but stays available when you next sit down to improve the skill.
+- The skill cannot automatically know which past run your feedback refers to, so you must supply that context (screenshot, link, specific description) yourself.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
+
+---
+
+## Q99: What is the difference between a global-level and a project-level skill?
+
+**Short answer:** Global skills (`~/.claude/skills/`) are reusable across every project, general capabilities like email drafting, an OKR writer, or a presentation builder. Project-level skills (`.claude/skills/`) are specific to one project's workflows, templates, and conventions.
+
+- A project skill will not appear in another project's `/` menu unless it is also copied to the global folder.
+- When moving a skill between projects, strip the old project's context and re-add context for the new one rather than reusing it verbatim.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
+
+---
+
+## Q100: How do I invoke a skill that needs a file input, like an Excel dashboard skill?
+
+**Short answer:** Invoke the skill by name and let it prompt you. A well-written skill asks for the input it needs (the file, the dataset), so you do not have to pre-format the request; you provide the file when it asks.
+
+- If the skill is defined to expect a file, it will request one rather than failing silently.
+- The same skill can produce a downstream artifact such as a standalone HTML dashboard from the file you hand it.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
+
+---
+
+## Q101: What is an "embedded independent HTML file" and why does it matter for sharing dashboards?
+
+**Short answer:** It is a single HTML file with all CSS and JavaScript inlined, so it does not depend on separate files or a local server. That makes it shareable over WhatsApp or email, and anyone can open it directly.
+
+- The failure mode to avoid is a file that points at a localhost path or external assets, it will only work on the machine that generated it.
+- When building a dashboard skill, specify embedded independent HTML as the output so the result is portable by default.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
+
+---
+
+## Q102: Should I base a new skill on a known industry framework when one exists?
+
+**Short answer:** Yes. Where an established framework exists (from books or standard practice, like Amazon's PR-FAQ), build the skill around that official framework rather than inventing an ad hoc structure. It makes the skill more robust and the output more credible.
+
+- In the session, the PR-FAQ skill was built by having Claude research the official working-backwards framework first, then generate the skill from it.
+- Grounding a skill in a named framework also gives you validated reference material to cite in the output.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
+
+---
+
+## Q103: What does the PR-FAQ skill do?
+
+**Short answer:** It applies Amazon's working-backwards Press Release / FAQ method to a feature decision. It interviews you (customer problem, alternatives, economics), then returns a build or do-not-build verdict plus a full PR-FAQ document, so you talk yourself into or out of the feature through the questions.
+
+- The value is the structured interrogation: after answering the skill's questions you are usually convinced one way or the other.
+- Output can be the interview and verdict, the full PR-FAQ document, or both.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
+
+---
+
+## Q104: How do I resume a specific Claude Code session after I have closed the terminal?
+
+**Short answer:** Use the built-in resume flow to reopen a prior conversation with its full context instead of starting blank. Claude Code supports continuing the most recent session or picking a past one, and the workshop wraps this in a named session registry (`ccs`) for convenience.
+
+- From the CLI, `claude --continue` resumes the most recent conversation and `claude --resume` lets you pick a specific past session.
+- The workshop's `ccs add` / `ccs open` commands are a thin naming layer on top of this so long-running threads can be reopened by name.
+
+**Sources:**
+- https://code.claude.com/docs/en/cli-reference (verified 05-07-2026)
+- https://code.claude.com/docs/en/common-workflows (verified 05-07-2026)
+
+---
+
+## Q105: How does Claude's memory system work, and what is a good example use?
+
+**Short answer:** Memory stores facts Claude should carry across conversations, at either project scope or global scope, indexed by a `MEMORY.md` file. You create a memory by telling Claude to remember something; it writes the fact and updates the index.
+
+- Project memory applies only to that project (for example, "save outputs under the current month's cohort folder"); global memory applies across every project on your account.
+- Examples shown: disambiguating two people with the same first name, "use the Antigravity IDE, not VS Code," and enforcing DD-MM-YYYY dates.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 05-07-2026)
+
+---
+
+# July 2026 - Session 4 Additions
+
+New questions raised by the same NextLeap Applied Generative AI Bootcamp cohort on 05-07-2026 during Session 4 (Building and Using Agents, afternoon). All URLs verified 05-07-2026.
+
+---
+
+## Q106: What is the difference between project-level and global-level memory?
+
+**Short answer:** Project memory lives with one project and only applies there; global memory is tied to your Claude account and applies across every project you open. Same idea as skills, different scope.
+
+- Project example: the rule that generated outputs go under the current month's cohort folder in this repo.
+- Global example: the rule that "create a session / ccs" means adding a row to the session registry, which should hold in any project.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 05-07-2026)
+
+---
+
+## Q107: Can a skill directly reference a saved memory?
+
+**Short answer:** No. A skill cannot invoke or read a memory. If a skill needs persistent context, put that context in a `references/` file inside the skill folder instead.
+
+- Memory is for Claude's project-level or global understanding, not for a skill's runtime.
+- Reference files are the supported way to give a skill durable background it can pull when it runs.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
+- https://code.claude.com/docs/en/memory (verified 05-07-2026)
+
+---
+
+## Q108: What is the difference between an agent and a skill?
+
+**Short answer:** An agent is a persona, the "who," with its own instructions, tools, and model. A skill is a capability, the "what," that can be invoked. Consider the agent as yourself and skills as what skills you have.
+
+- One agent can invoke several skills to do its job, the way a person uses several abilities.
+- You build an agent when you want a role that decides and acts; you build a skill when you want a repeatable capability.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 05-07-2026)
+- https://code.claude.com/docs/en/skills (verified 05-07-2026)
+
+---
+
+## Q109: Are agents project-level or global, and can I reuse one across projects?
+
+**Short answer:** Agents default to project level, stored in `.claude/agents/`. To reuse one in another project, copy its `.md` file (and any associated agent-memory file), or create the agent at the global level so it follows you everywhere.
+
+- The agent's filename is the agent name itself; there is no fixed filename like `SKILL.md`.
+- Copying the definition carries the persona; copy its memory file too if it has accumulated context you want to keep.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 05-07-2026)
+
+---
+
+## Q110: Why not bundle every skill into one big agent?
+
+**Short answer:** A mega-agent loads all its skills and instructions into context on every invocation, which burns tokens fast. Build category-specific agents first (documentation, research, review), then consolidate only once the pattern is proven.
+
+- More skills in one agent means more context cost per call, even for a request that needs only one of them.
+- Narrow agents are cheaper to run and easier to reason about; a router agent can sit in front of them if you need one entry point.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 05-07-2026)
+
+---
+
+## Q111: How do I see what Claude is doing behind the scenes while it works?
+
+**Short answer:** Press Control+O to expand the live view of Claude's plan and the commands and permissions it is working through. It is a useful window into the reasoning, not just the final output.
+
+- This is how the session showed plan mode, the exit-plan step, and the write-to-outputs-only permission for a new agent.
+- Watching the backend plan is a fast way to learn how Claude decomposes a task.
+
+**Sources:**
+- https://code.claude.com/docs/en/interactive-mode (verified 05-07-2026)
+
+---
+
+## Q112: Does Claude Code auto-select the best model for each prompt?
+
+**Short answer:** No. There is no auto-mode that analyzes your prompt and picks the best model per request the way some IDE assistants do. The model you select in the terminal is the one used; you steer cost by choosing the model and effort yourself.
+
+- Set model and effort with `/model` (and effort alone with `/effort`); guide defaults in CLAUDE.md if you want a standing preference.
+- Note that subagents commonly default to Sonnet even when the top-level session is on Opus, unless you specify otherwise.
+
+**Sources:**
+- https://code.claude.com/docs/en/model-config (verified 05-07-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 05-07-2026)
+
+---
+
+## Q113: What is the routing (orchestrator) agent pattern?
+
+**Short answer:** A dispatcher agent classifies an incoming request into one of several categories and forwards it, verbatim, to the matching specialist agent, without answering the request itself. In the session, pm-request-router sorted a request into PRD, COMPETITOR, CHURN, or UNCLEAR and dispatched to prd-drafter, competitor-snapshot, or churn-diagnoser.
+
+- Giving the router only the ability to dispatch (not to read or write) keeps it from doing a specialist's job.
+- For an unclear request it asks one clarifying question rather than guessing a category.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 05-07-2026)
+
+---
+
+## Q114: How do I connect a third-party tool that has no existing MCP server or connector?
+
+**Short answer:** Check first for a genuinely official MCP server (verify it is from the vendor, not an unverified community fork). If none exists, use an API token for the integration. If neither exists, the integration is not currently possible.
+
+- Always cross-check an MCP server's provenance before trusting it, an unofficial server can expose you to risk.
+- For a single integration, an API token is often lighter than an MCP server, which loads its full tool list into context each session.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 05-07-2026)
+
+---
+
+## Q115: How should I roll out a new categorization or triage agent safely?
+
+**Short answer:** Do not let it act on live systems on day one. Run it write-only to a local review file first (listing issues and who they would be assigned to), check its accuracy, then let it act once you trust it. Log every misclassification back as guidance so it improves.
+
+- Feed the agent examples of how you actually work (past review comments, prior triage decisions) rather than hand-writing exhaustive instructions.
+- This staged approach is what makes an automated PR-triage or ticket-routing agent trustworthy before it touches real tickets.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 05-07-2026)
+
+---
+
+## Q116: What is the token budget in Claude Code, and when does it reset?
+
+**Short answer:** Usage counts against a large token budget shown in the status line, and it resets on rolling windows, a 5-hour window and a weekly window, rather than a single daily reset. Watch the status line to see how much of each window remains.
+
+- Effort level and model choice are your main levers on how fast you consume the budget; medium effort and Sonnet cover most day-to-day work.
+- Two people running similar prompts can consume very different amounts, often because accumulated project memory changes how much searching Claude does per task.
+
+**Sources:**
+- https://code.claude.com/docs/en/costs (verified 05-07-2026)
+- https://code.claude.com/docs/en/statusline (verified 05-07-2026)
 
 ---

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        letter-spacing: 0em;
+      }
+
+      .cls-2 {
+        font-family: Raleway-Bold, Raleway;
+        font-size: 3.54px;
+        font-weight: 700;
+      }
+
+      .cls-3 {
+        fill: none;
+        stroke: #232323;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.5px;
+      }
+
+      .cls-4 {
+        letter-spacing: -.1em;
+      }
+    </style>
+  </defs>
+  <path class="cls-3" d="M4.96,19.62l5.04-9.65c.26-.49.26-1.08,0-1.57l-.21-.39c-.46-.85-.42-1.89.11-2.71l1.98-2.89c.41-.61,1.23-.78,1.86-.4h0c.67.41.87,1.3.43,1.96l-.68,1.01c-.43.64-.47,1.47-.1,2.15h0c.36.67,1.06,1.09,1.83,1.09h.14c.7,0,1.35-.35,1.73-.93l.83-1.25c.4-.61,1.21-.8,1.85-.43h.02c.68.41.89,1.28.48,1.94l-1.79,2.87c-.46.85-1.36,1.39-2.33,1.39h-.66c-.53,0-1.03.25-1.34.68l-6.2,9c-.55.75-1.59.94-2.37.43h0c-.76-.5-1.01-1.48-.59-2.28Z"/>
+  <text class="cls-2" transform="translate(0 -3.82)"><tspan class="cls-4" x="0" y="0">T</tspan><tspan class="cls-1" x="1.84" y="0">ools</tspan></text>
+</svg>

@@ -1,0 +1,175 @@
+# Asset Descriptions
+
+⚠️  GEMINI_API_KEY not set — descriptions below are catalog-derived (alt text, headings, section context, filename) instead of Vision-generated. To get richer Vision descriptions on the next capture, set GEMINI_API_KEY (or GOOGLE_API_KEY) and re-run.
+
+The `logo-<hash>.svg` filename prefix is a structural hint (DOM said this SVG was inside a `<header>`, home-link `<a>`, or had an aria-label matching the page brand). To pick the actual brand logo without Vision, open the `logo-*` candidates in a previewer or rasterize them with `sharp` before referencing — composing a fake logo ships off-brand in the final video.
+
+- 966x772-shop-garden-items.jpg — 95KB, 966x772 shop garden items
+- athletics.png — 19KB, athletics
+- baby-transport.png — 10KB, baby transport
+- buying-guides.jpg — 109KB, buying guides
+- chairs.png — 10KB, chairs
+- clothing-accessories.png — 16KB, clothing accessories
+- company-logo.png — 22KB, company logo
+- eu-world-cup-hp-carousel-banner-uk.jpg — 27KB, eu world cup hp carousel banner uk
+- favicon.png — 15KB, favicon
+- fencing-barriers.png — 10KB, fencing barriers
+- food-service.png — 10KB, food service
+- games.png — 10KB, games
+- garage-equipment-tools.png — 11KB, garage equipment tools
+- grey-upholstered-2-seater-sofa-in-a-styl.jpg — 63KB, grey upholstered 2 seater sofa in a styl
+- hardware.png — 11KB, hardware
+- hp-carousel-banner-continuous-deals-cms.jpg — 48KB, hp carousel banner continuous deals cms
+- hp-carousel-banner-garden-gazebo.jpg — 67KB, hp carousel banner garden gazebo
+- hp-carousel-banner-nof-balcony.jpg — 38KB, hp carousel banner nof balcony
+- hp-carousel-banner-nof-garden.jpg — 46KB, hp carousel banner nof garden
+- hp-carousel-banner-nof-modular.jpg — 37KB, hp carousel banner nof modular
+- hp-carousel-banner-tents-ai-labelled.jpg — 71KB, hp carousel banner tents ai labelled
+- hp-main-banner-desktop-nof-balcony.jpg — 118KB, hp main banner desktop nof balcony
+- hp-main-banner-mobile-nof-balcony.jpg — 63KB, hp main banner mobile nof balcony
+- hp-main-banner-tablet-nof-balcony.jpg — 104KB, hp main banner tablet nof balcony
+- hp-newsletter-banner-tablet-1982x942px-i.jpg — 55KB, hp newsletter banner tablet 1982x942px i
+- image-100.jpg — 19KB, image 100
+- image-124.jpg — 62KB, image 124
+- image-125.jpg — 132KB, image 125
+- image-127.jpg — 56KB, image 127
+- image-129.jpg — 219KB, image 129
+- image-72.jpg — 76KB, image 72
+- image-73.jpg — 11KB, image 73
+- image-74.jpg — 20KB, image 74
+- image-75.jpg — 43KB, image 75
+- image-77.jpg — 10KB, image 77
+- image-78.jpg — 16KB, image 78
+- image-79.jpg — 31KB, image 79
+- image-81.jpg — 11KB, image 81
+- image-82.jpg — 15KB, image 82
+- image-83.jpg — 26KB, image 83
+- image-85.jpg — 10KB, image 85
+- image-86.jpg — 17KB, image 86
+- image-87.jpg — 34KB, image 87
+- image-88.jpg — 41KB, image 88
+- image-89.jpg — 10KB, image 89
+- image-90.jpg — 23KB, image 90
+- image-91.jpg — 139KB, image 91
+- image-92.jpg — 19KB, image 92
+- image-93.jpg — 33KB, image 93
+- image-94.jpg — 75KB, image 94
+- image-96.jpg — 11KB, image 96
+- image-97.jpg — 20KB, image 97
+- image-99.jpg — 11KB, image 99
+- indoor-games.png — 20KB, indoor games
+- industrial-storage.png — 13KB, industrial storage
+- kitchen-collections.jpg — 63KB, kitchen collections
+- logo-067d98a6.svg — 1KB, logo 067d98a6
+- logo-07935d94.svg — 1KB, logo 07935d94
+- logo-08755b52.svg — 1KB, logo 08755b52
+- logo-0c262367.svg — 1KB, logo 0c262367
+- logo-1a3bd81e.svg — 2KB, logo 1a3bd81e
+- logo-254feba6.svg — 1KB, logo 254feba6
+- logo-2668ea19.svg — 0KB, logo 2668ea19
+- logo-52d3b664.svg — 8KB, logo 52d3b664
+- logo-5569f11d.svg — 1KB, logo 5569f11d
+- logo-60ee8c92.svg — 1KB, logo 60ee8c92
+- logo-725850d1.svg — 1KB, logo 725850d1
+- logo-9519bdd4.svg — 1KB, logo 9519bdd4
+- logo-9be04657.svg — 4KB, logo 9be04657
+- logo-a0ad62fd.svg — 0KB, logo a0ad62fd
+- logo-a9eefede.svg — 2KB, logo a9eefede
+- logo-cdd7abab.svg — 0KB, logo cdd7abab
+- logo-d2315a77.svg — 0KB, logo d2315a77
+- logo-ddd221df.svg — 0KB, logo ddd221df
+- logo-ef121543.svg — 1KB, logo ef121543
+- logo-f7fa3667.svg — 1KB, logo f7fa3667
+- logo-f807fd28.svg — 11KB, logo f807fd28
+- material-handling.png — 12KB, material handling
+- media-uploader.jpg — 41KB, media uploader
+- og-image.png — 36KB, og image
+- outdoor-furniture.png — 13KB, outdoor furniture
+- outdoor-living.png — 18KB, outdoor living
+- outdoor-play-equipment.png — 11KB, outdoor play equipment
+- photo-by-budgethuistuin-published-at-29-.jpg — 31KB, photo by budgethuistuin published at 29 
+- photo-by-hyttapaalifjell-published-at-19.jpg — 58KB, photo by hyttapaalifjell published at 19
+- photo-by-ipropertypl-published-at-9-nove.jpg — 34KB, photo by ipropertypl published at 9 nove
+- photo-by-lucieliebt-published-at-31-dece.jpg — 51KB, photo by lucieliebt published at 31 dece
+- photo-by-maartjerosalie-published-at-25-.jpg — 40KB, photo by maartjerosalie published at 25 
+- pots-planters.png — 13KB, pots planters
+- rooms-backyard.jpg — 59KB, rooms backyard
+- rooms-balcony.jpg — 56KB, rooms balcony
+- rooms-bathroom.jpg — 32KB, rooms bathroom
+- rooms-bedroom.jpg — 33KB, rooms bedroom
+- rooms-dining.jpg — 39KB, rooms dining
+- rooms-garden.jpg — 64KB, rooms garden
+- rooms-home.jpg — 29KB, rooms home
+- rooms-kids.jpg — 36KB, rooms kids
+- rooms-kitchen.jpg — 23KB, rooms kitchen
+- rooms-living.jpg — 27KB, rooms living
+- sharemevidaxl.png — 65KB, sharemevidaxl
+- shop-bedroom-furniture.jpg — 30KB, shop bedroom furniture
+- shop-per-room.png — 64KB, shop per room
+- sign-up-for-our-newsletter-5-discount.jpg — 32KB, sign up for our newsletter 5 discount
+- sporting-goods.png — 21KB, sporting goods
+- svg-0a2ffdd7.svg — 2KB, svg 0a2ffdd7
+- svg-374e0d8c.svg — 1KB, svg 374e0d8c
+- svg-45279f34.svg — 4KB, svg 45279f34
+- svg-487cf583.svg — 3KB, svg 487cf583
+- svg-4bc46d9f.svg — 1KB, svg 4bc46d9f
+- svg-5e2107ce.svg — 5KB, svg 5e2107ce
+- svg-616d10e8.svg — 1KB, svg 616d10e8
+- svg-6c7676b6.svg — 2KB, svg 6c7676b6
+- svg-6f3e2f6f.svg — 1KB, svg 6f3e2f6f
+- svg-8f17e0b9.svg — 1KB, svg 8f17e0b9
+- svg-90b999a8.svg — 4KB, svg 90b999a8
+- svg-b74e0cda.svg — 12KB, svg b74e0cda
+- svg-c49357c7.svg — 1KB, svg c49357c7
+- svg-c60a941f.svg — 0KB, svg c60a941f
+- svg-d17530e2.svg — 1KB, svg d17530e2
+- svg-d4e74590.svg — 1KB, svg d4e74590
+- svg-dbca2940.svg — 45KB, svg dbca2940
+- svg-e04aaa48.svg — 12KB, svg e04aaa48
+- svg-f692326c.svg — 2KB, svg f692326c
+- svg-f71cd3ca.svg — 2KB, svg f71cd3ca
+- tool-accessories.png — 13KB, tool accessories
+- toys.png — 10KB, toys
+- vidaxl-arched-gabion-baskets-50-pcs-200x.jpg — 15KB, vidaxl arched gabion baskets 50 pcs 200x
+- vidaxl-brown-bamboo-roller-blinds-120-x-.jpg — 12KB, vidaxl brown bamboo roller blinds 120 x 
+- vidaxl-garden-raised-bed-rusty-160x80x77.jpg — 10KB, vidaxl garden raised bed rusty 160x80x77
+- vidaxl-hanging-mosquito-net-156-mesh-whi.jpg — 11KB, vidaxl hanging mosquito net 156 mesh whi
+- vidaxl-manual-retractable-awning-150-cm-.jpg — 11KB, vidaxl manual retractable awning 150 cm 
+- vidaxl-mesh-screen-aluminium-100x500-cm-.jpg — 12KB, vidaxl mesh screen aluminium 100x500 cm 
+- vidaxl-tipping-trailer-for-lawn-mower-30.jpg — 11KB, vidaxl tipping trailer for lawn mower 30
+- svgs/logo-1e268d7c.svg — logo
+- svgs/logo-3713f08f-2.svg — logo
+- svgs/logo-3713f08f.svg — logo
+- svgs/logo-6349c314-2.svg — logo
+- svgs/logo-6349c314-3.svg — logo
+- svgs/logo-6349c314-4.svg — logo
+- svgs/logo-6349c314-5.svg — logo
+- svgs/logo-6349c314.svg — logo
+- svgs/logo-7a8d660e-2.svg — logo
+- svgs/logo-7a8d660e.svg — logo
+- svgs/logo-9ca9f156.svg — logo
+- svgs/logo-b81f1521.svg — logo
+- svgs/logo-d70bc162.svg — logo
+- svgs/logo-df6cf2db.svg — logo
+- svgs/svg-d70bc162-10.svg — svg d70bc162 10
+- svgs/svg-d70bc162-11.svg — svg d70bc162 11
+- svgs/svg-d70bc162-12.svg — svg d70bc162 12
+- svgs/svg-d70bc162-13.svg — svg d70bc162 13
+- svgs/svg-d70bc162-14.svg — svg d70bc162 14
+- svgs/svg-d70bc162-15.svg — svg d70bc162 15
+- svgs/svg-d70bc162-2.svg — svg d70bc162 2
+- svgs/svg-d70bc162-3.svg — svg d70bc162 3
+- svgs/svg-d70bc162-4.svg — svg d70bc162 4
+- svgs/svg-d70bc162-5.svg — svg d70bc162 5
+- svgs/svg-d70bc162-6.svg — svg d70bc162 6
+- svgs/svg-d70bc162-7.svg — svg d70bc162 7
+- svgs/svg-d70bc162-8.svg — svg d70bc162 8
+- svgs/svg-d70bc162-9.svg — svg d70bc162 9
+- svgs/svg-d70bc162.svg — svg d70bc162
+- svgs/svg-fb946a15.svg — svg fb946a15
+- fonts/pxiByp8kv8JHgFVrLDz8Z1xlEA.ttf — font file
+- fonts/pxiByp8kv8JHgFVrLEj6Z1xlEA.ttf — font file
+- fonts/pxiByp8kv8JHgFVrLFj_Z1xlEA.ttf — font file
+- fonts/pxiByp8kv8JHgFVrLGT9Z1xlEA.ttf — font file
+- fonts/pxiEyp8kv8JHgFVrJJfedw.ttf — font file
+- fonts/pxiGyp8kv8JHgFVrLPTucHtF.ttf — font file

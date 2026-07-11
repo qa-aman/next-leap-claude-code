@@ -1,0 +1,562 @@
+{
+  "total_duration_s": 27,
+  "width": 1080,
+  "height": 1920,
+  "groups": [
+    {
+      "id": "caption-group-0",
+      "frame": 1,
+      "start": 0,
+      "end": 0.778,
+      "text": "Every space",
+      "words": [
+        {
+          "id": "caption-word-0-0",
+          "text": "Every",
+          "start": 0,
+          "end": 0.36
+        },
+        {
+          "id": "caption-word-0-1",
+          "text": "space",
+          "start": 0.418,
+          "end": 0.755
+        }
+      ]
+    },
+    {
+      "id": "caption-group-1",
+      "frame": 1,
+      "start": 0.778,
+      "end": 1.033,
+      "text": "has a",
+      "words": [
+        {
+          "id": "caption-word-1-0",
+          "text": "has",
+          "start": 0.778,
+          "end": 0.906
+        },
+        {
+          "id": "caption-word-1-1",
+          "text": "a",
+          "start": 0.952,
+          "end": 0.987
+        }
+      ]
+    },
+    {
+      "id": "caption-group-2",
+      "frame": 1,
+      "start": 1.033,
+      "end": 1.683,
+      "text": "story waiting",
+      "words": [
+        {
+          "id": "caption-word-2-0",
+          "text": "story",
+          "start": 1.033,
+          "end": 1.324
+        },
+        {
+          "id": "caption-word-2-1",
+          "text": "waiting",
+          "start": 1.382,
+          "end": 1.649
+        }
+      ]
+    },
+    {
+      "id": "caption-group-3",
+      "frame": 1,
+      "start": 1.683,
+      "end": 2.488,
+      "text": "to happen.",
+      "words": [
+        {
+          "id": "caption-word-3-0",
+          "text": "to",
+          "start": 1.683,
+          "end": 1.73
+        },
+        {
+          "id": "caption-word-3-1",
+          "text": "happen.",
+          "start": 1.788,
+          "end": 2.368
+        }
+      ]
+    },
+    {
+      "id": "caption-group-4",
+      "frame": 2,
+      "start": 4,
+      "end": 4.58,
+      "text": "A kitchen",
+      "words": [
+        {
+          "id": "caption-word-4-0",
+          "text": "A",
+          "start": 4,
+          "end": 4.093
+        },
+        {
+          "id": "caption-word-4-1",
+          "text": "kitchen",
+          "start": 4.209,
+          "end": 4.546
+        }
+      ]
+    },
+    {
+      "id": "caption-group-5",
+      "frame": 2,
+      "start": 4.58,
+      "end": 5.838,
+      "text": "that finally works.",
+      "words": [
+        {
+          "id": "caption-word-5-0",
+          "text": "that",
+          "start": 4.58,
+          "end": 4.708
+        },
+        {
+          "id": "caption-word-5-1",
+          "text": "finally",
+          "start": 4.766,
+          "end": 5.149
+        },
+        {
+          "id": "caption-word-5-2",
+          "text": "works.",
+          "start": 5.207,
+          "end": 5.718
+        }
+      ]
+    },
+    {
+      "id": "caption-group-6",
+      "frame": 2,
+      "start": 5.904,
+      "end": 6.322,
+      "text": "A room",
+      "words": [
+        {
+          "id": "caption-word-6-0",
+          "text": "A",
+          "start": 5.904,
+          "end": 5.997
+        },
+        {
+          "id": "caption-word-6-1",
+          "text": "room",
+          "start": 6.078,
+          "end": 6.276
+        }
+      ]
+    },
+    {
+      "id": "caption-group-7",
+      "frame": 2,
+      "start": 6.322,
+      "end": 6.821,
+      "text": "that feels",
+      "words": [
+        {
+          "id": "caption-word-7-0",
+          "text": "that",
+          "start": 6.322,
+          "end": 6.438
+        },
+        {
+          "id": "caption-word-7-1",
+          "text": "feels",
+          "start": 6.496,
+          "end": 6.775
+        }
+      ]
+    },
+    {
+      "id": "caption-group-8",
+      "frame": 2,
+      "start": 6.821,
+      "end": 7.742,
+      "text": "like you.",
+      "words": [
+        {
+          "id": "caption-word-8-0",
+          "text": "like",
+          "start": 6.821,
+          "end": 6.984
+        },
+        {
+          "id": "caption-word-8-1",
+          "text": "you.",
+          "start": 7.03,
+          "end": 7.622
+        }
+      ]
+    },
+    {
+      "id": "caption-group-9",
+      "frame": 3,
+      "start": 9,
+      "end": 9.511,
+      "text": "A garden",
+      "words": [
+        {
+          "id": "caption-word-9-0",
+          "text": "A",
+          "start": 9,
+          "end": 9.093
+        },
+        {
+          "id": "caption-word-9-1",
+          "text": "garden",
+          "start": 9.174,
+          "end": 9.476
+        }
+      ]
+    },
+    {
+      "id": "caption-group-10",
+      "frame": 3,
+      "start": 9.511,
+      "end": 10.138,
+      "text": "that bursts",
+      "words": [
+        {
+          "id": "caption-word-10-0",
+          "text": "that",
+          "start": 9.511,
+          "end": 9.615
+        },
+        {
+          "id": "caption-word-10-1",
+          "text": "bursts",
+          "start": 9.662,
+          "end": 10.091
+        }
+      ]
+    },
+    {
+      "id": "caption-group-11",
+      "frame": 3,
+      "start": 10.138,
+      "end": 10.846,
+      "text": "into life.",
+      "words": [
+        {
+          "id": "caption-word-11-0",
+          "text": "into",
+          "start": 10.138,
+          "end": 10.324
+        },
+        {
+          "id": "caption-word-11-1",
+          "text": "life.",
+          "start": 10.405,
+          "end": 10.788
+        }
+      ]
+    },
+    {
+      "id": "caption-group-12",
+      "frame": 3,
+      "start": 10.846,
+      "end": 11.368,
+      "text": "A summer",
+      "words": [
+        {
+          "id": "caption-word-12-0",
+          "text": "A",
+          "start": 10.846,
+          "end": 10.927
+        },
+        {
+          "id": "caption-word-12-1",
+          "text": "summer",
+          "start": 11.043,
+          "end": 11.334
+        }
+      ]
+    },
+    {
+      "id": "caption-group-13",
+      "frame": 3,
+      "start": 11.368,
+      "end": 12.696,
+      "text": "lived outdoors.",
+      "words": [
+        {
+          "id": "caption-word-13-0",
+          "text": "lived",
+          "start": 11.368,
+          "end": 11.554
+        },
+        {
+          "id": "caption-word-13-1",
+          "text": "outdoors.",
+          "start": 11.589,
+          "end": 12.576
+        }
+      ]
+    },
+    {
+      "id": "caption-group-14",
+      "frame": 4,
+      "start": 14,
+      "end": 15.312,
+      "text": "Thousands of stylish,",
+      "words": [
+        {
+          "id": "caption-word-14-0",
+          "text": "Thousands",
+          "start": 14,
+          "end": 14.534
+        },
+        {
+          "id": "caption-word-14-1",
+          "text": "of",
+          "start": 14.569,
+          "end": 14.627
+        },
+        {
+          "id": "caption-word-14-2",
+          "text": "stylish,",
+          "start": 14.697,
+          "end": 15.289
+        }
+      ]
+    },
+    {
+      "id": "caption-group-15",
+      "frame": 4,
+      "start": 15.312,
+      "end": 16.902,
+      "text": "affordable finds for every",
+      "words": [
+        {
+          "id": "caption-word-15-0",
+          "text": "affordable",
+          "start": 15.312,
+          "end": 15.846
+        },
+        {
+          "id": "caption-word-15-1",
+          "text": "finds",
+          "start": 15.904,
+          "end": 16.299
+        },
+        {
+          "id": "caption-word-15-2",
+          "text": "for",
+          "start": 16.345,
+          "end": 16.461
+        },
+        {
+          "id": "caption-word-15-3",
+          "text": "every",
+          "start": 16.531,
+          "end": 16.833
+        }
+      ]
+    },
+    {
+      "id": "caption-group-16",
+      "frame": 4,
+      "start": 16.902,
+      "end": 17.32,
+      "text": "corner of",
+      "words": [
+        {
+          "id": "caption-word-16-0",
+          "text": "corner",
+          "start": 16.902,
+          "end": 17.181
+        },
+        {
+          "id": "caption-word-16-1",
+          "text": "of",
+          "start": 17.228,
+          "end": 17.274
+        }
+      ]
+    },
+    {
+      "id": "caption-group-17",
+      "frame": 4,
+      "start": 17.32,
+      "end": 17.843,
+      "text": "your home",
+      "words": [
+        {
+          "id": "caption-word-17-0",
+          "text": "your",
+          "start": 17.32,
+          "end": 17.46
+        },
+        {
+          "id": "caption-word-17-1",
+          "text": "home",
+          "start": 17.518,
+          "end": 17.808
+        }
+      ]
+    },
+    {
+      "id": "caption-group-18",
+      "frame": 4,
+      "start": 17.843,
+      "end": 18.996,
+      "text": "and garden.",
+      "words": [
+        {
+          "id": "caption-word-18-0",
+          "text": "and",
+          "start": 17.843,
+          "end": 17.936
+        },
+        {
+          "id": "caption-word-18-1",
+          "text": "garden.",
+          "start": 18.017,
+          "end": 18.876
+        }
+      ]
+    },
+    {
+      "id": "caption-group-19",
+      "frame": 5,
+      "start": 19.5,
+      "end": 19.953,
+      "text": "All in",
+      "words": [
+        {
+          "id": "caption-word-19-0",
+          "text": "All",
+          "start": 19.5,
+          "end": 19.744
+        },
+        {
+          "id": "caption-word-19-1",
+          "text": "in",
+          "start": 19.802,
+          "end": 19.872
+        }
+      ]
+    },
+    {
+      "id": "caption-group-20",
+      "frame": 5,
+      "start": 19.953,
+      "end": 21.013,
+      "text": "one place.",
+      "words": [
+        {
+          "id": "caption-word-20-0",
+          "text": "one",
+          "start": 19.953,
+          "end": 20.139
+        },
+        {
+          "id": "caption-word-20-1",
+          "text": "place.",
+          "start": 20.185,
+          "end": 20.893
+        }
+      ]
+    },
+    {
+      "id": "caption-group-21",
+      "frame": 6,
+      "start": 22,
+      "end": 23.072,
+      "text": "vidaXL.",
+      "words": [
+        {
+          "id": "caption-word-21-0",
+          "text": "vidaXL.",
+          "start": 22,
+          "end": 22.952
+        }
+      ]
+    },
+    {
+      "id": "caption-group-22",
+      "frame": 6,
+      "start": 23.289,
+      "end": 23.811,
+      "text": "Shop now",
+      "words": [
+        {
+          "id": "caption-word-22-0",
+          "text": "Shop",
+          "start": 23.289,
+          "end": 23.521
+        },
+        {
+          "id": "caption-word-22-1",
+          "text": "now",
+          "start": 23.591,
+          "end": 23.753
+        }
+      ]
+    },
+    {
+      "id": "caption-group-23",
+      "frame": 6,
+      "start": 23.811,
+      "end": 25.03,
+      "text": "at vidaXL dot",
+      "words": [
+        {
+          "id": "caption-word-23-0",
+          "text": "at",
+          "start": 23.811,
+          "end": 23.869
+        },
+        {
+          "id": "caption-word-23-1",
+          "text": "vidaXL",
+          "start": 23.927,
+          "end": 24.589
+        },
+        {
+          "id": "caption-word-23-2",
+          "text": "dot",
+          "start": 24.705,
+          "end": 24.949
+        }
+      ]
+    },
+    {
+      "id": "caption-group-24",
+      "frame": 6,
+      "start": 25.03,
+      "end": 26.253,
+      "text": "co dot uk.",
+      "words": [
+        {
+          "id": "caption-word-24-0",
+          "text": "co",
+          "start": 25.03,
+          "end": 25.158
+        },
+        {
+          "id": "caption-word-24-1",
+          "text": "dot",
+          "start": 25.216,
+          "end": 25.437
+        },
+        {
+          "id": "caption-word-24-2",
+          "text": "uk.",
+          "start": 25.518,
+          "end": 26.133
+        }
+      ]
+    }
+  ]
+}

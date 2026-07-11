@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "Poppins"; font-weight: 400; font-style: normal; font-display: block; src: url(assets/fonts/Poppins-400.woff2) format("woff2"); }
+        @font-face { font-family: "Poppins"; font-weight: 500; font-style: normal; font-display: block; src: url(assets/fonts/Poppins-500.woff2) format("woff2"); }
+        @font-face { font-family: "Poppins"; font-weight: 600; font-style: normal; font-display: block; src: url(assets/fonts/Poppins-600.woff2) format("woff2"); }
+        @font-face { font-family: "Poppins"; font-weight: 700; font-style: normal; font-display: block; src: url(assets/fonts/Poppins-700.woff2) format("woff2"); }
+
+        #root {
+          position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden;
+          background: #420839; font-family: "Poppins", system-ui, sans-serif;
+        }
+        #root .bg { position: absolute; inset: 0; overflow: hidden; }
+        #root .bg img { width: 100%; height: 100%; object-fit: cover; transform-origin: 50% 45%; will-change: transform; }
+        #root .scrim {
+          position: absolute; inset: 0;
+          background: linear-gradient(180deg, rgba(37,4,32,0.94) 0%, rgba(37,4,32,0.86) 44%, rgba(37,4,32,0.50) 62%, rgba(37,4,32,0.16) 75%, rgba(37,4,32,0.60) 100%);
+        }
+        #root .label {
+          position: absolute; left: 66px; top: 300px;
+          font-weight: 600; font-size: 32px; letter-spacing: 0.34em; text-transform: uppercase; color: #F3D018;
+        }
+        #root .beat {
+          position: absolute; left: 60px; top: 366px; width: 840px;
+          font-weight: 700; font-size: 146px; line-height: 1.14; letter-spacing: -0.02em; color: #FBF7F0;
+          text-shadow: 0 3px 28px rgba(37,4,32,0.6);
+        }
+        #root .beat .em {
+          color: #FBF7F0;
+          background: linear-gradient(#F3D018, #F3D018) left 90% / 100% 0.09em no-repeat;
+        }
+        #root .word { display: inline-block; }
+      </style>
+
+      <div id="root" data-composition-id="02-indoors" data-width="1080" data-height="1920">
+        <!-- Beat 1: kitchen (0 - 2.75s) -->
+        <div class="bg beat1 clip" data-layout-allow-overflow data-start="0" data-duration="2.75" data-track-index="0">
+          <img src="assets/img/kitchen.jpg" alt="" />
+        </div>
+        <!-- Beat 2: living room (2.55 - 5s) -->
+        <div class="bg beat2 clip" data-layout-allow-overflow data-start="2.55" data-duration="2.45" data-track-index="1">
+          <img src="assets/img/living.jpg" alt="" />
+        </div>
+        <div class="scrim clip" data-start="0" data-duration="5" data-track-index="2"></div>
+
+        <div class="label clip" data-start="0" data-duration="5" data-track-index="3">Indoors</div>
+
+        <h2 class="beat beat1-txt clip" data-start="0" data-duration="2.75" data-track-index="4">
+          <span class="word">A</span> <span class="word em">kitchen</span> <span class="word">that</span> <span class="word">works.</span>
+        </h2>
+        <h2 class="beat beat2-txt clip" data-start="2.55" data-duration="2.45" data-track-index="5">
+          <span class="word">A</span> <span class="word em">room</span> <span class="word">that's</span> <span class="word">you.</span>
+        </h2>
+      </div>
+
+      <script>
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+
+        // Beat 1 — kitchen ken-burns + headline reveal
+        tl.fromTo("#root .beat1 img", { scale: 1.10 }, { scale: 1.0, duration: 2.75, ease: "none" }, 0);
+        tl.from("#root .scrim", { opacity: 0, duration: 0.5, ease: "power1.out" }, 0);
+        tl.from("#root .label", { opacity: 0, y: 12, duration: 0.5, ease: "power2.out" }, 0.15);
+        tl.from("#root .beat1-txt .word", { opacity: 0, y: 40, duration: 0.6, ease: "power3.out", stagger: 0.12 }, 0.3);
+
+        // Seam ~2.55s — blur-cut kitchen out
+        tl.to("#root .beat1 img", { opacity: 0, filter: "blur(14px)", duration: 0.28, ease: "power2.in" }, 2.5);
+        tl.to("#root .beat1-txt", { opacity: 0, filter: "blur(10px)", duration: 0.24, ease: "power2.in" }, 2.42);
+
+        // Beat 2 — living room enters from blur, ken-burns, headline reveal
+        tl.fromTo("#root .beat2 img", { scale: 1.12, filter: "blur(16px)", opacity: 0 }, { scale: 1.02, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "power2.out" }, 2.55);
+        tl.to("#root .beat2 img", { scale: 1.0, duration: 1.95, ease: "none" }, 3.05);
+        tl.from("#root .beat2-txt .word", { opacity: 0, y: 40, duration: 0.6, ease: "power3.out", stagger: 0.12 }, 2.9);
+
+        window.__timelines["02-indoors"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #232323;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.5px;
+      }
+    </style>
+  </defs>
+  <g id="ToysAndGames_1239_master">
+    <g>
+      <path class="cls-1" d="M5.56,4.95l8.42-1.17c.55-.08,1.11.03,1.59.31l4.05,2.33c.77.45,1.25,1.27,1.25,2.16l.02,8.4c0,1.22-.87,2.26-2.07,2.47l-9.17,1.6c-.8.14-1.62-.12-2.2-.69l-3.35-3.35c-.47-.47-.74-1.11-.73-1.78l.04-7.8c0-1.24.92-2.29,2.15-2.46Z"/>
+      <path class="cls-1" d="M6.21,7.37l1.6,1.27c.53.42,1.2.61,1.87.52l8.15-1.03"/>
+      <path class="cls-1" d="M8.95,17.99v-7.25c0-.79-.38-1.54-1.02-2.01l-.13-.09"/>
+      <path class="cls-1" d="M8.95,11.28c0-.79.38-1.54,1.02-2.01l.13-.09"/>
+      <path class="cls-1" d="M12.09,17.99c0-1.55.05-6.54,3.05-7,2.45-.38,2.88,3.02,2.62,6"/>
+      <line class="cls-1" x1="12.55" y1="15.57" x2="17.38" y2="14.61"/>
+    </g>
+  </g>
+</svg>

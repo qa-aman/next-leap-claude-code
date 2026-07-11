@@ -1,0 +1,626 @@
+[a] Skip to main content
+[button] Previous
+[button] Next
+[span] Free shipping over £ 70
+[p] Why choose vidaXL?
+[p] 24/7 deals
+[p] Find the best deals & discounted products every day at vidaXL!
+[span] Go to deals
+[p] Free shipping over £ 70
+[p] Enjoy free shipping on all orders above £ 70.
+[p] Get discounts with vidaXL+
+[p] Opt in with your account today and watch your vidaXL+ points grow. The more you shop, the bigger the discounts you can unlock!
+[span] Create an account
+[span] Categories
+[div] Your recent searches
+[div] No recent searches available
+[p] Popular searches
+[span] garden furniture
+[span] wardrobe
+[span] cabinet sideboard
+[span] 3m awning
+[span] 8720286444009
+[span] bin store
+[span] black side board
+[span] camping tarp with poles
+[span] coffee tables
+[span] coffee tables artisan
+[span] Categories
+[span] Auctions
+[span] Account overview
+[span] My orders
+[span] Account details
+[span] Wishlist
+[p] Your shopping cart is empty
+[div] Let's get some products in here!
+[span] Go to cart
+[div] Your recent searches
+[div] No recent searches available
+[p] Popular searches
+[span] garden furniture
+[span] wardrobe
+[span] cabinet sideboard
+[span] 3m awning
+[span] 8720286444009
+[span] bin store
+[span] black side board
+[span] camping tarp with poles
+[span] coffee tables
+[span] coffee tables artisan
+[span] Categories
+[span] Back to menu
+[span] Furniture
+[div] Outdoor Furniture
+[div] Cabinets & Storage
+[div] Beds & Accessories
+[span] View all in Furniture
+[a] Baby & Toddler Furniture
+[a] Chair Accessories
+[a] Foot Rests
+[a] Furniture Sets
+[a] Office Furniture
+[a] Office Furniture Accessories
+[a] Outdoor Furniture Accessories
+[a] Room Divider Accessories
+[a] Room Dividers
+[a] Shelving
+[a] Sofa Accessories
+[a] Table Accessories
+[a] Trolleys
+[a] TV stands &  TV cabinets
+[span] Home & Garden
+[div] Lighting
+[div] Household Supplies
+[div] Kitchen & Dining
+[div] Lawn & Garden
+[div] Pool & Spa
+[span] View all in Home & Garden
+[a] Bathroom Accessories
+[a] Business & Home Security
+[a] Emergency Preparedness
+[a] Fireplace & Wood Stove Accessories
+[a] Fireplaces
+[a] Flood, Fire & Gas Safety
+[a] Household Appliance Accessories
+[a] Household Appliances
+[a] Lighting Accessories
+[a] Linens & Bedding
+[a] Rain Umbrellas
+[a] Smoking Accessories
+[span] Hardware
+[div] Building Materials
+[div] Fencing & Barriers
+[div] Plumbing
+[div] Hardware Accessories
+[div] Tool Accessories
+[span] View all in Hardware
+[a] Building Consumables
+[a] Hardware Pumps
+[a] Heating, Ventilation & Air Conditioning
+[a] Locks & Keys
+[a] Power & Electrical Supplies
+[span] Sporting Goods
+[div] Indoor Games
+[div] Outdoor Recreation
+[div] Athletics
+[div] Exercise & Fitness
+[span] View all in Sporting Goods
+[span] Animals & Pet Supplies
+[div] Pet Supplies
+[span] View all in Animals & Pet Supplies
+[span] Toys & Games
+[div] Outdoor Play Equipment
+[span] View all in Toys & Games
+[span] Vehicles & Parts
+[div] Vehicle Parts & Accessories
+[div] Garage Equipment & Tools
+[span] View all in Vehicles & Parts
+[a] Vehicles
+[span] Business & Industrial
+[div] Food Service
+[div] Industrial Storage
+[div] Material Handling
+[div] Hairdressing & Cosmetology
+[span] View all in Business & Industrial
+[a] Advertising & Marketing
+[a] Agriculture
+[a] Cleaning Carts & Containers
+[a] Detection Devices & Fasteners
+[a] Forestry & Logging
+[a] Science & Laboratory
+[a] Work Safety Protective Equipment
+[span] Baby & Toddler
+[div] Baby Transport
+[div] Baby Toys & Activity Equipment
+[div] Baby Safety
+[span] View all in Baby & Toddler
+[div] Cameras & Optics
+[div] Clothing & Accessories
+[div] Electronics
+[div] Health & Beauty
+[div] Luggage & Bags
+[div] Arts & Entertainment
+[span] View all in Others
+[a] Office Supplies
+[span] Get Inspired
+[span] Back to menu
+[span] Media uploader
+[span] Shop per room
+[span] #sharemevidaxl
+[span] Kitchen collections
+[span] Buying guides
+[span] Auctions
+[span] Track my order
+[span] Furniture
+[span] Home & Garden
+[span] Hardware
+[span] Sporting Goods
+[span] Animals & Pet Supplies
+[span] Toys & Games
+[span] Vehicles & Parts
+[span] Business & Industrial
+[span] Baby & Toddler
+[span] Others
+[div] Outdoor Furniture
+[div] Chairs
+[div] Sofas
+[div] Cabinets & Storage
+[div] Tables
+[div] Beds & Accessories
+[span] Baby & Toddler Furniture
+[span] Benches
+[span] Chair Accessories
+[span] Foot Rests
+[span] Furniture Sets
+[span] Futons
+[span] Office Furniture
+[span] Office Furniture Accessories
+[span] Outdoor Furniture Accessories
+[span] Room Divider Accessories
+[span] Room Dividers
+[span] Shelving
+[span] Sofa Accessories
+[span] Table Accessories
+[span] Trolleys
+[span] TV stands &  TV cabinets
+[div] Lighting
+[div] Household Supplies
+[div] Kitchen & Dining
+[div] Lawn & Garden
+[div] Decor
+[div] Pool & Spa
+[span] Bathroom Accessories
+[span] Business & Home Security
+[span] Emergency Preparedness
+[span] Fireplace & Wood Stove Accessories
+[span] Fireplaces
+[span] Flood, Fire & Gas Safety
+[span] Household Appliance Accessories
+[span] Household Appliances
+[span] Lighting Accessories
+[span] Linens & Bedding
+[span] Plants
+[span] Rain Umbrellas
+[span] Smoking Accessories
+[div] Building Materials
+[div] Tools
+[div] Fencing & Barriers
+[div] Plumbing
+[div] Hardware Accessories
+[div] Tool Accessories
+[span] Building Consumables
+[span] Hardware Pumps
+[span] Heating, Ventilation & Air Conditioning
+[span] Locks & Keys
+[span] Power & Electrical Supplies
+[div] Indoor Games
+[div] Outdoor Recreation
+[div] Athletics
+[div] Exercise & Fitness
+[div] Pet Supplies
+[div] Outdoor Play Equipment
+[div] Toys
+[div] Games
+[div] Vehicle Parts & Accessories
+[div] Garage Equipment & Tools
+[span] Vehicles
+[div] Food Service
+[div] Retail
+[div] Industrial Storage
+[div] Material Handling
+[div] Hairdressing & Cosmetology
+[div] Signage
+[span] Advertising & Marketing
+[span] Agriculture
+[span] Cleaning Carts & Containers
+[span] Detection Devices & Fasteners
+[span] Forestry & Logging
+[span] Science & Laboratory
+[span] Work Safety Protective Equipment
+[div] Baby Transport
+[div] Baby Toys & Activity Equipment
+[div] Baby Safety
+[div] Cameras & Optics
+[div] Clothing & Accessories
+[div] Electronics
+[div] Health & Beauty
+[div] Luggage & Bags
+[div] Arts & Entertainment
+[span] Mature
+[span] Office Supplies
+[a] Skip listing
+[div] Categories
+[div] Furniture
+[div] Home & Garden
+[div] Hardware
+[div] Sporting Goods
+[div] Animals & Pet Supplies
+[div] Beds & Bed Frames
+[div] Outdoor Living
+[div] Pots & Planters
+[div] Outdoor Furniture
+[div] Cabinets & Storage
+[div] New outdoor furniture for every space
+[div] Discover practical furniture for balconies, gardens, and modular outdoor setups.
+[span] Shop now
+[div] Tents for any trip
+[p] From solo trips to family camping, find the right tent for any trip.
+[span] Shop now
+[div] Your living room. Your stadium.
+[p] Host friends, watch the game, celebrate together. Your living room is ready for match day.
+[span] Shop now
+[div] Compact furniture for your balcony
+[p] Choose new compact items for relaxing and dining on your cosy balcony.
+[span] Shop now
+[div] Complete your garden setup
+[p] Create a comfortable, inviting garden space with tables, loungers, and storage solutions.
+[span] Shop now
+[div] Modular furniture that adapts to you
+[p] Modular outdoor furniture lets you expand, rearrange, and enjoy summer your way.
+[span] Shop now
+[div] New garden gazebos for summer
+[p] Create shade and comfort for outdoor dining or relaxing in your garden.
+[span] Shop now
+[div] Ongoing deals for outdoor spaces
+[p] Save up to 10% on practical garden and balcony items.
+[span] Shop now
+[div] Fresh picks just in!
+[p] Discover essential products for your every need.
+[span] Shop now
+[h2] Stories
+[h2] Auctions
+[h2] -60%
+[h2] on average
+[span] View all auctions
+[span] vidaXL
+[span] vidaXL Hanging Mosquito Net 156 Mesh White 220x180x180 cm
+[div] Time left:
+[span] 12:48:36
+[div] Number of bids:
+[div] Highest bid:
+[span] £ 2
+[span] vidaXL
+[span] vidaXL Brown Bamboo Roller Blinds 120 x 220 cm
+[div] Time left:
+[span] 12:53:36
+[div] Number of bids:
+[div] Highest bid:
+[span] £ 11
+[span] vidaXL
+[span] vidaXL Macrame Curtain 140x240 cm Cotton
+[div] Time left:
+[span] 2 day(s)
+[div] Number of bids:
+[div] Highest bid:
+[span] £ 6
+[span] vidaXL
+[span] vidaXL Parasol Base with Wheels for Ø38 / 48 mm Poles 27 kg Round
+[div] Time left:
+[span] 2 day(s)
+[div] Number of bids:
+[div] Highest bid:
+[span] £ 16
+[span] vidaXL
+[span] vidaXL Massage Reclining Office Chair Light Grey Fabric
+[div] Time left:
+[span] 2 day(s)
+[div] Number of bids:
+[div] Highest bid:
+[span] £ 21
+[span] vidaXL
+[span] vidaXL Mesh Screen Aluminium 100x500 cm Silver
+[div] Time left:
+[span] 3 day(s)
+[div] Number of bids:
+[div] Highest bid:
+[span] £ 9
+[span] vidaXL
+[span] vidaXL Garden Raised Bed Rusty 160x80x77 cm Corten Steel
+[div] Time left:
+[span] 3 day(s)
+[div] Number of bids:
+[div] Highest bid:
+[span] £ 26
+[span] vidaXL
+[span] vidaXL Garden Storage Box Brown 150x100x100 cm Poly Rattan
+[div] Time left:
+[span] 4 day(s)
+[div] Number of bids:
+[div] Highest bid:
+[span] £ 6
+[span] vidaXL
+[span] vidaXL Insect Door Screen with Mesh Curtain Black 100x220 cm Polyester
+[div] Time left:
+[span] 4 day(s)
+[div] Number of bids:
+[div] Highest bid:
+[span] £ 3
+[span] vidaXL
+[span] vidaXL Bicycle Stand for 6 Bikes Floor Freestanding Galvanised Steel
+[div] Time left:
+[span] 5 day(s)
+[div] Number of bids:
+[div] Highest bid:
+[span] £ 1
+[h3] Shop by room
+[div] Bedroom
+[div] Garden
+[div] Kitchen
+[div] Bathroom
+[div] Kids' room
+[div] Home office
+[div] Balcony
+[div] Dining room
+[div] Living room
+[div] Backyard barbecue
+[h2] Top picks for you
+[span] vidaXL Garden Parasol White Aluminium 500 cm
+[span] 312
+[span] Add to cart
+[span] vidaXL Umbrella Weight Plate | Black | Granite | Small | Heavy Weight Endurance
+[span] Add to cart
+[span] vidaXL Basement Window RISOR 110 x 40 cm PVC and Glass Anthracite
+[span] 159
+[span] Add to cart
+[span] vidaXL Dog Cage with Roof and Doors Grey 4x2x2 m Galvanised Steel
+[span] 277
+[span] Add to cart
+[span] vidaXL 7 Piece Garden Dining Set Solid Wood Acacia
+[span] options
+[span] 537
+[span] Add to cart
+[span] vidaXL Garden Raised Bed 200x100x91 cm WPC Grey
+[span] 295
+[span] Add to cart
+[span] vidaXL Tipping Trailer for Lawn Mower 300 kg Load
+[span] 239
+[span] Add to cart
+[span] vidaXL Bistro Table Light Brown 60X60 cm MDF
+[span] Add to cart
+[span] vidaXL Tent 16-Person with Roof with Storage Blue 680 x 510 x 210 cm
+[span] 286
+[span] Add to cart
+[span] vidaXL Bistro Table Leg Black Ø43x107 cm Cast Iron
+[span] 113
+[span] Add to cart
+[h4] Sign up for our newsletter £ 5 discount*
+[p] Every month, 651.454 people benefit from the best offers
+[span] Subscribe
+[span] Personalised recommendations
+[div] I would like to receive marketing emails from vidaXL
+[span] Help
+[p] Confirm your subscription
+[p] I would like to receive the vidaXL email newsletter with promotions and product news. Unsubscribing is possible at any time. The vidaXL privacy policy applies. *The minimum order value is £ 60. The discount is only valid on vidaXL branded products. vidaXL respects your privacy.
+[h5] More content for inspiration
+[h5] Explore #sharemevidaXL
+[h5] Time for bedroom shopping!
+[h5] Shop garden items
+[h2] Popular products:
+[span] vidaXL Retractable Side Awning Anthracite 100x300 cm
+[span] Add to cart
+[span] vidaXL Fence Panel ASSEN" Steel 1,7x1,2 m Black
+[div] £ 30,03 /m
+[span] Add to cart
+[span] vidaXL Folding Awning Manual Operated 600 cm Yellow/White (143032+144062)
+[span] 642
+[span] Add to cart
+[span] vidaXL Planter Rusty 200x40x40 cm Weathering Steel
+[span] 141
+[span] Add to cart
+[span] vidaXL Garden Parasol with with LEDs and Steel Pole Brown 269x269x235 cm
+[span] options
+[span] 151
+[span] Add to cart
+[span] vidaXL Manual Retractable Awning 150 cm Orange and White Stripes
+[span] options
+[span] Add to cart
+[span] vidaXL Retractable Awning 200x150 cm Cream
+[span] options
+[span] Add to cart
+[span] vidaXL Cantilever Garden Parasol with Aluminium Pole 350 cm Taupe
+[span] 120
+[span] Add to cart
+[span] vidaXL Garden Parasol White Aluminium 500 cm
+[span] 312
+[span] Add to cart
+[span] vidaXL Arched Gabion Baskets 50 pcs 200x50x120/140 cm Galvanised Iron
+[span] 2,103
+[span] Add to cart
+[h2] The most popular customer photos now. Join the #sharemevidaxl Gallery!
+[p] Use the
+[span] #sharemevidaxl
+[p] hashtag or tag
+[span] @vidaxl_uk
+[p] on Instagram to share your vidaXL products with the world, and we'll feature your photos in our inspirational gallery! Learn everything you need to know about content use by visiting our Terms & Conditions page
+[span] here
+[button] Previous
+[button] Next
+[span] All
+[span] Tables
+[span] Chairs
+[span] Sofas
+[span] Outdoor furniture
+[span] Cabinets & Storage
+[div] Post published by
+[div] @aleandro.daris
+[div] Post published by
+[div] @lucie_liebt
+[div] Post published by
+[div] @maartjerosalie
+[div] Post published by
+[div] @hytta_paa_lifjell
+[div] Post published by
+[div] @muca_roan
+[div] Post published by
+[div] @el.et.mel.interieurs
+[div] Post published by
+[div] @ipropertypl
+[div] Post published by
+[div] @budget_huis_tuin
+[a] See all
+[span] Your one-stop shop for home and garden essentials
+[p] Step into the world of vidaXL, where every corner of your
+[a] home and garden
+[p] can be enhanced by our diverse range of products. From chic furniture for your home to essential garden tools that empower your green thumb, we’ve got it all. At vidaXL, redecorating your home, sprucing up your garden or finding that ideal gift is easy and affordable.
+[span] Read more
+[p] Dive into our online shop and discover how to achieve the jackpot feeling without stretching your budget. We aim to make all products accessible to everyone by keeping our prices low.
+[span] Who are we at vidaXL?
+[p] At vidaXL, we are a dynamic international online retailer driven by the philosophy that there is always room for improvement and affordability. ‘Expect more’ isn’t just our slogan — it’s a promise. We understand the value of your money and constantly strive to enhance our product range and bring you competitively priced items.
+[p] Our own vidaXL brand offers a unique range of products that are either scarce or substantially more expensive elsewhere. Embracing the challenge, our other motto ‘Impossible? Think again’ reflects our commitment to surpassing your expectations every time.
+[span] Stylish yet affordable indoor and outdoor furniture
+[p] Home is where the heart is, and at vidaXL, we make sure it looks the part without breaking the bank. We’re always on the pulse of the latest trends in
+[a] home decor
+[p] and furniture design, ensuring that our collections are not only up to date but also accessible.
+[p] Whether you’re after inspiration or practical advice, our buying guides and highlighted home interior styles are designed to guide you to the ideal additions to your home. Check out our deals page for daily and weekly specials that offer great value on a range of items.
+[span] A vast home assortment awaits
+[p] Our online shop offers an incredible variety of products to suit all your needs. Whether you're redecorating your home, buying gifts or setting up a home gym, you'll find everything you need in one place.
+[p] We happily cater to every aspect of your home life — from stylish furnishings to practical gadgets and even pet supplies for your furry family members.
+[span] Transform your garden into a haven
+[p] Transform your garden into a haven with our wide selection of outdoor essentials. From cosy seating areas to decorative accents, discover how easy it is to enhance your garden and make it a retreat for relaxation and enjoyment. And for fitness enthusiasts, our outdoor fitness equipment means you can get your workout in without stepping away from the beauty of your garden.
+[p] Yes, with everything from parasols to sport, our garden range is designed to enhance and equip your outdoor spaces for endless enjoyment. Explore our range today and start your garden transformation.
+[span] Effortless online shopping
+[p] At vidaXL, convenience is key. Enjoy free delivery on all products — from plush sofas to essential sporting goods, and expect your items within just a few days. We ensure a swift and seamless delivery process so you can start enjoying your new additions without delay.
+[span] Pay how you like
+[p] Online shopping is all about convenience and flexibility. Choose your preferred payment method, whether it’s credit card, bank transfer or PayPal, and we’ll handle the rest, ensuring your items arrive swiftly at your doorstep.
+[span] Join the club and score rewards
+[p] Become a
+[a] vidaXL+ member
+[p] and turn your shopping into savings. With every purchase, you’ll rack up points that you can swap for discounts on future buys. Get ready to shop smarter and make every penny count. Simply sign up and start with 4 welcome points to get the ball rolling. Whether you're creating a new account or already a part of the vidaXL family, just select ‘opt-in’ in your account settings to join the fun.
+[span] In need of support?
+[p] Our comprehensive
+[a] help centre
+[p] has many frequently asked questions covering delivery, shipping, product details and much more.
+[p] For a more tailored assistance experience during your purchase journey, don't hesitate to contact our experienced customer service team. Our devoted professionals are ready to tackle any queries you may have, be they general questions or specific product-related inquiries.
+[h3] Contact us!
+[span] Go to Help center
+[span] Recommended
+[span] Chat with us
+[p] Live it up for less
+[p] Supported payment methods
+[span] Subscribe to our newsletter
+[p] Every month, 651.454 people benefit from the best offers
+[span] Subscribe
+[span] Personalised recommendations
+[div] I would like to receive marketing emails from vidaXL
+[p] Confirm your subscription
+[span] Our social media accounts
+[span] customer Service
+[span] Track your order
+[span] My account
+[span] Shipping & delivery
+[span] Product information
+[span] customer Service
+[a] Track your order
+[a] My account
+[a] Shipping & delivery
+[a] Product information
+[span] Business
+[span] Affiliate program
+[span] Production for vidaXL
+[span] Marketing collaborations
+[span] Business
+[a] Affiliate program
+[a] Production for vidaXL
+[a] Marketing collaborations
+[span] About vidaXL
+[span] Terms and Conditions Seller vidaXL
+[span] Privacy statement
+[span] Cookie Statement
+[a] Cookie Settings
+[span] Code of Conduct
+[span] Sustainability Approach
+[span] Working at vidaXL
+[span] Security
+[span] EPR Policy
+[span] Accessibility statement
+[a] About vidaXL
+[a] Terms and Conditions Seller vidaXL
+[a] Privacy statement
+[a] Cookie Statement
+[a] Cookie Settings
+[a] Code of Conduct
+[a] Sustainability Approach
+[a] Working at vidaXL
+[a] Security
+[a] EPR Policy
+[a] Accessibility statement
+[span] Discover more
+[span] Shop per room
+[span] Explore discounts
+[span] Discover more
+[a] Shop per room
+[a] Explore discounts
+[span] © 2008-2026 vidaXL www.vidaxl.co.uk is a website of vidaXL Marketplace LTD.
+[a] Reject all cookies
+[p] By accepting all our cookies you agree that vidaXL places cookies to improve the website experience, for example with more relevant products and suggestions. vidaXL also has several partners that require data to be sent to them to confirm sales, or provide targeted advertisements. For more information see our privacy and cookie statement.
+[p] Want to know more?
+[a] View our Privacy and Cookie statement.
+[h4] Personal cookie settings
+[i] check_box
+[strong] Essential cookies
+[span] Cookies that are essential to the website functionality. For example your shopping cart and wishlist.
+[i] check_box_outline_blank
+[strong] Analytical cookies
+[span] These cookies enable us to track visits and traffic sources so that we can measure and improve our site's performance. They assist us in determining which pages are the most and least popular, as well as observing how visitors navigate the site. All data collected by these cookies is aggregated and thus anonymous. If you don't allow cookies, we won't know when you visit our site, and will be unable to monitor its performance.
+[i] check_box_outline_blank
+[strong] Marketing cookies
+[span] Marketing cookies are used to track visitors across multiple websites. The goal is to show ads that are relevant and engaging for each individual user, making the ads more valuable for publishers and third-party advertisers.
+[a] Personalise settings
+[button] Yes, accept all cookies
+[div] By clicking “Accept All Cookies”, you agree to the storing of cookies on your device to enhance site navigation, analyse site usage, assist in our marketing efforts, and deliver personalized ads.
+[a] Privacy Policy and Cookie Statement
+[button] Accept All Cookies
+[button] Cookie Settings
+[button] Continue without Accepting
+[h2] Privacy Preference Centre
+[div] When you visit any website, it may store or retrieve information on your browser, mostly in the form of cookies. This information might be about you, your preferences, or your device, and is mostly used to make the site work as you expect. The information does not usually identify you directly, but it can give you a more personalized web experience. Because we respect your right to privacy, you can choose not to allow some types of cookies. Click on the different category headings to learn more and change our default settings. Blocking some types of cookies may impact your experience of the site and the services we are able to offer.
+[a] Privacy Policy and Cookie Statement
+[button] Allow All
+[h3] Manage Consent Preferences
+[h4] Strictly Necessary Cookies
+[div] Always Active
+[p] These cookies are necessary for the website to function and cannot be switched off in our systems. They are usually only set in response to actions made by you which amount to a request for services, such as setting your privacy preferences, logging in or filling in forms. You can set your browser to block or alert you about these cookies, but some parts of the site will not then work. These cookies do not store any personally identifiable information.
+[button] Cookies Details‎
+[h4] Functional Cookies
+[p] These cookies enable the website to provide enhanced functionality and personalisation. They may be set by us or by third-party providers whose services we have added to our pages. If you do not allow these cookies then some or all of these services may not function properly.
+[button] Cookies Details‎
+[h4] Performance Cookies
+[p] These cookies allow us to count visits and traffic sources, so we can measure and improve the performance of our site. They help us know which pages are the most and least popular and see how visitors move around the site. All information these cookies collect is aggregated and therefore anonymous. If you do not allow these cookies, we will not know when you have visited our site.
+[button] Cookies Details‎
+[h4] Targeting Cookies
+[p] These cookies may be set through our site by our advertising partners. They may be used by those companies to build a profile of your interests and show you relevant adverts on other sites. They do not store directly personal information, but are based on uniquely identifying your browser and internet device. If you do not allow these cookies, you will experience less targeted advertising.
+[button] Cookies Details‎
+[h4] Social Media Cookies
+[p] These cookies are set by a range of social media services that we have added to the site to enable you to share our content with your friends and networks. They are capable of tracking your browser across other sites and building up a profile of your interests. This may impact the content and messages you see on other websites you visit. If you do not allow these cookies you may not be able to use or see these sharing tools.
+[button] Cookies Details‎
+[title] Back Button
+[h3] Cookie List
+[title] Search Icon
+[title] Filter Icon
+[button] Clear
+[span] checkbox label
+[button] Apply
+[button] Cancel
+[span] Leg.Interest
+[button] Confirm My Choices
+[span] Your Privacy [`dialog closed`]

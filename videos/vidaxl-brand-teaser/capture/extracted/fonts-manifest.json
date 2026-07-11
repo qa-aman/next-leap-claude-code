@@ -1,0 +1,104 @@
+{
+  "files": [
+    {
+      "file": "pxiByp8kv8JHgFVrLDz8Z1xlEA.ttf",
+      "family": "Poppins",
+      "rawFamily": "Poppins Light",
+      "subfamily": "Regular",
+      "postscript": "Poppins-Light",
+      "weight": 300,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "pxiByp8kv8JHgFVrLEj6Z1xlEA.ttf",
+      "family": "Poppins",
+      "rawFamily": "Poppins SemiBold",
+      "subfamily": "Regular",
+      "postscript": "Poppins-SemiBold",
+      "weight": 600,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "pxiByp8kv8JHgFVrLFj_Z1xlEA.ttf",
+      "family": "Poppins",
+      "rawFamily": "Poppins ExtraLight",
+      "subfamily": "Regular",
+      "postscript": "Poppins-ExtraLight",
+      "weight": 275,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "pxiByp8kv8JHgFVrLGT9Z1xlEA.ttf",
+      "family": "Poppins",
+      "rawFamily": "Poppins Medium",
+      "subfamily": "Regular",
+      "postscript": "Poppins-Medium",
+      "weight": 500,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "pxiEyp8kv8JHgFVrJJfedw.ttf",
+      "family": "Poppins",
+      "rawFamily": "Poppins",
+      "subfamily": "Regular",
+      "postscript": "Poppins-Regular",
+      "weight": 400,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    },
+    {
+      "file": "pxiGyp8kv8JHgFVrLPTucHtF.ttf",
+      "family": "Poppins",
+      "rawFamily": "Poppins Thin",
+      "subfamily": "Regular",
+      "postscript": "Poppins-Thin",
+      "weight": 250,
+      "style": "normal",
+      "variationAxes": [],
+      "identified": true,
+      "isIcon": false
+    }
+  ],
+  "families": [
+    {
+      "family": "Poppins",
+      "weights": [
+        250,
+        275,
+        300,
+        400,
+        500,
+        600
+      ],
+      "variable": false,
+      "fileCount": 6,
+      "files": [
+        "pxiByp8kv8JHgFVrLDz8Z1xlEA.ttf",
+        "pxiByp8kv8JHgFVrLEj6Z1xlEA.ttf",
+        "pxiByp8kv8JHgFVrLFj_Z1xlEA.ttf",
+        "pxiByp8kv8JHgFVrLGT9Z1xlEA.ttf",
+        "pxiEyp8kv8JHgFVrJJfedw.ttf",
+        "pxiGyp8kv8JHgFVrLPTucHtF.ttf"
+      ]
+    }
+  ],
+  "unidentified": [],
+  "meta": {
+    "generatedAt": "2026-07-11T07:11:24.723Z",
+    "tool": "fontkit"
+  }
+}

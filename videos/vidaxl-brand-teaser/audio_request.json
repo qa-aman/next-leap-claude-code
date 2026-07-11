@@ -1,0 +1,17 @@
+{
+  "provider": "elevenlabs",
+  "lang": "en",
+  "speed": 1.0,
+  "lines": [
+    { "id": "01", "text": "Every space has a story waiting to happen." },
+    { "id": "02", "text": "A kitchen that finally works. A room that feels like you." },
+    { "id": "03", "text": "A garden that bursts into life. A summer lived outdoors." },
+    { "id": "04", "text": "Thousands of stylish, affordable finds for every corner of your home and garden." },
+    { "id": "05", "text": "All in one place." },
+    { "id": "06", "text": "vidaXL. Shop now at vidaXL dot co dot uk." }
+  ],
+  "bgm": {
+    "mode": "retrieve",
+    "query": "upbeat bright optimistic modern retail bed, warm uplifting, light percussion, no vocals"
+  }
+}

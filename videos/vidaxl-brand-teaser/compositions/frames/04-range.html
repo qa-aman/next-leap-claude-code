@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "Poppins"; font-weight: 400; font-style: normal; font-display: block; src: url(assets/fonts/Poppins-400.woff2) format("woff2"); }
+        @font-face { font-family: "Poppins"; font-weight: 500; font-style: normal; font-display: block; src: url(assets/fonts/Poppins-500.woff2) format("woff2"); }
+        @font-face { font-family: "Poppins"; font-weight: 600; font-style: normal; font-display: block; src: url(assets/fonts/Poppins-600.woff2) format("woff2"); }
+        @font-face { font-family: "Poppins"; font-weight: 700; font-style: normal; font-display: block; src: url(assets/fonts/Poppins-700.woff2) format("woff2"); }
+
+        #root {
+          position: absolute; inset: 0; width: 1080px; height: 1920px; overflow: hidden;
+          background: #FBF7F0; font-family: "Poppins", system-ui, sans-serif;
+        }
+        #root .ground { position: absolute; inset: 0; background: #FBF7F0; }
+        #root .bloom {
+          position: absolute; right: -14%; top: -6%; width: 82%; height: 44%;
+          background: radial-gradient(circle at 60% 40%, rgba(243,208,24,0.55) 0%, rgba(243,208,24,0.22) 38%, rgba(243,208,24,0.0) 68%);
+        }
+        #root .label {
+          position: absolute; left: 72px; top: 150px;
+          font-weight: 600; font-size: 32px; letter-spacing: 0.34em; text-transform: uppercase; color: #93117E;
+        }
+        #root .headline {
+          position: absolute; left: 66px; top: 214px; width: 948px;
+          font-weight: 700; font-size: 116px; line-height: 1.0; letter-spacing: -0.02em; color: #420839;
+        }
+        #root .headline .em { color: #93117E; }
+
+        #root .grid {
+          position: absolute; left: 70px; top: 560px; width: 940px;
+          display: grid; grid-template-columns: 1fr 1fr; gap: 34px; grid-auto-rows: 300px;
+        }
+        #root .tile {
+          position: relative; overflow: hidden; background: #efe7dc;
+          border: 1px solid #93117E; will-change: transform, opacity;
+        }
+        #root .tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        #root .tag {
+          position: absolute; left: 0; bottom: 0; right: 0;
+          padding: 16px 18px; font-weight: 600; font-size: 26px; color: #FBF7F0;
+          background: linear-gradient(0deg, rgba(37,4,32,0.78) 0%, rgba(37,4,32,0.0) 100%);
+        }
+      </style>
+
+      <div id="root" data-composition-id="04-range" data-width="1080" data-height="1920">
+        <div class="ground clip" data-start="0" data-duration="5.5" data-track-index="0"></div>
+        <div class="bloom clip" data-layout-allow-overflow data-start="0" data-duration="5.5" data-track-index="1"></div>
+
+        <div class="label clip" data-start="0" data-duration="5.5" data-track-index="2">Home &amp; garden</div>
+        <h2 class="headline clip" data-start="0" data-duration="5.5" data-track-index="3">
+          For <span class="em">every</span> corner.
+        </h2>
+
+        <div class="grid clip" data-start="0" data-duration="5.5" data-track-index="4">
+          <div class="tile"><img src="assets/img/kitchen.jpg" alt="" /><div class="tag">Kitchen</div></div>
+          <div class="tile"><img src="assets/img/garden.jpg" alt="" /><div class="tag">Garden</div></div>
+          <div class="tile"><img src="assets/img/bedroom.jpg" alt="" /><div class="tag">Bedroom</div></div>
+          <div class="tile"><img src="assets/img/balcony.jpg" alt="" /><div class="tag">Balcony</div></div>
+          <div class="tile"><img src="assets/img/dining.jpg" alt="" /><div class="tag">Dining</div></div>
+          <div class="tile"><img src="assets/img/gardenshop.jpg" alt="" /><div class="tag">Garden shop</div></div>
+        </div>
+      </div>
+
+      <script>
+        window.__timelines = window.__timelines || {};
+        const tl = gsap.timeline({ paused: true });
+        tl.from("#root .bloom", { opacity: 0, duration: 0.8, ease: "power1.out" }, 0);
+        tl.from("#root .label", { opacity: 0, y: 12, duration: 0.5, ease: "power2.out" }, 0.1);
+        tl.from("#root .headline", { opacity: 0, y: 22, duration: 0.6, ease: "power3.out" }, 0.25);
+        // tiles assemble one after another, paced across the line (not front-loaded)
+        tl.from("#root .tile", {
+          opacity: 0, scale: 0.9, y: 22, transformOrigin: "50% 50%",
+          duration: 0.55, ease: "back.out(1.1)", stagger: 0.32
+        }, 0.7);
+        window.__timelines["04-range"] = tl;
+      </script>
+    </template>
+  </body>
+</html>

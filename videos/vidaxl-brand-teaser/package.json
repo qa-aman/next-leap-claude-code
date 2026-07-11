@@ -1,0 +1,11 @@
+{
+  "name": "vidaxl-brand-teaser",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@0.7.52 preview",
+    "check": "npx --yes hyperframes@0.7.52 check",
+    "render": "npx --yes hyperframes@0.7.52 render",
+    "publish": "npx --yes hyperframes@0.7.52 publish"
+  }
+}

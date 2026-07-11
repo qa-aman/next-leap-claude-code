@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        letter-spacing: 0em;
+      }
+
+      .cls-2 {
+        letter-spacing: 0em;
+      }
+
+      .cls-3 {
+        font-family: Raleway-Bold, Raleway;
+        font-size: 3.54px;
+        font-weight: 700;
+      }
+
+      .cls-4 {
+        fill: none;
+        stroke: #232323;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.5px;
+      }
+
+      .cls-5 {
+        letter-spacing: -.07em;
+      }
+
+      .cls-6 {
+        letter-spacing: 0em;
+      }
+    </style>
+  </defs>
+  <text class="cls-3" transform="translate(0 -1.42)"><tspan class="cls-5" x="0" y="0">V</tspan><tspan class="cls-6" x="2.15" y="0">ehicles &amp; </tspan><tspan class="cls-2" x="18.5" y="0">P</tspan><tspan class="cls-1" x="20.68" y="0">arts</tspan></text>
+  <g id="VehicleAndParts_888_master">
+    <g>
+      <path class="cls-4" d="M7.84,9.28c-.91.08-1.5-.96-.95-1.69,1.26-1.67,3.27-2.67,5.4-2.57,1.93.09,3.69,1.08,4.82,2.62.54.73-.06,1.75-.96,1.67-1.22-.11-2.2-.49-4.18-.49s-2.75.35-4.13.47Z"/>
+      <path class="cls-4" d="M13.9,19.1c-.28.11-.59-.09-.61-.39-.02-.37-.04-.79-.04-.86,0-.57-.03-1.16.02-1.72.04-.45.24-.8.54-1.12.42-.46.97-.64,1.57-.7.83-.09,1.68-.16,2.52-.16.32,0,.53.33.4.62-.14.32-.29.67-.32.72-.29.53-.65,1.02-1.05,1.47-.84.93-1.89,1.67-3.05,2.14Z"/>
+      <path class="cls-4" d="M5.53,14.82c-.11-.29.17-.7.48-.71.37,0,.81.05.87.05.57.02,1.1.02,1.66.09.45.06.93.21,1.24.52.74.73.71,1.9.81,2.86.04.35.12,1.48-.42,1.54-.05,0-.1,0-.14-.02-.88-.26-1.72-.7-2.38-1.33-.91-.86-1.68-1.82-2.11-3Z"/>
+      <circle class="cls-4" cx="12" cy="12" r="10.02"/>
+    </g>
+    <path class="cls-4" d="M12,11.38c-.76,0-1.48.19-2.01.62"/>
+    <path class="cls-4" d="M12,11.38c.76,0,1.48.19,2.01.62"/>
+  </g>
+</svg>

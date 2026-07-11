@@ -1,0 +1,383 @@
+{
+  "tts_provider": "elevenlabs",
+  "voice_id": "pFZP5JQG7iQjIQuC4Bku",
+  "voice_name": "Lily",
+  "bgm": null,
+  "bgm_pending": false,
+  "voices": [
+    {
+      "id": "01",
+      "path": "assets/voice/01.wav",
+      "duration_s": 2.368,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Every",
+          "start": 0.0,
+          "end": 0.36
+        },
+        {
+          "id": "w1",
+          "text": "space",
+          "start": 0.418,
+          "end": 0.755
+        },
+        {
+          "id": "w2",
+          "text": "has",
+          "start": 0.778,
+          "end": 0.906
+        },
+        {
+          "id": "w3",
+          "text": "a",
+          "start": 0.952,
+          "end": 0.987
+        },
+        {
+          "id": "w4",
+          "text": "story",
+          "start": 1.033,
+          "end": 1.324
+        },
+        {
+          "id": "w5",
+          "text": "waiting",
+          "start": 1.382,
+          "end": 1.649
+        },
+        {
+          "id": "w6",
+          "text": "to",
+          "start": 1.683,
+          "end": 1.73
+        },
+        {
+          "id": "w7",
+          "text": "happen.",
+          "start": 1.788,
+          "end": 2.368
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "path": "assets/voice/02.wav",
+      "duration_s": 3.622,
+      "words": [
+        {
+          "id": "w8",
+          "text": "A",
+          "start": 0.0,
+          "end": 0.093
+        },
+        {
+          "id": "w9",
+          "text": "kitchen",
+          "start": 0.209,
+          "end": 0.546
+        },
+        {
+          "id": "w10",
+          "text": "that",
+          "start": 0.58,
+          "end": 0.708
+        },
+        {
+          "id": "w11",
+          "text": "finally",
+          "start": 0.766,
+          "end": 1.149
+        },
+        {
+          "id": "w12",
+          "text": "works.",
+          "start": 1.207,
+          "end": 1.718
+        },
+        {
+          "id": "w13",
+          "text": "A",
+          "start": 1.904,
+          "end": 1.997
+        },
+        {
+          "id": "w14",
+          "text": "room",
+          "start": 2.078,
+          "end": 2.276
+        },
+        {
+          "id": "w15",
+          "text": "that",
+          "start": 2.322,
+          "end": 2.438
+        },
+        {
+          "id": "w16",
+          "text": "feels",
+          "start": 2.496,
+          "end": 2.775
+        },
+        {
+          "id": "w17",
+          "text": "like",
+          "start": 2.821,
+          "end": 2.984
+        },
+        {
+          "id": "w18",
+          "text": "you.",
+          "start": 3.03,
+          "end": 3.622
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "path": "assets/voice/03.wav",
+      "duration_s": 3.576,
+      "words": [
+        {
+          "id": "w19",
+          "text": "A",
+          "start": 0.0,
+          "end": 0.093
+        },
+        {
+          "id": "w20",
+          "text": "garden",
+          "start": 0.174,
+          "end": 0.476
+        },
+        {
+          "id": "w21",
+          "text": "that",
+          "start": 0.511,
+          "end": 0.615
+        },
+        {
+          "id": "w22",
+          "text": "bursts",
+          "start": 0.662,
+          "end": 1.091
+        },
+        {
+          "id": "w23",
+          "text": "into",
+          "start": 1.138,
+          "end": 1.324
+        },
+        {
+          "id": "w24",
+          "text": "life.",
+          "start": 1.405,
+          "end": 1.788
+        },
+        {
+          "id": "w25",
+          "text": "A",
+          "start": 1.846,
+          "end": 1.927
+        },
+        {
+          "id": "w26",
+          "text": "summer",
+          "start": 2.043,
+          "end": 2.334
+        },
+        {
+          "id": "w27",
+          "text": "lived",
+          "start": 2.368,
+          "end": 2.554
+        },
+        {
+          "id": "w28",
+          "text": "outdoors.",
+          "start": 2.589,
+          "end": 3.576
+        }
+      ]
+    },
+    {
+      "id": "04",
+      "path": "assets/voice/04.wav",
+      "duration_s": 4.876,
+      "words": [
+        {
+          "id": "w29",
+          "text": "Thousands",
+          "start": 0.0,
+          "end": 0.534
+        },
+        {
+          "id": "w30",
+          "text": "of",
+          "start": 0.569,
+          "end": 0.627
+        },
+        {
+          "id": "w31",
+          "text": "stylish,",
+          "start": 0.697,
+          "end": 1.289
+        },
+        {
+          "id": "w32",
+          "text": "affordable",
+          "start": 1.312,
+          "end": 1.846
+        },
+        {
+          "id": "w33",
+          "text": "finds",
+          "start": 1.904,
+          "end": 2.299
+        },
+        {
+          "id": "w34",
+          "text": "for",
+          "start": 2.345,
+          "end": 2.461
+        },
+        {
+          "id": "w35",
+          "text": "every",
+          "start": 2.531,
+          "end": 2.833
+        },
+        {
+          "id": "w36",
+          "text": "corner",
+          "start": 2.902,
+          "end": 3.181
+        },
+        {
+          "id": "w37",
+          "text": "of",
+          "start": 3.228,
+          "end": 3.274
+        },
+        {
+          "id": "w38",
+          "text": "your",
+          "start": 3.32,
+          "end": 3.46
+        },
+        {
+          "id": "w39",
+          "text": "home",
+          "start": 3.518,
+          "end": 3.808
+        },
+        {
+          "id": "w40",
+          "text": "and",
+          "start": 3.843,
+          "end": 3.936
+        },
+        {
+          "id": "w41",
+          "text": "garden.",
+          "start": 4.017,
+          "end": 4.876
+        }
+      ]
+    },
+    {
+      "id": "05",
+      "path": "assets/voice/05.wav",
+      "duration_s": 1.393,
+      "words": [
+        {
+          "id": "w42",
+          "text": "All",
+          "start": 0.0,
+          "end": 0.244
+        },
+        {
+          "id": "w43",
+          "text": "in",
+          "start": 0.302,
+          "end": 0.372
+        },
+        {
+          "id": "w44",
+          "text": "one",
+          "start": 0.453,
+          "end": 0.639
+        },
+        {
+          "id": "w45",
+          "text": "place.",
+          "start": 0.685,
+          "end": 1.393
+        }
+      ]
+    },
+    {
+      "id": "06",
+      "path": "assets/voice/06.wav",
+      "duration_s": 4.133,
+      "words": [
+        {
+          "id": "w46",
+          "text": "vidaXL.",
+          "start": 0.0,
+          "end": 0.952
+        },
+        {
+          "id": "w47",
+          "text": "Shop",
+          "start": 1.289,
+          "end": 1.521
+        },
+        {
+          "id": "w48",
+          "text": "now",
+          "start": 1.591,
+          "end": 1.753
+        },
+        {
+          "id": "w49",
+          "text": "at",
+          "start": 1.811,
+          "end": 1.869
+        },
+        {
+          "id": "w50",
+          "text": "vidaXL",
+          "start": 1.927,
+          "end": 2.589
+        },
+        {
+          "id": "w51",
+          "text": "dot",
+          "start": 2.705,
+          "end": 2.949
+        },
+        {
+          "id": "w52",
+          "text": "co",
+          "start": 3.03,
+          "end": 3.158
+        },
+        {
+          "id": "w53",
+          "text": "dot",
+          "start": 3.216,
+          "end": 3.437
+        },
+        {
+          "id": "w54",
+          "text": "uk.",
+          "start": 3.518,
+          "end": 4.133
+        }
+      ]
+    }
+  ],
+  "sfx": [],
+  "total_duration_s": 19.969
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        font-family: Raleway-Bold, Raleway;
+        font-size: 3.54px;
+        font-weight: 700;
+      }
+
+      .cls-2 {
+        letter-spacing: 0em;
+      }
+
+      .cls-3 {
+        fill: none;
+        stroke: #232323;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.5px;
+      }
+
+      .cls-4 {
+        letter-spacing: -.03em;
+      }
+
+      .cls-5 {
+        letter-spacing: 0em;
+      }
+    </style>
+  </defs>
+  <text class="cls-1" transform="translate(0 -5.66)"><tspan class="cls-5" x="0" y="0">B</tspan><tspan x="2.4" y="0">usiness &amp;</tspan><tspan x="0" y="4.24">Indu</tspan><tspan class="cls-2" x="7.61" y="4.24">s</tspan><tspan x="9.35" y="4.24">tria</tspan><tspan class="cls-4" x="15.01" y="4.24">l</tspan></text>
+  <path class="cls-3" d="M2.5,11s2.33,1.04,5.5,1.62M8,12.62c1.24.23,2.6.38,4,.38s2.76-.16,4-.38M8,12.62v-1.62M8,12.62v1.38M16,12.62c3.17-.58,5.5-1.62,5.5-1.62M16,12.62v-1.62M16,12.62v1.38M16,6c0-2.21-1.79-4-4-4s-4,1.79-4,4M8.4,22h7.2c2.24,0,3.36,0,4.22-.44.75-.38,1.36-1,1.75-1.75.44-.86.44-1.98.44-4.22v-3.2c0-2.24,0-3.36-.44-4.22-.38-.75-1-1.36-1.75-1.75-.86-.44-1.98-.44-4.22-.44h-7.2c-2.24,0-3.36,0-4.22.44-.75.38-1.36,1-1.75,1.75-.44.86-.44,1.98-.44,4.22v3.2c0,2.24,0,3.36.44,4.22.38.75,1,1.36,1.75,1.75.86.44,1.98.44,4.22.44Z"/>
+</svg>

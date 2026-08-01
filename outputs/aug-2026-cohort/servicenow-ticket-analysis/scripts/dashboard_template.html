@@ -1,0 +1,838 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Service Desk Ticket Analysis - Jan to Mar 2026</title>
+<style>
+:root{
+  color-scheme: light;
+  --surface-1:#fcfcfb; --page:#f9f9f7;
+  --ink-1:#0b0b0b; --ink-2:#52514e; --ink-3:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --hair:rgba(11,11,11,.10);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300;
+  --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
+  --up:#006300;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(11,11,11,.04), 0 8px 24px -12px rgba(11,11,11,.14);
+}
+@media (prefers-color-scheme: dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme: dark;
+    --surface-1:#1a1a19; --page:#0d0d0d;
+    --ink-1:#ffffff; --ink-2:#c3c2b7; --ink-3:#898781;
+    --grid:#2c2c2a; --axis:#383835; --hair:rgba(255,255,255,.10);
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+    --up:#0ca30c;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 8px 24px -12px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --surface-1:#1a1a19; --page:#0d0d0d;
+  --ink-1:#ffffff; --ink-2:#c3c2b7; --ink-3:#898781;
+  --grid:#2c2c2a; --axis:#383835; --hair:rgba(255,255,255,.10);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+  --up:#0ca30c;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 8px 24px -12px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--page); color:var(--ink-1);
+  font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px; margin:0 auto; padding:32px 22px 72px}
+h1{font-size:27px; line-height:1.2; margin:0 0 6px; letter-spacing:-.02em}
+h2{font-size:19px; margin:0 0 4px; letter-spacing:-.015em}
+h3{font-size:14px; margin:0 0 3px; letter-spacing:-.005em}
+p{margin:0}
+.sub{color:var(--ink-2); font-size:13.5px}
+.muted{color:var(--ink-3); font-size:12.5px}
+
+header.top{display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start;
+  justify-content:space-between; margin-bottom:22px}
+.themebtn{background:var(--surface-1); color:var(--ink-2); border:1px solid var(--hair);
+  border-radius:999px; padding:7px 15px; font:inherit; font-size:13px; cursor:pointer}
+.themebtn:hover{color:var(--ink-1)}
+
+/* filter row - one row above everything it scopes */
+.filters{position:sticky; top:0; z-index:20; background:var(--page);
+  padding:12px 0 14px; margin-bottom:8px; border-bottom:1px solid var(--hair);
+  display:flex; flex-wrap:wrap; gap:20px; align-items:center}
+.fgroup{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.flabel{font-size:12px; color:var(--ink-3); text-transform:uppercase; letter-spacing:.07em}
+.chip{background:var(--surface-1); color:var(--ink-2); border:1px solid var(--hair);
+  border-radius:999px; padding:6px 13px; font:inherit; font-size:13px; cursor:pointer;
+  display:inline-flex; align-items:center; gap:7px; min-height:32px; line-height:1}
+.chip:hover{color:var(--ink-1); border-color:var(--axis)}
+.chip[aria-pressed="true"]{background:var(--ink-1); color:var(--surface-1); border-color:var(--ink-1)}
+.chip .dot{width:9px; height:9px; border-radius:3px; flex:none}
+.scope{margin-left:auto; font-size:12.5px; color:var(--ink-3)}
+
+section{margin-top:34px}
+.card{background:var(--surface-1); border:1px solid var(--hair); border-radius:var(--radius);
+  padding:22px; box-shadow:var(--shadow)}
+.cardhead{display:flex; justify-content:space-between; align-items:flex-start; gap:16px;
+  margin-bottom:18px; flex-wrap:wrap}
+
+/* stat tiles */
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(178px,1fr)); gap:14px}
+.tile{background:var(--surface-1); border:1px solid var(--hair); border-radius:var(--radius);
+  padding:17px 18px; box-shadow:var(--shadow)}
+.tile .k{font-size:11.5px; color:var(--ink-3); text-transform:uppercase;
+  letter-spacing:.07em; margin-bottom:9px}
+.tile .v{font-size:31px; line-height:1; letter-spacing:-.03em; font-weight:600}
+.tile .n{margin-top:8px; font-size:12.5px; color:var(--ink-2)}
+.delta{font-weight:600}
+.delta.up{color:var(--up)} .delta.down{color:var(--crit)}
+
+/* charts */
+.legend{display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:16px}
+.lgi{display:inline-flex; align-items:center; gap:7px; font-size:12.5px; color:var(--ink-2)}
+.lgi .sw{width:11px; height:11px; border-radius:3px; flex:none}
+svg{display:block; width:100%; height:auto; overflow:visible}
+.gridline{stroke:var(--grid); stroke-width:1}
+.axisline{stroke:var(--axis); stroke-width:1}
+.tick{fill:var(--ink-3); font-size:11.5px; font-variant-numeric:tabular-nums}
+.axlabel{fill:var(--ink-2); font-size:12.5px}
+.vallabel{fill:var(--ink-1); font-size:12px; font-weight:600}
+.seg{cursor:pointer}
+.seg:hover{opacity:.82}
+
+.toggle{background:none; border:1px solid var(--hair); color:var(--ink-2);
+  border-radius:999px; padding:5px 12px; font:inherit; font-size:12.5px; cursor:pointer}
+.toggle:hover{color:var(--ink-1); border-color:var(--axis)}
+
+table{width:100%; border-collapse:collapse; font-size:13.5px}
+th{text-align:left; font-weight:600; color:var(--ink-3); font-size:11.5px;
+  text-transform:uppercase; letter-spacing:.06em; padding:0 12px 9px 0;
+  border-bottom:1px solid var(--hair); white-space:nowrap}
+td{padding:10px 12px 10px 0; border-bottom:1px solid var(--hair); color:var(--ink-2);
+  vertical-align:top}
+td.n, th.n{text-align:right; font-variant-numeric:tabular-nums}
+td:last-child, th:last-child{padding-right:0}
+td strong{color:var(--ink-1); font-weight:600}
+.tablewrap{overflow-x:auto; margin-top:6px}
+tr.hi td{background:color-mix(in srgb, var(--s1) 7%, transparent)}
+
+/* status chip - icon + label, never colour alone */
+.st{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600;
+  white-space:nowrap}
+.st .ic{width:14px; text-align:center; font-size:12px}
+.st.good{color:var(--good)} .st.warn{color:var(--warn)}
+.st.serious{color:var(--serious)} .st.crit{color:var(--crit)}
+.st.neutral{color:var(--ink-3); font-weight:500}
+
+/* drill explorer */
+.drillgrid{display:grid; grid-template-columns:minmax(0,320px) minmax(0,1fr); gap:22px}
+@media(max-width:820px){.drillgrid{grid-template-columns:1fr}}
+.l2list{display:flex; flex-direction:column; gap:2px; max-height:520px; overflow-y:auto;
+  padding-right:6px}
+.l2row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center;
+  padding:9px 11px; border-radius:9px; cursor:pointer; border:1px solid transparent;
+  text-align:left; background:none; font:inherit; color:var(--ink-2); width:100%}
+.l2row:hover{background:color-mix(in srgb, var(--ink-1) 4%, transparent)}
+.l2row[aria-pressed="true"]{border-color:var(--hair);
+  background:color-mix(in srgb, var(--s1) 9%, transparent); color:var(--ink-1)}
+.l2row .nm{font-size:13.5px; display:flex; align-items:center; gap:8px}
+.l2row .ct{font-size:13px; font-variant-numeric:tabular-nums; font-weight:600; color:var(--ink-1)}
+.bartrack{grid-column:1/-1; display:block; height:4px; border-radius:2px;
+  background:var(--grid); margin-top:7px; overflow:hidden}
+.barfill{display:block; height:100%; border-radius:2px}
+
+.tk{border:1px solid var(--hair); border-radius:11px; padding:13px 15px; margin-bottom:9px;
+  background:color-mix(in srgb, var(--ink-1) 2%, transparent)}
+.tk .meta{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:11.5px; color:var(--ink-3);
+  margin-bottom:7px; font-variant-numeric:tabular-nums}
+.tk .desc{font-size:13.5px; color:var(--ink-1); margin-bottom:8px}
+.tk .why{font-size:12.5px; color:var(--ink-2); display:flex; gap:8px; align-items:baseline}
+.badge{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600;
+  border-radius:999px; padding:2px 9px; border:1px solid var(--hair); white-space:nowrap}
+.badge.high{color:var(--good)} .badge.med{color:var(--warn)} .badge.low{color:var(--crit)}
+
+.note{margin-top:12px; font-size:12.5px; color:var(--ink-3); line-height:1.6}
+.callout{border-left:3px solid var(--s1); padding:2px 0 2px 15px; margin-top:16px;
+  color:var(--ink-2); font-size:13.5px}
+.callout.caution{border-left-color:var(--warn)}
+ol{margin:10px 0 0; padding-left:20px; color:var(--ink-2); font-size:13.5px}
+li{margin-bottom:5px}
+.hidden{display:none}
+.tooltip{position:fixed; z-index:60; pointer-events:none; background:var(--ink-1);
+  color:var(--surface-1); border-radius:8px; padding:8px 11px; font-size:12.5px;
+  line-height:1.45; opacity:0; transition:opacity .09s; max-width:260px}
+footer{margin-top:44px; padding-top:22px; border-top:1px solid var(--hair);
+  color:var(--ink-3); font-size:12.5px; line-height:1.65}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div>
+    <h1>Service desk ticket analysis</h1>
+    <p class="sub" id="period"></p>
+  </div>
+  <button class="themebtn" id="themebtn" type="button">Switch theme</button>
+</header>
+
+<div class="filters" role="group" aria-label="Filters">
+  <div class="fgroup">
+    <span class="flabel">Month</span>
+    <div id="monthchips"></div>
+  </div>
+  <div class="fgroup">
+    <span class="flabel">Category</span>
+    <div id="catchips"></div>
+  </div>
+  <span class="scope" id="scope"></span>
+</div>
+
+<section>
+  <div class="tiles" id="tiles"></div>
+</section>
+
+<section>
+  <div class="card">
+    <div class="cardhead">
+      <div>
+        <h2 id="trendtitle"></h2>
+        <p class="sub" id="trendsub"></p>
+      </div>
+      <button class="toggle" data-twin="trend" type="button">Show table</button>
+    </div>
+    <div id="trendchart"></div>
+    <div class="legend" id="trendlegend"></div>
+    <div class="tablewrap hidden" id="trendtable"></div>
+    <p class="note" id="trendnote"></p>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <div class="cardhead">
+      <div>
+        <h2>Where the volume is coming from</h2>
+        <p class="sub">Pick a subcategory to see the issue types under it and the tickets people actually raised.</p>
+      </div>
+    </div>
+    <div class="drillgrid">
+      <div>
+        <h3 id="l2head"></h3>
+        <p class="muted" style="margin-bottom:12px">Sorted by volume. Bar shows share of the current filter.</p>
+        <div class="l2list" id="l2list"></div>
+      </div>
+      <div>
+        <h3 id="l3head"></h3>
+        <p class="muted" style="margin-bottom:12px" id="l3sub"></p>
+        <div class="tablewrap" id="l3table"></div>
+        <h3 style="margin-top:22px">What people wrote</h3>
+        <p class="muted" style="margin-bottom:12px">The raw description, and why the classifier put it here.</p>
+        <div id="tickets"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <div class="cardhead">
+      <div>
+        <h2>Automation shortlist</h2>
+        <p class="sub" id="shortsub"></p>
+      </div>
+    </div>
+    <div class="tablewrap" id="shorttable"></div>
+    <div class="callout" id="shortcall"></div>
+    <p class="note">Agent-hours are measured resolution time only. They exclude triage, queue
+      waiting and context switching, so treat them as the floor of what automation gives back,
+      not the full number. The decision to raise a change request sits with the service owner.</p>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <div class="cardhead">
+      <div>
+        <h2>Where the agent hours go</h2>
+        <p class="sub">Volume and effort are different questions. This is effort.</p>
+      </div>
+      <button class="toggle" data-twin="effort" type="button">Show table</button>
+    </div>
+    <div id="effortchart"></div>
+    <div class="tablewrap hidden" id="efforttable"></div>
+    <p class="note" id="effortnote"></p>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <div class="cardhead">
+      <div>
+        <h2>SLA pressure</h2>
+        <p class="sub">Subcategories with at least 10 resolved tickets, worst first.</p>
+      </div>
+    </div>
+    <div class="tablewrap" id="slatable"></div>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <div class="cardhead">
+      <div>
+        <h2>How the categories were assigned</h2>
+        <p class="sub">Every number above depends on this step, so it is measured, not assumed.</p>
+      </div>
+    </div>
+    <div class="tiles" id="qtiles"></div>
+    <div class="tablewrap" style="margin-top:20px" id="qtable"></div>
+    <div class="callout caution" id="qcaveat"></div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Source:</strong> <code>data/categorized-tickets.xlsx</code>, built from
+  <code>data/servicenow-tickets-jan-mar-2026.xlsx</code>. Every figure on this page is computed
+  in the browser from the 450 embedded ticket records, so a filter and its panels can never
+  disagree.</p>
+  <p style="margin-top:9px">This is a sample dataset created to design and test the workflow.
+  The numbers are not live service desk data.</p>
+</footer>
+
+</div>
+<div class="tooltip" id="tip" role="status"></div>
+
+<script>
+const D = /*__PAYLOAD__*/null;
+const R = D.rows;
+const ID=0, MO=1, L1=2, L2=3, L3=4, PR=5, HR=6, SLA=7, RO=8, CH=9, DEP=10,
+      DESC=11, CONF=12, REASON=13, GRP=14;
+const SERIES = ["--s1","--s2","--s3","--s4","--s5","--s6"];
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const state = { month:-1, cat:-1, l2:null };
+const SMALL_SAMPLE = 10;   // fewer resolved tickets than this and a median is noise
+
+/* ---------- small stats helpers ---------- */
+const num = n => n.toLocaleString("en-GB");
+const r1 = n => Math.round(n*10)/10;
+const pct = (a,b) => b ? Math.round(1000*a/b)/10 : 0;
+function quantile(sorted, q){
+  if(!sorted.length) return 0;
+  const p = (sorted.length-1)*q, lo = Math.floor(p), hi = Math.ceil(p);
+  return sorted[lo] + (sorted[hi]-sorted[lo])*(p-lo);
+}
+const esc = s => String(s).replace(/[&<>"]/g, c =>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- filtering ---------- */
+function scoped(){
+  return R.filter(t => (state.month<0 || t[MO]===state.month) &&
+                       (state.cat<0   || t[L1]===state.cat));
+}
+/* The trend chart is the one panel that always spans all three months - a
+   month-on-month chart filtered to one month would say nothing. The month
+   filter highlights there instead of slicing, and the subtitle says so. */
+function catScoped(){
+  return R.filter(t => state.cat<0 || t[L1]===state.cat);
+}
+
+/* ---------- tooltip ---------- */
+const tip = document.getElementById("tip");
+function bindTip(el, html){
+  el.addEventListener("mousemove", e => {
+    tip.innerHTML = html; tip.style.opacity = 1;
+    const w = tip.offsetWidth, h = tip.offsetHeight;
+    tip.style.left = Math.min(e.clientX+14, innerWidth-w-10) + "px";
+    tip.style.top  = Math.max(e.clientY-h-12, 8) + "px";
+  });
+  el.addEventListener("mouseleave", () => tip.style.opacity = 0);
+}
+
+/* ---------- filter chips ---------- */
+function buildChips(){
+  const mc = document.getElementById("monthchips");
+  mc.style.display="flex"; mc.style.gap="8px"; mc.style.flexWrap="wrap";
+  const mk = (label, val, dot) => {
+    const b = document.createElement("button");
+    b.className="chip"; b.type="button"; b.dataset.val=val;
+    b.innerHTML = (dot?`<span class="dot" style="background:${dot}"></span>`:"") + esc(label);
+    return b;
+  };
+  mc.append(mk("All 3 months",-1));
+  D.months.forEach((m,i)=> mc.append(mk(m,i)));
+  mc.addEventListener("click", e => {
+    const b = e.target.closest(".chip"); if(!b) return;
+    state.month = +b.dataset.val; renderAll();
+  });
+
+  const cc = document.getElementById("catchips");
+  cc.style.display="flex"; cc.style.gap="8px"; cc.style.flexWrap="wrap";
+  cc.append(mk("All categories",-1));
+  D.l1_order.forEach((c,i)=> cc.append(mk(c,i,`var(${SERIES[i]})`)));
+  cc.addEventListener("click", e => {
+    const b = e.target.closest(".chip"); if(!b) return;
+    const v = +b.dataset.val;
+    state.cat = v; state.l2 = null; renderAll();
+  });
+}
+function syncChips(){
+  document.querySelectorAll("#monthchips .chip").forEach(b =>
+    b.setAttribute("aria-pressed", (+b.dataset.val===state.month)+""));
+  document.querySelectorAll("#catchips .chip").forEach(b =>
+    b.setAttribute("aria-pressed", (+b.dataset.val===state.cat)+""));
+}
+
+/* ---------- 1. stat tiles ---------- */
+function renderTiles(){
+  const s = scoped();
+  const res = s.filter(t => t[HR]!==null);
+  const all = catScoped();
+  const perMonth = D.months.map((_,i)=> all.filter(t=>t[MO]===i).length);
+  const mom = perMonth[1] ? pct(perMonth[2]-perMonth[1], perMonth[1]) : 0;
+  const hrs = res.reduce((a,t)=>a+t[HR],0);
+  const slaOk = res.filter(t=>t[SLA]===true).length;
+
+  const delta = (v, suffix="%") => {
+    const cls = v>0 ? "up" : v<0 ? "down" : "";
+    const arrow = v>0 ? "▲" : v<0 ? "▼" : "–";
+    return `<span class="delta ${cls}">${arrow} ${Math.abs(v)}${suffix}</span>`;
+  };
+  const tiles = [
+    ["Tickets in scope", num(s.length),
+      state.month<0 ? `${perMonth.map(n=>num(n)).join(" → ")} across the 3 months`
+                    : `of ${num(all.length)} in the 3 month window`],
+    ["Mar vs Feb", (mom>0?"+":"") + mom + "%",
+      `${delta(mom)} month on month${state.cat<0?"":", this category"}`],
+    ["SLA met", pct(slaOk, res.length) + "%",
+      `${num(res.length - slaOk)} of ${num(res.length)} resolved tickets breached`],
+    ["Agent hours", num(Math.round(hrs)),
+      `${r1(hrs/Math.max(1,res.length))} h average per resolved ticket, across ${num(res.length)} of them`],
+    ["Reopened", pct(res.filter(t=>t[RO]).length, res.length) + "%",
+      `${num(res.filter(t=>t[RO]).length)} tickets came back after closure`],
+  ];
+  document.getElementById("tiles").innerHTML = tiles.map(([k,v,n]) =>
+    `<div class="tile"><div class="k">${esc(k)}</div><div class="v">${v}</div>
+     <div class="n">${n}</div></div>`).join("");
+}
+
+/* ---------- 2. stacked trend ---------- */
+function renderTrend(){
+  const data = catScoped();
+  const cats = state.cat<0 ? D.l1_order.map((n,i)=>i) : [state.cat];
+  const counts = cats.map(ci => D.months.map((_,mi)=>
+    data.filter(t=>t[L1]===ci && t[MO]===mi).length));
+  const totals = D.months.map((_,mi)=> data.filter(t=>t[MO]===mi).length);
+
+  document.getElementById("trendtitle").textContent =
+    state.cat<0 ? "Ticket volume by category, month on month"
+                : `${D.l1_order[state.cat]} volume, month on month`;
+  document.getElementById("trendsub").textContent =
+    state.month<0 ? "All three months shown."
+      : `All three months shown. ${D.months[state.month]} is highlighted, because a month-on-month chart filtered to one month would say nothing.`;
+
+  const W=920, H=330, PL=54, PR_=18, PT=26, PB=52;
+  const plotH = H-PT-PB, plotW = W-PL-PR_;
+  const max = Math.max(...totals, 1);
+  const step = max>120?40:max>60?20:10;
+  const top = Math.ceil(max/step)*step;
+  const y = v => PT + plotH - (v/top)*plotH;
+  const bw = Math.min(72, plotW/D.months.length*0.32);
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Stacked bar chart of ticket volume by category for each month">`;
+  for(let v=0; v<=top; v+=step){
+    svg += `<line class="gridline" x1="${PL}" x2="${W-PR_}" y1="${y(v)}" y2="${y(v)}"/>`;
+    svg += `<text class="tick" x="${PL-10}" y="${y(v)+4}" text-anchor="end">${v}</text>`;
+  }
+  svg += `<line class="axisline" x1="${PL}" x2="${W-PR_}" y1="${y(0)}" y2="${y(0)}"/>`;
+
+  D.months.forEach((m, mi) => {
+    const cx = PL + plotW*(mi+0.5)/D.months.length;
+    const x = cx - bw/2;
+    let acc = 0;
+    const dim = state.month>=0 && state.month!==mi;
+    cats.forEach((ci, k) => {
+      const v = counts[k][mi]; if(!v) return;
+      const y0 = y(acc+v), y1 = y(acc);
+      // 2px surface gap between stacked segments, not a border
+      const h = Math.max(1, y1-y0-2);
+      svg += `<rect class="seg" data-ci="${ci}" data-mi="${mi}" data-v="${v}"
+        x="${x}" y="${y0}" width="${bw}" height="${h}" rx="3"
+        fill="var(${SERIES[ci]})" opacity="${dim?0.28:1}"/>`;
+      acc += v;
+    });
+    // selective direct label: the month total only
+    svg += `<text class="vallabel" x="${cx}" y="${y(totals[mi])-9}" text-anchor="middle"
+      opacity="${dim?0.45:1}">${totals[mi]}</text>`;
+    svg += `<text class="axlabel" x="${cx}" y="${H-PB+22}" text-anchor="middle"
+      opacity="${dim?0.5:1}">${m}</text>`;
+    if(mi>0){
+      const d = totals[mi]-totals[mi-1];
+      const p = pct(d, totals[mi-1]);
+      svg += `<text class="tick" x="${cx}" y="${H-PB+39}" text-anchor="middle"
+        fill="${d>=0?cssv("--up"):cssv("--crit")}" opacity="${dim?0.5:1}">${d>=0?"+":""}${p}% vs prev</text>`;
+    }
+  });
+  svg += `<text class="axlabel" x="${PL-38}" y="${PT-10}">Tickets</text></svg>`;
+  document.getElementById("trendchart").innerHTML = svg;
+
+  document.querySelectorAll("#trendchart .seg").forEach(el => {
+    const ci = +el.dataset.ci, mi = +el.dataset.mi, v = +el.dataset.v;
+    bindTip(el, `<strong>${esc(D.l1_order[ci])}</strong><br>${D.months[mi]}: ${v} tickets
+      (${pct(v, totals[mi])}% of the month)`);
+    el.addEventListener("click", ()=>{ state.cat = ci; state.l2 = null; renderAll(); });
+  });
+
+  document.getElementById("trendlegend").innerHTML = cats.map(ci =>
+    `<span class="lgi"><span class="sw" style="background:var(${SERIES[ci]})"></span>
+     ${esc(D.l1_order[ci])}</span>`).join("");
+
+  document.getElementById("trendtable").innerHTML =
+    `<table><thead><tr><th>Category</th>` +
+    D.months.map(m=>`<th class="n">${m}</th>`).join("") +
+    `<th class="n">Total</th><th class="n">Jan to Mar</th></tr></thead><tbody>` +
+    cats.map((ci,k)=>{
+      const c = counts[k], tot = c.reduce((a,b)=>a+b,0);
+      const g = c[0] ? pct(c[2]-c[0], c[0]) : 0;
+      return `<tr><td><strong>${esc(D.l1_order[ci])}</strong></td>` +
+        c.map(n=>`<td class="n">${n}</td>`).join("") +
+        `<td class="n"><strong>${tot}</strong></td>
+         <td class="n" style="color:${g>=0?cssv("--up"):cssv("--crit")}">${g>=0?"+":""}${g}%</td></tr>`;
+    }).join("") +
+    `<tr><td><strong>Total</strong></td>` +
+    totals.map(n=>`<td class="n"><strong>${n}</strong></td>`).join("") +
+    `<td class="n"><strong>${totals.reduce((a,b)=>a+b,0)}</strong></td><td class="n"></td></tr>` +
+    `</tbody></table>`;
+
+  const growers = cats.map((ci,k)=>({ci, g: counts[k][0] ? pct(counts[k][2]-counts[k][0], counts[k][0]) : 0,
+    d: counts[k][2]-counts[k][0]})).filter(o=>o.d>0).sort((a,b)=>b.d-a.d);
+  document.getElementById("trendnote").textContent = growers.length
+    ? `Biggest riser: ${D.l1_order[growers[0].ci]}, up ${growers[0].d} tickets from January to March (${growers[0].g}%). With three months there are only two deltas, so read this as a direction, not a trend line.`
+    : "No category grew between January and March in the current selection.";
+}
+
+/* ---------- 3. drill ---------- */
+function renderDrill(){
+  const s = scoped();
+  const byL2 = {};
+  s.forEach(t => { (byL2[t[L2]] ||= {n:0, l1:t[L1], rows:[]}); byL2[t[L2]].n++;
+                   byL2[t[L2]].rows.push(t); });
+  const list = Object.entries(byL2).map(([k,v])=>({name:k,...v})).sort((a,b)=>b.n-a.n);
+
+  document.getElementById("l2head").textContent =
+    `Subcategories (${list.length})`;
+  if(!list.length){
+    document.getElementById("l2list").innerHTML = `<p class="muted">No tickets in this selection.</p>`;
+    document.getElementById("l3head").textContent = "";
+    document.getElementById("l3table").innerHTML = "";
+    document.getElementById("tickets").innerHTML = "";
+    return;
+  }
+  if(!state.l2 || !byL2[state.l2]) state.l2 = list[0].name;
+  const max = list[0].n;
+
+  document.getElementById("l2list").innerHTML = list.map(o =>
+    `<button class="l2row" type="button" data-l2="${esc(o.name)}"
+       aria-pressed="${o.name===state.l2}">
+       <span class="nm"><span class="dot" style="width:9px;height:9px;border-radius:3px;
+         background:var(${SERIES[o.l1]})"></span>${esc(o.name)}</span>
+       <span class="ct">${o.n}</span>
+       <span class="bartrack"><span class="barfill"
+         style="width:${(o.n/max*100).toFixed(1)}%;background:var(${SERIES[o.l1]})"></span></span>
+     </button>`).join("");
+  document.querySelectorAll(".l2row").forEach(b =>
+    b.addEventListener("click", ()=>{ state.l2 = b.dataset.l2; renderDrill(); }));
+
+  const sel = byL2[state.l2];
+  const byL3 = {};
+  sel.rows.forEach(t => { (byL3[t[L3]] ||= []).push(t); });
+  const l3rows = Object.entries(byL3).sort((a,b)=>b[1].length-a[1].length);
+
+  document.getElementById("l3head").textContent = `${state.l2} — ${sel.n} tickets`;
+  document.getElementById("l3sub").textContent =
+    `${D.l1_order[sel.l1]} › ${state.l2}. Handled by ${sel.rows[0][GRP]}.`;
+
+  document.getElementById("l3table").innerHTML =
+    `<table><thead><tr><th>Issue type</th>` +
+    (state.month<0 ? D.months.map(m=>`<th class="n">${m}</th>`).join("") : "") +
+    `<th class="n">Tickets</th><th class="n">Median hrs</th></tr></thead><tbody>` +
+    l3rows.map(([nm, rows])=>{
+      const res = rows.filter(t=>t[HR]!==null).map(t=>t[HR]).sort((a,b)=>a-b);
+      const med = res.length ? r1(quantile(res,0.5)) : "–";
+      const perM = D.months.map((_,i)=> rows.filter(t=>t[MO]===i).length);
+      return `<tr><td><strong>${esc(nm)}</strong></td>` +
+        (state.month<0 ? perM.map(n=>`<td class="n">${n}</td>`).join("") : "") +
+        `<td class="n"><strong>${rows.length}</strong></td><td class="n">${med}</td></tr>`;
+    }).join("") + `</tbody></table>`;
+
+  const badge = c => c==="High" ? `<span class="badge high">● High confidence</span>`
+    : c==="Medium" ? `<span class="badge med">◆ Medium, review</span>`
+    : `<span class="badge low">▲ Low, must review</span>`;
+  // spread the examples across the selection instead of showing the six oldest,
+  // otherwise every card says January and the drill looks stale
+  const stepN = Math.max(1, Math.floor(sel.rows.length/6));
+  const sample = sel.rows.filter((_,i)=> i % stepN === 0).slice(0,6);
+  document.getElementById("tickets").innerHTML = sample.map(t =>
+    `<div class="tk">
+      <div class="meta"><span>${esc(t[ID])}</span><span>${D.months[t[MO]]}</span>
+        <span>${D.priorities[t[PR]]}</span><span>${esc(t[DEP])}</span>
+        <span>${D.channels[t[CH]]}</span>
+        <span>${t[HR]===null ? "still open" : t[HR]+" h to resolve"}</span></div>
+      <div class="desc">“${esc(t[DESC])}”</div>
+      <div class="why">${badge(t[CONF])}<span>${esc(t[REASON])}</span></div>
+      <div class="muted" style="margin-top:6px">Assigned to ${esc(t[L3])}</div>
+    </div>`).join("") +
+    (sel.rows.length>6 ? `<p class="muted">Showing ${sample.length} spread across ${sel.rows.length}. The full set is in
+      <code>data/categorized-tickets.xlsx</code>.</p>` : "");
+}
+
+/* ---------- shared subcategory stats ---------- */
+function l2stats(rows){
+  const by = {};
+  rows.forEach(t => { (by[t[L2]] ||= {l1:t[L1], rows:[]}).rows.push(t); });
+  const nMonths = state.month<0 ? D.months.length : 1;
+  return Object.entries(by).map(([name, o]) => {
+    const res = o.rows.filter(t=>t[HR]!==null);
+    const hrs = res.map(t=>t[HR]).sort((a,b)=>a-b);
+    const sum = hrs.reduce((a,b)=>a+b,0);
+    const perM = D.months.map((_,i)=> o.rows.filter(t=>t[MO]===i).length);
+    return {
+      name, l1:o.l1, total:o.rows.length, perM, latest: perM[2],
+      median: hrs.length ? r1(quantile(hrs,0.5)) : 0,
+      spread: hrs.length ? r1(quantile(hrs,0.9)-quantile(hrs,0.1)) : 0,
+      hoursTotal: Math.round(sum), hoursPerMonth: r1(sum/nMonths),
+      slaPct: pct(res.filter(t=>t[SLA]===true).length, res.length),
+      reopenPct: pct(res.filter(t=>t[RO]).length, res.length),
+      p12Pct: pct(o.rows.filter(t=>t[PR]<=1).length, o.rows.length),
+      selfPct: pct(o.rows.filter(t=>t[CH]===0).length, o.rows.length),
+      resolved: res.length,
+      group: o.rows[0][GRP],
+    };
+  });
+}
+
+/* ---------- 4. automation shortlist ---------- */
+function renderShortlist(){
+  const rule = D.shortlist_rule;
+  // The shortlist always evaluates the full three months. It is a decision about a
+  // standing pattern, not about one month, so the month filter does not scope it.
+  const stats = l2stats(catScoped());
+  const nMonths = D.months.length;
+  stats.forEach(o => {
+    o.hoursPerMonth = r1(o.hoursTotal/nMonths);
+    o.checks = {
+      volume:  o.perM[2] >= rule.min_tickets_latest_month,
+      spread:  o.spread <= rule.max_spread_hours,
+      routine: o.p12Pct <= rule.max_p1p2_share_pct,
+    };
+    o.passed = Object.values(o.checks).filter(Boolean).length;
+  });
+  const pass = stats.filter(o=>o.passed===3).sort((a,b)=>b.hoursPerMonth-a.hoursPerMonth);
+  const near = stats.filter(o=>o.passed===2).sort((a,b)=>b.hoursPerMonth-a.hoursPerMonth).slice(0,4);
+
+  document.getElementById("shortsub").innerHTML =
+    `A subcategory reaches the shortlist when it clears all three checks: at least
+     <strong>${rule.min_tickets_latest_month} tickets</strong> in March, a resolution-time spread
+     (P90 minus P10) of <strong>${rule.max_spread_hours} hours or less</strong>, and no more than
+     <strong>${rule.max_p1p2_share_pct}%</strong> P1 or P2. Evaluated on all three months.`;
+
+  const mark = ok => ok ? `<span class="st good"><span class="ic">✓</span>Pass</span>`
+                        : `<span class="st crit"><span class="ic">✗</span>Fail</span>`;
+  const rowHtml = (o, hi) =>
+    `<tr class="${hi?"hi":""}"><td><strong>${esc(o.name)}</strong>
+       <div class="muted">${esc(D.l1_order[o.l1])} · ${esc(o.group)}</div></td>
+     <td class="n">${o.perM[2]}<div class="muted">${mark(o.checks.volume)}</div></td>
+     <td class="n">${o.spread} h<div class="muted">${mark(o.checks.spread)}</div></td>
+     <td class="n">${o.p12Pct}%<div class="muted">${mark(o.checks.routine)}</div></td>
+     <td class="n">${o.median} h</td>
+     <td class="n"><strong>${o.hoursPerMonth}</strong></td>
+     <td class="n">${o.perM[0] ? (o.perM[2]>=o.perM[0]?"+":"") + pct(o.perM[2]-o.perM[0], o.perM[0]) + "%" : "–"}</td>
+     <td class="n">${o.selfPct}%</td></tr>`;
+
+  document.getElementById("shorttable").innerHTML =
+    `<table><thead><tr><th>Subcategory</th><th class="n">Mar tickets</th>
+      <th class="n">Spread</th><th class="n">P1+P2</th><th class="n">Median</th>
+      <th class="n">Agent-hrs / month</th><th class="n">Jan to Mar</th>
+      <th class="n">Via portal</th></tr></thead><tbody>` +
+    (pass.length ? pass.map(o=>rowHtml(o,true)).join("")
+      : `<tr><td colspan="8" class="muted">Nothing clears all three checks in this selection.</td></tr>`) +
+    (near.length ? `<tr><td colspan="8" style="padding-top:18px;border:0">
+      <span class="flabel">Near miss — two of three checks</span></td></tr>` +
+      near.map(o=>rowHtml(o,false)).join("") : "") +
+    `</tbody></table>`;
+
+  if(pass.length){
+    const t = pass[0];
+    document.getElementById("shortcall").innerHTML =
+      `<strong>${esc(t.name)}</strong> is the clearest candidate. It ran
+       ${t.perM[0]} → ${t.perM[1]} → ${t.perM[2]} tickets across the three months
+       (${pct(t.perM[2]-t.perM[0], t.perM[0])}% up), it is
+       ${pct(t.total, catScoped().length)}% of everything the desk received, and it resolves in
+       ${t.median} hours with a spread of only ${t.spread} hours. A spread that tight means the
+       fix is the same nearly every time, which is what makes it scriptable. It gives back at
+       least ${t.hoursPerMonth} agent-hours a month, and ${t.selfPct}% of these already arrive
+       through the portal, so the front door for a self-service flow is in place.`;
+  } else {
+    document.getElementById("shortcall").textContent =
+      "No subcategory clears all three checks in the current selection.";
+  }
+}
+
+/* ---------- 5. effort chart ---------- */
+function renderEffort(){
+  const stats = l2stats(scoped()).filter(o=>o.resolved>0)
+    .sort((a,b)=> b.hoursPerMonth-a.hoursPerMonth || b.resolved-a.resolved || a.name.localeCompare(b.name))
+    .slice(0,8);
+  const max = Math.max(...stats.map(o=>o.hoursPerMonth), 1);
+  const rowH = 44, PL = 230, W = 920, PB = 34, barH = 15;
+  const H = stats.length*rowH + PB + 10;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Horizontal bar chart of agent hours per month by subcategory">`;
+  const plotW = W-PL-84;
+  const stepv = max>200?100:max>80?50:20;
+  for(let v=0; v<=max; v+=stepv){
+    const x = PL + (v/max)*plotW;
+    svg += `<line class="gridline" x1="${x}" x2="${x}" y1="0" y2="${H-PB}"/>`;
+    svg += `<text class="tick" x="${x}" y="${H-PB+18}" text-anchor="middle">${v}</text>`;
+  }
+  svg += `<line class="axisline" x1="${PL}" x2="${PL}" y1="0" y2="${H-PB}"/>`;
+  stats.forEach((o,i)=>{
+    const h = barH, y = i*rowH + (rowH-h)/2 - 2;
+    const w = Math.max(2, (o.hoursPerMonth/max)*plotW);
+    // A row built on very few tickets is noise, not a finding. Say so on the chart
+    // rather than letting a 5-ticket median sit third in a management ranking.
+    const thin = o.resolved < SMALL_SAMPLE;
+    svg += `<rect class="seg" data-i="${i}" x="${PL}" y="${y}" width="${w}" height="${h}"
+      rx="3" fill="var(--s1)" opacity="${thin?0.45:1}"/>`;
+    svg += `<text class="axlabel" x="${PL-12}" y="${y+h/2}" text-anchor="end">${esc(o.name)}</text>`;
+    svg += `<text class="tick" x="${PL-12}" y="${y+h/2+14}" text-anchor="end">${o.resolved} resolved${thin?" · small sample":""}</text>`;
+    svg += `<text class="vallabel" x="${PL+w+10}" y="${y+h/2+4}"
+      opacity="${thin?0.6:1}">${o.hoursPerMonth} h</text>`;
+  });
+  svg += `<text class="axlabel" x="${PL}" y="${H-4}">Agent-hours per month</text></svg>`;
+  document.getElementById("effortchart").innerHTML = svg;
+  document.querySelectorAll("#effortchart .seg").forEach(el=>{
+    const o = stats[+el.dataset.i];
+    bindTip(el, `<strong>${esc(o.name)}</strong><br>${o.hoursPerMonth} agent-hours per month<br>
+      ${o.total} tickets, median ${o.median} h, spread ${o.spread} h`);
+  });
+  document.getElementById("efforttable").innerHTML =
+    `<table><thead><tr><th>Subcategory</th><th class="n">Tickets</th>
+     <th class="n">Resolved</th><th class="n">Median hrs</th><th class="n">Spread hrs</th>
+     <th class="n">Agent-hrs / month</th><th>Confidence</th></tr></thead><tbody>` +
+    stats.map(o=>`<tr><td><strong>${esc(o.name)}</strong>
+      <div class="muted">${esc(D.l1_order[o.l1])}</div></td>
+      <td class="n">${o.total}</td><td class="n">${o.resolved}</td>
+      <td class="n">${o.median}</td>
+      <td class="n">${o.spread}</td><td class="n"><strong>${o.hoursPerMonth}</strong></td>
+      <td>${o.resolved < SMALL_SAMPLE
+        ? `<span class="st warn"><span class="ic">◆</span>Small sample</span>`
+        : `<span class="st neutral"><span class="ic">●</span>Enough data</span>`}</td></tr>`).join("") +
+    `</tbody></table>`;
+  document.getElementById("effortnote").textContent =
+    `Rows built on fewer than ${SMALL_SAMPLE} resolved tickets are drawn faded and marked as a small sample. ` +
+    `A median from a handful of tickets moves a long way on one slow ticket, so it is not a basis for a staffing decision on its own.`;
+}
+
+/* ---------- 6. SLA ---------- */
+function renderSLA(){
+  const stats = l2stats(scoped()).filter(o=>o.resolved>=10)
+    .sort((a,b)=> a.slaPct-b.slaPct || b.resolved-a.resolved || a.name.localeCompare(b.name)).slice(0,8);
+  const st = p => p>=95 ? ["good","●","On track"]
+    : p>=85 ? ["warn","◆","Slipping"]
+    : p>=70 ? ["serious","▲","Under pressure"]
+    : ["crit","■","Failing"];
+  document.getElementById("slatable").innerHTML = stats.length ?
+    `<table><thead><tr><th>Subcategory</th><th>Status</th><th class="n">SLA met</th>
+      <th class="n">Breached</th><th class="n">Median hrs</th><th class="n">Reopened</th>
+      <th>Handled by</th></tr></thead><tbody>` +
+    stats.map(o=>{
+      const [c,i,l] = st(o.slaPct);
+      return `<tr><td><strong>${esc(o.name)}</strong>
+        <div class="muted">${esc(D.l1_order[o.l1])}</div></td>
+        <td><span class="st ${c}"><span class="ic">${i}</span>${l}</span></td>
+        <td class="n">${o.slaPct}%</td>
+        <td class="n">${Math.round(o.resolved*(100-o.slaPct)/100)} of ${o.resolved}</td>
+        <td class="n">${o.median}</td><td class="n">${o.reopenPct}%</td>
+        <td>${esc(o.group)}</td></tr>`;
+    }).join("") + `</tbody></table>`
+    : `<p class="muted">No subcategory has 10 or more resolved tickets in this selection.</p>`;
+}
+
+/* ---------- 7. categoriser quality ---------- */
+function renderQuality(){
+  const a = D.accuracy;
+  const tiles = [
+    ["Tickets categorised", num(a.tickets_scored), "every ticket got all three levels"],
+    ["Unique cases sent", num(a.unique_cases),
+      `${a.classification_calls_saved_pct}% fewer calls after deduplicating`],
+    ["Category (L1) correct", a.overall.L1 + "%", "measured against the held-back answer key"],
+    ["Subcategory (L2) correct", a.overall.L2 + "%", "measured against the held-back answer key"],
+    ["Issue type (L3) correct", a.overall.L3 + "%",
+      `${a.distinct_misclassified_cases} distinct description${a.distinct_misclassified_cases===1?"":"s"} landed wrong`],
+    ["Flagged for review", num(a.needs_review_tickets),
+      "medium or low confidence, a human should check these"],
+  ];
+  document.getElementById("qtiles").innerHTML = tiles.map(([k,v,n]) =>
+    `<div class="tile"><div class="k">${esc(k)}</div><div class="v">${v}</div>
+     <div class="n">${esc(n)}</div></div>`).join("");
+
+  document.getElementById("qtable").innerHTML =
+    `<table><thead><tr><th>Category</th><th class="n">Tickets</th>
+      <th class="n">L1 correct</th><th class="n">L2 correct</th>
+      <th class="n">L3 correct</th></tr></thead><tbody>` +
+    a.per_category.map(r=>`<tr><td><strong>${esc(r["Category (L1)"])}</strong></td>
+      <td class="n">${r.tickets}</td><td class="n">${r.L1_correct_pct}%</td>
+      <td class="n">${r.L2_correct_pct}%</td><td class="n">${r.L3_correct_pct}%</td></tr>`).join("") +
+    `</tbody></table>`;
+
+  document.getElementById("qcaveat").innerHTML =
+    `<strong>Read this accuracy for what it is.</strong> These tickets are a sample set built to
+     design and test the workflow, so the descriptions were written from the same taxonomy the
+     classifier was scored against. That makes ${a.overall.L2}% a measurement that the pipeline
+     works end to end, and it is <em>not</em> a forecast of how it will score on the real ticket
+     queue. The number to trust on live data is the one you get after running the same
+     answer-key check on a few hundred hand-labelled real tickets. The workflow keeps that step
+     in, which is the point.`;
+}
+
+/* ---------- table twins ---------- */
+document.querySelectorAll("[data-twin]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const t = btn.dataset.twin;
+    const chart = document.getElementById(t+"chart");
+    const table = document.getElementById(t+"table");
+    const showTable = table.classList.contains("hidden");
+    table.classList.toggle("hidden", !showTable);
+    chart.classList.toggle("hidden", showTable);
+    if(t==="trend") document.getElementById("trendlegend").classList.toggle("hidden", showTable);
+    btn.textContent = showTable ? "Show chart" : "Show table";
+  });
+});
+
+/* ---------- theme ---------- */
+document.getElementById("themebtn").addEventListener("click", () => {
+  const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+  const cur = document.documentElement.getAttribute("data-theme") || (dark ? "dark" : "light");
+  document.documentElement.setAttribute("data-theme", cur==="dark" ? "light" : "dark");
+  renderAll();
+});
+
+/* ---------- render ---------- */
+function renderAll(){
+  syncChips();
+  const s = scoped();
+  document.getElementById("scope").textContent =
+    `${num(s.length)} tickets in scope · ` +
+    (state.month<0 ? "all 3 months" : D.months[state.month]) + " · " +
+    (state.cat<0 ? "all categories" : D.l1_order[state.cat]);
+  renderTiles(); renderTrend(); renderDrill();
+  renderShortlist(); renderEffort(); renderSLA();
+}
+document.getElementById("period").textContent =
+  `${D.period} · ${num(R.length)} tickets · ${D.l1_order.length} categories`;
+buildChips();
+renderQuality();
+renderAll();
+</script>
+</body>
+</html>

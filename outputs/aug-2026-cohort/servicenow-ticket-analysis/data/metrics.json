@@ -1,0 +1,3682 @@
+{
+  "generated_for": "Jan 2026 to Mar 2026",
+  "headline": {
+    "months": [
+      "Jan 2026",
+      "Feb 2026",
+      "Mar 2026"
+    ],
+    "month_keys": [
+      "2026-01",
+      "2026-02",
+      "2026-03"
+    ],
+    "totals": [
+      140,
+      150,
+      160
+    ],
+    "total_tickets": 450,
+    "mom_change_pct": 6.7,
+    "open_tickets": 13,
+    "sla_met_pct": 83.8,
+    "reopen_pct": 3.9,
+    "total_agent_hours": 4190.3
+  },
+  "l1": [
+    {
+      "name": "Access & Identity",
+      "counts": [
+        40,
+        39,
+        59
+      ],
+      "total": 138,
+      "share_pct": 30.7,
+      "mom_change": 20,
+      "mom_change_pct": 51.3,
+      "first_to_last_pct": 47.5,
+      "sla_met_pct": 98.5,
+      "reopen_pct": 3.0,
+      "agent_hours": 281.6,
+      "median_hours": 0.93
+    },
+    {
+      "name": "Software & Applications",
+      "counts": [
+        33,
+        27,
+        30
+      ],
+      "total": 90,
+      "share_pct": 20.0,
+      "mom_change": 3,
+      "mom_change_pct": 11.1,
+      "first_to_last_pct": -9.1,
+      "sla_met_pct": 71.6,
+      "reopen_pct": 3.4,
+      "agent_hours": 1099.8,
+      "median_hours": 9.02
+    },
+    {
+      "name": "Hardware",
+      "counts": [
+        22,
+        29,
+        27
+      ],
+      "total": 78,
+      "share_pct": 17.3,
+      "mom_change": -2,
+      "mom_change_pct": -6.9,
+      "first_to_last_pct": 22.7,
+      "sla_met_pct": 78.7,
+      "reopen_pct": 8.0,
+      "agent_hours": 1154.0,
+      "median_hours": 8.76
+    },
+    {
+      "name": "Network & Connectivity",
+      "counts": [
+        18,
+        21,
+        16
+      ],
+      "total": 55,
+      "share_pct": 12.2,
+      "mom_change": -5,
+      "mom_change_pct": -23.8,
+      "first_to_last_pct": -11.1,
+      "sla_met_pct": 69.1,
+      "reopen_pct": 5.5,
+      "agent_hours": 716.5,
+      "median_hours": 7.65
+    },
+    {
+      "name": "Email & Collaboration",
+      "counts": [
+        19,
+        20,
+        15
+      ],
+      "total": 54,
+      "share_pct": 12.0,
+      "mom_change": -5,
+      "mom_change_pct": -25.0,
+      "first_to_last_pct": -21.1,
+      "sla_met_pct": 98.1,
+      "reopen_pct": 0.0,
+      "agent_hours": 237.9,
+      "median_hours": 2.37
+    },
+    {
+      "name": "Security & Compliance",
+      "counts": [
+        8,
+        14,
+        13
+      ],
+      "total": 35,
+      "share_pct": 7.8,
+      "mom_change": -1,
+      "mom_change_pct": -7.1,
+      "first_to_last_pct": 62.5,
+      "sla_met_pct": 70.6,
+      "reopen_pct": 2.9,
+      "agent_hours": 700.5,
+      "median_hours": 3.11
+    }
+  ],
+  "l2": [
+    {
+      "parent": "Access & Identity",
+      "name": "Password",
+      "counts": [
+        20,
+        30,
+        38
+      ],
+      "total": 88,
+      "share_pct": 19.6,
+      "mom_change": 8,
+      "mom_change_pct": 26.7,
+      "first_to_last_pct": 90.0,
+      "median_hours": 0.78,
+      "p10_hours": 0.61,
+      "p90_hours": 1.07,
+      "spread_hours": 0.46,
+      "agent_hours_total": 68.5,
+      "agent_hours_per_month": 22.8,
+      "sla_met_pct": 100.0,
+      "reopen_pct": 2.4,
+      "p1p2_share_pct": 4.5,
+      "assignment_group": "IAM Support",
+      "self_service_pct": 42.0
+    },
+    {
+      "parent": "Network & Connectivity",
+      "name": "VPN",
+      "counts": [
+        9,
+        7,
+        11
+      ],
+      "total": 27,
+      "share_pct": 6.0,
+      "mom_change": 4,
+      "mom_change_pct": 57.1,
+      "first_to_last_pct": 22.2,
+      "median_hours": 5.59,
+      "p10_hours": 2.22,
+      "p90_hours": 11.82,
+      "spread_hours": 9.61,
+      "agent_hours_total": 161.7,
+      "agent_hours_per_month": 53.9,
+      "sla_met_pct": 81.5,
+      "reopen_pct": 7.4,
+      "p1p2_share_pct": 44.4,
+      "assignment_group": "Network Operations",
+      "self_service_pct": 40.7
+    },
+    {
+      "parent": "Hardware",
+      "name": "Laptop",
+      "counts": [
+        6,
+        10,
+        10
+      ],
+      "total": 26,
+      "share_pct": 5.8,
+      "mom_change": 0,
+      "mom_change_pct": 0.0,
+      "first_to_last_pct": 66.7,
+      "median_hours": 18.38,
+      "p10_hours": 4.36,
+      "p90_hours": 61.86,
+      "spread_hours": 57.51,
+      "agent_hours_total": 714.5,
+      "agent_hours_per_month": 238.2,
+      "sla_met_pct": 50.0,
+      "reopen_pct": 7.7,
+      "p1p2_share_pct": 7.7,
+      "assignment_group": "Desktop Support",
+      "self_service_pct": 50.0
+    },
+    {
+      "parent": "Software & Applications",
+      "name": "Licensing",
+      "counts": [
+        7,
+        11,
+        8
+      ],
+      "total": 26,
+      "share_pct": 5.8,
+      "mom_change": -3,
+      "mom_change_pct": -27.3,
+      "first_to_last_pct": 14.3,
+      "median_hours": 17.23,
+      "p10_hours": 9.02,
+      "p90_hours": 36.55,
+      "spread_hours": 27.53,
+      "agent_hours_total": 524.2,
+      "agent_hours_per_month": 174.7,
+      "sla_met_pct": 50.0,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 23.1,
+      "assignment_group": "Application Support",
+      "self_service_pct": 50.0
+    },
+    {
+      "parent": "Email & Collaboration",
+      "name": "Mail Client",
+      "counts": [
+        7,
+        11,
+        7
+      ],
+      "total": 25,
+      "share_pct": 5.6,
+      "mom_change": -4,
+      "mom_change_pct": -36.4,
+      "first_to_last_pct": 0.0,
+      "median_hours": 2.17,
+      "p10_hours": 1.32,
+      "p90_hours": 4.07,
+      "spread_hours": 2.75,
+      "agent_hours_total": 60.2,
+      "agent_hours_per_month": 20.1,
+      "sla_met_pct": 100.0,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 12.0,
+      "assignment_group": "Messaging Support",
+      "self_service_pct": 40.0
+    },
+    {
+      "parent": "Hardware",
+      "name": "Peripherals",
+      "counts": [
+        10,
+        6,
+        9
+      ],
+      "total": 25,
+      "share_pct": 5.6,
+      "mom_change": 3,
+      "mom_change_pct": 50.0,
+      "first_to_last_pct": -10.0,
+      "median_hours": 7.57,
+      "p10_hours": 2.44,
+      "p90_hours": 19.47,
+      "spread_hours": 17.03,
+      "agent_hours_total": 213.0,
+      "agent_hours_per_month": 71.0,
+      "sla_met_pct": 87.0,
+      "reopen_pct": 8.7,
+      "p1p2_share_pct": 12.0,
+      "assignment_group": "Desktop Support",
+      "self_service_pct": 40.0
+    },
+    {
+      "parent": "Access & Identity",
+      "name": "Account Provisioning",
+      "counts": [
+        7,
+        4,
+        12
+      ],
+      "total": 23,
+      "share_pct": 5.1,
+      "mom_change": 8,
+      "mom_change_pct": 200.0,
+      "first_to_last_pct": 71.4,
+      "median_hours": 6.43,
+      "p10_hours": 3.64,
+      "p90_hours": 11.75,
+      "spread_hours": 8.11,
+      "agent_hours_total": 160.5,
+      "agent_hours_per_month": 53.5,
+      "sla_met_pct": 90.9,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 13.0,
+      "assignment_group": "IAM Support",
+      "self_service_pct": 47.8
+    },
+    {
+      "parent": "Software & Applications",
+      "name": "ERP System",
+      "counts": [
+        12,
+        3,
+        6
+      ],
+      "total": 21,
+      "share_pct": 4.7,
+      "mom_change": 3,
+      "mom_change_pct": 100.0,
+      "first_to_last_pct": -50.0,
+      "median_hours": 7.74,
+      "p10_hours": 4.1,
+      "p90_hours": 17.64,
+      "spread_hours": 13.54,
+      "agent_hours_total": 205.4,
+      "agent_hours_per_month": 68.5,
+      "sla_met_pct": 71.4,
+      "reopen_pct": 4.8,
+      "p1p2_share_pct": 33.3,
+      "assignment_group": "Application Support",
+      "self_service_pct": 38.1
+    },
+    {
+      "parent": "Security & Compliance",
+      "name": "Phishing and Fraud",
+      "counts": [
+        4,
+        9,
+        7
+      ],
+      "total": 20,
+      "share_pct": 4.4,
+      "mom_change": -2,
+      "mom_change_pct": -22.2,
+      "first_to_last_pct": 75.0,
+      "median_hours": 2.08,
+      "p10_hours": 1.0,
+      "p90_hours": 3.23,
+      "spread_hours": 2.23,
+      "agent_hours_total": 40.6,
+      "agent_hours_per_month": 13.5,
+      "sla_met_pct": 95.0,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 70.0,
+      "assignment_group": "Security Operations",
+      "self_service_pct": 50.0
+    },
+    {
+      "parent": "Hardware",
+      "name": "Printer",
+      "counts": [
+        2,
+        12,
+        5
+      ],
+      "total": 19,
+      "share_pct": 4.2,
+      "mom_change": -7,
+      "mom_change_pct": -58.3,
+      "first_to_last_pct": 150.0,
+      "median_hours": 6.91,
+      "p10_hours": 2.15,
+      "p90_hours": 19.86,
+      "spread_hours": 17.71,
+      "agent_hours_total": 175.8,
+      "agent_hours_per_month": 58.6,
+      "sla_met_pct": 100.0,
+      "reopen_pct": 11.1,
+      "p1p2_share_pct": 10.5,
+      "assignment_group": "Desktop Support",
+      "self_service_pct": 63.2
+    },
+    {
+      "parent": "Access & Identity",
+      "name": "MFA",
+      "counts": [
+        5,
+        5,
+        8
+      ],
+      "total": 18,
+      "share_pct": 4.0,
+      "mom_change": 3,
+      "mom_change_pct": 60.0,
+      "first_to_last_pct": 60.0,
+      "median_hours": 1.25,
+      "p10_hours": 0.67,
+      "p90_hours": 1.89,
+      "spread_hours": 1.22,
+      "agent_hours_total": 23.0,
+      "agent_hours_per_month": 7.7,
+      "sla_met_pct": 100.0,
+      "reopen_pct": 5.6,
+      "p1p2_share_pct": 11.1,
+      "assignment_group": "IAM Support",
+      "self_service_pct": 38.9
+    },
+    {
+      "parent": "Network & Connectivity",
+      "name": "WiFi",
+      "counts": [
+        2,
+        8,
+        5
+      ],
+      "total": 15,
+      "share_pct": 3.3,
+      "mom_change": -3,
+      "mom_change_pct": -37.5,
+      "first_to_last_pct": 150.0,
+      "median_hours": 7.79,
+      "p10_hours": 4.34,
+      "p90_hours": 23.88,
+      "spread_hours": 19.54,
+      "agent_hours_total": 169.8,
+      "agent_hours_per_month": 56.6,
+      "sla_met_pct": 80.0,
+      "reopen_pct": 6.7,
+      "p1p2_share_pct": 26.7,
+      "assignment_group": "Network Operations",
+      "self_service_pct": 40.0
+    },
+    {
+      "parent": "Software & Applications",
+      "name": "Browser and Plugins",
+      "counts": [
+        5,
+        4,
+        6
+      ],
+      "total": 15,
+      "share_pct": 3.3,
+      "mom_change": 2,
+      "mom_change_pct": 50.0,
+      "first_to_last_pct": 20.0,
+      "median_hours": 4.07,
+      "p10_hours": 1.64,
+      "p90_hours": 8.19,
+      "spread_hours": 6.54,
+      "agent_hours_total": 73.8,
+      "agent_hours_per_month": 24.6,
+      "sla_met_pct": 92.9,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 6.7,
+      "assignment_group": "Application Support",
+      "self_service_pct": 66.7
+    },
+    {
+      "parent": "Software & Applications",
+      "name": "CRM System",
+      "counts": [
+        5,
+        3,
+        6
+      ],
+      "total": 14,
+      "share_pct": 3.1,
+      "mom_change": 3,
+      "mom_change_pct": 100.0,
+      "first_to_last_pct": 20.0,
+      "median_hours": 13.76,
+      "p10_hours": 4.46,
+      "p90_hours": 31.24,
+      "spread_hours": 26.78,
+      "agent_hours_total": 245.3,
+      "agent_hours_per_month": 81.8,
+      "sla_met_pct": 64.3,
+      "reopen_pct": 14.3,
+      "p1p2_share_pct": 7.1,
+      "assignment_group": "Application Support",
+      "self_service_pct": 35.7
+    },
+    {
+      "parent": "Software & Applications",
+      "name": "Office Productivity Suite",
+      "counts": [
+        4,
+        6,
+        4
+      ],
+      "total": 14,
+      "share_pct": 3.1,
+      "mom_change": -2,
+      "mom_change_pct": -33.3,
+      "first_to_last_pct": 0.0,
+      "median_hours": 2.09,
+      "p10_hours": 1.05,
+      "p90_hours": 7.53,
+      "spread_hours": 6.47,
+      "agent_hours_total": 51.1,
+      "agent_hours_per_month": 17.0,
+      "sla_met_pct": 100.0,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 14.3,
+      "assignment_group": "Application Support",
+      "self_service_pct": 28.6
+    },
+    {
+      "parent": "Email & Collaboration",
+      "name": "Document Collaboration",
+      "counts": [
+        5,
+        4,
+        2
+      ],
+      "total": 11,
+      "share_pct": 2.4,
+      "mom_change": -2,
+      "mom_change_pct": -50.0,
+      "first_to_last_pct": -60.0,
+      "median_hours": 7.16,
+      "p10_hours": 1.63,
+      "p90_hours": 16.44,
+      "spread_hours": 14.81,
+      "agent_hours_total": 96.7,
+      "agent_hours_per_month": 32.2,
+      "sla_met_pct": 90.9,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 0.0,
+      "assignment_group": "Messaging Support",
+      "self_service_pct": 36.4
+    },
+    {
+      "parent": "Email & Collaboration",
+      "name": "Distribution Lists",
+      "counts": [
+        4,
+        2,
+        4
+      ],
+      "total": 10,
+      "share_pct": 2.2,
+      "mom_change": 2,
+      "mom_change_pct": 100.0,
+      "first_to_last_pct": 0.0,
+      "median_hours": 1.79,
+      "p10_hours": 1.12,
+      "p90_hours": 2.39,
+      "spread_hours": 1.28,
+      "agent_hours_total": 17.9,
+      "agent_hours_per_month": 6.0,
+      "sla_met_pct": 100.0,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 0.0,
+      "assignment_group": "Messaging Support",
+      "self_service_pct": 60.0
+    },
+    {
+      "parent": "Access & Identity",
+      "name": "Group Membership",
+      "counts": [
+        8,
+        0,
+        1
+      ],
+      "total": 9,
+      "share_pct": 2.0,
+      "mom_change": 1,
+      "mom_change_pct": 0.0,
+      "first_to_last_pct": -87.5,
+      "median_hours": 3.51,
+      "p10_hours": 1.55,
+      "p90_hours": 4.88,
+      "spread_hours": 3.33,
+      "agent_hours_total": 29.6,
+      "agent_hours_per_month": 9.9,
+      "sla_met_pct": 100.0,
+      "reopen_pct": 11.1,
+      "p1p2_share_pct": 0.0,
+      "assignment_group": "IAM Support",
+      "self_service_pct": 33.3
+    },
+    {
+      "parent": "Email & Collaboration",
+      "name": "Meetings and Calls",
+      "counts": [
+        3,
+        3,
+        2
+      ],
+      "total": 8,
+      "share_pct": 1.8,
+      "mom_change": -1,
+      "mom_change_pct": -33.3,
+      "first_to_last_pct": -33.3,
+      "median_hours": 6.91,
+      "p10_hours": 2.91,
+      "p90_hours": 14.55,
+      "spread_hours": 11.65,
+      "agent_hours_total": 63.1,
+      "agent_hours_per_month": 21.0,
+      "sla_met_pct": 100.0,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 0.0,
+      "assignment_group": "Messaging Support",
+      "self_service_pct": 37.5
+    },
+    {
+      "parent": "Hardware",
+      "name": "Mobile",
+      "counts": [
+        4,
+        1,
+        3
+      ],
+      "total": 8,
+      "share_pct": 1.8,
+      "mom_change": 2,
+      "mom_change_pct": 200.0,
+      "first_to_last_pct": -25.0,
+      "median_hours": 4.64,
+      "p10_hours": 3.33,
+      "p90_hours": 11.84,
+      "spread_hours": 8.51,
+      "agent_hours_total": 50.7,
+      "agent_hours_per_month": 16.9,
+      "sla_met_pct": 100.0,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 0.0,
+      "assignment_group": "Desktop Support",
+      "self_service_pct": 50.0
+    },
+    {
+      "parent": "Network & Connectivity",
+      "name": "Bandwidth and Performance",
+      "counts": [
+        3,
+        4,
+        0
+      ],
+      "total": 7,
+      "share_pct": 1.6,
+      "mom_change": -4,
+      "mom_change_pct": -100.0,
+      "first_to_last_pct": -100.0,
+      "median_hours": 13.38,
+      "p10_hours": 10.92,
+      "p90_hours": 73.71,
+      "spread_hours": 62.78,
+      "agent_hours_total": 233.5,
+      "agent_hours_per_month": 77.8,
+      "sla_met_pct": 28.6,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 57.1,
+      "assignment_group": "Network Operations",
+      "self_service_pct": 42.9
+    },
+    {
+      "parent": "Network & Connectivity",
+      "name": "LAN and Cabling",
+      "counts": [
+        4,
+        2,
+        0
+      ],
+      "total": 6,
+      "share_pct": 1.3,
+      "mom_change": -2,
+      "mom_change_pct": -100.0,
+      "first_to_last_pct": -100.0,
+      "median_hours": 24.71,
+      "p10_hours": 13.05,
+      "p90_hours": 38.01,
+      "spread_hours": 24.96,
+      "agent_hours_total": 151.6,
+      "agent_hours_per_month": 50.5,
+      "sla_met_pct": 33.3,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 16.7,
+      "assignment_group": "Network Operations",
+      "self_service_pct": 33.3
+    },
+    {
+      "parent": "Security & Compliance",
+      "name": "Data Access Control",
+      "counts": [
+        2,
+        2,
+        2
+      ],
+      "total": 6,
+      "share_pct": 1.3,
+      "mom_change": 0,
+      "mom_change_pct": 0.0,
+      "first_to_last_pct": 0.0,
+      "median_hours": 117.5,
+      "p10_hours": 37.81,
+      "p90_hours": 156.71,
+      "spread_hours": 118.9,
+      "agent_hours_total": 512.2,
+      "agent_hours_per_month": 170.7,
+      "sla_met_pct": 20.0,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 0.0,
+      "assignment_group": "Security Operations",
+      "self_service_pct": 50.0
+    },
+    {
+      "parent": "Security & Compliance",
+      "name": "Malware",
+      "counts": [
+        1,
+        1,
+        3
+      ],
+      "total": 5,
+      "share_pct": 1.1,
+      "mom_change": 2,
+      "mom_change_pct": 200.0,
+      "first_to_last_pct": 200.0,
+      "median_hours": 9.07,
+      "p10_hours": 6.12,
+      "p90_hours": 19.52,
+      "spread_hours": 13.4,
+      "agent_hours_total": 59.7,
+      "agent_hours_per_month": 19.9,
+      "sla_met_pct": 60.0,
+      "reopen_pct": 20.0,
+      "p1p2_share_pct": 60.0,
+      "assignment_group": "Security Operations",
+      "self_service_pct": 60.0
+    },
+    {
+      "parent": "Security & Compliance",
+      "name": "Audit and Review",
+      "counts": [
+        1,
+        2,
+        1
+      ],
+      "total": 4,
+      "share_pct": 0.9,
+      "mom_change": -1,
+      "mom_change_pct": -50.0,
+      "first_to_last_pct": 0.0,
+      "median_hours": 23.06,
+      "p10_hours": 12.34,
+      "p90_hours": 30.84,
+      "spread_hours": 18.5,
+      "agent_hours_total": 88.0,
+      "agent_hours_per_month": 29.3,
+      "sla_met_pct": 25.0,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 25.0,
+      "assignment_group": "Security Operations",
+      "self_service_pct": 100.0
+    }
+  ],
+  "l3": [
+    {
+      "parent_l1": "Access & Identity",
+      "parent_l2": "Password",
+      "name": "Account locked after failed attempts",
+      "counts": [
+        6,
+        12,
+        13
+      ],
+      "total": 31,
+      "median_hours": 0.8,
+      "examples": [
+        {
+          "id": "INC1045348",
+          "month": "Jan 2026",
+          "desc": "raising this again, locked out again. need it opened asap, have a client call at 11 this is blocking my work",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Locked out and needs it opened, no attempt count given.",
+          "hours": 0.61
+        },
+        {
+          "id": "INC1045289",
+          "month": "Jan 2026",
+          "desc": "raising this again, it says too many attempts, locked. pls unlock",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Too many attempts message, asks for unlock.",
+          "hours": 0.61
+        },
+        {
+          "id": "INC1045203",
+          "month": "Jan 2026",
+          "desc": "hello, i am unable to sign in, message says account is locked contact admin",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Message explicitly states the account is locked.",
+          "hours": 0.54
+        },
+        {
+          "id": "INC1045384",
+          "month": "Jan 2026",
+          "desc": "HI, BLOCKED OUT OF THE PORTAL, KEEPS SAYING ACCOUNT DISABLED NEED THIS TODAY",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Portal reports the account as disabled.",
+          "hours": 1.2
+        }
+      ]
+    },
+    {
+      "parent_l1": "Access & Identity",
+      "parent_l2": "Password",
+      "name": "Password expiry not notified",
+      "counts": [
+        6,
+        8,
+        15
+      ],
+      "total": 29,
+      "median_hours": 0.8,
+      "examples": [
+        {
+          "id": "INC1045427",
+          "month": "Jan 2026",
+          "desc": "SECOND TIME REPORTING THIS, DID NOT GET THE 14 DAY REMINDER, CREDENTIALS EXPIRED SUDDENLY KINDLY LOOK INTO IT URGENTLY",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Names the missing 14 day reminder and sudden expiry.",
+          "hours": 0.98
+        },
+        {
+          "id": "INC1045208",
+          "month": "Jan 2026",
+          "desc": "no warning came adn today it just stopped letting me in let me know if you need anything from my side",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Access stopped with no prior warning, classic silent expiry.",
+          "hours": 1.27
+        },
+        {
+          "id": "INC1045493",
+          "month": "Jan 2026",
+          "desc": "HI, EXPIRED WITHOUT ANY MAIL TO ME, NOW I CANT WORK APPRECIATE A QUICK FIX",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Expired with no mail sent to the user.",
+          "hours": 0.98
+        },
+        {
+          "id": "INC1045519",
+          "month": "Jan 2026",
+          "desc": "hi, expired without any mail to me, now i cant work please help",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Expired with no mail sent to the user.",
+          "hours": 0.79
+        }
+      ]
+    },
+    {
+      "parent_l1": "Access & Identity",
+      "parent_l2": "Password",
+      "name": "Password reset",
+      "counts": [
+        8,
+        10,
+        10
+      ],
+      "total": 28,
+      "median_hours": 0.75,
+      "examples": [
+        {
+          "id": "INC1045380",
+          "month": "Jan 2026",
+          "desc": "good morning, system not accepting my details after i changed it last week thanks in advance",
+          "priority": "P4 - Low",
+          "confidence": "Medium",
+          "reason": "Credentials rejected after the user changed them.",
+          "hours": 0.58
+        },
+        {
+          "id": "INC1045300",
+          "month": "Jan 2026",
+          "desc": "hi, forgot the credentials after the holiday, please help thanks in advance",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "User forgot credentials and needs them reset.",
+          "hours": 1.0
+        },
+        {
+          "id": "INC1045256",
+          "month": "Jan 2026",
+          "desc": "cant get into the system since morning, tried twice already need this today",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Cannot get in since morning, no lockout message, likely credentials.",
+          "hours": 0.86
+        },
+        {
+          "id": "INC1045436",
+          "month": "Jan 2026",
+          "desc": "forgot the credentials after the holiday, plz help please help",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "User forgot credentials and needs them reset.",
+          "hours": 1.03
+        }
+      ]
+    },
+    {
+      "parent_l1": "Security & Compliance",
+      "parent_l2": "Phishing and Fraud",
+      "name": "Suspicious email reported",
+      "counts": [
+        4,
+        9,
+        7
+      ],
+      "total": 20,
+      "median_hours": 2.08,
+      "examples": [
+        {
+          "id": "INC1045386",
+          "month": "Jan 2026",
+          "desc": "got a mail asking for my details, looks fake, forwarding it appreciate a quick fix",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Mail requesting personal details, user believes it is fake.",
+          "hours": 3.22
+        },
+        {
+          "id": "INC1045254",
+          "month": "Jan 2026",
+          "desc": "someone claiming to be the director asked me for gift cards",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Executive impersonation asking for gift cards.",
+          "hours": 1.93
+        },
+        {
+          "id": "INC1045489",
+          "month": "Jan 2026",
+          "desc": "hi team, got a mail asking for my details, looks fake, forwarding it this is blocking my work",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Mail requesting personal details, user believes it is fake.",
+          "hours": 2.31
+        },
+        {
+          "id": "INC1045271",
+          "month": "Jan 2026",
+          "desc": "team, strange link in a mail from an unknown sender, did not click appreciate a quick fix",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Unknown sender with a suspicious link, reported not clicked.",
+          "hours": 1.5
+        }
+      ]
+    },
+    {
+      "parent_l1": "Software & Applications",
+      "parent_l2": "Licensing",
+      "name": "License expired or reassigned",
+      "counts": [
+        4,
+        8,
+        4
+      ],
+      "total": 16,
+      "median_hours": 15.61,
+      "examples": [
+        {
+          "id": "INC1045262",
+          "month": "Jan 2026",
+          "desc": "raising this again, the tool logged me out saying no seat available appreciate a quick fix",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "No seat available means the licence was taken away.",
+          "hours": 6.02
+        },
+        {
+          "id": "INC1045245",
+          "month": "Jan 2026",
+          "desc": "second time reporting this, teh tool logged me out saying no seat available this is blocking my work",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "No seat available means the licence was taken away.",
+          "hours": 14.86
+        },
+        {
+          "id": "INC1045482",
+          "month": "Jan 2026",
+          "desc": "raising this again, the tool logged me out saying no seat available",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "No seat available means the licence was taken away.",
+          "hours": 26.55
+        },
+        {
+          "id": "INC1045325",
+          "month": "Jan 2026",
+          "desc": "hi, it says my subscription has ended, cannot open anything please help",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Subscription ended, tool will not open.",
+          "hours": 14.81
+        }
+      ]
+    },
+    {
+      "parent_l1": "Email & Collaboration",
+      "parent_l2": "Mail Client",
+      "name": "Mail not syncing",
+      "counts": [
+        4,
+        7,
+        3
+      ],
+      "total": 14,
+      "median_hours": 1.87,
+      "examples": [
+        {
+          "id": "INC1045539",
+          "month": "Jan 2026",
+          "desc": "not receiving anything since morning but web version shows them thanks in advance",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Web mail shows the messages, the client does not.",
+          "hours": 1.22
+        },
+        {
+          "id": "INC1045361",
+          "month": "Jan 2026",
+          "desc": "hi team, not receiving anything since morning but web version shows them thanks in advance",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Web mail shows the messages, the client does not.",
+          "hours": 1.41
+        },
+        {
+          "id": "INC1045242",
+          "month": "Jan 2026",
+          "desc": "not receiving anything since morning but web version shows them need this today",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Web mail shows the messages, the client does not.",
+          "hours": 1.87
+        },
+        {
+          "id": "INC1045527",
+          "month": "Jan 2026",
+          "desc": "sent items are not updating on my laptop this is blocking my work",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Sent items not updating on the local client.",
+          "hours": 1.31
+        }
+      ]
+    },
+    {
+      "parent_l1": "Network & Connectivity",
+      "parent_l2": "VPN",
+      "name": "VPN disconnects frequently",
+      "counts": [
+        2,
+        4,
+        8
+      ],
+      "total": 14,
+      "median_hours": 4.27,
+      "examples": [
+        {
+          "id": "INC1045440",
+          "month": "Jan 2026",
+          "desc": "team, connection is unstable since the new client version please help",
+          "priority": "P4 - Low",
+          "confidence": "Medium",
+          "reason": "Unstable connection tied to a new client version.",
+          "hours": 1.25
+        },
+        {
+          "id": "INC1045263",
+          "month": "Jan 2026",
+          "desc": "hello, connection is unstable since the new client version appreciate a quick fix",
+          "priority": "P2 - High",
+          "confidence": "Medium",
+          "reason": "Unstable connection tied to a new client version.",
+          "hours": 4.82
+        },
+        {
+          "id": "INC1045714",
+          "month": "Feb 2026",
+          "desc": "hi, connection is unstable since the new client version",
+          "priority": "P2 - High",
+          "confidence": "Medium",
+          "reason": "Unstable connection tied to a new client version.",
+          "hours": 12.55
+        },
+        {
+          "id": "INC1045882",
+          "month": "Feb 2026",
+          "desc": "good morning, connection is unstable since the new client version kindly look into it urgently",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Unstable connection tied to a new client version.",
+          "hours": 3.71
+        }
+      ]
+    },
+    {
+      "parent_l1": "Access & Identity",
+      "parent_l2": "MFA",
+      "name": "MFA device lost or replaced",
+      "counts": [
+        3,
+        3,
+        7
+      ],
+      "total": 13,
+      "median_hours": 1.19,
+      "examples": [
+        {
+          "id": "INC1045234",
+          "month": "Jan 2026",
+          "desc": "lost my handset yesterday, cannot get the verification code",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Lost handset, cannot receive the verification code.",
+          "hours": 1.29
+        },
+        {
+          "id": "INC1045423",
+          "month": "Jan 2026",
+          "desc": "changed my phone, now teh 6 digit code app is empty",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "New phone, authenticator app has no work entry.",
+          "hours": 0.68
+        },
+        {
+          "id": "INC1045288",
+          "month": "Jan 2026",
+          "desc": "good morning, lost my handset yesterday, cannot get the verification code",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Lost handset, cannot receive the verification code.",
+          "hours": 1.4
+        },
+        {
+          "id": "INC1045683",
+          "month": "Feb 2026",
+          "desc": "hi team, changed my phone, now the 6 digit code app is empty",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "New phone, authenticator app has no work entry.",
+          "hours": 1.01
+        }
+      ]
+    },
+    {
+      "parent_l1": "Hardware",
+      "parent_l2": "Printer",
+      "name": "Print quality or paper jam",
+      "counts": [
+        1,
+        8,
+        4
+      ],
+      "total": 13,
+      "median_hours": 10.62,
+      "examples": [
+        {
+          "id": "INC1045521",
+          "month": "Jan 2026",
+          "desc": "good morning, pages coming with lines across, toner maybe this is blocking my work",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Lines across the page, user suspects toner.",
+          "hours": 1.97
+        },
+        {
+          "id": "INC1045579",
+          "month": "Feb 2026",
+          "desc": "paper stuck inside, tried removing but still error appreciate a quick fix",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Paper jam that persists after clearing.",
+          "hours": 3.24
+        },
+        {
+          "id": "INC1045900",
+          "month": "Feb 2026",
+          "desc": "SECOND TIME REPORTING THIS, PAPER STUCK INSIDE, TRIED REMOVING BUT STILL ERROR",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Paper jam that persists after clearing.",
+          "hours": 2.45
+        },
+        {
+          "id": "INC1045886",
+          "month": "Feb 2026",
+          "desc": "good morning, pages coming with lines across, toner maybe kindly look into it urgently",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Lines across the page, user suspects toner.",
+          "hours": 4.1
+        }
+      ]
+    },
+    {
+      "parent_l1": "Network & Connectivity",
+      "parent_l2": "VPN",
+      "name": "VPN will not connect",
+      "counts": [
+        7,
+        3,
+        3
+      ],
+      "total": 13,
+      "median_hours": 5.88,
+      "examples": [
+        {
+          "id": "INC1045201",
+          "month": "Jan 2026",
+          "desc": "getting authentication failed when i try from home need this today",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Authentication failure specifically when working from home.",
+          "hours": 2.71
+        },
+        {
+          "id": "INC1045431",
+          "month": "Jan 2026",
+          "desc": "HELLO, NO CONNECTION FROM MY HOME LINE SINCE YESTERDAY EVENING THIS IS BLOCKING MY WORK",
+          "priority": "P2 - High",
+          "confidence": "Medium",
+          "reason": "No connection from the home line since a set time.",
+          "hours": 6.88
+        },
+        {
+          "id": "INC1045477",
+          "month": "Jan 2026",
+          "desc": "SECOND TIME REPORTING THIS, NO CONNECTION FROM MY HOME LINE SINCE YESTERDAY EVENING THIS IS BLOCKING MY WORK",
+          "priority": "P4 - Low",
+          "confidence": "Medium",
+          "reason": "No connection from the home line since a set time.",
+          "hours": 13.06
+        },
+        {
+          "id": "INC1045278",
+          "month": "Jan 2026",
+          "desc": "getting authentication failed when i try from home appreciate a quick fix",
+          "priority": "P1 - Critical",
+          "confidence": "Medium",
+          "reason": "Authentication failure specifically when working from home.",
+          "hours": 5.96
+        }
+      ]
+    },
+    {
+      "parent_l1": "Email & Collaboration",
+      "parent_l2": "Document Collaboration",
+      "name": "Site or library access",
+      "counts": [
+        5,
+        4,
+        2
+      ],
+      "total": 11,
+      "median_hours": 7.16,
+      "examples": [
+        {
+          "id": "INC1045390",
+          "month": "Jan 2026",
+          "desc": "hi, the team site says access denied after the migration",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Access denied on the team site after a migration.",
+          "hours": 6.05
+        },
+        {
+          "id": "INC1045465",
+          "month": "Jan 2026",
+          "desc": "cannot upload to the project library anymore",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Upload to the project library is refused.",
+          "hours": 1.73
+        },
+        {
+          "id": "INC1045212",
+          "month": "Jan 2026",
+          "desc": "raising this again, cannot upload to the project library anymore",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Upload to the project library is refused.",
+          "hours": 20.42
+        },
+        {
+          "id": "INC1045209",
+          "month": "Jan 2026",
+          "desc": "second time reporting this, cannot upload to the project library anymore please help",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Upload to the project library is refused.",
+          "hours": 7.16
+        }
+      ]
+    },
+    {
+      "parent_l1": "Email & Collaboration",
+      "parent_l2": "Mail Client",
+      "name": "Mailbox full or quota",
+      "counts": [
+        3,
+        4,
+        4
+      ],
+      "total": 11,
+      "median_hours": 2.33,
+      "examples": [
+        {
+          "id": "INC1045369",
+          "month": "Jan 2026",
+          "desc": "second time reporting this, cannot send anything, says storage limit reached",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Storage limit reached blocks sending.",
+          "hours": 2.4
+        },
+        {
+          "id": "INC1045282",
+          "month": "Jan 2026",
+          "desc": "hi, mails are bouncing back to senders, box seems full this is blocking my work",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Mail bouncing and the box is reported full.",
+          "hours": 2.22
+        },
+        {
+          "id": "INC1045338",
+          "month": "Jan 2026",
+          "desc": "mails are bouncing back to senders, box seems full please help",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Mail bouncing and the box is reported full.",
+          "hours": 2.26
+        },
+        {
+          "id": "INC1045700",
+          "month": "Feb 2026",
+          "desc": "team, mails are bouncing back to senders, box seems full need this today",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Mail bouncing and the box is reported full.",
+          "hours": 4.09
+        }
+      ]
+    },
+    {
+      "parent_l1": "Hardware",
+      "parent_l2": "Peripherals",
+      "name": "Headset or audio device",
+      "counts": [
+        4,
+        2,
+        5
+      ],
+      "total": 11,
+      "median_hours": 6.38,
+      "examples": [
+        {
+          "id": "INC1045306",
+          "month": "Jan 2026",
+          "desc": "hi team, audio only comes in left side of the headphone need this today",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Audio only in one ear of the headphone.",
+          "hours": 15.61
+        },
+        {
+          "id": "INC1045333",
+          "month": "Jan 2026",
+          "desc": "good morning, no one can hear me on calls, tried both sides please help",
+          "priority": "P2 - High",
+          "confidence": "Medium",
+          "reason": "Mic not picked up, user already tried both sides of the headset.",
+          "hours": 4.49
+        },
+        {
+          "id": "INC1045267",
+          "month": "Jan 2026",
+          "desc": "good morning, audio only comes in left side of the headphone need this today",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Audio only in one ear of the headphone.",
+          "hours": 5.19
+        },
+        {
+          "id": "INC1045417",
+          "month": "Jan 2026",
+          "desc": "good morning, mic is picking up too much noise, team complained this is blocking my work",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Mic picking up excessive noise on calls.",
+          "hours": 7.57
+        }
+      ]
+    },
+    {
+      "parent_l1": "Software & Applications",
+      "parent_l2": "ERP System",
+      "name": "ERP login failure",
+      "counts": [
+        5,
+        2,
+        4
+      ],
+      "total": 11,
+      "median_hours": 7.3,
+      "examples": [
+        {
+          "id": "INC1045400",
+          "month": "Jan 2026",
+          "desc": "cannot get into the module since the weekend patch need this today",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Cannot enter the module after a weekend patch.",
+          "hours": 24.57
+        },
+        {
+          "id": "INC1045223",
+          "month": "Jan 2026",
+          "desc": "cannot get into the module since the weekend patch thanks in advance",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Cannot enter the module after a weekend patch.",
+          "hours": 7.3
+        },
+        {
+          "id": "INC1045233",
+          "month": "Jan 2026",
+          "desc": "it says session could not be created, others are fine please help",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Session cannot be created for this user only.",
+          "hours": 15.93
+        },
+        {
+          "id": "INC1045250",
+          "month": "Jan 2026",
+          "desc": "team, cannot get into the module since the weekend patch",
+          "priority": "P1 - Critical",
+          "confidence": "Medium",
+          "reason": "Cannot enter the module after a weekend patch.",
+          "hours": 1.89
+        }
+      ]
+    },
+    {
+      "parent_l1": "Email & Collaboration",
+      "parent_l2": "Distribution Lists",
+      "name": "Distribution list change",
+      "counts": [
+        4,
+        2,
+        4
+      ],
+      "total": 10,
+      "median_hours": 1.79,
+      "examples": [
+        {
+          "id": "INC1045360",
+          "month": "Jan 2026",
+          "desc": "good morning, please add the two new joiners to the delivery mail group",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Asks to add two joiners to a mail group.",
+          "hours": 1.96
+        },
+        {
+          "id": "INC1045206",
+          "month": "Jan 2026",
+          "desc": "team, please add the two new joiners to the delivery mail group need this today",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Asks to add two joiners to a mail group.",
+          "hours": 0.81
+        },
+        {
+          "id": "INC1045291",
+          "month": "Jan 2026",
+          "desc": "hi team, i am still getting mails from a team i left",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Still on a mail group after leaving the team.",
+          "hours": 1.15
+        },
+        {
+          "id": "INC1045235",
+          "month": "Jan 2026",
+          "desc": "please add the two new joiners to the delivery mail group",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Asks to add two joiners to a mail group.",
+          "hours": 1.74
+        }
+      ]
+    },
+    {
+      "parent_l1": "Hardware",
+      "parent_l2": "Laptop",
+      "name": "Laptop slow or freezing",
+      "counts": [
+        3,
+        3,
+        4
+      ],
+      "total": 10,
+      "median_hours": 17.32,
+      "examples": [
+        {
+          "id": "INC1045442",
+          "month": "Jan 2026",
+          "desc": "raising this again, everything hangs when i open more than 2 things let me know if you need anything from my side",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Machine hangs with more than two apps open.",
+          "hours": 5.4
+        },
+        {
+          "id": "INC1045445",
+          "month": "Jan 2026",
+          "desc": "raising this again, very slow since last week, fan runs loud all the time",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Sustained slowness with the fan running constantly.",
+          "hours": 57.79
+        },
+        {
+          "id": "INC1045466",
+          "month": "Jan 2026",
+          "desc": "second time reporting this, very slow since last week, fan runs loud all the time thanks in advance",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Sustained slowness with the fan running constantly.",
+          "hours": 57.76
+        },
+        {
+          "id": "INC1045694",
+          "month": "Feb 2026",
+          "desc": "GOOD MORNING, MACHINE TAKES 15 MINS TO START, UNUSABLE IN TEH MORNING PLZ HELP",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Startup takes 15 minutes, machine unusable.",
+          "hours": 21.73
+        }
+      ]
+    },
+    {
+      "parent_l1": "Software & Applications",
+      "parent_l2": "CRM System",
+      "name": "CRM report not loading",
+      "counts": [
+        4,
+        3,
+        3
+      ],
+      "total": 10,
+      "median_hours": 13.76,
+      "examples": [
+        {
+          "id": "INC1045326",
+          "month": "Jan 2026",
+          "desc": "THE PIPELINE VIEW SPINS FOREVER AND NEVER LOADS KINDLY LOOK INTO IT URGENTLY",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Pipeline view never finishes loading.",
+          "hours": 13.93
+        },
+        {
+          "id": "INC1045257",
+          "month": "Jan 2026",
+          "desc": "hi team, dashboard is blank for me but fine for my manager thanks in advance",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Dashboard blank for one user, loads for the manager.",
+          "hours": 13.59
+        },
+        {
+          "id": "INC1045501",
+          "month": "Jan 2026",
+          "desc": "good morning, teh pipeline view spins forever and never loads kindly look into it urgently",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Pipeline view never finishes loading.",
+          "hours": 2.19
+        },
+        {
+          "id": "INC1045373",
+          "month": "Jan 2026",
+          "desc": "hi team, the pipeline view spins forever adn never loads kindly look into it urgently",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Pipeline view never finishes loading.",
+          "hours": 57.14
+        }
+      ]
+    },
+    {
+      "parent_l1": "Software & Applications",
+      "parent_l2": "ERP System",
+      "name": "ERP transaction error",
+      "counts": [
+        7,
+        1,
+        2
+      ],
+      "total": 10,
+      "median_hours": 8.13,
+      "examples": [
+        {
+          "id": "INC1045303",
+          "month": "Jan 2026",
+          "desc": "teh entry is nto going through, gives an error number please help",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "An entry fails to post with an error number.",
+          "hours": 6.49
+        },
+        {
+          "id": "INC1045228",
+          "month": "Jan 2026",
+          "desc": "posting fails with a dump error at the last step appreciate a quick fix",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Posting fails with a dump at the final step.",
+          "hours": 21.25
+        },
+        {
+          "id": "INC1045395",
+          "month": "Jan 2026",
+          "desc": "HELLO, POSTING FAILS WITH A DUMP ERROR AT THE LAST STEP",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Posting fails with a dump at the final step.",
+          "hours": 7.74
+        },
+        {
+          "id": "INC1045248",
+          "month": "Jan 2026",
+          "desc": "hi, teh entry is not going through, gives an error number this is blocking my work",
+          "priority": "P2 - High",
+          "confidence": "Medium",
+          "reason": "An entry fails to post with an error number.",
+          "hours": 14.57
+        }
+      ]
+    },
+    {
+      "parent_l1": "Software & Applications",
+      "parent_l2": "Licensing",
+      "name": "New license request",
+      "counts": [
+        3,
+        3,
+        4
+      ],
+      "total": 10,
+      "median_hours": 18.19,
+      "examples": [
+        {
+          "id": "INC1045474",
+          "month": "Jan 2026",
+          "desc": "please arrange a seat for the analytics software thanks in advance",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Asks for a seat on the analytics software.",
+          "hours": 9.2
+        },
+        {
+          "id": "INC1045509",
+          "month": "Jan 2026",
+          "desc": "hi, need the design tool for a project starting next month thanks in advance",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Requests a tool for an upcoming project.",
+          "hours": 18.39
+        },
+        {
+          "id": "INC1045270",
+          "month": "Jan 2026",
+          "desc": "need the design tool for a project starting next month",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Requests a tool for an upcoming project.",
+          "hours": 21.54
+        },
+        {
+          "id": "INC1045562",
+          "month": "Feb 2026",
+          "desc": "team, my trial expired, i need the proper version now",
+          "priority": "P2 - High",
+          "confidence": "Medium",
+          "reason": "Trial ended, user is asking for the full version.",
+          "hours": 4.83
+        }
+      ]
+    },
+    {
+      "parent_l1": "Access & Identity",
+      "parent_l2": "Account Provisioning",
+      "name": "Role change access update",
+      "counts": [
+        3,
+        1,
+        5
+      ],
+      "total": 9,
+      "median_hours": 7.0,
+      "examples": [
+        {
+          "id": "INC1045522",
+          "month": "Jan 2026",
+          "desc": "hello, moved from support to delivery team, my old screens are gone",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Team change left the user without the old screens.",
+          "hours": 8.93
+        },
+        {
+          "id": "INC1045221",
+          "month": "Jan 2026",
+          "desc": "raising this again, moved from support to delivery team, my old screens are gone this is blocking my work",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Team change left the user without the old screens.",
+          "hours": 3.61
+        },
+        {
+          "id": "INC1045447",
+          "month": "Jan 2026",
+          "desc": "moved from support to delivery team, my old screens are gone kindly look into it urgently",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Team change left the user without the old screens.",
+          "hours": 11.84
+        },
+        {
+          "id": "INC1045809",
+          "month": "Feb 2026",
+          "desc": "transferred to another department, need teh right screens now",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Department transfer needs the new screens granted.",
+          "hours": 3.95
+        }
+      ]
+    },
+    {
+      "parent_l1": "Hardware",
+      "parent_l2": "Laptop",
+      "name": "Battery or charging fault",
+      "counts": [
+        2,
+        5,
+        2
+      ],
+      "total": 9,
+      "median_hours": 15.04,
+      "examples": [
+        {
+          "id": "INC1045428",
+          "month": "Jan 2026",
+          "desc": "battery drains in one hour, was fine before this is blocking my work",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Battery life collapsed from its normal duration.",
+          "hours": 118.84
+        },
+        {
+          "id": "INC1045470",
+          "month": "Jan 2026",
+          "desc": "second time reporting this, battery drains in one hour, was fine before please help",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Battery life collapsed from its normal duration.",
+          "hours": 4.24
+        },
+        {
+          "id": "INC1045672",
+          "month": "Feb 2026",
+          "desc": "battery drains in one hour, was fine before plz help",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Battery life collapsed from its normal duration.",
+          "hours": 5.0
+        },
+        {
+          "id": "INC1045744",
+          "month": "Feb 2026",
+          "desc": "GOOD MORNING, NOT CHARGING EVEN WHEN PLUGGED IN, SHOWS 4% KINDLY LOOK INTO IT URGENTLY",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Not charging while plugged in, level stuck low.",
+          "hours": 10.9
+        }
+      ]
+    },
+    {
+      "parent_l1": "Hardware",
+      "parent_l2": "Peripherals",
+      "name": "Keyboard or mouse fault",
+      "counts": [
+        4,
+        1,
+        4
+      ],
+      "total": 9,
+      "median_hours": 6.59,
+      "examples": [
+        {
+          "id": "INC1045368",
+          "month": "Jan 2026",
+          "desc": "raising this again, wireless mouse disconnects every few minutes",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Wireless mouse keeps dropping its connection.",
+          "hours": 4.43
+        },
+        {
+          "id": "INC1045351",
+          "month": "Jan 2026",
+          "desc": "wireless mouse disconnects every few minutes let me know if you need anything from my side",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Wireless mouse keeps dropping its connection.",
+          "hours": 2.31
+        },
+        {
+          "id": "INC1045377",
+          "month": "Jan 2026",
+          "desc": "WIRELESS MOUSE DISCONNECTS EVERY FEW MINUTES LET ME KNOW IF YOU NEED ANYTHING FROM MY SIDE",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Wireless mouse keeps dropping its connection.",
+          "hours": 8.76
+        },
+        {
+          "id": "INC1045536",
+          "month": "Jan 2026",
+          "desc": "second time reporting this, teh pointer jumps on its own while typing",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Pointer moves on its own, a pointing device fault.",
+          "hours": 9.46
+        }
+      ]
+    },
+    {
+      "parent_l1": "Hardware",
+      "parent_l2": "Mobile",
+      "name": "Company mobile setup",
+      "counts": [
+        4,
+        1,
+        3
+      ],
+      "total": 8,
+      "median_hours": 4.64,
+      "examples": [
+        {
+          "id": "INC1045461",
+          "month": "Jan 2026",
+          "desc": "raising this again, cannot add my official mail on the new phone",
+          "priority": "P4 - Low",
+          "confidence": "Medium",
+          "reason": "Work mail will not add to a new phone.",
+          "hours": 4.46
+        },
+        {
+          "id": "INC1045329",
+          "month": "Jan 2026",
+          "desc": "good morning, new handset given, need the work apps put on it",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "New handset needs the work applications installed.",
+          "hours": 2.85
+        },
+        {
+          "id": "INC1045413",
+          "month": "Jan 2026",
+          "desc": "HELLO, PHONE IS NOT SYNCING ANYTHING FROM OFFICE THIS IS BLOCKING MY WORK",
+          "priority": "P4 - Low",
+          "confidence": "Medium",
+          "reason": "Phone not syncing anything from office systems.",
+          "hours": 15.12
+        },
+        {
+          "id": "INC1045472",
+          "month": "Jan 2026",
+          "desc": "new handset given, need the work apps put on it kindly look into it urgently",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "New handset needs the work applications installed.",
+          "hours": 4.72
+        }
+      ]
+    },
+    {
+      "parent_l1": "Network & Connectivity",
+      "parent_l2": "WiFi",
+      "name": "Cannot join office WiFi",
+      "counts": [
+        1,
+        5,
+        2
+      ],
+      "total": 8,
+      "median_hours": 12.8,
+      "examples": [
+        {
+          "id": "INC1045237",
+          "month": "Jan 2026",
+          "desc": "TEAM, MY LAPTOP DOES NOT SEE THE OFFICE NETWORK AT ALL",
+          "priority": "P4 - Low",
+          "confidence": "Medium",
+          "reason": "Laptop cannot even see the office network.",
+          "hours": 8.08
+        },
+        {
+          "id": "INC1045616",
+          "month": "Feb 2026",
+          "desc": "IT ASKS FOR A CERTIFICATE AND THEN FAILS TO JOIN NEED THIS TODAY",
+          "priority": "P2 - High",
+          "confidence": "Medium",
+          "reason": "Certificate prompt then join failure on the network.",
+          "hours": 4.13
+        },
+        {
+          "id": "INC1045864",
+          "month": "Feb 2026",
+          "desc": "second time reporting this, my laptop does nto see the office network at all appreciate a quick fix",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Laptop cannot even see the office network.",
+          "hours": 23.42
+        },
+        {
+          "id": "INC1045835",
+          "month": "Feb 2026",
+          "desc": "good morning, it asks for a certificate and then fails to join",
+          "priority": "P2 - High",
+          "confidence": "Medium",
+          "reason": "Certificate prompt then join failure on the network.",
+          "hours": 4.66
+        }
+      ]
+    },
+    {
+      "parent_l1": "Software & Applications",
+      "parent_l2": "Browser and Plugins",
+      "name": "Site not opening in browser",
+      "counts": [
+        3,
+        2,
+        3
+      ],
+      "total": 8,
+      "median_hours": 4.84,
+      "examples": [
+        {
+          "id": "INC1045355",
+          "month": "Jan 2026",
+          "desc": "team, the page loads blank, works on my colleague machine",
+          "priority": "P4 - Low",
+          "confidence": "Medium",
+          "reason": "Page blank for this machine only, browser side issue.",
+          "hours": 6.37
+        },
+        {
+          "id": "INC1045478",
+          "month": "Jan 2026",
+          "desc": "HI TEAM, INTERNAL PORTAL GIVES A CERTIFICATE WARNING EVERY TIME PLEASE HELP",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Certificate warning on an internal site in the browser.",
+          "hours": 1.0
+        },
+        {
+          "id": "INC1045404",
+          "month": "Jan 2026",
+          "desc": "hi team, teh page loads blank, works on my colleague machine please help",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Page blank for this machine only, browser side issue.",
+          "hours": 5.07
+        },
+        {
+          "id": "INC1045628",
+          "month": "Feb 2026",
+          "desc": "raising this again, internal portal gives a certificate warning every time kindly look into it urgently",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Certificate warning on an internal site in the browser.",
+          "hours": 2.93
+        }
+      ]
+    },
+    {
+      "parent_l1": "Software & Applications",
+      "parent_l2": "Office Productivity Suite",
+      "name": "Spreadsheet crash or corruption",
+      "counts": [
+        2,
+        3,
+        3
+      ],
+      "total": 8,
+      "median_hours": 4.28,
+      "examples": [
+        {
+          "id": "INC1045299",
+          "month": "Jan 2026",
+          "desc": "the file closes by itself every time i open the big sheet need this today",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Large sheet closes itself on open.",
+          "hours": 7.63
+        },
+        {
+          "id": "INC1045525",
+          "month": "Jan 2026",
+          "desc": "keeps saying not responding when i refresh teh pivot thanks in advance",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Not responding on a pivot refresh in the spreadsheet.",
+          "hours": 4.28
+        },
+        {
+          "id": "INC1045689",
+          "month": "Feb 2026",
+          "desc": "team, keeps saying not responding when i refresh the pivot",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Not responding on a pivot refresh in the spreadsheet.",
+          "hours": 2.09
+        },
+        {
+          "id": "INC1045644",
+          "month": "Feb 2026",
+          "desc": "hello, keeps saying not responding when i refresh the pivot let me know if you need anything from my side",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Not responding on a pivot refresh in the spreadsheet.",
+          "hours": 12.27
+        }
+      ]
+    },
+    {
+      "parent_l1": "Access & Identity",
+      "parent_l2": "Account Provisioning",
+      "name": "Leaver account deactivation",
+      "counts": [
+        2,
+        2,
+        3
+      ],
+      "total": 7,
+      "median_hours": 6.7,
+      "examples": [
+        {
+          "id": "INC1045504",
+          "month": "Jan 2026",
+          "desc": "raising this again, person left last friday, please close everything for him kindly look into it urgently",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Person left, asks to close all access.",
+          "hours": 7.05
+        },
+        {
+          "id": "INC1045298",
+          "month": "Jan 2026",
+          "desc": "good morning, resignation done, need the access removed before audit",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Resignation complete, access must be removed.",
+          "hours": 4.57
+        },
+        {
+          "id": "INC1045651",
+          "month": "Feb 2026",
+          "desc": "raising this again, his last working day was 28th, still showing active in the system this is blocking my work",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Leaver still active past their last working day.",
+          "hours": 6.36
+        },
+        {
+          "id": "INC1045769",
+          "month": "Feb 2026",
+          "desc": "raising this again, person left last friday, plz close everything for him",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Person left, asks to close all access.",
+          "hours": 5.27
+        }
+      ]
+    },
+    {
+      "parent_l1": "Access & Identity",
+      "parent_l2": "Account Provisioning",
+      "name": "New joiner account setup",
+      "counts": [
+        2,
+        1,
+        4
+      ],
+      "total": 7,
+      "median_hours": 6.19,
+      "examples": [
+        {
+          "id": "INC1045294",
+          "month": "Jan 2026",
+          "desc": "hi, need everything ready for the new resource starting next week",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Nothing set up for a resource starting next week.",
+          "hours": 6.5
+        },
+        {
+          "id": "INC1045408",
+          "month": "Jan 2026",
+          "desc": "second time reporting this, need everything ready for the new resource starting next week need this today",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Nothing set up for a resource starting next week.",
+          "hours": 3.31
+        },
+        {
+          "id": "INC1045669",
+          "month": "Feb 2026",
+          "desc": "hello, need everything ready for teh new resource starting next week appreciate a quick fix",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Nothing set up for a resource starting next week.",
+          "hours": 6.19
+        },
+        {
+          "id": "INC1046150",
+          "month": "Mar 2026",
+          "desc": "HELLO, OUR NEW HIRE HAS NO LOGIN, LAPTOP IS THERE BUT CANNOT START LET ME KNOW IF YOU NEED ANYTHING FROM MY SIDE",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "New hire has hardware but no login.",
+          "hours": 10.94
+        }
+      ]
+    },
+    {
+      "parent_l1": "Hardware",
+      "parent_l2": "Laptop",
+      "name": "Screen or display fault",
+      "counts": [
+        1,
+        2,
+        4
+      ],
+      "total": 7,
+      "median_hours": 25.95,
+      "examples": [
+        {
+          "id": "INC1045283",
+          "month": "Jan 2026",
+          "desc": "hello, half the screen is flickering, lines coming",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Flickering and lines on half the display.",
+          "hours": 73.69
+        },
+        {
+          "id": "INC1045867",
+          "month": "Feb 2026",
+          "desc": "hi team, display goes black randomly then comes back appreciate a quick fix",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Display blanks intermittently then recovers.",
+          "hours": 37.36
+        },
+        {
+          "id": "INC1045656",
+          "month": "Feb 2026",
+          "desc": "half the screen is flickering, lines coming kindly look into it urgently",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Flickering and lines on half the display.",
+          "hours": 25.95
+        },
+        {
+          "id": "INC1046296",
+          "month": "Mar 2026",
+          "desc": "hi, half the screen is flickering, lines coming please help",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Flickering and lines on half the display.",
+          "hours": 3.22
+        }
+      ]
+    },
+    {
+      "parent_l1": "Network & Connectivity",
+      "parent_l2": "Bandwidth and Performance",
+      "name": "Slow network performance",
+      "counts": [
+        3,
+        4,
+        0
+      ],
+      "total": 7,
+      "median_hours": 13.38,
+      "examples": [
+        {
+          "id": "INC1045287",
+          "month": "Jan 2026",
+          "desc": "hi, file transfers to the server are taking forever this week appreciate a quick fix",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "File transfers to the server are slow all week.",
+          "hours": 140.71
+        },
+        {
+          "id": "INC1045339",
+          "month": "Jan 2026",
+          "desc": "file transfers to the server are taking forever this week",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "File transfers to the server are slow all week.",
+          "hours": 29.04
+        },
+        {
+          "id": "INC1045224",
+          "month": "Jan 2026",
+          "desc": "second time reporting this, file transfers to the server are taking forever this week kindly look into it urgently",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "File transfers to the server are slow all week.",
+          "hours": 13.2
+        },
+        {
+          "id": "INC1045733",
+          "month": "Feb 2026",
+          "desc": "team, file transfers to the server are taking forever this week",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "File transfers to the server are slow all week.",
+          "hours": 15.82
+        }
+      ]
+    },
+    {
+      "parent_l1": "Network & Connectivity",
+      "parent_l2": "WiFi",
+      "name": "Weak WiFi in a zone",
+      "counts": [
+        1,
+        3,
+        3
+      ],
+      "total": 7,
+      "median_hours": 7.1,
+      "examples": [
+        {
+          "id": "INC1045246",
+          "month": "Jan 2026",
+          "desc": "hello, on the 4th floor it drops constantly, ground floor is fine thanks in advance",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Drops on one floor while another floor is fine.",
+          "hours": 12.21
+        },
+        {
+          "id": "INC1045726",
+          "month": "Feb 2026",
+          "desc": "cafeteria area has almost no connectivity need this today",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Named area of the building has almost no signal.",
+          "hours": 7.1
+        },
+        {
+          "id": "INC1045722",
+          "month": "Feb 2026",
+          "desc": "hi team, cafeteria area has almost no connectivity please help",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Named area of the building has almost no signal.",
+          "hours": 2.92
+        },
+        {
+          "id": "INC1045596",
+          "month": "Feb 2026",
+          "desc": "on the 4th floor it drops constantly, ground floor is fine",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Drops on one floor while another floor is fine.",
+          "hours": 5.88
+        }
+      ]
+    },
+    {
+      "parent_l1": "Software & Applications",
+      "parent_l2": "Browser and Plugins",
+      "name": "Add-in not loading",
+      "counts": [
+        2,
+        2,
+        3
+      ],
+      "total": 7,
+      "median_hours": 3.06,
+      "examples": [
+        {
+          "id": "INC1045319",
+          "month": "Jan 2026",
+          "desc": "raising this again, extension is installed but nothing happens when i click",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Extension installed but does nothing on click.",
+          "hours": 3.53
+        },
+        {
+          "id": "INC1045314",
+          "month": "Jan 2026",
+          "desc": "the toolbar button disappeared after the update this is blocking my work",
+          "priority": "P4 - Low",
+          "confidence": "Medium",
+          "reason": "Toolbar button vanished after an update, add-in not loading.",
+          "hours": 2.39
+        },
+        {
+          "id": "INC1045781",
+          "month": "Feb 2026",
+          "desc": "the toolbar button disappeared after the update",
+          "priority": "P4 - Low",
+          "confidence": "Medium",
+          "reason": "Toolbar button vanished after an update, add-in not loading.",
+          "hours": 2.11
+        },
+        {
+          "id": "INC1045602",
+          "month": "Feb 2026",
+          "desc": "extension is installed but nothing happens when i click please help",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Extension installed but does nothing on click.",
+          "hours": 8.53
+        }
+      ]
+    },
+    {
+      "parent_l1": "Email & Collaboration",
+      "parent_l2": "Meetings and Calls",
+      "name": "Call quality poor",
+      "counts": [
+        2,
+        2,
+        2
+      ],
+      "total": 6,
+      "median_hours": 7.88,
+      "examples": [
+        {
+          "id": "INC1045409",
+          "month": "Jan 2026",
+          "desc": "video freezes for others while my network looks fine need this today",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Video freezes for other participants during calls.",
+          "hours": 7.15
+        },
+        {
+          "id": "INC1045307",
+          "month": "Jan 2026",
+          "desc": "hello, video freezes for others while my network looks fine plz help",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Video freezes for other participants during calls.",
+          "hours": 4.77
+        },
+        {
+          "id": "INC1045825",
+          "month": "Feb 2026",
+          "desc": "voice breaks badly in every call from my end let me know if you need anything from my side",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Voice breaks up on every call from this user.",
+          "hours": 1.71
+        },
+        {
+          "id": "INC1045847",
+          "month": "Feb 2026",
+          "desc": "video freezes for others while my network looks fine please help",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Video freezes for other participants during calls.",
+          "hours": 17.46
+        }
+      ]
+    },
+    {
+      "parent_l1": "Hardware",
+      "parent_l2": "Printer",
+      "name": "Printer offline",
+      "counts": [
+        1,
+        4,
+        1
+      ],
+      "total": 6,
+      "median_hours": 3.63,
+      "examples": [
+        {
+          "id": "INC1045220",
+          "month": "Jan 2026",
+          "desc": "NOTHING PRINTS, JOBS JUST SIT IN THE QUEUE",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Jobs queue and nothing prints, device likely offline.",
+          "hours": 3.79
+        },
+        {
+          "id": "INC1045918",
+          "month": "Feb 2026",
+          "desc": "good morning, cannt find the device in teh list anymore let me know if you need anything from my side",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Device has disappeared from the available list.",
+          "hours": 3.63
+        },
+        {
+          "id": "INC1045543",
+          "month": "Feb 2026",
+          "desc": "hi team, nothing prints, jobs just sit in the queue need this today",
+          "priority": "P4 - Low",
+          "confidence": "Medium",
+          "reason": "Jobs queue and nothing prints, device likely offline.",
+          "hours": 0.6
+        },
+        {
+          "id": "INC1045586",
+          "month": "Feb 2026",
+          "desc": "team, cannot find the device in the list anymore appreciate a quick fix",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Device has disappeared from the available list.",
+          "hours": 2.23
+        }
+      ]
+    },
+    {
+      "parent_l1": "Network & Connectivity",
+      "parent_l2": "LAN and Cabling",
+      "name": "Port dead at desk",
+      "counts": [
+        4,
+        2,
+        0
+      ],
+      "total": 6,
+      "median_hours": 24.71,
+      "examples": [
+        {
+          "id": "INC1045244",
+          "month": "Jan 2026",
+          "desc": "hi, the wall socket at my new seat is nto giving anything appreciate a quick fix",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Wall socket at the new seat is dead.",
+          "hours": 38.75
+        },
+        {
+          "id": "INC1045265",
+          "month": "Jan 2026",
+          "desc": "good morning, the wall socket at my new seat is not giving anything",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Wall socket at the new seat is dead.",
+          "hours": 30.19
+        },
+        {
+          "id": "INC1045370",
+          "month": "Jan 2026",
+          "desc": "hi, moved desks and now there is no connection through the cable thanks in advance",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "No connection over the cable at the new desk.",
+          "hours": 37.27
+        },
+        {
+          "id": "INC1045379",
+          "month": "Jan 2026",
+          "desc": "hi team, the wall socket at my new seat is not giving anything need this today",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Wall socket at the new seat is dead.",
+          "hours": 19.24
+        }
+      ]
+    },
+    {
+      "parent_l1": "Software & Applications",
+      "parent_l2": "Office Productivity Suite",
+      "name": "Document or slide app fault",
+      "counts": [
+        2,
+        3,
+        1
+      ],
+      "total": 6,
+      "median_hours": 1.61,
+      "examples": [
+        {
+          "id": "INC1045375",
+          "month": "Jan 2026",
+          "desc": "team, the deck will nto save, says file is in use",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Presentation will not save, file in use error.",
+          "hours": 2.77
+        },
+        {
+          "id": "INC1045506",
+          "month": "Jan 2026",
+          "desc": "HI TEAM, FORMATTING BREAKS WHEN I REOPEN TEH DOCUMENT",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Document formatting breaks on reopen.",
+          "hours": 1.55
+        },
+        {
+          "id": "INC1045857",
+          "month": "Feb 2026",
+          "desc": "raising this again, the deck will not save, says file is in use need this today",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Presentation will not save, file in use error.",
+          "hours": 1.46
+        },
+        {
+          "id": "INC1045788",
+          "month": "Feb 2026",
+          "desc": "second time reporting this, the deck will not save, says file is in use this is blocking my work",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Presentation will not save, file in use error.",
+          "hours": 0.95
+        }
+      ]
+    },
+    {
+      "parent_l1": "Access & Identity",
+      "parent_l2": "Group Membership",
+      "name": "Application permission request",
+      "counts": [
+        4,
+        0,
+        1
+      ],
+      "total": 5,
+      "median_hours": 2.12,
+      "examples": [
+        {
+          "id": "INC1045529",
+          "month": "Jan 2026",
+          "desc": "second time reporting this, plz give me approval rights for teh requests queue kindly look into it urgently",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Wants approval rights inside an application queue.",
+          "hours": 2.12
+        },
+        {
+          "id": "INC1045345",
+          "month": "Jan 2026",
+          "desc": "team, need edit rights in the reporting tool, i only have view appreciate a quick fix",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Has view only, needs edit rights in a tool.",
+          "hours": 1.23
+        },
+        {
+          "id": "INC1045342",
+          "month": "Jan 2026",
+          "desc": "need edit rights in the reporting tool, i only have view this is blocking my work",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Has view only, needs edit rights in a tool.",
+          "hours": 1.63
+        },
+        {
+          "id": "INC1045231",
+          "month": "Jan 2026",
+          "desc": "plz give me approval rights for teh requests queue need this today",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Wants approval rights inside an application queue.",
+          "hours": 4.66
+        }
+      ]
+    },
+    {
+      "parent_l1": "Access & Identity",
+      "parent_l2": "MFA",
+      "name": "MFA prompt loop",
+      "counts": [
+        2,
+        2,
+        1
+      ],
+      "total": 5,
+      "median_hours": 1.42,
+      "examples": [
+        {
+          "id": "INC1045239",
+          "month": "Jan 2026",
+          "desc": "verification keeps repeating every 5 minutes, very annoying let me know if you need anything from my side",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Verification repeats every few minutes.",
+          "hours": 1.72
+        },
+        {
+          "id": "INC1045533",
+          "month": "Jan 2026",
+          "desc": "approve on phone, then it asks agian on laptop, never ends this is blocking my work",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Approval on phone re-prompts on laptop endlessly.",
+          "hours": 1.42
+        },
+        {
+          "id": "INC1045556",
+          "month": "Feb 2026",
+          "desc": "SECOND TIME REPORTING THIS, APPROVE ON PHONE, THEN IT ASKS AGAIN ON LAPTOP, NEVER ENDS LET ME KNOW IF YOU NEED ANYTHING FROM MY SIDE",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Approval on phone re-prompts on laptop endlessly.",
+          "hours": 2.44
+        },
+        {
+          "id": "INC1045610",
+          "month": "Feb 2026",
+          "desc": "good morning, verification keeps repeating every 5 minutes, very annoying kindly look into it urgently",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Verification repeats every few minutes.",
+          "hours": 1.42
+        }
+      ]
+    },
+    {
+      "parent_l1": "Hardware",
+      "parent_l2": "Peripherals",
+      "name": "Docking station not working",
+      "counts": [
+        2,
+        3,
+        0
+      ],
+      "total": 5,
+      "median_hours": 9.38,
+      "examples": [
+        {
+          "id": "INC1045358",
+          "month": "Jan 2026",
+          "desc": "hi team, the dock is dead, nothing connects when i put the laptop this is blocking my work",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Dock passes nothing through when the laptop is attached.",
+          "hours": 9.84
+        },
+        {
+          "id": "INC1045439",
+          "month": "Jan 2026",
+          "desc": "WHEN I ATTACH IT TEH KEYBOARD AND MOUSE STOP RESPONDING KINDLY LOOK INTO IT URGENTLY",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Attaching the dock kills the keyboard and mouse.",
+          "hours": 7.22
+        },
+        {
+          "id": "INC1045793",
+          "month": "Feb 2026",
+          "desc": "when i attach it the keyboard and mouse stop responding please help",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Attaching the dock kills the keyboard and mouse.",
+          "hours": 9.38
+        },
+        {
+          "id": "INC1045819",
+          "month": "Feb 2026",
+          "desc": "teh dock is dead, nothing connects when i put teh laptop let me know if you need anything from my side",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Dock passes nothing through when the laptop is attached.",
+          "hours": 4.44
+        }
+      ]
+    },
+    {
+      "parent_l1": "Security & Compliance",
+      "parent_l2": "Malware",
+      "name": "Malware or virus alert",
+      "counts": [
+        1,
+        1,
+        3
+      ],
+      "total": 5,
+      "median_hours": 9.07,
+      "examples": [
+        {
+          "id": "INC1045311",
+          "month": "Jan 2026",
+          "desc": "my machine is behaving oddly after i opened an attachment this is blocking my work",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Odd behaviour immediately after opening an attachment.",
+          "hours": 7.19
+        },
+        {
+          "id": "INC1045720",
+          "month": "Feb 2026",
+          "desc": "raising this again, my machine is behaving oddly after i opened an attachment thanks in advance",
+          "priority": "P1 - Critical",
+          "confidence": "Medium",
+          "reason": "Odd behaviour immediately after opening an attachment.",
+          "hours": 16.53
+        },
+        {
+          "id": "INC1046059",
+          "month": "Mar 2026",
+          "desc": "hi, a warning popped up saying threat detected adn quarantined this is blocking my work",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Threat detected and quarantined warning.",
+          "hours": 5.4
+        },
+        {
+          "id": "INC1046051",
+          "month": "Mar 2026",
+          "desc": "SECOND TIME REPORTING THIS, MY MACHINE IS BEHAVING ODDLY AFTER I OPENED AN ATTACHMENT APPRECIATE A QUICK FIX",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Odd behaviour immediately after opening an attachment.",
+          "hours": 9.07
+        }
+      ]
+    },
+    {
+      "parent_l1": "Access & Identity",
+      "parent_l2": "Group Membership",
+      "name": "Shared mailbox or folder access",
+      "counts": [
+        4,
+        0,
+        0
+      ],
+      "total": 4,
+      "median_hours": 3.73,
+      "examples": [
+        {
+          "id": "INC1045216",
+          "month": "Jan 2026",
+          "desc": "hi team, cannot open the team folder, says you do not have permission need this today",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Permission denied on a shared team folder.",
+          "hours": 4.02
+        },
+        {
+          "id": "INC1045275",
+          "month": "Jan 2026",
+          "desc": "SECOND TIME REPORTING THIS, THE DRIVE THAT FINANCE SHARED IS NOT OPENING FOR ME THIS IS BLOCKING MY WORK",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Cannot open a drive another team shared.",
+          "hours": 2.77
+        },
+        {
+          "id": "INC1045432",
+          "month": "Jan 2026",
+          "desc": "raising this again, cannt open the team folder, says you do not have permission plz help",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Permission denied on a shared team folder.",
+          "hours": 3.95
+        },
+        {
+          "id": "INC1045483",
+          "month": "Jan 2026",
+          "desc": "teh drive that finance shared is not opening for me need this today",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Cannot open a drive another team shared.",
+          "hours": 3.51
+        }
+      ]
+    },
+    {
+      "parent_l1": "Security & Compliance",
+      "parent_l2": "Audit and Review",
+      "name": "Access review or evidence request",
+      "counts": [
+        1,
+        2,
+        1
+      ],
+      "total": 4,
+      "median_hours": 23.06,
+      "examples": [
+        {
+          "id": "INC1045457",
+          "month": "Jan 2026",
+          "desc": "auditors are asking for the list of who has access to the finance app kindly look into it urgently",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Auditors want the access list for an application.",
+          "hours": 27.55
+        },
+        {
+          "id": "INC1045869",
+          "month": "Feb 2026",
+          "desc": "auditors are asking for the list of who has access to the finance app please help",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Auditors want the access list for an application.",
+          "hours": 9.67
+        },
+        {
+          "id": "INC1045559",
+          "month": "Feb 2026",
+          "desc": "auditors are asking for the list of who has access to the finance app",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Auditors want the access list for an application.",
+          "hours": 32.25
+        },
+        {
+          "id": "INC1045990",
+          "month": "Mar 2026",
+          "desc": "team, need the login history for our team for last quarter let me know if you need anything from my side",
+          "priority": "P2 - High",
+          "confidence": "High",
+          "reason": "Requests historic login records for a team.",
+          "hours": 18.57
+        }
+      ]
+    },
+    {
+      "parent_l1": "Software & Applications",
+      "parent_l2": "CRM System",
+      "name": "CRM sync or data issue",
+      "counts": [
+        1,
+        0,
+        3
+      ],
+      "total": 4,
+      "median_hours": 17.39,
+      "examples": [
+        {
+          "id": "INC1045315",
+          "month": "Jan 2026",
+          "desc": "my opportunities are not showing the latest numbers kindly look into it urgently",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Opportunity records not showing current values.",
+          "hours": 9.84
+        },
+        {
+          "id": "INC1046165",
+          "month": "Mar 2026",
+          "desc": "hi team, data from the marketing tool is nto flowing in need this today",
+          "priority": "P4 - Low",
+          "confidence": "Medium",
+          "reason": "Data from another tool is not flowing into the system.",
+          "hours": 24.95
+        },
+        {
+          "id": "INC1046231",
+          "month": "Mar 2026",
+          "desc": "team, teh records i updated yesterday are missing today please help",
+          "priority": "P3 - Moderate",
+          "confidence": "Medium",
+          "reason": "Yesterday's record updates have disappeared.",
+          "hours": 7.1
+        },
+        {
+          "id": "INC1046066",
+          "month": "Mar 2026",
+          "desc": "TEAM, MY OPPORTUNITIES ARE NOT SHOWING THE LATEST NUMBERS",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Opportunity records not showing current values.",
+          "hours": 25.11
+        }
+      ]
+    },
+    {
+      "parent_l1": "Security & Compliance",
+      "parent_l2": "Data Access Control",
+      "name": "Removable media exception",
+      "counts": [
+        1,
+        1,
+        1
+      ],
+      "total": 3,
+      "median_hours": 83.69,
+      "examples": [
+        {
+          "id": "INC1045446",
+          "month": "Jan 2026",
+          "desc": "team, usb ports are disabled, i need it for one day only kindly look into it urgently",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Asks for a temporary exception to the USB block.",
+          "hours": 7.23
+        },
+        {
+          "id": "INC1045639",
+          "month": "Feb 2026",
+          "desc": "usb ports are disabled, i need it for one day only",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Asks for a temporary exception to the USB block.",
+          "hours": 83.69
+        },
+        {
+          "id": "INC1046121",
+          "month": "Mar 2026",
+          "desc": "need to copy files to a pen drive for the client, it is blocked",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Needs the USB block lifted to copy client files.",
+          "hours": 127.66
+        }
+      ]
+    },
+    {
+      "parent_l1": "Security & Compliance",
+      "parent_l2": "Data Access Control",
+      "name": "Sensitive data access request",
+      "counts": [
+        1,
+        1,
+        1
+      ],
+      "total": 3,
+      "median_hours": 146.79,
+      "examples": [
+        {
+          "id": "INC1045334",
+          "month": "Jan 2026",
+          "desc": "requesting rights to the restricted client data set",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Requests rights on a restricted client data set.",
+          "hours": 176.08
+        },
+        {
+          "id": "INC1045571",
+          "month": "Feb 2026",
+          "desc": "raising this again, requesting rights to the restricted client data set kindly look into it urgently",
+          "priority": "P3 - Moderate",
+          "confidence": "High",
+          "reason": "Requests rights on a restricted client data set.",
+          "hours": 117.5
+        },
+        {
+          "id": "INC1046290",
+          "month": "Mar 2026",
+          "desc": "hi team, need access to the payroll folder for the audit work kindly look into it urgently",
+          "priority": "P4 - Low",
+          "confidence": "Medium",
+          "reason": "Payroll folder access for audit work, sensitive data.",
+          "hours": null
+        }
+      ]
+    },
+    {
+      "parent_l1": "Email & Collaboration",
+      "parent_l2": "Meetings and Calls",
+      "name": "Cannot join or schedule meeting",
+      "counts": [
+        1,
+        1,
+        0
+      ],
+      "total": 2,
+      "median_hours": 5.04,
+      "examples": [
+        {
+          "id": "INC1045419",
+          "month": "Jan 2026",
+          "desc": "hello, cannot book a room in the invite, option is greyed out plz help",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Room booking option greyed out in the invite.",
+          "hours": 3.42
+        },
+        {
+          "id": "INC1045883",
+          "month": "Feb 2026",
+          "desc": "the invite link says organiser has not started, but he has need this today",
+          "priority": "P4 - Low",
+          "confidence": "High",
+          "reason": "Cannot join, invite reports the organiser has not started.",
+          "hours": 6.67
+        }
+      ]
+    }
+  ],
+  "shortlist_rule": {
+    "min_tickets_latest_month": 12,
+    "max_spread_hours": 3.0,
+    "max_p1p2_share_pct": 25.0
+  },
+  "shortlist": [
+    {
+      "parent": "Access & Identity",
+      "name": "Password",
+      "counts": [
+        20,
+        30,
+        38
+      ],
+      "total": 88,
+      "share_pct": 19.6,
+      "mom_change": 8,
+      "mom_change_pct": 26.7,
+      "first_to_last_pct": 90.0,
+      "median_hours": 0.78,
+      "p10_hours": 0.61,
+      "p90_hours": 1.07,
+      "spread_hours": 0.46,
+      "agent_hours_total": 68.5,
+      "agent_hours_per_month": 22.8,
+      "sla_met_pct": 100.0,
+      "reopen_pct": 2.4,
+      "p1p2_share_pct": 4.5,
+      "assignment_group": "IAM Support",
+      "self_service_pct": 42.0,
+      "checks": {
+        "volume": true,
+        "spread": true,
+        "routine": true
+      },
+      "checks_passed": 3
+    }
+  ],
+  "near_miss": [
+    {
+      "parent": "Access & Identity",
+      "name": "Account Provisioning",
+      "counts": [
+        7,
+        4,
+        12
+      ],
+      "total": 23,
+      "share_pct": 5.1,
+      "mom_change": 8,
+      "mom_change_pct": 200.0,
+      "first_to_last_pct": 71.4,
+      "median_hours": 6.43,
+      "p10_hours": 3.64,
+      "p90_hours": 11.75,
+      "spread_hours": 8.11,
+      "agent_hours_total": 160.5,
+      "agent_hours_per_month": 53.5,
+      "sla_met_pct": 90.9,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 13.0,
+      "assignment_group": "IAM Support",
+      "self_service_pct": 47.8,
+      "checks": {
+        "volume": true,
+        "spread": false,
+        "routine": true
+      },
+      "checks_passed": 2
+    },
+    {
+      "parent": "Email & Collaboration",
+      "name": "Mail Client",
+      "counts": [
+        7,
+        11,
+        7
+      ],
+      "total": 25,
+      "share_pct": 5.6,
+      "mom_change": -4,
+      "mom_change_pct": -36.4,
+      "first_to_last_pct": 0.0,
+      "median_hours": 2.17,
+      "p10_hours": 1.32,
+      "p90_hours": 4.07,
+      "spread_hours": 2.75,
+      "agent_hours_total": 60.2,
+      "agent_hours_per_month": 20.1,
+      "sla_met_pct": 100.0,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 12.0,
+      "assignment_group": "Messaging Support",
+      "self_service_pct": 40.0,
+      "checks": {
+        "volume": false,
+        "spread": true,
+        "routine": true
+      },
+      "checks_passed": 2
+    },
+    {
+      "parent": "Access & Identity",
+      "name": "MFA",
+      "counts": [
+        5,
+        5,
+        8
+      ],
+      "total": 18,
+      "share_pct": 4.0,
+      "mom_change": 3,
+      "mom_change_pct": 60.0,
+      "first_to_last_pct": 60.0,
+      "median_hours": 1.25,
+      "p10_hours": 0.67,
+      "p90_hours": 1.89,
+      "spread_hours": 1.22,
+      "agent_hours_total": 23.0,
+      "agent_hours_per_month": 7.7,
+      "sla_met_pct": 100.0,
+      "reopen_pct": 5.6,
+      "p1p2_share_pct": 11.1,
+      "assignment_group": "IAM Support",
+      "self_service_pct": 38.9,
+      "checks": {
+        "volume": false,
+        "spread": true,
+        "routine": true
+      },
+      "checks_passed": 2
+    },
+    {
+      "parent": "Email & Collaboration",
+      "name": "Distribution Lists",
+      "counts": [
+        4,
+        2,
+        4
+      ],
+      "total": 10,
+      "share_pct": 2.2,
+      "mom_change": 2,
+      "mom_change_pct": 100.0,
+      "first_to_last_pct": 0.0,
+      "median_hours": 1.79,
+      "p10_hours": 1.12,
+      "p90_hours": 2.39,
+      "spread_hours": 1.28,
+      "agent_hours_total": 17.9,
+      "agent_hours_per_month": 6.0,
+      "sla_met_pct": 100.0,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 0.0,
+      "assignment_group": "Messaging Support",
+      "self_service_pct": 60.0,
+      "checks": {
+        "volume": false,
+        "spread": true,
+        "routine": true
+      },
+      "checks_passed": 2
+    }
+  ],
+  "effort": [
+    {
+      "parent": "Hardware",
+      "name": "Laptop",
+      "counts": [
+        6,
+        10,
+        10
+      ],
+      "total": 26,
+      "share_pct": 5.8,
+      "mom_change": 0,
+      "mom_change_pct": 0.0,
+      "first_to_last_pct": 66.7,
+      "median_hours": 18.38,
+      "p10_hours": 4.36,
+      "p90_hours": 61.86,
+      "spread_hours": 57.51,
+      "agent_hours_total": 714.5,
+      "agent_hours_per_month": 238.2,
+      "sla_met_pct": 50.0,
+      "reopen_pct": 7.7,
+      "p1p2_share_pct": 7.7,
+      "assignment_group": "Desktop Support",
+      "self_service_pct": 50.0
+    },
+    {
+      "parent": "Software & Applications",
+      "name": "Licensing",
+      "counts": [
+        7,
+        11,
+        8
+      ],
+      "total": 26,
+      "share_pct": 5.8,
+      "mom_change": -3,
+      "mom_change_pct": -27.3,
+      "first_to_last_pct": 14.3,
+      "median_hours": 17.23,
+      "p10_hours": 9.02,
+      "p90_hours": 36.55,
+      "spread_hours": 27.53,
+      "agent_hours_total": 524.2,
+      "agent_hours_per_month": 174.7,
+      "sla_met_pct": 50.0,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 23.1,
+      "assignment_group": "Application Support",
+      "self_service_pct": 50.0
+    },
+    {
+      "parent": "Security & Compliance",
+      "name": "Data Access Control",
+      "counts": [
+        2,
+        2,
+        2
+      ],
+      "total": 6,
+      "share_pct": 1.3,
+      "mom_change": 0,
+      "mom_change_pct": 0.0,
+      "first_to_last_pct": 0.0,
+      "median_hours": 117.5,
+      "p10_hours": 37.81,
+      "p90_hours": 156.71,
+      "spread_hours": 118.9,
+      "agent_hours_total": 512.2,
+      "agent_hours_per_month": 170.7,
+      "sla_met_pct": 20.0,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 0.0,
+      "assignment_group": "Security Operations",
+      "self_service_pct": 50.0
+    },
+    {
+      "parent": "Software & Applications",
+      "name": "CRM System",
+      "counts": [
+        5,
+        3,
+        6
+      ],
+      "total": 14,
+      "share_pct": 3.1,
+      "mom_change": 3,
+      "mom_change_pct": 100.0,
+      "first_to_last_pct": 20.0,
+      "median_hours": 13.76,
+      "p10_hours": 4.46,
+      "p90_hours": 31.24,
+      "spread_hours": 26.78,
+      "agent_hours_total": 245.3,
+      "agent_hours_per_month": 81.8,
+      "sla_met_pct": 64.3,
+      "reopen_pct": 14.3,
+      "p1p2_share_pct": 7.1,
+      "assignment_group": "Application Support",
+      "self_service_pct": 35.7
+    },
+    {
+      "parent": "Network & Connectivity",
+      "name": "Bandwidth and Performance",
+      "counts": [
+        3,
+        4,
+        0
+      ],
+      "total": 7,
+      "share_pct": 1.6,
+      "mom_change": -4,
+      "mom_change_pct": -100.0,
+      "first_to_last_pct": -100.0,
+      "median_hours": 13.38,
+      "p10_hours": 10.92,
+      "p90_hours": 73.71,
+      "spread_hours": 62.78,
+      "agent_hours_total": 233.5,
+      "agent_hours_per_month": 77.8,
+      "sla_met_pct": 28.6,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 57.1,
+      "assignment_group": "Network Operations",
+      "self_service_pct": 42.9
+    },
+    {
+      "parent": "Hardware",
+      "name": "Peripherals",
+      "counts": [
+        10,
+        6,
+        9
+      ],
+      "total": 25,
+      "share_pct": 5.6,
+      "mom_change": 3,
+      "mom_change_pct": 50.0,
+      "first_to_last_pct": -10.0,
+      "median_hours": 7.57,
+      "p10_hours": 2.44,
+      "p90_hours": 19.47,
+      "spread_hours": 17.03,
+      "agent_hours_total": 213.0,
+      "agent_hours_per_month": 71.0,
+      "sla_met_pct": 87.0,
+      "reopen_pct": 8.7,
+      "p1p2_share_pct": 12.0,
+      "assignment_group": "Desktop Support",
+      "self_service_pct": 40.0
+    },
+    {
+      "parent": "Software & Applications",
+      "name": "ERP System",
+      "counts": [
+        12,
+        3,
+        6
+      ],
+      "total": 21,
+      "share_pct": 4.7,
+      "mom_change": 3,
+      "mom_change_pct": 100.0,
+      "first_to_last_pct": -50.0,
+      "median_hours": 7.74,
+      "p10_hours": 4.1,
+      "p90_hours": 17.64,
+      "spread_hours": 13.54,
+      "agent_hours_total": 205.4,
+      "agent_hours_per_month": 68.5,
+      "sla_met_pct": 71.4,
+      "reopen_pct": 4.8,
+      "p1p2_share_pct": 33.3,
+      "assignment_group": "Application Support",
+      "self_service_pct": 38.1
+    },
+    {
+      "parent": "Hardware",
+      "name": "Printer",
+      "counts": [
+        2,
+        12,
+        5
+      ],
+      "total": 19,
+      "share_pct": 4.2,
+      "mom_change": -7,
+      "mom_change_pct": -58.3,
+      "first_to_last_pct": 150.0,
+      "median_hours": 6.91,
+      "p10_hours": 2.15,
+      "p90_hours": 19.86,
+      "spread_hours": 17.71,
+      "agent_hours_total": 175.8,
+      "agent_hours_per_month": 58.6,
+      "sla_met_pct": 100.0,
+      "reopen_pct": 11.1,
+      "p1p2_share_pct": 10.5,
+      "assignment_group": "Desktop Support",
+      "self_service_pct": 63.2
+    }
+  ],
+  "sla_pressure": [
+    {
+      "parent": "Hardware",
+      "name": "Laptop",
+      "counts": [
+        6,
+        10,
+        10
+      ],
+      "total": 26,
+      "share_pct": 5.8,
+      "mom_change": 0,
+      "mom_change_pct": 0.0,
+      "first_to_last_pct": 66.7,
+      "median_hours": 18.38,
+      "p10_hours": 4.36,
+      "p90_hours": 61.86,
+      "spread_hours": 57.51,
+      "agent_hours_total": 714.5,
+      "agent_hours_per_month": 238.2,
+      "sla_met_pct": 50.0,
+      "reopen_pct": 7.7,
+      "p1p2_share_pct": 7.7,
+      "assignment_group": "Desktop Support",
+      "self_service_pct": 50.0
+    },
+    {
+      "parent": "Software & Applications",
+      "name": "Licensing",
+      "counts": [
+        7,
+        11,
+        8
+      ],
+      "total": 26,
+      "share_pct": 5.8,
+      "mom_change": -3,
+      "mom_change_pct": -27.3,
+      "first_to_last_pct": 14.3,
+      "median_hours": 17.23,
+      "p10_hours": 9.02,
+      "p90_hours": 36.55,
+      "spread_hours": 27.53,
+      "agent_hours_total": 524.2,
+      "agent_hours_per_month": 174.7,
+      "sla_met_pct": 50.0,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 23.1,
+      "assignment_group": "Application Support",
+      "self_service_pct": 50.0
+    },
+    {
+      "parent": "Software & Applications",
+      "name": "CRM System",
+      "counts": [
+        5,
+        3,
+        6
+      ],
+      "total": 14,
+      "share_pct": 3.1,
+      "mom_change": 3,
+      "mom_change_pct": 100.0,
+      "first_to_last_pct": 20.0,
+      "median_hours": 13.76,
+      "p10_hours": 4.46,
+      "p90_hours": 31.24,
+      "spread_hours": 26.78,
+      "agent_hours_total": 245.3,
+      "agent_hours_per_month": 81.8,
+      "sla_met_pct": 64.3,
+      "reopen_pct": 14.3,
+      "p1p2_share_pct": 7.1,
+      "assignment_group": "Application Support",
+      "self_service_pct": 35.7
+    },
+    {
+      "parent": "Software & Applications",
+      "name": "ERP System",
+      "counts": [
+        12,
+        3,
+        6
+      ],
+      "total": 21,
+      "share_pct": 4.7,
+      "mom_change": 3,
+      "mom_change_pct": 100.0,
+      "first_to_last_pct": -50.0,
+      "median_hours": 7.74,
+      "p10_hours": 4.1,
+      "p90_hours": 17.64,
+      "spread_hours": 13.54,
+      "agent_hours_total": 205.4,
+      "agent_hours_per_month": 68.5,
+      "sla_met_pct": 71.4,
+      "reopen_pct": 4.8,
+      "p1p2_share_pct": 33.3,
+      "assignment_group": "Application Support",
+      "self_service_pct": 38.1
+    },
+    {
+      "parent": "Network & Connectivity",
+      "name": "WiFi",
+      "counts": [
+        2,
+        8,
+        5
+      ],
+      "total": 15,
+      "share_pct": 3.3,
+      "mom_change": -3,
+      "mom_change_pct": -37.5,
+      "first_to_last_pct": 150.0,
+      "median_hours": 7.79,
+      "p10_hours": 4.34,
+      "p90_hours": 23.88,
+      "spread_hours": 19.54,
+      "agent_hours_total": 169.8,
+      "agent_hours_per_month": 56.6,
+      "sla_met_pct": 80.0,
+      "reopen_pct": 6.7,
+      "p1p2_share_pct": 26.7,
+      "assignment_group": "Network Operations",
+      "self_service_pct": 40.0
+    },
+    {
+      "parent": "Network & Connectivity",
+      "name": "VPN",
+      "counts": [
+        9,
+        7,
+        11
+      ],
+      "total": 27,
+      "share_pct": 6.0,
+      "mom_change": 4,
+      "mom_change_pct": 57.1,
+      "first_to_last_pct": 22.2,
+      "median_hours": 5.59,
+      "p10_hours": 2.22,
+      "p90_hours": 11.82,
+      "spread_hours": 9.61,
+      "agent_hours_total": 161.7,
+      "agent_hours_per_month": 53.9,
+      "sla_met_pct": 81.5,
+      "reopen_pct": 7.4,
+      "p1p2_share_pct": 44.4,
+      "assignment_group": "Network Operations",
+      "self_service_pct": 40.7
+    },
+    {
+      "parent": "Hardware",
+      "name": "Peripherals",
+      "counts": [
+        10,
+        6,
+        9
+      ],
+      "total": 25,
+      "share_pct": 5.6,
+      "mom_change": 3,
+      "mom_change_pct": 50.0,
+      "first_to_last_pct": -10.0,
+      "median_hours": 7.57,
+      "p10_hours": 2.44,
+      "p90_hours": 19.47,
+      "spread_hours": 17.03,
+      "agent_hours_total": 213.0,
+      "agent_hours_per_month": 71.0,
+      "sla_met_pct": 87.0,
+      "reopen_pct": 8.7,
+      "p1p2_share_pct": 12.0,
+      "assignment_group": "Desktop Support",
+      "self_service_pct": 40.0
+    },
+    {
+      "parent": "Access & Identity",
+      "name": "Account Provisioning",
+      "counts": [
+        7,
+        4,
+        12
+      ],
+      "total": 23,
+      "share_pct": 5.1,
+      "mom_change": 8,
+      "mom_change_pct": 200.0,
+      "first_to_last_pct": 71.4,
+      "median_hours": 6.43,
+      "p10_hours": 3.64,
+      "p90_hours": 11.75,
+      "spread_hours": 8.11,
+      "agent_hours_total": 160.5,
+      "agent_hours_per_month": 53.5,
+      "sla_met_pct": 90.9,
+      "reopen_pct": 0.0,
+      "p1p2_share_pct": 13.0,
+      "assignment_group": "IAM Support",
+      "self_service_pct": 47.8
+    }
+  ],
+  "channels": [
+    {
+      "name": "Self-Service Portal",
+      "count": 202,
+      "share_pct": 44.9
+    },
+    {
+      "name": "Email",
+      "count": 124,
+      "share_pct": 27.6
+    },
+    {
+      "name": "Phone",
+      "count": 82,
+      "share_pct": 18.2
+    },
+    {
+      "name": "Chat",
+      "count": 42,
+      "share_pct": 9.3
+    }
+  ],
+  "accuracy": {
+    "tickets_scored": 450,
+    "unique_cases": 127,
+    "classification_calls_saved_pct": 71.8,
+    "overall": {
+      "L1": 100.0,
+      "L2": 100.0,
+      "L3": 98.4
+    },
+    "per_category": [
+      {
+        "Category (L1)": "Access & Identity",
+        "tickets": 138,
+        "L1_correct_pct": 100.0,
+        "L2_correct_pct": 100.0,
+        "L3_correct_pct": 94.9
+      },
+      {
+        "Category (L1)": "Email & Collaboration",
+        "tickets": 54,
+        "L1_correct_pct": 100.0,
+        "L2_correct_pct": 100.0,
+        "L3_correct_pct": 100.0
+      },
+      {
+        "Category (L1)": "Hardware",
+        "tickets": 78,
+        "L1_correct_pct": 100.0,
+        "L2_correct_pct": 100.0,
+        "L3_correct_pct": 100.0
+      },
+      {
+        "Category (L1)": "Network & Connectivity",
+        "tickets": 55,
+        "L1_correct_pct": 100.0,
+        "L2_correct_pct": 100.0,
+        "L3_correct_pct": 100.0
+      },
+      {
+        "Category (L1)": "Security & Compliance",
+        "tickets": 35,
+        "L1_correct_pct": 100.0,
+        "L2_correct_pct": 100.0,
+        "L3_correct_pct": 100.0
+      },
+      {
+        "Category (L1)": "Software & Applications",
+        "tickets": 90,
+        "L1_correct_pct": 100.0,
+        "L2_correct_pct": 100.0,
+        "L3_correct_pct": 100.0
+      }
+    ],
+    "by_confidence": [
+      {
+        "Confidence": "High",
+        "tickets": 340.0,
+        "L2_correct_pct": 100.0
+      },
+      {
+        "Confidence": "Medium",
+        "tickets": 110.0,
+        "L2_correct_pct": 100.0
+      }
+    ],
+    "uncategorized": 0,
+    "needs_review_tickets": 110,
+    "distinct_misclassified_cases": 0
+  }
+}

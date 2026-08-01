@@ -1,0 +1,1145 @@
+[
+  {
+    "case_id":"C001",
+    "_norm":"no warning came and today it just stopped letting me in",
+    "tickets_in_case":11,
+    "sample_short":"No warning came and today it",
+    "sample_desc":"no warning came adn today it just stopped letting me in let me know if you need anything from my side",
+    "departments":"Customer Success, Human Resources, Marketing, Operations",
+    "channels":"Chat, Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C002",
+    "_norm":"did not get the 14 day reminder credentials expired suddenly",
+    "tickets_in_case":10,
+    "sample_short":"Did not get the 14 day",
+    "sample_desc":"SECOND TIME REPORTING THIS, DID NOT GET THE 14 DAY REMINDER, CREDENTIALS EXPIRED SUDDENLY KINDLY LOOK INTO IT URGENTLY",
+    "departments":"Customer Success, Engineering, Human Resources, Legal",
+    "channels":"Chat, Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C003",
+    "_norm":"forgot the credentials after the holiday",
+    "tickets_in_case":9,
+    "sample_short":"Forgot the credentials after the holiday",
+    "sample_desc":"hi, forgot the credentials after the holiday, please help thanks in advance",
+    "departments":"Finance, Human Resources, Manufacturing, Operations",
+    "channels":"Chat, Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C004",
+    "_norm":"strange link in a mail from an unknown sender did not click",
+    "tickets_in_case":9,
+    "sample_short":"Need support",
+    "sample_desc":"team, strange link in a mail from an unknown sender, did not click appreciate a quick fix",
+    "departments":"Engineering, Finance, Marketing, Sales",
+    "channels":"Chat, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C005",
+    "_norm":"the tool logged me out saying no seat available",
+    "tickets_in_case":8,
+    "sample_short":"System problem",
+    "sample_desc":"raising this again, the tool logged me out saying no seat available appreciate a quick fix",
+    "departments":"Customer Success, Engineering, Human Resources, Manufacturing",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C006",
+    "_norm":"it says my subscription has ended cannot open anything",
+    "tickets_in_case":8,
+    "sample_short":"It says my subscription has ended",
+    "sample_desc":"hi, it says my subscription has ended, cannot open anything please help",
+    "departments":"Human Resources, Legal, Manufacturing, Marketing",
+    "channels":"Chat, Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C007",
+    "_norm":"cant get into the system since morning tried twice already",
+    "tickets_in_case":8,
+    "sample_short":"Cant get into the system since",
+    "sample_desc":"cant get into the system since morning, tried twice already need this today",
+    "departments":"Finance, Human Resources, Operations, Procurement",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C008",
+    "_norm":"expired without any mail to me now i cant work",
+    "tickets_in_case":8,
+    "sample_short":"Expired without any mail to me",
+    "sample_desc":"HI, EXPIRED WITHOUT ANY MAIL TO ME, NOW I CANT WORK APPRECIATE A QUICK FIX",
+    "departments":"Customer Success, Engineering, Finance, Legal",
+    "channels":"Chat, Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C009",
+    "_norm":"not receiving anything since morning but web version shows them",
+    "tickets_in_case":8,
+    "sample_short":"Not receiving anything since morning but",
+    "sample_desc":"not receiving anything since morning but web version shows them thanks in advance",
+    "departments":"Finance, Legal, Manufacturing, Marketing",
+    "channels":"Chat, Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C010",
+    "_norm":"getting authentication failed when i try from home",
+    "tickets_in_case":7,
+    "sample_short":"Please assist",
+    "sample_desc":"getting authentication failed when i try from home need this today",
+    "departments":"Engineering, Finance, Human Resources, Legal",
+    "channels":"Chat, Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C011",
+    "_norm":"it says too many attempts locked pls unlock",
+    "tickets_in_case":7,
+    "sample_short":"It says too many attempts, locked",
+    "sample_desc":"raising this again, it says too many attempts, locked. pls unlock",
+    "departments":"Customer Success, Engineering, Finance, Legal",
+    "channels":"Chat, Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C012",
+    "_norm":"locked out again need it opened asap have a client call at 11",
+    "tickets_in_case":7,
+    "sample_short":"Not working",
+    "sample_desc":"raising this again, locked out again. need it opened asap, have a client call at 11 this is blocking my work",
+    "departments":"Customer Success, Engineering, Finance, Manufacturing",
+    "channels":"Chat, Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C013",
+    "_norm":"blocked out of the portal keeps saying account disabled",
+    "tickets_in_case":7,
+    "sample_short":"Blocked out of the portal, keeps",
+    "sample_desc":"HI, BLOCKED OUT OF THE PORTAL, KEEPS SAYING ACCOUNT DISABLED NEED THIS TODAY",
+    "departments":"Customer Success, Engineering, Legal, Procurement",
+    "channels":"Chat, Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C014",
+    "_norm":"mails are bouncing back to senders box seems full",
+    "tickets_in_case":7,
+    "sample_short":"Mails are bouncing back to senders",
+    "sample_desc":"hi, mails are bouncing back to senders, box seems full this is blocking my work",
+    "departments":"Legal, Manufacturing, Marketing, Operations",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C015",
+    "_norm":"cannot upload to the project library anymore",
+    "tickets_in_case":6,
+    "sample_short":"Cannot upload to the project library",
+    "sample_desc":"cannot upload to the project library anymore",
+    "departments":"Engineering, Human Resources, Operations, Procurement",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C016",
+    "_norm":"the pipeline view spins forever and never loads",
+    "tickets_in_case":6,
+    "sample_short":"The pipeline view spins forever and",
+    "sample_desc":"THE PIPELINE VIEW SPINS FOREVER AND NEVER LOADS KINDLY LOOK INTO IT URGENTLY",
+    "departments":"Legal, Manufacturing, Marketing, Operations",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C017",
+    "_norm":"connection is unstable since the new client version",
+    "tickets_in_case":6,
+    "sample_short":"Connection is unstable since the new",
+    "sample_desc":"team, connection is unstable since the new client version please help",
+    "departments":"Customer Success, Legal, Marketing, Operations",
+    "channels":"Chat, Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C018",
+    "_norm":"account got blocked i think i typed wrong 3 times",
+    "tickets_in_case":6,
+    "sample_short":"Request",
+    "sample_desc":"GOOD MORNING, ACCOUNT GOT BLOCKED, I THINK I TYPED WRONG 3 TIMES KINDLY LOOK INTO IT URGENTLY",
+    "departments":"Customer Success, Engineering, Human Resources, Sales",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C019",
+    "_norm":"sent items are not updating on my laptop",
+    "tickets_in_case":6,
+    "sample_short":"System problem",
+    "sample_desc":"sent items are not updating on my laptop this is blocking my work",
+    "departments":"Engineering, Legal, Manufacturing, Marketing",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C020",
+    "_norm":"half the screen is flickering lines coming",
+    "tickets_in_case":5,
+    "sample_short":"Half the screen is flickering, lines",
+    "sample_desc":"hello, half the screen is flickering, lines coming",
+    "departments":"Engineering, Marketing, Procurement, Sales",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C021",
+    "_norm":"the team site says access denied after the migration",
+    "tickets_in_case":5,
+    "sample_short":"The team site says access denied",
+    "sample_desc":"hi, the team site says access denied after the migration",
+    "departments":"Human Resources, Legal, Marketing, Procurement",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C022",
+    "_norm":"got a mail asking for my details looks fake forwarding it",
+    "tickets_in_case":5,
+    "sample_short":"Got a mail asking for my",
+    "sample_desc":"got a mail asking for my details, looks fake, forwarding it appreciate a quick fix",
+    "departments":"Finance, Marketing",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C023",
+    "_norm":"the deck will not save says file is in use",
+    "tickets_in_case":5,
+    "sample_short":"IT issue",
+    "sample_desc":"team, the deck will nto save, says file is in use",
+    "departments":"Finance, Legal, Marketing, Operations",
+    "channels":"Chat, Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C024",
+    "_norm":"internal portal gives a certificate warning every time",
+    "tickets_in_case":5,
+    "sample_short":"Internal portal gives a certificate warning",
+    "sample_desc":"HI TEAM, INTERNAL PORTAL GIVES A CERTIFICATE WARNING EVERY TIME PLEASE HELP",
+    "departments":"Engineering, Marketing, Operations, Procurement",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C025",
+    "_norm":"lost my handset yesterday cannot get the verification code",
+    "tickets_in_case":5,
+    "sample_short":"Lost my handset yesterday, cannot get",
+    "sample_desc":"lost my handset yesterday, cannot get the verification code",
+    "departments":"Human Resources, Legal, Manufacturing, Procurement",
+    "channels":"Chat, Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C026",
+    "_norm":"i am still getting mails from a team i left",
+    "tickets_in_case":5,
+    "sample_short":"Need support",
+    "sample_desc":"hi team, i am still getting mails from a team i left",
+    "departments":"Engineering, Operations, Sales",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C027",
+    "_norm":"file transfers to the server are taking forever this week",
+    "tickets_in_case":5,
+    "sample_short":"Request",
+    "sample_desc":"hi, file transfers to the server are taking forever this week appreciate a quick fix",
+    "departments":"Customer Success, Marketing, Operations, Sales",
+    "channels":"Chat, Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C028",
+    "_norm":"system not accepting my details after i changed it last week",
+    "tickets_in_case":5,
+    "sample_short":"Urgent help needed",
+    "sample_desc":"good morning, system not accepting my details after i changed it last week thanks in advance",
+    "departments":"Engineering, Finance, Human Resources, Sales",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C029",
+    "_norm":"the entry is not going through gives an error number",
+    "tickets_in_case":5,
+    "sample_short":"The entry is not going through",
+    "sample_desc":"teh entry is nto going through, gives an error number please help",
+    "departments":"Customer Success, Finance, Legal, Manufacturing",
+    "channels":"Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C030",
+    "_norm":"someone claiming to be the director asked me for gift cards",
+    "tickets_in_case":5,
+    "sample_short":"Need support",
+    "sample_desc":"someone claiming to be the director asked me for gift cards",
+    "departments":"Legal, Manufacturing, Marketing, Operations",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C031",
+    "_norm":"the wall socket at my new seat is not giving anything",
+    "tickets_in_case":5,
+    "sample_short":"The wall socket at my new",
+    "sample_desc":"hi, the wall socket at my new seat is nto giving anything appreciate a quick fix",
+    "departments":"Engineering, Human Resources, Procurement",
+    "channels":"Chat, Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C032",
+    "_norm":"pages coming with lines across toner maybe",
+    "tickets_in_case":5,
+    "sample_short":"Pages coming with lines across, toner",
+    "sample_desc":"good morning, pages coming with lines across, toner maybe this is blocking my work",
+    "departments":"Customer Success, Human Resources, Legal",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C033",
+    "_norm":"no one can hear me on calls tried both sides",
+    "tickets_in_case":5,
+    "sample_short":"No one can hear me on",
+    "sample_desc":"good morning, no one can hear me on calls, tried both sides please help",
+    "departments":"Finance, Human Resources, Manufacturing, Operations",
+    "channels":"Chat, Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C034",
+    "_norm":"please add the two new joiners to the delivery mail group",
+    "tickets_in_case":5,
+    "sample_short":"Please add the two new joiners",
+    "sample_desc":"good morning, please add the two new joiners to the delivery mail group",
+    "departments":"Human Resources, Legal, Manufacturing, Marketing",
+    "channels":"Chat, Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C035",
+    "_norm":"cannot get into the module since the weekend patch",
+    "tickets_in_case":5,
+    "sample_short":"Request",
+    "sample_desc":"cannot get into the module since the weekend patch need this today",
+    "departments":"Customer Success, Finance, Human Resources, Manufacturing",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C036",
+    "_norm":"need everything ready for the new resource starting next week",
+    "tickets_in_case":5,
+    "sample_short":"Need everything ready for the new",
+    "sample_desc":"hi, need everything ready for the new resource starting next week",
+    "departments":"Human Resources, Manufacturing, Marketing, Procurement",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C037",
+    "_norm":"changed my phone now the 6 digit code app is empty",
+    "tickets_in_case":5,
+    "sample_short":"Changed my phone, now the 6",
+    "sample_desc":"changed my phone, now teh 6 digit code app is empty",
+    "departments":"Customer Success, Engineering, Legal, Marketing",
+    "channels":"Email, Phone"
+  },
+  {
+    "case_id":"C038",
+    "_norm":"the tunnel drops every 20 minutes while working from home",
+    "tickets_in_case":5,
+    "sample_short":"Issue",
+    "sample_desc":"TEAM, THE TUNNEL DROPS EVERY 20 MINUTES WHILE WORKING FROM HOME KINDLY LOOK INTO IT URGENTLY",
+    "departments":"Legal, Manufacturing, Marketing, Sales",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C039",
+    "_norm":"my login is not working it says invalid credentials but im sure its right",
+    "tickets_in_case":5,
+    "sample_short":"My login is not working. it",
+    "sample_desc":"second time reporting this, my login is not working. it says invalid credentials but im sure its right thanks in advance",
+    "departments":"Customer Success, Human Resources, Manufacturing, Marketing",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C040",
+    "_norm":"my trial expired i need the proper version now",
+    "tickets_in_case":4,
+    "sample_short":"My trial expired, i need the",
+    "sample_desc":"team, my trial expired, i need the proper version now",
+    "departments":"Finance, Operations, Procurement, Sales",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C041",
+    "_norm":"moved from support to delivery team my old screens are gone",
+    "tickets_in_case":4,
+    "sample_short":"Moved from support to delivery team",
+    "sample_desc":"hello, moved from support to delivery team, my old screens are gone",
+    "departments":"Finance, Legal, Operations, Sales",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C042",
+    "_norm":"posting fails with a dump error at the last step",
+    "tickets_in_case":4,
+    "sample_short":"Posting fails with a dump error",
+    "sample_desc":"posting fails with a dump error at the last step appreciate a quick fix",
+    "departments":"Finance, Legal, Marketing, Operations",
+    "channels":"Chat, Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C043",
+    "_norm":"nothing prints jobs just sit in the queue",
+    "tickets_in_case":4,
+    "sample_short":"Nothing prints, jobs just sit in",
+    "sample_desc":"NOTHING PRINTS, JOBS JUST SIT IN THE QUEUE",
+    "departments":"Finance, Marketing, Procurement",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C044",
+    "_norm":"phone is not syncing anything from office",
+    "tickets_in_case":4,
+    "sample_short":"Phone is not syncing anything from",
+    "sample_desc":"HELLO, PHONE IS NOT SYNCING ANYTHING FROM OFFICE THIS IS BLOCKING MY WORK",
+    "departments":"Manufacturing, Marketing, Operations",
+    "channels":"Chat, Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C045",
+    "_norm":"output is very light hard to read the invoice copies",
+    "tickets_in_case":4,
+    "sample_short":"Not working",
+    "sample_desc":"output is very light, hard to read the invoice copies need this today",
+    "departments":"Engineering, Marketing, Procurement, Sales",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C046",
+    "_norm":"it says session could not be created others are fine",
+    "tickets_in_case":4,
+    "sample_short":"Request",
+    "sample_desc":"it says session could not be created, others are fine please help",
+    "departments":"Finance, Legal, Sales",
+    "channels":"Chat, Email, Phone"
+  },
+  {
+    "case_id":"C047",
+    "_norm":"wireless mouse disconnects every few minutes",
+    "tickets_in_case":4,
+    "sample_short":"Wireless mouse disconnects every few minutes",
+    "sample_desc":"raising this again, wireless mouse disconnects every few minutes",
+    "departments":"Customer Success, Engineering, Finance, Sales",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C048",
+    "_norm":"paper stuck inside tried removing but still error",
+    "tickets_in_case":4,
+    "sample_short":"Please assist",
+    "sample_desc":"paper stuck inside, tried removing but still error appreciate a quick fix",
+    "departments":"Finance, Legal, Operations, Procurement",
+    "channels":"Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C049",
+    "_norm":"i am unable to sign in message says account is locked contact admin",
+    "tickets_in_case":4,
+    "sample_short":"Not working",
+    "sample_desc":"hello, i am unable to sign in, message says account is locked contact admin",
+    "departments":"Customer Success, Engineering, Procurement, Sales",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C050",
+    "_norm":"transferred to another department need the right screens now",
+    "tickets_in_case":4,
+    "sample_short":"Issue",
+    "sample_desc":"transferred to another department, need teh right screens now",
+    "departments":"Human Resources, Legal, Manufacturing, Procurement",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C051",
+    "_norm":"cannot send anything says storage limit reached",
+    "tickets_in_case":4,
+    "sample_short":"Cannot send anything, says storage limit",
+    "sample_desc":"second time reporting this, cannot send anything, says storage limit reached",
+    "departments":"Legal, Manufacturing",
+    "channels":"Chat, Self-Service Portal"
+  },
+  {
+    "case_id":"C052",
+    "_norm":"dashboard is blank for me but fine for my manager",
+    "tickets_in_case":4,
+    "sample_short":"Dashboard is blank for me but",
+    "sample_desc":"hi team, dashboard is blank for me but fine for my manager thanks in advance",
+    "departments":"Customer Success, Manufacturing",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C053",
+    "_norm":"everything hangs when i open more than 2 things",
+    "tickets_in_case":4,
+    "sample_short":"Urgent help needed",
+    "sample_desc":"raising this again, everything hangs when i open more than 2 things let me know if you need anything from my side",
+    "departments":"Human Resources, Manufacturing, Operations",
+    "channels":"Chat, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C054",
+    "_norm":"extension is installed but nothing happens when i click",
+    "tickets_in_case":4,
+    "sample_short":"Extension is installed but nothing happens",
+    "sample_desc":"raising this again, extension is installed but nothing happens when i click",
+    "departments":"Finance, Marketing, Procurement, Sales",
+    "channels":"Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C055",
+    "_norm":"cafeteria area has almost no connectivity",
+    "tickets_in_case":4,
+    "sample_short":"IT issue",
+    "sample_desc":"cafeteria area has almost no connectivity need this today",
+    "departments":"Customer Success, Engineering, Manufacturing",
+    "channels":"Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C056",
+    "_norm":"it asks for a certificate and then fails to join",
+    "tickets_in_case":4,
+    "sample_short":"It asks for a certificate and",
+    "sample_desc":"IT ASKS FOR A CERTIFICATE AND THEN FAILS TO JOIN NEED THIS TODAY",
+    "departments":"Legal, Manufacturing, Operations",
+    "channels":"Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C057",
+    "_norm":"battery drains in one hour was fine before",
+    "tickets_in_case":4,
+    "sample_short":"Battery drains in one hour, was",
+    "sample_desc":"battery drains in one hour, was fine before this is blocking my work",
+    "departments":"Customer Success, Human Resources, Legal, Manufacturing",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C058",
+    "_norm":"audio only comes in left side of the headphone",
+    "tickets_in_case":4,
+    "sample_short":"Not working",
+    "sample_desc":"hi team, audio only comes in left side of the headphone need this today",
+    "departments":"Finance, Legal, Manufacturing, Sales",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C059",
+    "_norm":"not charging even when plugged in shows 4",
+    "tickets_in_case":3,
+    "sample_short":"Request",
+    "sample_desc":"GOOD MORNING, NOT CHARGING EVEN WHEN PLUGGED IN, SHOWS 4% KINDLY LOOK INTO IT URGENTLY",
+    "departments":"Customer Success, Operations, Sales",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C060",
+    "_norm":"video freezes for others while my network looks fine",
+    "tickets_in_case":3,
+    "sample_short":"Urgent help needed",
+    "sample_desc":"video freezes for others while my network looks fine need this today",
+    "departments":"Legal, Marketing, Operations",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C061",
+    "_norm":"need the design tool for a project starting next month",
+    "tickets_in_case":3,
+    "sample_short":"Request",
+    "sample_desc":"hi, need the design tool for a project starting next month thanks in advance",
+    "departments":"Human Resources, Marketing, Procurement",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C062",
+    "_norm":"no connection from my home line since yesterday evening",
+    "tickets_in_case":3,
+    "sample_short":"No connection from my home line",
+    "sample_desc":"HELLO, NO CONNECTION FROM MY HOME LINE SINCE YESTERDAY EVENING THIS IS BLOCKING MY WORK",
+    "departments":"Human Resources, Procurement",
+    "channels":"Chat, Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C063",
+    "_norm":"very slow since last week fan runs loud all the time",
+    "tickets_in_case":3,
+    "sample_short":"Very slow since last week, fan",
+    "sample_desc":"raising this again, very slow since last week, fan runs loud all the time",
+    "departments":"Engineering, Finance, Marketing",
+    "channels":"Chat, Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C064",
+    "_norm":"please arrange a seat for the analytics software",
+    "tickets_in_case":3,
+    "sample_short":"Please arrange a seat for the",
+    "sample_desc":"please arrange a seat for the analytics software thanks in advance",
+    "departments":"Customer Success, Legal, Operations",
+    "channels":"Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C065",
+    "_norm":"on the 4th floor it drops constantly ground floor is fine",
+    "tickets_in_case":3,
+    "sample_short":"On the 4th floor it drops",
+    "sample_desc":"hello, on the 4th floor it drops constantly, ground floor is fine thanks in advance",
+    "departments":"Customer Success, Manufacturing",
+    "channels":"Email"
+  },
+  {
+    "case_id":"C066",
+    "_norm":"auditors are asking for the list of who has access to the finance app",
+    "tickets_in_case":3,
+    "sample_short":"Auditors are asking for the list",
+    "sample_desc":"auditors are asking for the list of who has access to the finance app kindly look into it urgently",
+    "departments":"Human Resources, Manufacturing",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C067",
+    "_norm":"new device the authenticator is not showing anything for work",
+    "tickets_in_case":3,
+    "sample_short":"New device, the authenticator is not",
+    "sample_desc":"hello, new device, the authenticator is not showing anything for work this is blocking my work",
+    "departments":"Human Resources, Operations",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C068",
+    "_norm":"resignation done need the access removed before audit",
+    "tickets_in_case":3,
+    "sample_short":"Resignation done, need the access removed",
+    "sample_desc":"good morning, resignation done, need the access removed before audit",
+    "departments":"Human Resources, Operations, Sales",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C069",
+    "_norm":"the page loads blank works on my colleague machine",
+    "tickets_in_case":3,
+    "sample_short":"The page loads blank, works on",
+    "sample_desc":"team, the page loads blank, works on my colleague machine",
+    "departments":"Customer Success, Manufacturing, Marketing",
+    "channels":"Email"
+  },
+  {
+    "case_id":"C070",
+    "_norm":"keeps saying not responding when i refresh the pivot",
+    "tickets_in_case":3,
+    "sample_short":"Keeps saying not responding when i",
+    "sample_desc":"keeps saying not responding when i refresh teh pivot thanks in advance",
+    "departments":"Engineering, Procurement",
+    "channels":"Email, Phone"
+  },
+  {
+    "case_id":"C071",
+    "_norm":"it just says connecting and stays there forever",
+    "tickets_in_case":3,
+    "sample_short":"It just says connecting and stays",
+    "sample_desc":"hi team, it just says connecting and stays there forever this is blocking my work",
+    "departments":"Customer Success, Operations",
+    "channels":"Chat, Self-Service Portal"
+  },
+  {
+    "case_id":"C072",
+    "_norm":"the dock is dead nothing connects when i put the laptop",
+    "tickets_in_case":3,
+    "sample_short":"The dock is dead, nothing connects",
+    "sample_desc":"hi team, the dock is dead, nothing connects when i put the laptop this is blocking my work",
+    "departments":"Engineering, Sales",
+    "channels":"Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C073",
+    "_norm":"my machine is behaving oddly after i opened an attachment",
+    "tickets_in_case":3,
+    "sample_short":"My machine is behaving oddly after",
+    "sample_desc":"my machine is behaving oddly after i opened an attachment this is blocking my work",
+    "departments":"Engineering, Finance, Legal",
+    "channels":"Chat, Self-Service Portal"
+  },
+  {
+    "case_id":"C074",
+    "_norm":"the toolbar button disappeared after the update",
+    "tickets_in_case":3,
+    "sample_short":"Request",
+    "sample_desc":"the toolbar button disappeared after the update this is blocking my work",
+    "departments":"Customer Success, Engineering, Human Resources",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C075",
+    "_norm":"my laptop does not see the office network at all",
+    "tickets_in_case":3,
+    "sample_short":"My laptop does not see the",
+    "sample_desc":"TEAM, MY LAPTOP DOES NOT SEE THE OFFICE NETWORK AT ALL",
+    "departments":"Customer Success, Sales",
+    "channels":"Email, Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C076",
+    "_norm":"the pointer jumps on its own while typing",
+    "tickets_in_case":3,
+    "sample_short":"The pointer jumps on its own",
+    "sample_desc":"second time reporting this, teh pointer jumps on its own while typing",
+    "departments":"Manufacturing, Operations",
+    "channels":"Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C077",
+    "_norm":"keeps disconnecting during calls have to reconnect again and again",
+    "tickets_in_case":3,
+    "sample_short":"Issue",
+    "sample_desc":"good morning, keeps disconnecting during calls, have to reconnect again and again",
+    "departments":"Customer Success, Legal, Operations",
+    "channels":"Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C078",
+    "_norm":"the file closes by itself every time i open the big sheet",
+    "tickets_in_case":3,
+    "sample_short":"The file closes by itself every",
+    "sample_desc":"the file closes by itself every time i open the big sheet need this today",
+    "departments":"Engineering, Marketing, Sales",
+    "channels":"Chat, Self-Service Portal"
+  },
+  {
+    "case_id":"C079",
+    "_norm":"person left last friday please close everything for him",
+    "tickets_in_case":3,
+    "sample_short":"IT issue",
+    "sample_desc":"raising this again, person left last friday, please close everything for him kindly look into it urgently",
+    "departments":"Engineering, Finance, Sales",
+    "channels":"Chat, Self-Service Portal"
+  },
+  {
+    "case_id":"C080",
+    "_norm":"when i attach it the keyboard and mouse stop responding",
+    "tickets_in_case":2,
+    "sample_short":"When i attach it the keyboard",
+    "sample_desc":"WHEN I ATTACH IT TEH KEYBOARD AND MOUSE STOP RESPONDING KINDLY LOOK INTO IT URGENTLY",
+    "departments":"Human Resources, Manufacturing",
+    "channels":"Chat, Self-Service Portal"
+  },
+  {
+    "case_id":"C081",
+    "_norm":"usb ports are disabled i need it for one day only",
+    "tickets_in_case":2,
+    "sample_short":"IT issue",
+    "sample_desc":"team, usb ports are disabled, i need it for one day only kindly look into it urgently",
+    "departments":"Engineering, Finance",
+    "channels":"Chat, Self-Service Portal"
+  },
+  {
+    "case_id":"C082",
+    "_norm":"voice breaks badly in every call from my end",
+    "tickets_in_case":2,
+    "sample_short":"Voice breaks badly in every call",
+    "sample_desc":"voice breaks badly in every call from my end let me know if you need anything from my side",
+    "departments":"Legal",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C083",
+    "_norm":"requesting rights to the restricted client data set",
+    "tickets_in_case":2,
+    "sample_short":"Urgent help needed",
+    "sample_desc":"requesting rights to the restricted client data set",
+    "departments":"Human Resources, Procurement",
+    "channels":"Chat, Self-Service Portal"
+  },
+  {
+    "case_id":"C084",
+    "_norm":"please give me approval rights for the requests queue",
+    "tickets_in_case":2,
+    "sample_short":"Need support",
+    "sample_desc":"second time reporting this, plz give me approval rights for teh requests queue kindly look into it urgently",
+    "departments":"Engineering, Procurement",
+    "channels":"Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C085",
+    "_norm":"verification keeps repeating every 5 minutes very annoying",
+    "tickets_in_case":2,
+    "sample_short":"Verification keeps repeating every 5 minutes",
+    "sample_desc":"verification keeps repeating every 5 minutes, very annoying let me know if you need anything from my side",
+    "departments":"Customer Success, Operations",
+    "channels":"Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C086",
+    "_norm":"the drive that finance shared is not opening for me",
+    "tickets_in_case":2,
+    "sample_short":"The drive that finance shared is",
+    "sample_desc":"SECOND TIME REPORTING THIS, THE DRIVE THAT FINANCE SHARED IS NOT OPENING FOR ME THIS IS BLOCKING MY WORK",
+    "departments":"Legal, Marketing",
+    "channels":"Chat, Phone"
+  },
+  {
+    "case_id":"C087",
+    "_norm":"a warning popped up saying threat detected and quarantined",
+    "tickets_in_case":2,
+    "sample_short":"A warning popped up saying threat",
+    "sample_desc":"hi, a warning popped up saying threat detected adn quarantined this is blocking my work",
+    "departments":"Manufacturing, Procurement",
+    "channels":"Chat, Self-Service Portal"
+  },
+  {
+    "case_id":"C088",
+    "_norm":"my opportunities are not showing the latest numbers",
+    "tickets_in_case":2,
+    "sample_short":"Please assist",
+    "sample_desc":"my opportunities are not showing the latest numbers kindly look into it urgently",
+    "departments":"Manufacturing, Sales",
+    "channels":"Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C089",
+    "_norm":"my workbook says it cannot be opened worked yesterday",
+    "tickets_in_case":2,
+    "sample_short":"My workbook says it cannot be",
+    "sample_desc":"hello, my workbook says it cannot be opened, worked yesterday appreciate a quick fix",
+    "departments":"Manufacturing",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C090",
+    "_norm":"few keys not typing mainly e and r",
+    "tickets_in_case":2,
+    "sample_short":"Issue",
+    "sample_desc":"few keys not typing, mainly e and r",
+    "departments":"Manufacturing, Operations",
+    "channels":"Email, Self-Service Portal"
+  },
+  {
+    "case_id":"C091",
+    "_norm":"everything is crawling since 10am today across the floor",
+    "tickets_in_case":2,
+    "sample_short":"Everything is crawling since 10am today",
+    "sample_desc":"good morning, everything is crawling since 10am today across the floor appreciate a quick fix",
+    "departments":"Engineering, Procurement",
+    "channels":"Email, Phone"
+  },
+  {
+    "case_id":"C092",
+    "_norm":"machine takes 15 mins to start unusable in the morning",
+    "tickets_in_case":2,
+    "sample_short":"Machine takes 15 mins to start",
+    "sample_desc":"machine takes 15 mins to start, unusable in the morning appreciate a quick fix",
+    "departments":"Marketing, Sales",
+    "channels":"Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C093",
+    "_norm":"cannot find the device in the list anymore",
+    "tickets_in_case":2,
+    "sample_short":"Cannot find the device in the",
+    "sample_desc":"good morning, cannt find the device in teh list anymore let me know if you need anything from my side",
+    "departments":"Engineering, Operations",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C094",
+    "_norm":"cannot add my official mail on the new phone",
+    "tickets_in_case":2,
+    "sample_short":"Cannot add my official mail on",
+    "sample_desc":"raising this again, cannot add my official mail on the new phone",
+    "departments":"Customer Success, Engineering",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C095",
+    "_norm":"mic is picking up too much noise team complained",
+    "tickets_in_case":2,
+    "sample_short":"Mic is picking up too much",
+    "sample_desc":"good morning, mic is picking up too much noise, team complained this is blocking my work",
+    "departments":"Human Resources",
+    "channels":"Email"
+  },
+  {
+    "case_id":"C096",
+    "_norm":"need edit rights in the reporting tool i only have view",
+    "tickets_in_case":2,
+    "sample_short":"Urgent help needed",
+    "sample_desc":"team, need edit rights in the reporting tool, i only have view appreciate a quick fix",
+    "departments":"Engineering, Finance",
+    "channels":"Phone, Self-Service Portal"
+  },
+  {
+    "case_id":"C097",
+    "_norm":"approve on phone then it asks again on laptop never ends",
+    "tickets_in_case":2,
+    "sample_short":"Approve on phone, then it asks",
+    "sample_desc":"approve on phone, then it asks agian on laptop, never ends this is blocking my work",
+    "departments":"Finance, Human Resources",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C098",
+    "_norm":"new handset given need the work apps put on it",
+    "tickets_in_case":2,
+    "sample_short":"New handset given, need the work",
+    "sample_desc":"good morning, new handset given, need the work apps put on it",
+    "departments":"Customer Success, Finance",
+    "channels":"Email, Phone"
+  },
+  {
+    "case_id":"C099",
+    "_norm":"battery drains in one hour was fine before please help",
+    "tickets_in_case":1,
+    "sample_short":"Battery drains in one hour, was",
+    "sample_desc":"battery drains in one hour, was fine before plz help",
+    "departments":"Legal",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C100",
+    "_norm":"cannot book a room in the invite option is greyed out please help",
+    "tickets_in_case":1,
+    "sample_short":"Cannot book a room in the",
+    "sample_desc":"hello, cannot book a room in the invite, option is greyed out plz help",
+    "departments":"Operations",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C101",
+    "_norm":"forgot the credentials after the holiday please help",
+    "tickets_in_case":1,
+    "sample_short":"Issue",
+    "sample_desc":"forgot the credentials after the holiday, plz help please help",
+    "departments":"Engineering",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C102",
+    "_norm":"video freezes for others while my network looks fine please help",
+    "tickets_in_case":1,
+    "sample_short":"Please assist",
+    "sample_desc":"hello, video freezes for others while my network looks fine plz help",
+    "departments":"Finance",
+    "channels":"Phone"
+  },
+  {
+    "case_id":"C103",
+    "_norm":"cannot open the team folder says you do not have permission",
+    "tickets_in_case":1,
+    "sample_short":"Not working",
+    "sample_desc":"hi team, cannot open the team folder, says you do not have permission need this today",
+    "departments":"Procurement",
+    "channels":"Phone"
+  },
+  {
+    "case_id":"C104",
+    "_norm":"batch job for month end failed midway again",
+    "tickets_in_case":1,
+    "sample_short":"Batch job for month end failed",
+    "sample_desc":"batch job for month end failed midway again please help",
+    "departments":"Legal",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C105",
+    "_norm":"there is a crack after it fell still working but hard to read",
+    "tickets_in_case":1,
+    "sample_short":"Please assist",
+    "sample_desc":"hello, there is a crack after it fell, still working but hard to read please help",
+    "departments":"Legal",
+    "channels":"Phone"
+  },
+  {
+    "case_id":"C106",
+    "_norm":"cannot open the team folder says you do not have permission please help",
+    "tickets_in_case":1,
+    "sample_short":"Cannot open the team folder, says",
+    "sample_desc":"raising this again, cannt open the team folder, says you do not have permission plz help",
+    "departments":"Customer Success",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C107",
+    "_norm":"data from the marketing tool is not flowing in",
+    "tickets_in_case":1,
+    "sample_short":"Data from the marketing tool is",
+    "sample_desc":"hi team, data from the marketing tool is nto flowing in need this today",
+    "departments":"Manufacturing",
+    "channels":"Email"
+  },
+  {
+    "case_id":"C108",
+    "_norm":"display goes black randomly then comes back",
+    "tickets_in_case":1,
+    "sample_short":"Please assist",
+    "sample_desc":"hi team, display goes black randomly then comes back appreciate a quick fix",
+    "departments":"Marketing",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C109",
+    "_norm":"the records i updated yesterday are missing today",
+    "tickets_in_case":1,
+    "sample_short":"The records i updated yesterday are",
+    "sample_desc":"team, teh records i updated yesterday are missing today please help",
+    "departments":"Procurement",
+    "channels":"Phone"
+  },
+  {
+    "case_id":"C110",
+    "_norm":"our new hire has no login laptop is there but cannot start",
+    "tickets_in_case":1,
+    "sample_short":"Our new hire has no login",
+    "sample_desc":"HELLO, OUR NEW HIRE HAS NO LOGIN, LAPTOP IS THERE BUT CANNOT START LET ME KNOW IF YOU NEED ANYTHING FROM MY SIDE",
+    "departments":"Legal",
+    "channels":"Phone"
+  },
+  {
+    "case_id":"C111",
+    "_norm":"formatting breaks when i reopen the document",
+    "tickets_in_case":1,
+    "sample_short":"Formatting breaks when i reopen the",
+    "sample_desc":"HI TEAM, FORMATTING BREAKS WHEN I REOPEN TEH DOCUMENT",
+    "departments":"Legal",
+    "channels":"Email"
+  },
+  {
+    "case_id":"C112",
+    "_norm":"machine takes 15 mins to start unusable in the morning please help",
+    "tickets_in_case":1,
+    "sample_short":"Machine takes 15 mins to start",
+    "sample_desc":"GOOD MORNING, MACHINE TAKES 15 MINS TO START, UNUSABLE IN TEH MORNING PLZ HELP",
+    "departments":"Procurement",
+    "channels":"Phone"
+  },
+  {
+    "case_id":"C113",
+    "_norm":"need to copy files to a pen drive for the client it is blocked",
+    "tickets_in_case":1,
+    "sample_short":"Need support",
+    "sample_desc":"need to copy files to a pen drive for the client, it is blocked",
+    "departments":"Legal",
+    "channels":"Chat"
+  },
+  {
+    "case_id":"C114",
+    "_norm":"need the login history for our team for last quarter",
+    "tickets_in_case":1,
+    "sample_short":"Need the login history for our",
+    "sample_desc":"team, need the login history for our team for last quarter let me know if you need anything from my side",
+    "departments":"Procurement",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C115",
+    "_norm":"promoted last month but still seeing the old menu options",
+    "tickets_in_case":1,
+    "sample_short":"System problem",
+    "sample_desc":"team, promoted last month but still seeing teh old menu options let me know if you need anything from my side",
+    "departments":"Customer Success",
+    "channels":"Email"
+  },
+  {
+    "case_id":"C116",
+    "_norm":"need access to the payroll folder for the audit work",
+    "tickets_in_case":1,
+    "sample_short":"Need access to the payroll folder",
+    "sample_desc":"hi team, need access to the payroll folder for the audit work kindly look into it urgently",
+    "departments":"Human Resources",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C117",
+    "_norm":"moved desks and now there is no connection through the cable",
+    "tickets_in_case":1,
+    "sample_short":"Moved desks and now there is",
+    "sample_desc":"hi, moved desks and now there is no connection through the cable thanks in advance",
+    "departments":"Marketing",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C118",
+    "_norm":"someone claiming to be the director asked me for gift cards please help",
+    "tickets_in_case":1,
+    "sample_short":"Someone claiming to be the director",
+    "sample_desc":"hi, someone claiming to be teh director asked me for gift cards plz help",
+    "departments":"Finance",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C119",
+    "_norm":"the adapter is warm but percentage keeps going down",
+    "tickets_in_case":1,
+    "sample_short":"The adapter is warm but percentage",
+    "sample_desc":"hello, the adapter is warm but percentage keeps going down",
+    "departments":"Sales",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C120",
+    "_norm":"his last working day was 28th still showing active in the system",
+    "tickets_in_case":1,
+    "sample_short":"His last working day was 28th",
+    "sample_desc":"raising this again, his last working day was 28th, still showing active in the system this is blocking my work",
+    "departments":"Procurement",
+    "channels":"Email"
+  },
+  {
+    "case_id":"C121",
+    "_norm":"it says session could not be created others are fine please help",
+    "tickets_in_case":1,
+    "sample_short":"It says session could not be",
+    "sample_desc":"IT SAYS SESSION COULD NOT BE CREATED, OTHERS ARE FINE PLZ HELP",
+    "departments":"Human Resources",
+    "channels":"Email"
+  },
+  {
+    "case_id":"C122",
+    "_norm":"it keeps asking me for the code again and again in a loop",
+    "tickets_in_case":1,
+    "sample_short":"Urgent help needed",
+    "sample_desc":"hi team, it keeps asking me for the code again and again in a loop",
+    "departments":"Marketing",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C123",
+    "_norm":"it asks for a certificate and then fails to join please help",
+    "tickets_in_case":1,
+    "sample_short":"It asks for a certificate and",
+    "sample_desc":"it asks for a certificate adn then fails to join plz help",
+    "departments":"Operations",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C124",
+    "_norm":"i can see the dashboard but cannot download anything",
+    "tickets_in_case":1,
+    "sample_short":"I can see the dashboard but",
+    "sample_desc":"i can see the dashboard but cannot download anything this is blocking my work",
+    "departments":"Procurement",
+    "channels":"Phone"
+  },
+  {
+    "case_id":"C125",
+    "_norm":"the finance system is throwing an error at login for me only",
+    "tickets_in_case":1,
+    "sample_short":"Urgent help needed",
+    "sample_desc":"good morning, teh finance system is throwing an error at login for me only appreciate a quick fix",
+    "departments":"Engineering",
+    "channels":"Self-Service Portal"
+  },
+  {
+    "case_id":"C126",
+    "_norm":"new person joining monday in my team nothing is set up for her yet",
+    "tickets_in_case":1,
+    "sample_short":"New person joining monday in my",
+    "sample_desc":"hi team, new person joining monday in my team, nothing is set up for her yet",
+    "departments":"Human Resources",
+    "channels":"Email"
+  },
+  {
+    "case_id":"C127",
+    "_norm":"the invite link says organiser has not started but he has",
+    "tickets_in_case":1,
+    "sample_short":"Urgent help needed",
+    "sample_desc":"the invite link says organiser has not started, but he has need this today",
+    "departments":"Manufacturing",
+    "channels":"Phone"
+  }
+]

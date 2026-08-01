@@ -1,0 +1,76 @@
+{
+  "tickets": 522,
+  "unique_cases": 126,
+  "dedup_saving_pct": 75.9,
+  "uncategorized": 0,
+  "needs_review_tickets": 122,
+  "scored": true,
+  "tickets_scored": 522,
+  "overall": {
+    "L1": 99.4,
+    "L2": 99.4,
+    "L3": 98.1
+  },
+  "per_category": [
+    {
+      "Category (L1)": "Access & Identity",
+      "tickets": 172,
+      "L1_correct_pct": 100.0,
+      "L2_correct_pct": 100.0,
+      "L3_correct_pct": 95.9
+    },
+    {
+      "Category (L1)": "Email & Collaboration",
+      "tickets": 73,
+      "L1_correct_pct": 100.0,
+      "L2_correct_pct": 100.0,
+      "L3_correct_pct": 100.0
+    },
+    {
+      "Category (L1)": "Hardware",
+      "tickets": 87,
+      "L1_correct_pct": 100.0,
+      "L2_correct_pct": 100.0,
+      "L3_correct_pct": 100.0
+    },
+    {
+      "Category (L1)": "Network & Connectivity",
+      "tickets": 65,
+      "L1_correct_pct": 95.4,
+      "L2_correct_pct": 95.4,
+      "L3_correct_pct": 95.4
+    },
+    {
+      "Category (L1)": "Security & Compliance",
+      "tickets": 34,
+      "L1_correct_pct": 100.0,
+      "L2_correct_pct": 100.0,
+      "L3_correct_pct": 100.0
+    },
+    {
+      "Category (L1)": "Software & Applications",
+      "tickets": 91,
+      "L1_correct_pct": 100.0,
+      "L2_correct_pct": 100.0,
+      "L3_correct_pct": 100.0
+    }
+  ],
+  "by_confidence": [
+    {
+      "Confidence": "High",
+      "tickets": 400,
+      "L2_correct_pct": 100.0
+    },
+    {
+      "Confidence": "Medium",
+      "tickets": 113,
+      "L2_correct_pct": 97.3
+    },
+    {
+      "Confidence": "Low",
+      "tickets": 9,
+      "L2_correct_pct": 100.0
+    }
+  ],
+  "distinct_misclassified_cases": 3
+}

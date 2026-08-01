@@ -1,262 +1,568 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Five Agent Patterns - MeetFlow Workshop</title>
-<style>
-  :root {
-    --bg: #0D0D0D;
-    --panel: #1a1a1d;
-    --panel-2: #232327;
-    --border: #2e2e33;
-    --text: #ececec;
-    --muted: #9a9aa0;
-    --accent: #D47A21;
-    --accent-soft: #D47A2120;
-    --code-bg: #141416;
-    --green: #4ade80;
-    --blue: #3b82f6;
-  }
-  * { box-sizing: border-box; }
-  html, body {
-    margin: 0; padding: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    line-height: 1.65;
-    font-size: 16px;
-  }
-  .container { max-width: 920px; margin: 0 auto; padding: 48px 32px 96px; }
-  header { border-bottom: 2px solid var(--accent); padding-bottom: 24px; margin-bottom: 40px; }
-  header .eyebrow {
-    color: var(--accent); font-size: 13px; letter-spacing: 1.5px;
-    text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
-  }
-  h1 { font-size: 36px; margin: 0 0 12px; line-height: 1.2; }
-  h2 { font-size: 26px; margin: 56px 0 16px; padding-top: 32px; border-top: 1px solid var(--border); }
-  h3 { font-size: 18px; margin: 24px 0 10px; color: var(--accent); }
-  h4 { font-size: 14px; margin: 20px 0 8px; color: var(--text); text-transform: uppercase; letter-spacing: 0.8px; }
-  p { margin: 12px 0; color: var(--text); }
-  .muted { color: var(--muted); }
-  .lead { font-size: 18px; color: var(--muted); }
-  a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
-  a:hover { border-bottom-style: solid; }
-  code {
-    font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
-    font-size: 13.5px;
-    background: var(--code-bg);
-    border: 1px solid var(--border);
-    padding: 1px 6px;
-    border-radius: 4px;
-    color: #f4d6a8;
-  }
-  pre {
-    background: var(--code-bg);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: 6px;
-    padding: 16px 20px;
-    overflow-x: auto;
-    font-size: 13px;
-    line-height: 1.55;
-  }
-  pre code { background: none; border: none; padding: 0; color: var(--text); font-size: 13px; }
-  pre.file { border-left-color: var(--blue); }
-  .pre-label {
-    display: inline-block;
-    font-family: "SF Mono", Menlo, monospace;
-    font-size: 11px; letter-spacing: 0.5px;
-    color: var(--muted);
-    background: var(--panel-2);
-    border: 1px solid var(--border);
-    border-bottom: none;
-    border-radius: 4px 4px 0 0;
-    padding: 4px 10px;
-    margin-bottom: -1px;
-  }
-  .pre-label.file { color: var(--blue); }
-  .pre-label.ask { color: var(--accent); }
-  .pattern {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 28px 32px;
-    margin: 32px 0;
-  }
-  .pattern-num {
-    display: inline-block;
-    background: var(--accent);
-    color: #000; font-weight: 700;
-    padding: 4px 12px; border-radius: 4px;
-    font-size: 13px; letter-spacing: 1px;
-    margin-bottom: 12px;
-  }
-  .pattern h2 { margin-top: 0; padding-top: 0; border-top: none; font-size: 28px; }
-  .callout {
-    background: var(--accent-soft);
-    border-left: 3px solid var(--accent);
-    padding: 14px 18px;
-    margin: 18px 0;
-    border-radius: 4px;
-  }
-  .callout strong { color: var(--accent); }
-  .method {
-    background: var(--panel-2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 4px 20px 16px;
-    margin: 16px 0;
-  }
-  .method-head {
-    display: flex; align-items: center; gap: 10px;
-    margin: 14px 0 6px;
-    font-weight: 700;
-  }
-  .method-badge {
-    background: var(--accent); color: #000;
-    padding: 2px 10px; border-radius: 4px;
-    font-size: 12px; letter-spacing: 0.5px;
-    flex-shrink: 0;
-  }
-  .method-badge.b { background: var(--blue); color: #fff; }
-  ul, ol { padding-left: 22px; }
-  ul li, ol li { margin: 6px 0; }
-  table { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14.5px; }
-  th, td { border: 1px solid var(--border); padding: 10px 14px; text-align: left; vertical-align: top; }
-  th { background: var(--panel-2); color: var(--accent); font-weight: 600; }
-  td code { white-space: nowrap; }
-  .checkbox-list { list-style: none; padding-left: 0; }
-  .checkbox-list li { padding-left: 28px; position: relative; margin: 10px 0; }
-  .checkbox-list li::before {
-    content: "\2610"; position: absolute; left: 0; top: 0;
-    color: var(--accent); font-size: 18px;
-  }
-  .tag {
-    display: inline-block;
-    background: var(--panel-2);
-    color: var(--muted);
-    padding: 2px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    margin-right: 6px;
-    border: 1px solid var(--border);
-  }
-  .tag.green { color: var(--green); border-color: var(--green); }
-  .footer {
-    margin-top: 64px; padding-top: 24px;
-    border-top: 1px solid var(--border);
-    color: var(--muted); font-size: 14px;
-  }
-  hr.divider { border: none; border-top: 1px dashed var(--border); margin: 28px 0; }
-  .toc {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 20px 28px;
-    margin: 24px 0 40px;
-  }
-  .toc h3 { margin-top: 0; color: var(--text); font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
-  .toc ol { margin: 12px 0 0; }
-  .toc a { border-bottom: none; color: var(--text); }
-  .toc a:hover { color: var(--accent); }
-  /* ---- left-sidebar table of contents ---- */
-  html { scroll-behavior: smooth; }
-  .wrap { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; align-items: start; }
-  aside {
-    position: sticky; top: 0; height: 100vh; overflow-y: auto;
-    padding: 28px 20px; border-right: 1px solid var(--border); background: var(--panel);
-  }
-  aside .toc-h { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin: 0 0 14px; }
-  aside ol { list-style: none; padding: 0; margin: 0; counter-reset: toc; }
-  aside li { counter-increment: toc; margin: 0; }
-  aside li a {
-    display: block; padding: 9px 10px; border-radius: 6px; color: var(--text);
-    font-size: 13.5px; line-height: 1.35; border-bottom: none;
-  }
-  aside li a::before { content: counter(toc) "."; color: var(--muted); margin-right: 8px; font-variant-numeric: tabular-nums; }
-  aside li a:hover { background: var(--panel-2); border-bottom: none; }
-  aside li a.active { background: var(--accent-soft); color: var(--accent); }
-  .wrap > .container { margin: 0; }
-  h2[id], section[id], .pattern[id] { scroll-margin-top: 20px; }
-  .menu-toggle { display: none; }
-  @media (max-width: 880px) {
-    .wrap { grid-template-columns: 1fr; }
-    aside { position: static; height: auto; max-height: 0; overflow: hidden; padding: 0 20px; border-right: none; border-bottom: 1px solid var(--border); }
-    aside.open { max-height: 70vh; overflow: auto; padding: 20px; }
-    .menu-toggle { display: block; position: sticky; top: 0; z-index: 20; background: var(--panel); border: none; border-bottom: 1px solid var(--border); color: var(--text); font: inherit; font-weight: 600; text-align: left; padding: 14px 20px; cursor: pointer; width: 100%; }
-    .wrap > .container { margin: 0 auto; }
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Five Agent Patterns - MeetFlow Workshop</title>
+
+  <style>
+    :root {
+      --bg: #0D0D0D;
+      --panel: #1a1a1d;
+      --panel-2: #232327;
+      --border: #2e2e33;
+      --text: #ececec;
+      --muted: #9a9aa0;
+      --accent: #D47A21;
+      --accent-soft: #D47A2120;
+      --code-bg: #141416;
+      --green: #4ade80;
+      --blue: #3b82f6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 48px 32px 96px;
+    }
+
+    header {
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 24px;
+      margin-bottom: 40px;
+    }
+
+    header .eyebrow {
+      color: var(--accent);
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin: 0 0 12px;
+      line-height: 1.2;
+    }
+
+    h2 {
+      font-size: 26px;
+      margin: 56px 0 16px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    h3 {
+      font-size: 18px;
+      margin: 24px 0 10px;
+      color: var(--accent);
+    }
+
+    h4 {
+      font-size: 14px;
+      margin: 20px 0 8px;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    p {
+      margin: 12px 0;
+      color: var(--text);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .lead {
+      font-size: 18px;
+      color: var(--muted);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px dotted var(--accent);
+    }
+
+    a:hover {
+      border-bottom-style: solid;
+    }
+
+    code {
+      font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+      font-size: 13.5px;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      border-radius: 4px;
+      color: #f4d6a8;
+    }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 16px 20px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    pre.file {
+      border-left-color: var(--blue);
+    }
+
+    .pre-label {
+      display: inline-block;
+      font-family: "SF Mono", Menlo, monospace;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+      padding: 4px 10px;
+      margin-bottom: -1px;
+    }
+
+    .pre-label.file {
+      color: var(--blue);
+    }
+
+    .pre-label.ask {
+      color: var(--accent);
+    }
+
+    .pattern {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 28px 32px;
+      margin: 32px 0;
+    }
+
+    .pattern-num {
+      display: inline-block;
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .pattern h2 {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+      font-size: 28px;
+    }
+
+    .callout {
+      background: var(--accent-soft);
+      border-left: 3px solid var(--accent);
+      padding: 14px 18px;
+      margin: 18px 0;
+      border-radius: 4px;
+    }
+
+    .callout strong {
+      color: var(--accent);
+    }
+
+    .method {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 4px 20px 16px;
+      margin: 16px 0;
+    }
+
+    .method-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 14px 0 6px;
+      font-weight: 700;
+    }
+
+    .method-badge {
+      background: var(--accent);
+      color: #000;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+
+    .method-badge.b {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    ul,
+    ol {
+      padding-left: 22px;
+    }
+
+    ul li,
+    ol li {
+      margin: 6px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 14.5px;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--panel-2);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    td code {
+      white-space: nowrap;
+    }
+
+    .checkbox-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .checkbox-list li {
+      padding-left: 28px;
+      position: relative;
+      margin: 10px 0;
+    }
+
+    .checkbox-list li::before {
+      content: "\2610";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--accent);
+      font-size: 18px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--panel-2);
+      color: var(--muted);
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-right: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .tag.green {
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    .footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 1px dashed var(--border);
+      margin: 28px 0;
+    }
+
+    .toc {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 28px;
+      margin: 24px 0 40px;
+    }
+
+    .toc h3 {
+      margin-top: 0;
+      color: var(--text);
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .toc ol {
+      margin: 12px 0 0;
+    }
+
+    .toc a {
+      border-bottom: none;
+      color: var(--text);
+    }
+
+    .toc a:hover {
+      color: var(--accent);
+    }
+
+    /* ---- left-sidebar table of contents ---- */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .wrap {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+      align-items: start;
+    }
+
+    aside {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 28px 20px;
+      border-right: 1px solid var(--border);
+      background: var(--panel);
+    }
+
+    aside .toc-h {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin: 0 0 14px;
+    }
+
+    aside ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      counter-reset: toc;
+    }
+
+    aside li {
+      counter-increment: toc;
+      margin: 0;
+    }
+
+    aside li a {
+      display: block;
+      padding: 9px 10px;
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 13.5px;
+      line-height: 1.35;
+      border-bottom: none;
+    }
+
+    aside li a::before {
+      content: counter(toc) ".";
+      color: var(--muted);
+      margin-right: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    aside li a:hover {
+      background: var(--panel-2);
+      border-bottom: none;
+    }
+
+    aside li a.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .wrap>.container {
+      margin: 0;
+    }
+
+    h2[id],
+    section[id],
+    .pattern[id] {
+      scroll-margin-top: 20px;
+    }
+
+    .menu-toggle {
+      display: none;
+    }
+
+    @media (max-width: 880px) {
+      .wrap {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: static;
+        height: auto;
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 20px;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      aside.open {
+        max-height: 70vh;
+        overflow: auto;
+        padding: 20px;
+      }
+
+      .menu-toggle {
+        display: block;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        background: var(--panel);
+        border: none;
+        border-bottom: 1px solid var(--border);
+        color: var(--text);
+        font: inherit;
+        font-weight: 600;
+        text-align: left;
+        padding: 14px 20px;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      .wrap>.container {
+        margin: 0 auto;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="wrap">
-<button class="menu-toggle" aria-label="Toggle contents">Contents</button>
-<aside>
-  <div class="toc-h">Contents</div>
-  <ol>
-    <li><a href="#how-it-works">How to create a subagent now</a></li>
-    <li><a href="#prompt-chaining">Prompt Chaining</a></li>
-    <li><a href="#routing">Routing</a></li>
-    <li><a href="#parallelization">Parallelization</a></li>
-    <li><a href="#orchestrator-workers">Orchestrator-Workers</a></li>
-    <li><a href="#evaluator-optimizer">Evaluator-Optimizer</a></li>
-    <li><a href="#finished">Nine agents, five patterns</a></li>
-  </ol>
-</aside>
-<div class="container">
+  <div class="wrap">
+    <button class="menu-toggle" aria-label="Toggle contents">Contents</button>
+    <aside>
+      <div class="toc-h">Contents</div>
+      <ol>
+        <li><a href="#how-it-works">How to create a subagent now</a></li>
+        <li><a href="#prompt-chaining">Prompt Chaining</a></li>
+        <li><a href="#routing">Routing</a></li>
+        <li><a href="#parallelization">Parallelization</a></li>
+        <li><a href="#orchestrator-workers">Orchestrator-Workers</a></li>
+        <li><a href="#evaluator-optimizer">Evaluator-Optimizer</a></li>
+        <li><a href="#finished">Nine agents, five patterns</a></li>
+      </ol>
+    </aside>
+    <div class="container">
 
-<header>
-  <div class="eyebrow">Claude Code for PMs - Hands-on Lab</div>
-  <h1>Build Five Agents by Describing Them to Claude</h1>
-  <p class="lead">A subagent is one Markdown file with a bit of YAML on top. You do not hand-write it: you tell Claude what you want, it writes the file into <code>.claude/agents/</code>. This handout walks you through nine subagents across the five classic workflow patterns.</p>
-  <p class="muted" style="font-size: 13px; margin-top: 12px;">Reference: <a href="https://code.claude.com/docs/en/sub-agents">Anthropic's official subagents guide</a>. Pattern set: Anthropic, "Building Effective Agents." All file paths refer to this MeetFlow workshop repo.</p>
-</header>
+      <header>
+        <div class="eyebrow">Claude Code for PMs - Hands-on Lab</div>
+        <h1>Build Five Agents by Describing Them to Claude</h1>
+        <p class="lead">A subagent is one Markdown file with a bit of YAML on top. You do not hand-write it: you tell
+          Claude what you want, it writes the file into <code>.claude/agents/</code>. This handout walks you through
+          nine subagents across the five classic workflow patterns.</p>
+        <p class="muted" style="font-size: 13px; margin-top: 12px;">Reference: <a
+            href="https://code.claude.com/docs/en/sub-agents">Anthropic's official subagents guide</a>. Pattern set:
+          Anthropic, "Building Effective Agents." All file paths refer to this MeetFlow workshop repo.</p>
+      </header>
 
-<div class="callout">
-<strong>The <code>/agents</code> wizard is gone.</strong> As of Claude Code v2.1.198, typing <code>/agents</code> no longer opens the interactive creation wizard (the old Running and Library tabs). It just prints a reminder to ask Claude or edit <code>.claude/agents/</code> directly. Everything else is unchanged: the file format, the frontmatter fields, and the <code>.claude/agents/</code> (project) and <code>~/.claude/agents/</code> (personal) locations all still work. This handout uses the current flow.
-</div>
+      <div class="callout">
+        <strong>The <code>/agents</code> wizard is gone.</strong> As of Claude Code v2.1.198, typing
+        <code>/agents</code> no longer opens the interactive creation wizard (the old Running and Library tabs). It just
+        prints a reminder to ask Claude or edit <code>.claude/agents/</code> directly. Everything else is unchanged: the
+        file format, the frontmatter fields, and the <code>.claude/agents/</code> (project) and
+        <code>~/.claude/agents/</code> (personal) locations all still work. This handout uses the current flow.
+      </div>
 
-<div class="callout">
-<strong>You are building these from a clean slate.</strong> For this lab the eight prebuilt agents have been cleared out of <code>.claude/agents/</code>, so you create each one fresh (the ninth, <code>competitor-deep-dive</code>, is new anyway). If your copy of the repo still has any of them, creating an agent with the same <code>name</code> just overwrites it, which is fine here.
-</div>
+      <div class="callout">
+        <strong>You are building these from a clean slate.</strong> For this lab the eight prebuilt agents have been
+        cleared out of <code>.claude/agents/</code>, so you create each one fresh (the ninth,
+        <code>competitor-deep-dive</code>, is new anyway). If your copy of the repo still has any of them, creating an
+        agent with the same <code>name</code> just overwrites it, which is fine here.
+      </div>
 
-<div class="callout">
-<strong>Build order matters in two places.</strong> Create the three Routing specialists (<code>prd-drafter</code>, <code>competitor-snapshot</code>, <code>churn-diagnoser</code>) before the <code>pm-request-router</code>, and create <code>prd-critic</code> before <code>prd-quality-loop</code>. A dispatcher that points at an agent you have not built yet fails at runtime. Each section below flags this where it applies.
-</div>
+      <div class="callout">
+        <strong>Build order matters in two places.</strong> Create the three Routing specialists
+        (<code>prd-drafter</code>, <code>competitor-snapshot</code>, <code>churn-diagnoser</code>) before the
+        <code>pm-request-router</code>, and create <code>prd-critic</code> before <code>prd-quality-loop</code>. A
+        dispatcher that points at an agent you have not built yet fails at runtime. Each section below flags this where
+        it applies.
+      </div>
 
-<div class="toc">
-  <h3>What you will build</h3>
-  <ol>
-    <li><a href="#prompt-chaining">Prompt Chaining &rarr; <strong>interview-insight-synthesizer</strong></a></li>
-    <li><a href="#routing">Routing &rarr; <strong>pm-request-router</strong> (+ 3 specialists)</a></li>
-    <li><a href="#parallelization">Parallelization &rarr; <strong>feedback-triangulator</strong></a></li>
-    <li><a href="#orchestrator-workers">Orchestrator-Workers &rarr; <strong>competitor-deep-dive</strong></a></li>
-    <li><a href="#evaluator-optimizer">Evaluator-Optimizer &rarr; <strong>prd-quality-loop</strong> (+ critic)</a></li>
-  </ol>
-</div>
+      <div class="toc">
+        <h3>What you will build</h3>
+        <ol>
+          <li><a href="#prompt-chaining">Prompt Chaining &rarr; <strong>interview-insight-synthesizer</strong></a></li>
+          <li><a href="#routing">Routing &rarr; <strong>pm-request-router</strong> (+ 3 specialists)</a></li>
+          <li><a href="#parallelization">Parallelization &rarr; <strong>feedback-triangulator</strong></a></li>
+          <li><a href="#orchestrator-workers">Orchestrator-Workers &rarr; <strong>competitor-deep-dive</strong></a></li>
+          <li><a href="#evaluator-optimizer">Evaluator-Optimizer &rarr; <strong>prd-quality-loop</strong> (+ critic)</a>
+          </li>
+        </ol>
+      </div>
 
-<!-- ============================================ -->
-<!-- HOW IT WORKS                                  -->
-<!-- ============================================ -->
-<h2 id="how-it-works">How to create a subagent now</h2>
+      <!-- ============================================ -->
+      <!-- HOW IT WORKS                                  -->
+      <!-- ============================================ -->
+      <h2 id="how-it-works">How to create a subagent now</h2>
 
-<p>There are two ways. Use the first for every agent in this handout. The second is what the first one produces, so it is worth seeing once.</p>
+      <p>There are two ways. Use the first for every agent in this handout. The second is what the first one produces,
+        so it is worth seeing once.</p>
 
-<div class="method">
-<div class="method-head"><span class="method-badge">Method A</span> Ask Claude (recommended)</div>
-<p>In the Claude Code chat, describe the agent and where to save it. Claude writes the file, fills in the frontmatter, and writes the system prompt for you.</p>
-<span class="pre-label ask">you, in chat</span>
-<pre><code>Create a project subagent in .claude/agents/ called "code-improver" that
+      <div class="method">
+        <div class="method-head"><span class="method-badge">Method A</span> Ask Claude (recommended)</div>
+        <p>In the Claude Code chat, describe the agent and where to save it. Claude writes the file, fills in the
+          frontmatter, and writes the system prompt for you.</p>
+        <span class="pre-label ask">you, in chat</span>
+        <pre><code>Create a project subagent in .claude/agents/ called "code-improver" that
 scans files and suggests improvements for readability, performance, and
 best practices. Make it read-only and have it use Sonnet.</code></pre>
-</div>
+      </div>
 
-<div class="method">
-<div class="method-head"><span class="method-badge b">Method B</span> Write the file yourself</div>
-<p>A subagent is just a Markdown file: YAML frontmatter on top, the system prompt as the body. Drop it in <code>.claude/agents/</code>.</p>
-<span class="pre-label file">.claude/agents/code-improver.md</span>
-<pre class="file"><code>---
+      <div class="method">
+        <div class="method-head"><span class="method-badge b">Method B</span> Write the file yourself</div>
+        <p>A subagent is just a Markdown file: YAML frontmatter on top, the system prompt as the body. Drop it in
+          <code>.claude/agents/</code>.
+        </p>
+        <span class="pre-label file">.claude/agents/code-improver.md</span>
+        <pre class="file"><code>---
 name: code-improver
 description: Scans files and suggests improvements for readability,
   performance, and best practices. Use after writing or modifying code.
@@ -266,50 +572,88 @@ model: sonnet
 
 You are a code improvement specialist. For each issue you find, explain
 the problem, show the current code, and provide an improved version.</code></pre>
-</div>
+      </div>
 
-<h3>The frontmatter fields you will use today</h3>
-<p>Only <code>name</code> and <code>description</code> are required. The rest have sensible defaults.</p>
+      <h3>The frontmatter fields you will use today</h3>
+      <p>Only <code>name</code> and <code>description</code> are required. The rest have sensible defaults.</p>
 
-<table>
-<thead><tr><th>Field</th><th>What it does</th><th>This workshop</th></tr></thead>
-<tbody>
-<tr><td><code>name</code></td><td>Unique id, lowercase and hyphens. How you and the router refer to the agent</td><td>Required</td></tr>
-<tr><td><code>description</code></td><td>When Claude should delegate to it. This is the trigger. Write it well</td><td>Required</td></tr>
-<tr><td><code>tools</code></td><td>Allowlist of tools. Omit to inherit all. Grant only what the agent needs</td><td>Set per agent</td></tr>
-<tr><td><code>model</code></td><td><code>sonnet</code>, <code>opus</code>, <code>haiku</code>, <code>fable</code>, a full id, or <code>inherit</code>. Defaults to <code>inherit</code></td><td><code>sonnet</code></td></tr>
-<tr><td><code>color</code></td><td>Display color in the task list: red, blue, green, yellow, purple, orange, pink, cyan</td><td>Suggested per agent</td></tr>
-</tbody>
-</table>
+      <table>
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>What it does</th>
+            <th>This workshop</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>name</code></td>
+            <td>Unique id, lowercase and hyphens. How you and the router refer to the agent</td>
+            <td>Required</td>
+          </tr>
+          <tr>
+            <td><code>description</code></td>
+            <td>When Claude should delegate to it. This is the trigger. Write it well</td>
+            <td>Required</td>
+          </tr>
+          <tr>
+            <td><code>tools</code></td>
+            <td>Allowlist of tools. Omit to inherit all. Grant only what the agent needs</td>
+            <td>Set per agent</td>
+          </tr>
+          <tr>
+            <td><code>model</code></td>
+            <td><code>sonnet</code>, <code>opus</code>, <code>haiku</code>, <code>fable</code>, a full id, or
+              <code>inherit</code>. Defaults to <code>inherit</code>
+            </td>
+            <td><code>sonnet</code></td>
+          </tr>
+          <tr>
+            <td><code>color</code></td>
+            <td>Display color in the task list: red, blue, green, yellow, purple, orange, pink, cyan</td>
+            <td>Suggested per agent</td>
+          </tr>
+        </tbody>
+      </table>
 
-<div class="callout">
-<strong>Project vs personal.</strong> <code>.claude/agents/</code> saves the agent inside this repo, so it gets committed and shared with the cohort. <code>~/.claude/agents/</code> saves to your global folder, available in every project on your machine. Use project scope for workshop agents.
-</div>
+      <div class="callout">
+        <strong>Project vs personal.</strong> <code>.claude/agents/</code> saves the agent inside this repo, so it gets
+        committed and shared with the cohort. <code>~/.claude/agents/</code> saves to your global folder, available in
+        every project on your machine. Use project scope for workshop agents.
+      </div>
 
-<div class="callout">
-<strong>No restart needed, usually.</strong> Claude Code watches both agent folders and picks up new or edited files within a few seconds. The main exception: if <code>.claude/agents/</code> did not exist when you started your session, create your first agent, then restart Claude Code once so the watcher sees the new folder. (The watcher is also off entirely if you launched with <code>--disable-slash-commands</code>, which you will not be using today.)
-</div>
+      <div class="callout">
+        <strong>No restart needed, usually.</strong> Claude Code watches both agent folders and picks up new or edited
+        files within a few seconds. The main exception: if <code>.claude/agents/</code> did not exist when you started
+        your session, create your first agent, then restart Claude Code once so the watcher sees the new folder. (The
+        watcher is also off entirely if you launched with <code>--disable-slash-commands</code>, which you will not be
+        using today.)
+      </div>
 
-<div class="callout">
-<strong>To edit an agent later,</strong> just open its <code>.md</code> file and change any field, or ask Claude to edit it for you: <em>"update the churn-diagnoser agent to also read 05-user-personas/."</em> The change takes effect on the next delegation.
-</div>
+      <div class="callout">
+        <strong>To edit an agent later,</strong> just open its <code>.md</code> file and change any field, or ask Claude
+        to edit it for you: <em>"update the churn-diagnoser agent to also read 05-user-personas/."</em> The change takes
+        effect on the next delegation.
+      </div>
 
-<hr class="divider">
+      <hr class="divider">
 
-<!-- ============================================ -->
-<!-- 1. PROMPT CHAINING                            -->
-<!-- ============================================ -->
-<div class="pattern" id="prompt-chaining">
-<span class="pattern-num">PATTERN 01</span>
-<h2>Prompt Chaining</h2>
-<p class="lead">Decompose a task into sequential stages. Each stage has a quality gate before moving on.</p>
+      <!-- ============================================ -->
+      <!-- 1. PROMPT CHAINING                            -->
+      <!-- ============================================ -->
+      <div class="pattern" id="prompt-chaining">
+        <span class="pattern-num">PATTERN 01</span>
+        <h2>Prompt Chaining</h2>
+        <p class="lead">Decompose a task into sequential stages. Each stage has a quality gate before moving on.</p>
 
-<h3>The agent: <code>interview-insight-synthesizer</code></h3>
-<p>Reads every transcript in <code>07-user-interviews/</code> and produces a ranked synthesis brief. Chains four stages: extract pains &rarr; cluster into themes &rarr; rank by frequency &rarr; write the brief. Single agent, no fan-out.</p>
+        <h3>The agent: <code>interview-insight-synthesizer</code></h3>
+        <p>Reads every transcript in <code>07-user-interviews/</code> and produces a ranked synthesis brief. Chains four
+          stages: extract pains &rarr; cluster into themes &rarr; rank by frequency &rarr; write the brief. Single
+          agent, no fan-out.</p>
 
-<div class="method">
-<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this in chat</div>
-<pre><code>Create a project subagent in .claude/agents/ called
+        <div class="method">
+          <div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this in chat</div>
+          <pre><code>Create a project subagent in .claude/agents/ called
 "interview-insight-synthesizer" for MeetFlow, using Sonnet, color blue.
 Give it Read, Glob, and Write only.
 
@@ -337,12 +681,12 @@ Rules: cite the interview filename for every quote. Never invent quotes.
 
 Trigger it when the user asks to synthesize user interviews, find common
 pain points, or build a research brief from interview transcripts.</code></pre>
-</div>
+        </div>
 
-<div class="method">
-<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
-<span class="pre-label file">.claude/agents/interview-insight-synthesizer.md</span>
-<pre class="file"><code>---
+        <div class="method">
+          <div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+          <span class="pre-label file">.claude/agents/interview-insight-synthesizer.md</span>
+          <pre class="file"><code>---
 name: interview-insight-synthesizer
 description: Synthesizes user interviews into a ranked research brief.
   Use when asked to find common pain points or build a research brief
@@ -365,32 +709,36 @@ sequential stages, with a quality gate before moving on:
    TL;DR (3 bullets), top 3 themes (quote + count each), recommendations.
 
 Cite the interview filename for every quote. Never invent quotes.</code></pre>
-</div>
+        </div>
 
-<h4>Why these tools</h4>
-<p>Read and Glob to walk the transcripts, Write to save the brief. No <code>Agent</code> tool: this pattern is a single agent working through stages, not a dispatcher.</p>
+        <h4>Why these tools</h4>
+        <p>Read and Glob to walk the transcripts, Write to save the brief. No <code>Agent</code> tool: this pattern is a
+          single agent working through stages, not a dispatcher.</p>
 
-<h3>Test it</h3>
-<p>In chat: <em>"Synthesize the user interviews and tell me the top 3 frustrations."</em> Claude should delegate to this agent. Watch it move through all four stages and write the file to <code>outputs/</code>.</p>
-</div>
+        <h3>Test it</h3>
+        <p>In chat: <em>"Synthesize the user interviews and tell me the top 3 frustrations."</em> Claude should delegate
+          to this agent. Watch it move through all four stages and write the file to <code>outputs/</code>.</p>
+      </div>
 
 
-<!-- ============================================ -->
-<!-- 2. ROUTING                                    -->
-<!-- ============================================ -->
-<div class="pattern" id="routing">
-<span class="pattern-num">PATTERN 02</span>
-<h2>Routing</h2>
-<p class="lead">One agent classifies the request, then dispatches to a specialist. You build four agents: three specialists, then the router that calls them.</p>
+      <!-- ============================================ -->
+      <!-- 2. ROUTING                                    -->
+      <!-- ============================================ -->
+      <div class="pattern" id="routing">
+        <span class="pattern-num">PATTERN 02</span>
+        <h2>Routing</h2>
+        <p class="lead">One agent classifies the request, then dispatches to a specialist. You build four agents: three
+          specialists, then the router that calls them.</p>
 
-<div class="callout">
-<strong>Build order matters.</strong> Create the three specialists (2A, 2B, 2C) before the router (2D). The router dispatches to specialists by name. If they do not exist yet, it fails at runtime.
-</div>
+        <div class="callout">
+          <strong>Build order matters.</strong> Create the three specialists (2A, 2B, 2C) before the router (2D). The
+          router dispatches to specialists by name. If they do not exist yet, it fails at runtime.
+        </div>
 
-<h3>Agent 2A: <code>prd-drafter</code> (specialist 1)</h3>
-<div class="method">
-<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
-<pre><code>Create a project subagent in .claude/agents/ called "prd-drafter" for
+        <h3>Agent 2A: <code>prd-drafter</code> (specialist 1)</h3>
+        <div class="method">
+          <div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+          <pre><code>Create a project subagent in .claude/agents/ called "prd-drafter" for
 MeetFlow, Sonnet, color green, with Read, Glob, Write.
 
 It writes a concise one-page PRD. Before writing it reads
@@ -406,11 +754,11 @@ Output (Markdown, saved to outputs/prd-{feature-name}.md, no date):
 
 Trigger it when the user asks for a feature spec, PRD, one-pager, or
 product requirements doc.</code></pre>
-</div>
-<div class="method">
-<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
-<span class="pre-label file">.claude/agents/prd-drafter.md</span>
-<pre class="file"><code>---
+        </div>
+        <div class="method">
+          <div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+          <span class="pre-label file">.claude/agents/prd-drafter.md</span>
+          <pre class="file"><code>---
 name: prd-drafter
 description: Writes a concise one-page PRD for a MeetFlow feature. Use when
   the user asks for a feature spec, PRD, one-pager, or requirements doc.
@@ -424,12 +772,12 @@ Write a one-page PRD. First read 03-product-knowledge/company.md and
 (no date). Sections: Problem (with one real stat), Target user (a named
 persona from 05-user-personas/), Solution (5 bullets, no implementation),
 Success metric (baseline + target), Risks (top 3), Out of scope (top 3).</code></pre>
-</div>
+        </div>
 
-<h3>Agent 2B: <code>competitor-snapshot</code> (specialist 2)</h3>
-<div class="method">
-<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
-<pre><code>Create a project subagent in .claude/agents/ called "competitor-snapshot"
+        <h3>Agent 2B: <code>competitor-snapshot</code> (specialist 2)</h3>
+        <div class="method">
+          <div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+          <pre><code>Create a project subagent in .claude/agents/ called "competitor-snapshot"
 for MeetFlow, Sonnet, color yellow, with Read, Glob, Write.
 
 Before writing it reads 03-product-knowledge/competitive.md.
@@ -442,11 +790,11 @@ Output (Markdown, saved to outputs/competitor-snapshot-{name}.md, no date):
 
 Trigger it when the user asks for a competitor analysis, feature
 comparison, or positioning read on a specific competitor by name.</code></pre>
-</div>
-<div class="method">
-<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
-<span class="pre-label file">.claude/agents/competitor-snapshot.md</span>
-<pre class="file"><code>---
+        </div>
+        <div class="method">
+          <div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+          <span class="pre-label file">.claude/agents/competitor-snapshot.md</span>
+          <pre class="file"><code>---
 name: competitor-snapshot
 description: Quick positioning read on a named MeetFlow competitor. Use when
   the user asks how MeetFlow compares to a specific competitor by name.
@@ -459,12 +807,12 @@ Read 03-product-knowledge/competitive.md first. Then save
 outputs/competitor-snapshot-{name}.md (no date): their positioning (1 line),
 where they beat MeetFlow (3 bullets), where MeetFlow beats them (3 bullets),
 one strategic implication for our roadmap.</code></pre>
-</div>
+        </div>
 
-<h3>Agent 2C: <code>churn-diagnoser</code> (specialist 3)</h3>
-<div class="method">
-<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
-<pre><code>Create a project subagent in .claude/agents/ called "churn-diagnoser" for
+        <h3>Agent 2C: <code>churn-diagnoser</code> (specialist 3)</h3>
+        <div class="method">
+          <div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+          <pre><code>Create a project subagent in .claude/agents/ called "churn-diagnoser" for
 MeetFlow, Sonnet, color red, with Read, Glob, Write.
 
 It diagnoses why users leave. Pro monthly churn is currently 4.1%. It reads
@@ -478,11 +826,11 @@ Output (Markdown, saved to outputs/churn-diagnosis.md, no date):
 
 Trigger it when the user asks about churn, retention, why users are
 leaving, or how to improve Pro stickiness.</code></pre>
-</div>
-<div class="method">
-<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
-<span class="pre-label file">.claude/agents/churn-diagnoser.md</span>
-<pre class="file"><code>---
+        </div>
+        <div class="method">
+          <div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+          <span class="pre-label file">.claude/agents/churn-diagnoser.md</span>
+          <pre class="file"><code>---
 name: churn-diagnoser
 description: Diagnoses MeetFlow churn drivers. Use when the user asks about
   churn, retention, why users leave, or improving Pro stickiness.
@@ -495,12 +843,12 @@ Diagnose why MeetFlow users churn (Pro monthly churn is 4.1%). Read
 06-user-feedback/, 07-user-interviews/, and 03-product-knowledge/company.md.
 Save outputs/churn-diagnosis.md (no date): top 3 drivers (each backed by 2+
 sources, files cited), quick wins (under 2 sprints), structural fixes.</code></pre>
-</div>
+        </div>
 
-<h3>Agent 2D: <code>pm-request-router</code> (the router)</h3>
-<div class="method">
-<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
-<pre><code>Create a project subagent in .claude/agents/ called "pm-request-router" for
+        <h3>Agent 2D: <code>pm-request-router</code> (the router)</h3>
+        <div class="method">
+          <div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+          <pre><code>Create a project subagent in .claude/agents/ called "pm-request-router" for
 MeetFlow, Sonnet, color orange. Give it the Agent tool only.
 
 Its ONLY job is classification and dispatch. It must NEVER answer the
@@ -518,11 +866,11 @@ Workflow:
 
 Trigger it FIRST for any open-ended PM request, or when the user says
 "help me with..." without specifying what they need.</code></pre>
-</div>
-<div class="method">
-<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
-<span class="pre-label file">.claude/agents/pm-request-router.md</span>
-<pre class="file"><code>---
+        </div>
+        <div class="method">
+          <div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+          <span class="pre-label file">.claude/agents/pm-request-router.md</span>
+          <pre class="file"><code>---
 name: pm-request-router
 description: Triage agent for open-ended MeetFlow PM requests. Use first
   when the user says "help me with..." without naming a deliverable.
@@ -537,38 +885,45 @@ UNCLEAR, announce "Classified as: X. Dispatching Y.", then dispatch via the
 Agent tool (PRD to prd-drafter, COMPETITOR to competitor-snapshot, CHURN to
 churn-diagnoser), passing the request verbatim. If UNCLEAR, ask exactly one
 clarifying question. Never guess.</code></pre>
-</div>
-<h4>Why these tools</h4>
-<p>The router needs only the <code>Agent</code> tool. That is what lets one subagent dispatch to another (a subagent can spawn its own subagents). Without it, the router can classify but cannot hand off. It reads no files and writes nothing: it classifies the request in front of it and passes it on, and the specialists do all the reading and writing.</p>
+        </div>
+        <h4>Why these tools</h4>
+        <p>The router needs only the <code>Agent</code> tool. That is what lets one subagent dispatch to another (a
+          subagent can spawn its own subagents). Without it, the router can classify but cannot hand off. It reads no
+          files and writes nothing: it classifies the request in front of it and passes it on, and the specialists do
+          all the reading and writing.</p>
 
-<h3>Test the routing</h3>
-<p>Try three requests and watch which specialist gets dispatched:</p>
-<ul>
-  <li><em>"Help me write a spec for Smart Follow-Up."</em> &rarr; PRD (green agent runs)</li>
-  <li><em>"How does Granola compare to us?"</em> &rarr; COMPETITOR (yellow agent runs)</li>
-  <li><em>"Why are Pro users leaving?"</em> &rarr; CHURN (red agent runs)</li>
-</ul>
-</div>
+        <h3>Test the routing</h3>
+        <p>Try three requests and watch which specialist gets dispatched:</p>
+        <ul>
+          <li><em>"Help me write a spec for Smart Follow-Up."</em> &rarr; PRD (green agent runs)</li>
+          <li><em>"How does Granola compare to us?"</em> &rarr; COMPETITOR (yellow agent runs)</li>
+          <li><em>"Why are Pro users leaving?"</em> &rarr; CHURN (red agent runs)</li>
+        </ul>
+      </div>
 
 
-<!-- ============================================ -->
-<!-- 3. PARALLELIZATION                            -->
-<!-- ============================================ -->
-<div class="pattern" id="parallelization">
-<span class="pattern-num">PATTERN 03</span>
-<h2>Parallelization</h2>
-<p class="lead">One agent fires three workers at once, then merges their outputs.</p>
+      <!-- ============================================ -->
+      <!-- 3. PARALLELIZATION                            -->
+      <!-- ============================================ -->
+      <div class="pattern" id="parallelization">
+        <span class="pattern-num">PATTERN 03</span>
+        <h2>Parallelization</h2>
+        <p class="lead">One agent fires three workers at once, then merges their outputs.</p>
 
-<h3>The agent: <code>feedback-triangulator</code></h3>
-<p>Dispatches three workers in parallel - interviews, Q1 survey, churn data - then surfaces issues that appear in MORE than one source.</p>
+        <h3>The agent: <code>feedback-triangulator</code></h3>
+        <p>Dispatches three workers in parallel - interviews, Q1 survey, churn data - then surfaces issues that appear
+          in MORE than one source.</p>
 
-<div class="callout">
-<strong>Parallelization vs Orchestrator-Workers (do not confuse them).</strong> Parallelization uses a FIXED set of workers: always the same three sources, no matter the request. Orchestrator-Workers (Pattern 04) uses a DYNAMIC set: the agent picks which workers to spawn based on the input. Same parallel mechanics, different decision-making.
-</div>
+        <div class="callout">
+          <strong>Parallelization vs Orchestrator-Workers (do not confuse them).</strong> Parallelization uses a FIXED
+          set of workers: always the same three sources, no matter the request. Orchestrator-Workers (Pattern 04) uses a
+          DYNAMIC set: the agent picks which workers to spawn based on the input. Same parallel mechanics, different
+          decision-making.
+        </div>
 
-<div class="method">
-<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
-<pre><code>Create a project subagent in .claude/agents/ called "feedback-triangulator"
+        <div class="method">
+          <div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+          <pre><code>Create a project subagent in .claude/agents/ called "feedback-triangulator"
 for MeetFlow, Sonnet, color purple, with Agent, Read, Glob, Write.
 
 It triangulates user feedback from three independent sources in parallel.
@@ -593,11 +948,11 @@ Always cite source files.
 
 Trigger it when the user wants a triangulated view of feedback across
 multiple sources.</code></pre>
-</div>
-<div class="method">
-<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
-<span class="pre-label file">.claude/agents/feedback-triangulator.md</span>
-<pre class="file"><code>---
+        </div>
+        <div class="method">
+          <div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+          <span class="pre-label file">.claude/agents/feedback-triangulator.md</span>
+          <pre class="file"><code>---
 name: feedback-triangulator
 description: Cross-references interviews, survey, and churn data to find
   issues confirmed by 2+ sources. Use when the user wants a triangulated
@@ -614,32 +969,41 @@ top 5 issues with source citations and reads nothing else. When all return,
 rank issues by how many sources mention them. Save
 outputs/triangulated-feedback.md (no date): triangulated issues (2+ sources)
 first, then source-specific issues. Always cite source files.</code></pre>
-</div>
-<h4>Why these tools</h4>
-<p>The <code>Agent</code> tool is what enables the parallel dispatch. Read and Glob let the merge step re-check sources; Write saves the final brief.</p>
+        </div>
+        <h4>Why these tools</h4>
+        <p>The <code>Agent</code> tool is what enables the parallel dispatch. Read and Glob let the merge step re-check
+          sources; Write saves the final brief.</p>
 
-<h3>Test it</h3>
-<p><em>"Triangulate the feedback. What is the top issue across sources?"</em> In the subagent panel you will see three workers running at once. That is the parallel dispatch working.</p>
-</div>
+        <h3>Test it</h3>
+        <p><em>"Triangulate the feedback. What is the top issue across sources?"</em> In the subagent panel you will see
+          three workers running at once. That is the parallel dispatch working.</p>
+      </div>
 
 
-<!-- ============================================ -->
-<!-- 4. ORCHESTRATOR-WORKERS                       -->
-<!-- ============================================ -->
-<div class="pattern" id="orchestrator-workers">
-<span class="pattern-num">PATTERN 04</span>
-<h2>Orchestrator-Workers</h2>
-<p class="lead">The orchestrator decides which workers to spawn based on the input. Different inputs produce different worker sets.</p>
+      <!-- ============================================ -->
+      <!-- 4. ORCHESTRATOR-WORKERS                       -->
+      <!-- ============================================ -->
+      <div class="pattern" id="orchestrator-workers">
+        <span class="pattern-num">PATTERN 04</span>
+        <h2>Orchestrator-Workers</h2>
+        <p class="lead">The orchestrator decides which workers to spawn based on the input. Different inputs produce
+          different worker sets.</p>
 
-<p class="muted">Unlike Routing (Pattern 02), which picks ONE specialist from a fixed menu, the orchestrator picks N workers, and the worker list changes per input. Unlike Parallelization (Pattern 03), which always dispatches the same fixed workers, the orchestrator decides the worker set at runtime.</p>
+        <p class="muted">Unlike Routing (Pattern 02), which picks ONE specialist from a fixed menu, the orchestrator
+          picks N workers, and the worker list changes per input. Unlike Parallelization (Pattern 03), which always
+          dispatches the same fixed workers, the orchestrator decides the worker set at runtime.</p>
 
-<h3>The agent: <code>competitor-deep-dive</code></h3>
-<p>Given any competitor name, this agent picks 3-5 research angles that matter for THAT competitor, then spawns a worker per angle.</p>
-<div class="callout"><strong>Heads up:</strong> the repo already ships <code>competitor-intel-analyst</code>, a single-agent researcher with no worker fan-out. The one you build here, <code>competitor-deep-dive</code>, is the multi-worker orchestrator version. The names differ on purpose, so building it adds a new file next to the existing ones in <code>.claude/agents/</code>.</div>
+        <h3>The agent: <code>competitor-deep-dive</code></h3>
+        <p>Given any competitor name, this agent picks 3-5 research angles that matter for THAT competitor, then spawns
+          a worker per angle.</p>
+        <div class="callout"><strong>Heads up:</strong> the repo already ships <code>competitor-intel-analyst</code>, a
+          single-agent researcher with no worker fan-out. The one you build here, <code>competitor-deep-dive</code>, is
+          the multi-worker orchestrator version. The names differ on purpose, so building it adds a new file next to the
+          existing ones in <code>.claude/agents/</code>.</div>
 
-<div class="method">
-<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
-<pre><code>Create a project subagent in .claude/agents/ called "competitor-deep-dive"
+        <div class="method">
+          <div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+          <pre><code>Create a project subagent in .claude/agents/ called "competitor-deep-dive"
 for MeetFlow, Sonnet, color cyan, with Agent, WebFetch, Read, Glob, Write.
 
 It runs deep competitive analysis on a named competitor.
@@ -663,11 +1027,11 @@ parallel (one message). Cite worker outputs in the final brief.
 
 Trigger it when the user wants a deep analysis of a specific competitor
 by name.</code></pre>
-</div>
-<div class="method">
-<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
-<span class="pre-label file">.claude/agents/competitor-deep-dive.md</span>
-<pre class="file"><code>---
+        </div>
+        <div class="method">
+          <div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+          <span class="pre-label file">.claude/agents/competitor-deep-dive.md</span>
+          <pre class="file"><code>---
 name: competitor-deep-dive
 description: Multi-worker deep dive on a named competitor. Picks research
   angles per competitor, then fans out workers. Use for a deep, multi-angle
@@ -685,35 +1049,39 @@ message (general-purpose type), one angle each. Synthesize into
 outputs/competitor-deepdive-{name}.md (no date): TL;DR, where they beat us,
 where we beat them, strategic implications (cite 04-strategy/product-vision.md).
 Always cite worker outputs.</code></pre>
-</div>
-<h4>Why these tools</h4>
-<p>Same as parallelization plus <code>WebFetch</code>, so workers can pull from competitor sites when the repo does not have the answer.</p>
+        </div>
+        <h4>Why these tools</h4>
+        <p>Same as parallelization plus <code>WebFetch</code>, so workers can pull from competitor sites when the repo
+          does not have the answer.</p>
 
-<h3>Test it twice</h3>
-<ul>
-  <li><em>"Deep dive on Granola."</em></li>
-  <li><em>"Deep dive on Fireflies."</em></li>
-</ul>
-<p>Verify the orchestrator picks <strong>different</strong> angles for each. If it picks the same angles for both, the angle-selection rule is too loose. Edit the agent file (or ask Claude to) and tighten it.</p>
-</div>
+        <h3>Test it twice</h3>
+        <ul>
+          <li><em>"Deep dive on Granola."</em></li>
+          <li><em>"Deep dive on Fireflies."</em></li>
+        </ul>
+        <p>Verify the orchestrator picks <strong>different</strong> angles for each. If it picks the same angles for
+          both, the angle-selection rule is too loose. Edit the agent file (or ask Claude to) and tighten it.</p>
+      </div>
 
 
-<!-- ============================================ -->
-<!-- 5. EVALUATOR-OPTIMIZER                        -->
-<!-- ============================================ -->
-<div class="pattern" id="evaluator-optimizer">
-<span class="pattern-num">PATTERN 05</span>
-<h2>Evaluator-Optimizer</h2>
-<p class="lead">Two agents in a feedback loop. One writes. One critiques. The writer revises until the critic is satisfied.</p>
+      <!-- ============================================ -->
+      <!-- 5. EVALUATOR-OPTIMIZER                        -->
+      <!-- ============================================ -->
+      <div class="pattern" id="evaluator-optimizer">
+        <span class="pattern-num">PATTERN 05</span>
+        <h2>Evaluator-Optimizer</h2>
+        <p class="lead">Two agents in a feedback loop. One writes. One critiques. The writer revises until the critic is
+          satisfied.</p>
 
-<div class="callout">
-<strong>Build order matters.</strong> Build 5A (the critic) first. The writer (5B) dispatches to the critic by name. If the critic does not exist yet, the loop fails.
-</div>
+        <div class="callout">
+          <strong>Build order matters.</strong> Build 5A (the critic) first. The writer (5B) dispatches to the critic by
+          name. If the critic does not exist yet, the loop fails.
+        </div>
 
-<h3>Agent 5A: <code>prd-critic</code> (the critic)</h3>
-<div class="method">
-<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
-<pre><code>Create a project subagent in .claude/agents/ called "prd-critic" for
+        <h3>Agent 5A: <code>prd-critic</code> (the critic)</h3>
+        <div class="method">
+          <div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+          <pre><code>Create a project subagent in .claude/agents/ called "prd-critic" for
 MeetFlow, Sonnet, color pink, with the Read tool only.
 
 It scores draft PRDs against a strict 5-dimension rubric. Persona: a
@@ -735,11 +1103,11 @@ e.g. "add the 34% action item accuracy stat from
 04-strategy/product-vision.md," not "make the problem clearer."
 
 Note it is used only when dispatched by prd-quality-loop.</code></pre>
-</div>
-<div class="method">
-<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
-<span class="pre-label file">.claude/agents/prd-critic.md</span>
-<pre class="file"><code>---
+        </div>
+        <div class="method">
+          <div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+          <span class="pre-label file">.claude/agents/prd-critic.md</span>
+          <pre class="file"><code>---
 name: prd-critic
 description: Scores a draft MeetFlow PRD against a 5-dimension rubric. Used
   only when dispatched by prd-quality-loop.
@@ -754,14 +1122,14 @@ persona), solution scope (5 bullets, no implementation), measurability
 (baseline + target), risks (top 3 concrete). Output "Score: X/10" then one
 line per dimension. If under 8, add three specific fixes, each naming the
 exact section and exact change. NEVER give a 10 - there is always something.</code></pre>
-</div>
-<h4>Why these tools</h4>
-<p>Read only. The critic scores a draft passed to it. It does not write anything.</p>
+        </div>
+        <h4>Why these tools</h4>
+        <p>Read only. The critic scores a draft passed to it. It does not write anything.</p>
 
-<h3>Agent 5B: <code>prd-quality-loop</code> (the writer + loop)</h3>
-<div class="method">
-<div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
-<pre><code>Create a project subagent in .claude/agents/ called "prd-quality-loop" for
+        <h3>Agent 5B: <code>prd-quality-loop</code> (the writer + loop)</h3>
+        <div class="method">
+          <div class="method-head"><span class="method-badge">Method A</span> Ask Claude - paste this</div>
+          <pre><code>Create a project subagent in .claude/agents/ called "prd-quality-loop" for
 MeetFlow, Sonnet, color green, with Agent, Read, Glob, Write.
 
 It writes engineering-ready PRDs using a critique loop with prd-critic.
@@ -787,11 +1155,11 @@ last score 6/10."
 
 Trigger it when the user asks for a high-quality PRD that will pass
 engineering review.</code></pre>
-</div>
-<div class="method">
-<div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
-<span class="pre-label file">.claude/agents/prd-quality-loop.md</span>
-<pre class="file"><code>---
+        </div>
+        <div class="method">
+          <div class="method-head"><span class="method-badge b">Method B</span> Or write the file</div>
+          <span class="pre-label file">.claude/agents/prd-quality-loop.md</span>
+          <pre class="file"><code>---
 name: prd-quality-loop
 description: Writes an engineering-ready PRD via a critique loop with
   prd-critic. Use when the user wants a PRD that will pass eng review.
@@ -807,77 +1175,109 @@ draft. If it scores 8+, save outputs/prd-{feature-name}.md (no date) and stop. I
 under 8, revise every point and re-score. Max 3 loops; after that, ship the
 latest with a "Remaining gaps" note on top. Never argue with the critic;
 revise. Log each iteration: "Iteration 2 of 3 - last score 6/10."</code></pre>
-</div>
+        </div>
 
-<h3>Test it</h3>
-<p><em>"Use prd-quality-loop to write a PRD for Smart Follow-Up."</em> Watch the loop run: draft v1 &rarr; score &rarr; revise &rarr; score &rarr; ship. The final PRD should log a score of 8/10 or higher at the top.</p>
-</div>
+        <h3>Test it</h3>
+        <p><em>"Use prd-quality-loop to write a PRD for Smart Follow-Up."</em> Watch the loop run: draft v1 &rarr; score
+          &rarr; revise &rarr; score &rarr; ship. The final PRD should log a score of 8/10 or higher at the top.</p>
+      </div>
 
 
-<!-- ============================================ -->
-<!-- WRAP UP                                       -->
-<!-- ============================================ -->
-<h2 id="finished">You now have nine agents across five patterns</h2>
+      <!-- ============================================ -->
+      <!-- WRAP UP                                       -->
+      <!-- ============================================ -->
+      <h2 id="finished">You now have nine agents across five patterns</h2>
 
-<p>If you followed every section, your <code>.claude/agents/</code> folder contains:</p>
+      <p>If you followed every section, your <code>.claude/agents/</code> folder contains:</p>
 
-<ul class="checkbox-list">
-  <li><code>interview-insight-synthesizer</code> <span class="tag green">Prompt Chaining</span></li>
-  <li><code>prd-drafter</code> + <code>competitor-snapshot</code> + <code>churn-diagnoser</code> + <code>pm-request-router</code> <span class="tag green">Routing</span></li>
-  <li><code>feedback-triangulator</code> <span class="tag green">Parallelization</span></li>
-  <li><code>competitor-deep-dive</code> <span class="tag green">Orchestrator-Workers</span></li>
-  <li><code>prd-critic</code> + <code>prd-quality-loop</code> <span class="tag green">Evaluator-Optimizer</span></li>
-</ul>
+      <ul class="checkbox-list">
+        <li><code>interview-insight-synthesizer</code> <span class="tag green">Prompt Chaining</span></li>
+        <li><code>prd-drafter</code> + <code>competitor-snapshot</code> + <code>churn-diagnoser</code> +
+          <code>pm-request-router</code> <span class="tag green">Routing</span>
+        </li>
+        <li><code>feedback-triangulator</code> <span class="tag green">Parallelization</span></li>
+        <li><code>competitor-deep-dive</code> <span class="tag green">Orchestrator-Workers</span></li>
+        <li><code>prd-critic</code> + <code>prd-quality-loop</code> <span class="tag green">Evaluator-Optimizer</span>
+        </li>
+      </ul>
 
-<p>Verify by running <code>ls .claude/agents/</code> in your terminal. Every agent should show up as a <code>.md</code> file.</p>
+      <p>Verify by running <code>ls .claude/agents/</code> in your terminal. Every agent should show up as a
+        <code>.md</code> file.
+      </p>
 
-<h3>Editing an agent later</h3>
-<p>Two ways, both live within seconds, no restart: open the <code>.md</code> file and change any field, or ask Claude - <em>"give churn-diagnoser access to 05-user-personas/ too."</em> Claude edits the frontmatter or body for you.</p>
+      <h3>Editing an agent later</h3>
+      <p>Two ways, both live within seconds, no restart: open the <code>.md</code> file and change any field, or ask
+        Claude - <em>"give churn-diagnoser access to 05-user-personas/ too."</em> Claude edits the frontmatter or body
+        for you.</p>
 
-<h3>Quick reference - which pattern when</h3>
-<table>
-<thead><tr><th>If your task...</th><th>Use</th></tr></thead>
-<tbody>
-<tr><td>Has clear sequential stages with quality gates</td><td>Prompt Chaining</td></tr>
-<tr><td>Mixes request types needing different handling</td><td>Routing</td></tr>
-<tr><td>Has independent subtasks that can all run at once</td><td>Parallelization</td></tr>
-<tr><td>Needs a different decomposition for each input</td><td>Orchestrator-Workers</td></tr>
-<tr><td>Has checkable quality that improves with iteration</td><td>Evaluator-Optimizer</td></tr>
-</tbody>
-</table>
+      <h3>Quick reference - which pattern when</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>If your task...</th>
+            <th>Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Has clear sequential stages with quality gates</td>
+            <td>Prompt Chaining</td>
+          </tr>
+          <tr>
+            <td>Mixes request types needing different handling</td>
+            <td>Routing</td>
+          </tr>
+          <tr>
+            <td>Has independent subtasks that can all run at once</td>
+            <td>Parallelization</td>
+          </tr>
+          <tr>
+            <td>Needs a different decomposition for each input</td>
+            <td>Orchestrator-Workers</td>
+          </tr>
+          <tr>
+            <td>Has checkable quality that improves with iteration</td>
+            <td>Evaluator-Optimizer</td>
+          </tr>
+        </tbody>
+      </table>
 
-<div class="callout">
-<strong>Homework.</strong> Build one more agent for a real workflow you do every week - sprint prep, weekly status, stakeholder digest. Pick the pattern that fits. Describe it to Claude, or drop a <code>.md</code> file in <code>.claude/agents/</code>. Share what you built in the cohort channel.
-</div>
+      <div class="callout">
+        <strong>Homework.</strong> Build one more agent for a real workflow you do every week - sprint prep, weekly
+        status, stakeholder digest. Pick the pattern that fits. Describe it to Claude, or drop a <code>.md</code> file
+        in <code>.claude/agents/</code>. Share what you built in the cohort channel.
+      </div>
 
-<div class="footer">
-  <p>Pattern set: Anthropic, "Building Effective Agents."<br>
-  Subagent reference: <a href="https://code.claude.com/docs/en/sub-agents">code.claude.com/docs/en/sub-agents</a><br>
-  Project context: MeetFlow workshop repo. All file paths refer to that repo.</p>
-</div>
+      <div class="footer">
+        <p>Pattern set: Anthropic, "Building Effective Agents."<br>
+          Subagent reference: <a
+            href="https://code.claude.com/docs/en/sub-agents">code.claude.com/docs/en/sub-agents</a><br>
+          Project context: MeetFlow workshop repo. All file paths refer to that repo.</p>
+      </div>
 
-</div>
-</div>
-<script>
-  const links = [...document.querySelectorAll('aside li a')];
-  const map = new Map(links.map(l => [l.getAttribute('href').slice(1), l]));
-  const targets = [...map.keys()].map(id => document.getElementById(id)).filter(Boolean);
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        links.forEach(l => l.classList.remove('active'));
-        const a = map.get(e.target.id);
-        if (a) { a.classList.add('active'); a.scrollIntoView({ block: 'nearest' }); }
-      }
-    });
-  }, { rootMargin: '0px 0px -75% 0px', threshold: 0 });
-  targets.forEach(t => io.observe(t));
-  const aside = document.querySelector('aside');
-  const toggle = document.querySelector('.menu-toggle');
-  if (toggle) {
-    toggle.onclick = () => aside.classList.toggle('open');
-    links.forEach(l => l.addEventListener('click', () => aside.classList.remove('open')));
-  }
-</script>
+    </div>
+  </div>
+  <script>
+    const links = [...document.querySelectorAll('aside li a')];
+    const map = new Map(links.map(l => [l.getAttribute('href').slice(1), l]));
+    const targets = [...map.keys()].map(id => document.getElementById(id)).filter(Boolean);
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          links.forEach(l => l.classList.remove('active'));
+          const a = map.get(e.target.id);
+          if (a) { a.classList.add('active'); a.scrollIntoView({ block: 'nearest' }); }
+        }
+      });
+    }, { rootMargin: '0px 0px -75% 0px', threshold: 0 });
+    targets.forEach(t => io.observe(t));
+    const aside = document.querySelector('aside');
+    const toggle = document.querySelector('.menu-toggle');
+    if (toggle) {
+      toggle.onclick = () => aside.classList.toggle('open');
+      links.forEach(l => l.addEventListener('click', () => aside.classList.remove('open')));
+    }
+  </script>
 </body>
+
 </html>

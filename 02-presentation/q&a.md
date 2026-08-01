@@ -17,6 +17,10 @@ Answers to open questions from workshop sessions, sourced from official Anthropi
 - **July 2026 Session 2 additions:** 04-07-2026 (Q90-Q95 - Skills, Plugins, and Practical Examples - see "July 2026 - Session 2 Additions" section)
 - **July 2026 Session 3 additions:** 05-07-2026 (Q96-Q105 - Skills Creation and PM Frameworks - see "July 2026 - Session 3 Additions" section)
 - **July 2026 Session 4 additions:** 05-07-2026 (Q106-Q116 - Building and Using Agents - see "July 2026 - Session 4 Additions" section)
+- **July 2026 Session 5 additions:** 11-07-2026 (Q117-Q129 - Workflows, Routines, and Product Automation - see "July 2026 - Session 5 Additions" section)
+- **July 2026 Session 6 additions:** 11-07-2026 (Q130-Q141 - Video, Commands, Hooks, and Session Management - see "July 2026 - Session 6 Additions" section)
+- **July 2026 Session 7 additions:** 12-07-2026 (Q142-Q153 - Build Hours, Shopping Assistant MVP - see "July 2026 - Session 7 Additions" section)
+- **July 2026 Session 8 additions:** 12-07-2026 (Q154-Q167 - Build Hours Part 2, Phase 2 login sessions and product matching - see "July 2026 - Session 8 Additions" section)
 
 If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
@@ -2113,3 +2117,703 @@ New questions raised by the same NextLeap Applied Generative AI Bootcamp cohort 
 - https://code.claude.com/docs/en/statusline (verified 05-07-2026)
 
 ---
+
+# July 2026 - Session 5 Additions
+
+New questions raised by the same NextLeap Applied Generative AI Bootcamp cohort on 11-07-2026 during Session 5 (Workflows, Routines, and Product Automation). All URLs verified 11-07-2026.
+
+---
+
+## Q117: What is the `/loop` command, and how does it work as a cron-like scheduler?
+
+**Short answer:** `/loop` re-runs a prompt on an interval while your session stays open, so it behaves like a lightweight cron. Both the interval and the prompt are optional, and you can pass a skill as the prompt so it re-runs each iteration.
+
+- Example: `/loop 20m /review-pr 1234` re-runs that skill every 20 minutes; omit the interval and Claude self-paces.
+- Practical use from the session: point a data-filling skill at an Excel of clients and loop it hourly to populate each row unattended (your machine must stay on).
+- For scheduling that survives a closed laptop, use routines instead (Q119), which run on Anthropic-managed cloud infrastructure.
+
+**Sources:**
+- https://code.claude.com/docs/en/scheduled-tasks (verified 11-07-2026)
+- https://code.claude.com/docs/en/slash-commands (verified 11-07-2026)
+
+---
+
+## Q118: What are dynamic workflows and the `/workflow` command, and how are they different from just prompting?
+
+**Short answer:** A workflow moves the orchestration from Claude's context into a script. Instead of Claude deciding turn by turn what to spawn, a workflow script holds the loop, the branching, and the intermediate results itself, so your context holds only the final answer. You invoke and manage them with `/workflow` and `/workflows`.
+
+- Workflows run in the background, so the session stays responsive while agents work; run `/workflows` to list running and completed ones and open a progress view.
+- In the session, a workflow prompt named which agents to use (senior QA, senior software engineer, product manager, product designer) and Claude generated a `product-audit.js` file; next time you just say "continue this workflow."
+- Workflows are token-heavy because they can spawn many agents and sub-agents; use them when you have the budget and a well-defined context.
+
+**Sources:**
+- https://code.claude.com/docs/en/workflows (verified 11-07-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 11-07-2026)
+
+---
+
+## Q119: What are routines, and how many can I schedule on my plan?
+
+**Short answer:** A routine is a saved Claude Code configuration (a prompt, one or more repositories, and a set of connectors) that runs automatically on a schedule, on an API trigger, or in reaction to GitHub events. Routines execute on Anthropic-managed cloud infrastructure, so they keep working when your laptop is closed.
+
+- Session example: a daily 7:00 AM digest of new Anthropic and Claude Code releases, running since mid-June.
+- The number of routines you can run depends on your plan tier; check the routines documentation and your account for the current limit rather than assuming a fixed number.
+- Good second use: a routine that tracks a competitor's changes and DMs you a summary.
+
+**Sources:**
+- https://code.claude.com/docs/en/routines (verified 11-07-2026)
+- https://code.claude.com/docs/en/scheduled-tasks (verified 11-07-2026)
+
+---
+
+## Q120: What is the parallelization (fan-out) agent pattern?
+
+**Short answer:** Dispatch several workers at once, each reading a different source, then run a second step that combines and ranks their results. In the session, three general-purpose workers read user interviews, the Q1 survey, and churn/company files in parallel, then a step-two pass ranked issues that appeared in two or three sources.
+
+- The key difference from prompt chaining is that the workers run at the same time, not one after another, so the read is faster.
+- Give each worker a tight brief (read exactly these files, return the top five issues with title, one-line description, and source file) so the outputs are easy to merge.
+- The merge step is where you find corroboration, an issue in two or three sources is a stronger signal than one that appears once.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 11-07-2026)
+- https://code.claude.com/docs/en/common-workflows (verified 11-07-2026)
+
+---
+
+## Q121: How do I decide between a skill, an agent, and a workflow?
+
+**Short answer:** Start with a skill (one repeatable capability). Build an agent when you need a persona that calls several skills end to end. Use a workflow when you want those agents to loop automatically and you have the token budget.
+
+- Skill: a single job you do repeatedly, like drafting a spec or filling a data sheet.
+- Agent: a role that decides and acts, invoking one or more skills, for example a PM agent that creates a spec, gets it reviewed, and updates it.
+- Workflow: the whole team looping (build, test, synthesize, repeat), best run when you have time and tokens to spare.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 11-07-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 11-07-2026)
+- https://code.claude.com/docs/en/workflows (verified 11-07-2026)
+
+---
+
+## Q122: What should I do when a sub-agent seems stuck or frozen?
+
+**Short answer:** Do not kill the session. Send a short prompt like "are you stuck?" to nudge it to continue or report its state. If the timestamp keeps moving but no tokens are being consumed, your request is queued behind load, not dead.
+
+- Killing and restarting loses the work in progress; a nudge is cheaper and usually enough.
+- If it is genuinely stalled, check the status page (Q123) for an outage before assuming it is your setup.
+- Agent view (`/agents` view) helps you see what multiple agents and sub-agents are doing when a large task spawns many of them.
+
+**Sources:**
+- https://code.claude.com/docs/en/troubleshooting (verified 11-07-2026)
+- https://code.claude.com/docs/en/agent-view (verified 11-07-2026)
+
+---
+
+## Q123: Where do I check whether Claude or Claude Code is having an outage?
+
+**Short answer:** Use the official status page at https://status.claude.com. It lists uptime and incidents for the models and Claude Code, so you can tell a real outage from a problem on your end.
+
+- The session referenced a partial outage on 7 July and errors around July 10, both posted there.
+- Check the status page first when a task appears frozen but you have already nudged it and it still will not move.
+
+**Sources:**
+- https://status.claude.com/ (verified 11-07-2026)
+- https://code.claude.com/docs/en/troubleshooting (verified 11-07-2026)
+
+---
+
+## Q124: Why did a workflow report using 30+ agents when I only built four?
+
+**Short answer:** Your four agents are the named roles you defined. When a task is large, each of those agents can spawn its own sub-agents to parallelize the work, which is why a run can show 22, 27, or 33 agents in total.
+
+- The four roles (for example QA, engineer, PM, designer) are the orchestration; the extra agents are sub-agents doing the work in parallel across many files or personas.
+- You can steer this by prompting "using sub-agents, review these documents" and even naming how many, rather than letting Claude decide.
+- More sub-agents means more tokens, so scope the task if cost matters.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 11-07-2026)
+- https://code.claude.com/docs/en/workflows (verified 11-07-2026)
+
+---
+
+## Q125: Can Claude Code build an end-to-end product, and how?
+
+**Short answer:** Yes, but through spec-driven development, not a single prompt. Brainstorm the problem, the users, and the plan with Claude first, and do not start building until you are confident in that plan. Then proceed step by step, the same way you would without AI.
+
+- The discipline is the same product process you already follow; the agents do the execution instead of humans.
+- Feed the project rich context (personas, prior feedback, engineering review patterns) as Markdown files so the output needs less correction.
+- Session examples built this way included an HRMS, Property Finder, a job-search tool, and MeetScribe.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 11-07-2026)
+- https://code.claude.com/docs/en/skills (verified 11-07-2026)
+
+---
+
+## Q126: How do I create and use user personas in Claude Code?
+
+**Short answer:** Personas are not a Claude feature; you create them as a file. Feed Claude your interview or survey data (for example "we ran 50 interviews and users said this") and ask it to produce a `personas.md`. Then reference that file to drive per-persona decisions.
+
+- Once you have personas, you can run AB tests per persona, for example enabling a new feature only for the persona that uses that area most, to get fast, relevant feedback.
+- Keep personas grounded in real data (database events, NPS, interviews), not assumptions.
+- The same file becomes reusable context for future features and agents.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 11-07-2026)
+- https://code.claude.com/docs/en/skills (verified 11-07-2026)
+
+---
+
+## Q127: How do I connect a product analytics tool like Mixpanel to Claude Code?
+
+**Short answer:** Use a connector or MCP server for the tool if an official one exists, then query it in natural language. First make sure your product logs the events you care about; without event data there is nothing for the tool to analyze.
+
+- Connectors exist for several analytics tools (the session named Mixpanel, Amplitude, Pendo, and PostHog); always confirm a server is official before trusting it.
+- If no MCP server exists (Google Analytics was cited as an example without one), export the data and feed it to Claude directly.
+- Caveat raised in the session: session-recording tools like Microsoft Clarity can consume a lot of tokens and may not return enriched, conclusive data, so test before relying on them.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 11-07-2026)
+
+---
+
+## Q128: Why do workflows, sub-agents, and recording summaries consume so many tokens, and how do I control cost?
+
+**Short answer:** Cost scales with how much content is read and how many agents run. Workflows spawn many sub-agents, and summarizing large inputs like session recordings reads a lot of tokens. Your main levers are model choice, effort level, and scoping the task.
+
+- Watch usage in the status line, and remember the budget resets on rolling windows (a 5-hour window and a weekly window), not a single daily reset.
+- Prefer Sonnet and medium effort for routine work; reserve the largest models for the hardest reasoning.
+- Scope inputs (fewer files per agent, narrower tasks) rather than pointing a workflow at an entire codebase when you do not need to.
+
+**Sources:**
+- https://code.claude.com/docs/en/costs (verified 11-07-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 11-07-2026)
+
+---
+
+## Q129: How do I generate product or feature videos from Claude Code?
+
+**Short answer:** Install a video plugin or skill, then describe the video you want. In the session, installing the HyperFrames skill added an `agents.md` and around 20 video skills (product launch, website-to-video, motion graphics, and others), and a product-launch-video workflow crawled a live site for real brand assets.
+
+- Voiceover uses a third-party text-to-speech key (11 Labs in the session), stored in the project's `.env` file; the skill scripts run locally and do not themselves call an AI model for the video assembly.
+- Add an eval/checklist file so the agent self-reviews the output (for example audio-video sync) before sharing the final cut, and let that checklist improve with each video.
+- Install only official or clearly first-party plugins and skills, and review what an install adds before running it.
+
+**Sources:**
+- https://code.claude.com/docs/en/plugins (verified 11-07-2026)
+- https://code.claude.com/docs/en/skills (verified 11-07-2026)
+
+---
+
+# July 2026 - Session 6 Additions
+
+New questions raised by the same NextLeap Applied Generative AI Bootcamp cohort on 11-07-2026 during Session 6 (Video, Commands, Hooks, and Session Management, afternoon). All URLs verified 11-07-2026.
+
+---
+
+## Q130: How do I control the length, language, and captions of a generated video?
+
+**Short answer:** Set them in your prompt. Ask for a specific length (for example one minute), name the audio language, and say whether you want captions; the video skill and its voice provider handle the rest. Give it a screenshot plus a rough user-journey script for the best result.
+
+- Voice comes from a third-party text-to-speech provider (11 Labs in the session); pick a language and paste a specific voice ID copied from that provider to lock the voice.
+- Captions are optional; you can regenerate a cleaner cut without them if the captioned version looks busy.
+- Treat it like non-AI video work: draft and review the script first, then render.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 11-07-2026)
+- https://code.claude.com/docs/en/plugins (verified 11-07-2026)
+
+---
+
+## Q131: What is the `/loop` command good for, and what does it depend on?
+
+**Short answer:** `/loop` re-runs a prompt on an interval so a long task keeps going unattended. A common use is recovering from transient errors: loop every 15 minutes to send "continue" until a set time so an overnight build finishes on its own. Its one dependency is that your machine must stay on.
+
+- Other examples: email your open Jira tickets at 8:00 AM daily, or send a scrum digest to stakeholders every morning.
+- Keep your display set to always-on so the machine does not sleep mid-loop.
+- If you need it to run when your laptop is closed, use a routine (Q132) instead.
+
+**Sources:**
+- https://code.claude.com/docs/en/scheduled-tasks (verified 11-07-2026)
+
+---
+
+## Q132: Why would I use a routine instead of `/loop` if I can already schedule things?
+
+**Short answer:** A routine runs on Anthropic's cloud infrastructure, so it works when your laptop is off, but it is capped by plan (roughly 5 per day on Pro and 15 per day on Max). `/loop` has no such cap but depends on your machine staying on. Choose by whether you need cloud independence or unlimited local runs.
+
+- The routine cap exists because it consumes Anthropic's infrastructure, not your machine.
+- Routines can use connectors; note a limitation raised in the session, the Gmail connector creates a draft rather than sending, so Slack was used for digests.
+
+**Sources:**
+- https://code.claude.com/docs/en/routines (verified 11-07-2026)
+- https://code.claude.com/docs/en/scheduled-tasks (verified 11-07-2026)
+
+---
+
+## Q133: What is plan mode, and how do I toggle it?
+
+**Short answer:** Plan mode makes Claude draft a reviewable plan before it acts, which you approve before execution. Use it for any complex task with multiple dependencies. Toggle modes with Shift+Tab rather than typing a slash command.
+
+- Reviewing the plan first catches a wrong approach before tokens are spent building it.
+- Shift+Tab cycles through the available modes, shown at the bottom of the terminal.
+
+**Sources:**
+- https://code.claude.com/docs/en/interactive-mode (verified 11-07-2026)
+
+---
+
+## Q134: How do I get a report analyzing my past Claude Code sessions?
+
+**Short answer:** Run the insights bundled skill. It reads your saved session transcripts and produces an HTML report of what you did, what went well, what to improve, and suggested CLAUDE.md additions. It is a retro for your Claude Code usage; run it monthly.
+
+- In the session it covered 860 messages across 86 sessions and flagged recurring issues (stale MCP, missing Python packages, unverified URLs) plus concrete config suggestions.
+- It works because every session is saved continuously to local transcript files (see Q135).
+
+**Sources:**
+- https://code.claude.com/docs/en/sessions (verified 11-07-2026)
+- https://code.claude.com/docs/en/skills (verified 11-07-2026)
+
+---
+
+## Q135: Where are my Claude Code sessions stored, and how do I stop them being deleted after 30 days?
+
+**Short answer:** Sessions are saved as JSONL transcript files under your global `.claude` directory (created when you installed Claude Code), grouped by project. By default they are cleaned up after 30 days. Set `cleanupPeriodDays` in your global `settings.json` to keep them longer.
+
+- Aman set `cleanupPeriodDays` to 3650 (ten years) so nothing is auto-deleted.
+- The same global `.claude` folder holds your global skills and memory, so back it up (or copy it) when moving machines; deleting it removes those skills.
+
+**Sources:**
+- https://code.claude.com/docs/en/settings (verified 11-07-2026)
+- https://code.claude.com/docs/en/sessions (verified 11-07-2026)
+
+---
+
+## Q136: What do `/compact` and `/clear` do to my context window?
+
+**Short answer:** `/compact` summarizes the conversation so far and keeps only that summary, freeing up context while retaining the gist. `/clear` wipes the conversation entirely and starts fresh. Use compact when you are running low on the context window but still need continuity.
+
+- The context window is large (shown as a percentage remaining in the session); compact when the used portion starts crowding out room to work.
+- Clear is the harder reset for when you are switching to an unrelated task.
+
+**Sources:**
+- https://code.claude.com/docs/en/costs (verified 11-07-2026)
+- https://code.claude.com/docs/en/interactive-mode (verified 11-07-2026)
+
+---
+
+## Q137: What are the ways to give Claude persistent memory, and how do I add a quick one?
+
+**Short answer:** There are three places: CLAUDE.md, the project memory file, and a rules file referenced from CLAUDE.md. For a rule that must not be missed, add it in more than one place. To add a quick memory, start a message with `#` and Claude will save it.
+
+- Keep CLAUDE.md lean (roughly under 200 lines); if it grows too large it eats the context window and stops being fully effective.
+- Memories are sometimes not recalled if a request is not specific, which is why duplicating a critical rule into both memory and a referenced rules file is safer.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 11-07-2026)
+
+---
+
+## Q138: How do I set up a hook that auto-updates my docs when code changes?
+
+**Short answer:** Use a PostToolUse hook in `settings.json` that fires after a turn changes source files, then runs a cheap `claude -p` pass to refresh CLAUDE.md and README.md from the git diff. This keeps docs from going stale without you remembering to update them.
+
+- Hooks fire on events like PreToolUse and PostToolUse; doc-refresh belongs on PostToolUse, after the edits land.
+- Removing the hook config (or the hook file) stops it, so it is easy to turn off.
+
+**Sources:**
+- https://code.claude.com/docs/en/hooks (verified 11-07-2026)
+
+---
+
+## Q139: How do I connect a design tool like Google Stitch to Claude Code via MCP?
+
+**Short answer:** Add the tool's MCP server (Stitch provides one) using its setup snippet for your client, authenticate, and then generate designs in natural language. Stitch returns a full design-token system (primary, secondary, neutral, headline, body, label) you can apply to a page.
+
+- Confirm the server is the official one before adding it, and check whether it needs an API token or subscription.
+- The same MCP approach works for other design and analytics tools; the design tokens come from the server, not from Claude inventing them.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 11-07-2026)
+
+---
+
+## Q140: What is the difference between sub-agent-driven and inline execution, and how do I reduce token usage?
+
+**Short answer:** Sub-agent-driven execution runs work in parallel across multiple strategies and burns far more tokens; inline execution runs steps one by one, slower but cheaper for the same outcome. To control cost, tell Claude "do not use sub agents," use Sonnet for any sub-agents, and keep effort at medium.
+
+- The outcome is usually the same; the trade-off is speed versus token spend.
+- To feel the difference, run the same task in two folders, one sub-agent-driven and one inline, and compare tokens and time.
+- If you built a skill with sub-agents, it will not force sub-agents later unless you ask; specify inline when you invoke it to stay cheap.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 11-07-2026)
+- https://code.claude.com/docs/en/costs (verified 11-07-2026)
+
+---
+
+## Q141: How do I enable Shift+Enter for multiline input in my terminal?
+
+**Short answer:** Run the `/terminal-setup` command, which configures your terminal (including the Shift+Enter key binding) for Claude Code. After that you can type multi-line prompts with Shift+Enter.
+
+- This is part of general terminal configuration for Claude Code and is a one-time setup per terminal.
+
+**Sources:**
+- https://code.claude.com/docs/en/terminal-config (verified 11-07-2026)
+
+---
+
+# July 2026 - Session 7 Additions
+
+New questions raised by the same NextLeap Applied Generative AI Bootcamp cohort on 12-07-2026 during Session 7 (Build Hours, Shopping Assistant MVP). All URLs verified 12-07-2026.
+
+---
+
+## Q142: How do I avoid doing the work twice between a Claude prototype and Figma?
+
+**Short answer:** Give Claude your Figma context (component links and guidelines) so it prototypes in your design system, then import the generated HTML into Figma so only a small share of work remains there. Connect Figma through its MCP server to make this two-way.
+
+- Feed Claude the Figma links so it can build a UX zone that matches your fonts, components, and system, then iterate until nothing on Figma is missing from the UX zone.
+- A Figma developer or company account is needed because Figma restricts MCP calls on free accounts.
+- The point is the same as everywhere: build the design-system context first, or the prototype stays generic.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 12-07-2026)
+
+---
+
+## Q143: What is the difference between a generic prompt and a leading prompt when brainstorming?
+
+**Short answer:** A leading prompt tells Claude which direction to solve in, so it only explores that lane. A generic prompt gives just the problem and asks for options, so the model searches across many possibilities. For brainstorming, use the generic prompt.
+
+- Example: "here is the problem, give me different ways to automate or solve it" beats "solve this using semantic matching."
+- You narrow later, once you have seen the range of options, not before.
+
+**Sources:**
+- https://code.claude.com/docs/en/best-practices (verified 12-07-2026)
+- https://code.claude.com/docs/en/common-workflows (verified 12-07-2026)
+
+---
+
+## Q144: How do I test whether something is feasible before building it, and can Claude drive a browser?
+
+**Short answer:** Run a Phase 0 feasibility spike. Claude can drive a real browser through the Playwright or Chrome DevTools MCP tools, so it can prove a fetch or flow works on one real case before you write any product code.
+
+- In the session, Claude opened Amazon in a real browser and confirmed it could read live prices and product URLs before the spec was written.
+- Testing the risky assumption first is what stops you building on a fantasy; if the spike fails, you redesign, not rebuild.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 12-07-2026)
+- https://code.claude.com/docs/en/common-workflows (verified 12-07-2026)
+
+---
+
+## Q145: What is spec-driven development in Claude Code, and what is the flow?
+
+**Short answer:** Brainstorm the problem, prove feasibility (Phase 0), write a spec, turn it into a phased implementation plan, then build phase by phase. It is the same product process you follow without AI; the agents do the execution.
+
+- The flow in the session: problem statement, open brainstorm, Phase 0 browser spike, committed spec (goal, core decisions, data model, phases), implementation plan, then build.
+- Do not proceed to the next phase until you are confident in the current one; keep the spec, plan, and progress as living files.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 12-07-2026)
+- https://code.claude.com/docs/en/best-practices (verified 12-07-2026)
+
+---
+
+## Q146: How do I run test-driven development while Claude builds?
+
+**Short answer:** Derive test cases from the spec first, then build against them, so testing happens in parallel with development rather than at the end. Split each module into a pure, deterministic part you unit-test against saved fixtures and a thin live-IO wrapper you cover with a manual smoke script.
+
+- In the session, each site module was split into a pure DOM parser (unit-tested on saved HTML fixtures) and a thin browser-fetch wrapper (manual smoke test), because live sites are too flaky for a tight test loop.
+- A QA-engineer agent can author the test cases from the spec so the build satisfies them as it goes.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 12-07-2026)
+- https://code.claude.com/docs/en/best-practices (verified 12-07-2026)
+
+---
+
+## Q147: What does the `/init` command do?
+
+**Short answer:** `/init` scans your project and generates a starter CLAUDE.md with the build commands, test instructions, and conventions it discovers. If a CLAUDE.md already exists, it suggests improvements rather than overwriting, and you refine from there.
+
+- Run it when you open or scaffold a project so Claude has a baseline of project context.
+- Follow up by editing CLAUDE.md (or using `/memory`) to add anything Claude would not discover on its own, like a preferred stack.
+
+**Sources:**
+- https://code.claude.com/docs/en/commands (verified 12-07-2026)
+- https://code.claude.com/docs/en/memory (verified 12-07-2026)
+
+---
+
+## Q148: How do plugins like Superpowers add skills such as brainstorming and planning?
+
+**Short answer:** A plugin bundles skills, and once installed those skills auto-invoke when relevant. The Superpowers plugin adds brainstorming and writing-plan skills, so a brainstorm produces structured output and an approved spec turns into an implementation plan automatically.
+
+- The skills fire based on their descriptions, you do not have to call them by name each time.
+- Confirm a plugin is from a trusted source before installing, since it runs skills in your project.
+
+**Sources:**
+- https://code.claude.com/docs/en/plugins (verified 12-07-2026)
+- https://code.claude.com/docs/en/skills (verified 12-07-2026)
+
+---
+
+## Q149: How do I reuse agents from one project in another and strip the old project's context?
+
+**Short answer:** Copy the agent definitions and their agent-memory folder into the new project, then prompt Claude to remove all references to the old project, pull in any rule files those agents reference, and loop a review sub-agent until every file scores above your bar (95/100 in the session).
+
+- The agents carry a persona plus accumulated memory; the memory is where prior corrections live, so decide whether to keep or reset it.
+- The rubric loop matters because agents almost always miss some stale reference on the first pass.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 12-07-2026)
+
+---
+
+## Q150: Why do I have to restart Claude Code after creating a new sub-agent?
+
+**Short answer:** Claude's watcher only picks up agent directories that existed when the session started, so a sub-agent created mid-session is not dispatchable until you restart. Restart, and it loads from the on-disk definition.
+
+- If Claude "can't find" a sub-agent you just created, a restart is the fix.
+- Register or reopen your session after the restart so you continue with the same context.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 12-07-2026)
+
+---
+
+## Q151: How does Claude choose the tech stack, and can I override my global default?
+
+**Short answer:** Claude picks a stack that fits the task, not blindly your global default. In the session it chose TypeScript with Playwright for a browser-driving CLI even though the global default was Python, because Python was set for FastAPI backends, not browser automation. You can override by naming the stack you want.
+
+- State your standing preferences in CLAUDE.md, but expect Claude to deviate with a stated reason when the task calls for it.
+- If you want a specific technology, say so in the prompt and Claude will build to it.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 12-07-2026)
+- https://code.claude.com/docs/en/common-workflows (verified 12-07-2026)
+
+---
+
+## Q152: What is the status line, and how do I set one up?
+
+**Short answer:** The status line is the bar at the bottom of the terminal showing context like the current model, effort level, branch, and how much of the context window remains. You configure it in settings, and you can have Claude build a custom one for you.
+
+- Watching the remaining context window tells you when to `/compact` (roughly when only 20-30% is left) before responses degrade.
+- In the session the status line also carried the project name and the PID used to register sessions in the CCS registry.
+
+**Sources:**
+- https://code.claude.com/docs/en/statusline (verified 12-07-2026)
+
+---
+
+## Q153: How should I structure a project so anyone can understand what was built and why?
+
+**Short answer:** Keep living documents alongside the code: a spec, an implementation plan, a progress file, and architecture and decisions files. Rendering the architecture as an interactive HTML file (not plain text) lets non-technical readers follow the problem, the options rejected, and the decisions taken.
+
+- These files also feed future agents, so a new contributor (or Claude itself) can pick up the project without re-deriving the context.
+- Record not just what was decided but why, so a later "why did you build it this way" has an answer.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 12-07-2026)
+- https://code.claude.com/docs/en/memory (verified 12-07-2026)
+
+---
+
+# July 2026 - Session 8 Additions
+
+New questions raised by the same NextLeap Applied Generative AI Bootcamp cohort on 12-07-2026 during Session 8 (Build Hours Part 2, Phase 2 login sessions and product matching). All URLs verified 12-07-2026.
+
+---
+
+## Q154: Is it safe to give an agent my credentials, and where should they live?
+
+**Short answer:** Never type credentials into the chat. Put them in a `.env` file and tell the agent to read them from there. Anything pasted into the chat becomes part of the session, and an API key exposed that way has to be rotated.
+
+- Claude Code treats `.env` as sensitive and will add it to `.gitignore` before committing, even if you forgot to.
+- Best of all is not handing over a password at all: for a site that supports it, log in yourself in a real browser window and let the tool store only the resulting session cookies.
+- The honest caveat a participant raised is worth keeping in mind: the agent already sees your repo, your commit history, and your file tree. Scope what you open, do not assume `.env` alone is the whole boundary.
+
+**Sources:**
+- https://code.claude.com/docs/en/security (verified 12-07-2026)
+- https://code.claude.com/docs/en/settings (verified 12-07-2026)
+
+---
+
+## Q155: What is the safe architecture for logging into a site the tool needs to read?
+
+**Short answer:** The tool opens a real browser window, you sign in yourself with your phone number and OTP, and the tool saves only the encrypted session cookies on your machine. It never sees or stores a password, and nothing is committed to the repo.
+
+- Most Indian grocery apps use phone plus OTP, so often there is no password to hand over in the first place.
+- The encryption key can sit in the macOS Keychain, so a leaked session file on its own is useless. On Windows, keeping it in `.env` is a fine substitute.
+- Fully unattended login is not possible where OTP or two-factor is involved. You complete the login yourself each time the session expires.
+- If the tool stores a session outside `.env`, build the delete command at the same time so you can wipe it on demand.
+
+**Sources:**
+- https://code.claude.com/docs/en/security (verified 12-07-2026)
+- https://code.claude.com/docs/en/settings (verified 12-07-2026)
+
+---
+
+## Q156: Why did the interactive login have to run in a real terminal instead of inside Claude Code?
+
+**Short answer:** An interactive step that needs a human, such as typing an OTP, is the one thing the agent cannot do for you. Run that command in a normal terminal tab, then hand the result back to the agent.
+
+- In the session, the first login attempt run through Claude Code wrote its output to a temp directory that never touched the project, and logged success unconditionally, so it looked like it had worked. It had not.
+- The lesson generalises: a step that reports success without checking anything is worse than a step that fails, because it removes your reason to look.
+- After the fix wrote to the project root, both site sessions persisted and returned live pincode-correct prices with no re-login.
+
+**Sources:**
+- https://code.claude.com/docs/en/interactive-mode (verified 12-07-2026)
+- https://code.claude.com/docs/en/common-workflows (verified 12-07-2026)
+
+---
+
+## Q157: What is harness engineering, and how is it different from prompt and context engineering?
+
+**Short answer:** Prompt engineering is the single instruction. Context engineering is the documentation, knowledge, and project structure you build around the agent. Harness engineering is the guardrails that stop the agent taking a path you never wanted, even when it cannot find the path you did want.
+
+- The worked example from the session: the tool may search and compare a product, but it must never add to cart or place an order. It must refuse even if you prompt it to, until you remove the guardrail yourself.
+- In Claude Code the practical carriers of a harness are permission rules, `disallowedTools` on an agent, and hooks that block a tool call before it runs.
+- The point of a harness is that it holds without a human watching. If a rule only works when you are reading the output, it is not a guardrail.
+
+**Sources:**
+- https://code.claude.com/docs/en/iam (verified 12-07-2026)
+- https://code.claude.com/docs/en/hooks (verified 12-07-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 12-07-2026)
+
+---
+
+## Q158: What is loop engineering?
+
+**Short answer:** Loop engineering is feeding the blocked or wrong attempt back to the agent so it stops choosing that path next time, instead of you correcting the same thing manually every run.
+
+- The pattern: the harness stops the agent going somewhere it should not, and the record of why it tried is returned to the agent as input for the next iteration.
+- The engineering version of this is feeding pull-request review comments back into the agent that writes the code, so the same review comment stops recurring and the agent improves rather than the individual developer.
+- This is what turns a one-off correction into a durable behaviour change.
+
+**Sources:**
+- https://code.claude.com/docs/en/hooks (verified 12-07-2026)
+- https://code.claude.com/docs/en/memory (verified 12-07-2026)
+
+---
+
+## Q159: How do I make sure the test cases cover the edge cases a human would miss?
+
+**Short answer:** Put the testing methods themselves into a rules file, then ask the agent to generate test cases against those methods rather than against one happy path.
+
+- Name the methods explicitly: exhaustive testing, black box, white box, boundary value analysis.
+- Add the domain checks that matter for your product. In this build those were same quantity, same variant, and correct pack size, because a peanut butter query returned a protein bar and it was not flagged as a bad match.
+- Also test the negative case honestly. If you can find a product by hand that the agent reports as unavailable, that is a defect in the search route, not an absent product.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 12-07-2026)
+- https://code.claude.com/docs/en/common-workflows (verified 12-07-2026)
+
+---
+
+## Q160: How do I keep a record of what I tested and when?
+
+**Short answer:** Ask the agent to write every test run into an HTML report capturing the query, each site or path it checked, the direct URL, the value it found, and the recommendation it made. That file becomes your test suite record.
+
+- The value is the timeline: which test ran on which date, what the product did at that moment, and what changed since.
+- HTML over plain Markdown here for the same reason as the architecture doc: a non-technical reader can open it and follow the run without being walked through it.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 12-07-2026)
+
+---
+
+## Q161: Does the QA agent start automatically after the engineering agent, and is that test-driven?
+
+**Short answer:** Yes, if you set it up that way. In this build the test cases were written alongside each component rather than after the build finished, and the QA engineer agent ran in parallel with the software engineer agent.
+
+- The four agents in play were product manager (writes the spec), QA engineer (test cases), software engineer (builds), and designer (usability).
+- Sub-agent driven execution is Claude Code's default offer when a task is large enough, so you often do not have to ask for it by name.
+- By the end of the session 122 test cases were passing, including a new module added mid-session.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 12-07-2026)
+
+---
+
+## Q162: How do I put those agents into a loop, and where does the loop stop?
+
+**Short answer:** Once the specs exist, ask for a dynamic workflow that runs the agents in sequence and repeats: engineer builds, QA tests, PM reviews, designer flags usability, then back to the engineer with the fixes. You stop it with a gate.
+
+- A sensible gate is severity: keep looping while any high-priority issue or enhancement remains, and leave medium and low outside the loop.
+- The cost caveat is real. Dynamic workflows consume a lot of tokens, so use them once the spec is stable rather than while you are still exploring.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 12-07-2026)
+- https://code.claude.com/docs/en/costs (verified 12-07-2026)
+
+---
+
+## Q163: What is the difference between a skill and a workflow, and when does a skill become one?
+
+**Short answer:** A skill is the capability. A workflow is the capability running without you invoking it. If you are still calling the skill by hand every time, you have built half of it.
+
+- The example from the session: instead of pasting a meeting link and invoking the transcript skill each time, schedule a routine that runs every evening, checks the day's recordings, and files each transcript in its folder.
+- This is a general workflow, not the `/workflow` dynamic-workflow feature. The dynamic workflow is the multi-agent loop from Q162, which is a different and more expensive thing.
+- The test to apply to your own setup: what is the next step, and how do I remove myself from it.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 12-07-2026)
+- https://code.claude.com/docs/en/slash-commands (verified 12-07-2026)
+
+---
+
+## Q164: My company will never let development happen inside an agent. How do I still use Claude on our codebase?
+
+**Short answer:** Use it for understanding and testing rather than writing. Give Claude the repository plus your domain knowledge as context, then work feature by feature to reverse-engineer specs and generate the test cases humans miss.
+
+- Start by listing features and sub-features at a high level, then take one feature at a time. Do not point it at the whole repo and ask for everything.
+- Where no requirement document exists, build the spec from the code. Where one does exist, compare the requirement to the code.
+- The comparison is where the value is: if the requirement says A, B, C and the code does A, B, C, D, then D was built outside the spec. That is a test case and a PM decision, either update the spec or remove the code.
+- Do not scale to the next module until you are confident the current feature's test cases are genuinely complete.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 12-07-2026)
+- https://code.claude.com/docs/en/memory (verified 12-07-2026)
+
+---
+
+## Q165: Is my session data used for training, and what is the feedback prompt asking me?
+
+**Short answer:** Claude Code periodically shows an interactive feedback prompt that asks you to rate the session and then asks separately whether you want to share it. Sharing is a choice you make there, and the current policy is the place to confirm the details for your plan.
+
+- Consumer plans use your data for model training only if you opt in. Commercial plans (Team, Enterprise) do not use your data for training by default.
+- This is a good reason to keep credentials out of the chat regardless of the setting. Anything you paste is in the session.
+
+**Sources:**
+- https://code.claude.com/docs/en/data-usage (verified 12-07-2026)
+- https://privacy.anthropic.com/en/articles/10023580-is-my-data-used-for-model-training (verified 12-07-2026)
+
+---
+
+## Q166: Is Claude Code free, and what do I need to use it?
+
+**Short answer:** Claude Code is not free. It starts with the Pro plan at 20 dollars a month, and you can also use it against API billing.
+
+- Higher usage limits come with the Max plans, which is what matters most if you run sub-agent loops or dynamic workflows, since those consume tokens quickly.
+- The Superpowers plugin used in this build is installed separately from the plugin list, and without it the brainstorm, spec, and plan documents are not created as part of the process.
+
+**Sources:**
+- https://www.anthropic.com/pricing (verified 12-07-2026)
+- https://code.claude.com/docs/en/costs (verified 12-07-2026)
+- https://code.claude.com/docs/en/plugins (verified 12-07-2026)
+
+---
+
+## Q167: A command is stuck and burning time without progress. What do I do?
+
+**Short answer:** Press Ctrl+C to stop the current execution, then give the next command. The stuck execution ends and the new one starts.
+
+- Watch the signal that matters: if time is passing but tokens are not being consumed, the agent is waiting on something rather than working.
+- In this session that state came from a site putting up a login wall mid-run, which the agent could not pass on its own. Stopping it and running the manual login was the correct move, not waiting longer.
+
+**Sources:**
+- https://code.claude.com/docs/en/interactive-mode (verified 12-07-2026)

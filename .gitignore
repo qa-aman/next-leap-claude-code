@@ -7,3 +7,5 @@ node_modules/
 .playwright-mcp
 .claude/claude-sessions-registry.md
 .agents/
+# Office temp lock files
+~$*

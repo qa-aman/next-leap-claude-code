@@ -21,6 +21,7 @@ Answers to open questions from workshop sessions, sourced from official Anthropi
 - **July 2026 Session 6 additions:** 11-07-2026 (Q130-Q141 - Video, Commands, Hooks, and Session Management - see "July 2026 - Session 6 Additions" section)
 - **July 2026 Session 7 additions:** 12-07-2026 (Q142-Q153 - Build Hours, Shopping Assistant MVP - see "July 2026 - Session 7 Additions" section)
 - **July 2026 Session 8 additions:** 12-07-2026 (Q154-Q167 - Build Hours Part 2, Phase 2 login sessions and product matching - see "July 2026 - Session 8 Additions" section)
+- **August 2026 Session 1 additions:** 01-08-2026 (Q168-Q181 - new cohort, Claude Code Setup, Plugins and CLAUDE.md - see "August 2026 - Session 1 Additions" section)
 
 If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
@@ -2817,3 +2818,247 @@ New questions raised by the same NextLeap Applied Generative AI Bootcamp cohort 
 
 **Sources:**
 - https://code.claude.com/docs/en/interactive-mode (verified 12-07-2026)
+
+---
+
+# August 2026 - Session 1 Additions
+
+New questions raised by a new NextLeap Applied Generative AI Bootcamp cohort on 01-08-2026 during Session 1 (Claude Code Setup, Plugin Installation and CLAUDE.md, morning). All URLs verified 01-08-2026.
+
+---
+
+## Q168: Most of us are not developers. Is Claude Code only useful if you write code?
+
+**Short answer:** No. Claude Code is a terminal-based agent that works on whatever files and context you give it, so the work it automates is document work as much as code work.
+
+- In this cohort the three participants were in IT service delivery, IT service management and product management, and none of them write production code.
+- The pattern that makes it useful for non-developers is the same one that makes it useful for developers: give it a folder with real context, then have it produce a repeatable artifact from that context.
+- The concrete example from an earlier cohort: a weekly multi-team ticket report that took four to five hours by hand became a skill that produces the same report in ten to fifteen minutes.
+- The practical ask to yourself is not "what code do I write" but "what do I produce every week from the same set of inputs".
+
+**Sources:**
+- https://code.claude.com/docs/en/overview (verified 01-08-2026)
+- https://code.claude.com/docs/en/skills (verified 01-08-2026)
+
+---
+
+## Q169: Why is Claude Code installed with a terminal command instead of a `.exe` or an installer?
+
+**Short answer:** Because Claude Code is a terminal tool, not a desktop application. There is no executable to double-click.
+
+- On macOS you open Terminal with `command + space`, then paste the install command from the setup document.
+- On Windows you must open **PowerShell**, not Command Prompt, then run the `irm` install command.
+- After the install finishes, **close the terminal and open a new one** before running `claude --version`. The check will fail in the same session that ran the install because the PATH has not been picked up yet.
+- The Claude desktop app is a different product. Installing it does not install Claude Code.
+
+**Sources:**
+- https://code.claude.com/docs/en/quickstart (verified 01-08-2026)
+- https://code.claude.com/docs/en/setup (verified 01-08-2026)
+
+---
+
+## Q170: Does Claude Code depend on Cursor or Antigravity? Cursor has its own installer, why does Claude need an IDE?
+
+**Short answer:** It does not depend on any IDE. Claude Code is a standalone CLI. Open any terminal, type `claude`, and it runs.
+
+- Running it inside an IDE is a workflow preference, not a requirement. The reason to do it is that the agent writes files, and you want to read those files without switching windows.
+- The layout used in this session: terminal moved to the secondary sidebar on the right (right-click the terminal, "Move to secondary sidebar"), file viewer in the middle, folder tree on the left. One window, no switching.
+- VS Code, Cursor, Antigravity and JetBrains all work. Antigravity is a personal preference here, nothing more.
+- You can open several terminals in the same window and run separate Claude Code sessions in each one.
+
+**Sources:**
+- https://code.claude.com/docs/en/quickstart (verified 01-08-2026)
+- https://code.claude.com/docs/en/ide-integrations (verified 01-08-2026)
+
+---
+
+## Q171: What does Claude Pro cost, is it recurring, and do I need a GST number in India?
+
+**Short answer:** Pro is billed monthly at the plan price shown at checkout, roughly 17 dollars a month before tax and around 23 dollars with GST. It auto-debits monthly and you can cancel anytime. No GST number is needed, the tax is applied automatically.
+
+- Check the billing toggle before paying. The checkout page can default to the annual plan, and one participant nearly bought a year by mistake.
+- Confirm the current prices and what each tier includes on the pricing page rather than from any number quoted in a session, because plan pricing changes.
+- Higher usage limits sit on the Max plans, which matters if you later run sub-agent loops or dynamic workflows.
+
+**Sources:**
+- https://www.anthropic.com/pricing (verified 01-08-2026)
+- https://code.claude.com/docs/en/costs (verified 01-08-2026)
+
+---
+
+## Q172: `git clone` fails with "Permission denied (publickey)". How do I get the repo?
+
+**Short answer:** You are cloning over SSH without an SSH key registered on your GitHub account. Switch to the HTTPS URL and it will work immediately.
+
+On the GitHub repo page, click the green **Code** button, select the **HTTPS** tab instead of SSH, copy that URL, and run:
+
+```bash
+git clone https://github.com/<owner>/<repo>.git
+```
+
+- HTTPS needs no key setup, which is why it is the right fallback when you are mid-session and blocked.
+- Set up an SSH key separately when you have time, because it needs your email address and a key generation step and it is a lengthy process to do live. Ask Claude to walk you through it step by step for your operating system.
+- If the clone appears to succeed but the folder is empty, run `ls` in the parent directory to confirm where it actually landed before cloning again.
+
+**Sources:**
+- https://code.claude.com/docs/en/troubleshooting (verified 01-08-2026)
+
+---
+
+## Q173: What is the difference between Claude Chat, Claude Cowork, and Claude Code?
+
+**Short answer:** They are three surfaces with increasing capability. Chat has no access to your files. Cowork can read and write files in a folder. Claude Code adds the skills, plugins, sub-agents and MCP architecture on top.
+
+| | Reads your files | Writes your files | Skills, plugins, MCP |
+|---|---|---|---|
+| Claude Chat | No | No | No |
+| Claude Cowork | Yes | Yes | No |
+| Claude Code | Yes | Yes | Yes |
+
+- With Chat you prompt, copy the output, and paste it somewhere else. With Claude Code the output lands in the right file in your project.
+- The skills and plugins layer is the practical difference. It is what lets a repeated task become a one-word command instead of a re-typed prompt.
+
+**Sources:**
+- https://code.claude.com/docs/en/overview (verified 01-08-2026)
+- https://code.claude.com/docs/en/skills (verified 01-08-2026)
+
+---
+
+## Q174: How do I change the model and the effort level, and what should I set as my default?
+
+**Short answer:** Type `/model` and press enter. Pick the model with the up and down arrow keys, and change the effort with the left and right arrow keys on the same screen.
+
+- The terminal does not take mouse clicks. Everything on that screen is arrow keys plus enter, and the available keys are printed at the bottom of the screen.
+- For a cohort on a Pro plan, set the default to **Sonnet with medium effort**. Extra high and max consume tokens very quickly and burn through the usage window.
+- Asking Claude in plain English to change its own model will not change it. This is a setting you change yourself with `/model`.
+
+**Sources:**
+- https://code.claude.com/docs/en/model-config (verified 01-08-2026)
+- https://code.claude.com/docs/en/interactive-mode (verified 01-08-2026)
+
+---
+
+## Q175: What is the status line at the bottom of the terminal, and how do I get one?
+
+**Short answer:** It is a configurable line that shows your working state: model, effort, context remaining, process ID, folder, git branch, and how much of your usage window is left. You set it up in your Claude Code settings.
+
+- The fastest route, and the one used in this session: take a screenshot of a status line you like, paste it into Claude Code, and ask it to set up the same status line for you. It writes the configuration itself.
+- The two fields worth watching from day one are context remaining and the usage window reset time. Claude Code has a rolling five-hour window and a seven-day window, and the status line is where you see both.
+- If pasting a screenshot into the terminal does not work on your machine, save the image to a folder and give Claude the file path instead.
+
+**Sources:**
+- https://code.claude.com/docs/en/statusline (verified 01-08-2026)
+- https://code.claude.com/docs/en/settings (verified 01-08-2026)
+
+---
+
+## Q176: How do I install plugins, and which ones should a new cohort start with?
+
+**Short answer:** Type `/plugin`, go to the discover list, use the arrow keys to move and space to toggle each plugin, press `i` to install them all in one pass, then run `/reload-plugins` to activate them.
+
+The eleven installed in this session and what each one is for:
+
+| Plugin | What it does |
+|---|---|
+| frontend-design | UI and front-end design guidance when building interfaces |
+| Superpowers | Brainstorming, spec and planning skills, invoked automatically when you ask to brainstorm |
+| code-review | Official review plugin, checks code for issues |
+| context7 | Pulls current library and framework documentation instead of answering from memory |
+| skill-creator | Builds new skills to the correct folder and file architecture |
+| code-simplifier | Simplifies complex code against known patterns |
+| github | Connects GitHub into your day-to-day work |
+| playwright | Browser automation, opens and drives real websites |
+| claude-md-management | Keeps CLAUDE.md and skill files within the length guidelines |
+| feature-dev | Feature development workflow |
+| security | Security review guidance |
+
+- You can select all of them and install in a single pass. You do not have to install one at a time.
+- After `/reload-plugins` the terminal reports how many plugins, skills and agents are now active. Check that count matches what you selected.
+
+**Sources:**
+- https://code.claude.com/docs/en/plugins (verified 01-08-2026)
+- https://code.claude.com/docs/en/plugin-marketplaces (verified 01-08-2026)
+
+---
+
+## Q177: Why do CLAUDE.md and skill files have a line limit, and what is the number?
+
+**Short answer:** Keep them under 500 lines. Anything beyond that is not read, so the instructions you wrote past that point are silently lost. The comfortable target is under 200 lines.
+
+- The fix is not to delete content, it is to move the overflow into a `references/` file and link to it from the main file, so the detail loads only when it is needed.
+- The claude-md-management plugin exists to do exactly this: it checks your CLAUDE.md and skill files against the guidelines and pushes the excess into references.
+- The same discipline applies to skills, not only CLAUDE.md.
+- This is a Claude Code architecture rule. Other IDEs and agents have their own context handling, so do not assume the same number carries across.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 01-08-2026)
+- https://code.claude.com/docs/en/skills (verified 01-08-2026)
+
+---
+
+## Q178: There is an "adviser" setting in the menu. What is it and should I turn it on?
+
+**Short answer:** It lets a smaller model escalate to a stronger one when it gets stuck. Leave it off while you are learning, because it runs server side and consumes extra tokens.
+
+- The behaviour it describes: when Claude needs stronger judgement on a complex decision, or is repeatedly failing and circling without progress, it escalates to an adviser model for guidance and then continues.
+- It is useful if you are running Sonnet or Haiku as your default and occasionally hit something they cannot handle, because you do not have to notice and switch models yourself.
+- The cost is the reason to keep it off in a cohort setting on a Pro plan. Turn it on later when you understand your own token consumption.
+- This is an experimental setting, so confirm current behaviour in the settings documentation rather than relying on this answer alone.
+
+**Sources:**
+- https://code.claude.com/docs/en/settings (verified 01-08-2026)
+- https://code.claude.com/docs/en/model-config (verified 01-08-2026)
+
+---
+
+## Q179: What are the permission modes and how do I switch between them?
+
+**Short answer:** Press **shift + tab** to cycle through them. There are four: manual approval, auto-accept edits, plan mode, and auto mode.
+
+- **Manual** asks you to approve each action. It is the safest and the slowest, and it is where you start by default.
+- **Auto-accept edits** stops asking about file edits but still gates riskier actions.
+- **Plan mode** makes Claude produce a plan first and work against it. Use this when the task is complex enough that you want to see the approach before any file changes.
+- **Auto mode** runs without asking for approval. This is the mode used most in these sessions, and the reason a prompt sometimes still asks for approval is that you are not actually in auto mode yet.
+- The current mode is always shown at the bottom of the terminal, so check there rather than guessing.
+
+**Sources:**
+- https://code.claude.com/docs/en/interactive-mode (verified 01-08-2026)
+- https://code.claude.com/docs/en/iam (verified 01-08-2026)
+
+---
+
+## Q180: What is CLAUDE.md, and how is it different from the README?
+
+**Short answer:** The README tells a human what the project is. CLAUDE.md tells the agent where to go next. It is an orchestration layer, not documentation.
+
+- CLAUDE.md is the first thing Claude reads on any prompt in that project. Everything in it is loaded before your instruction is acted on.
+- What belongs in it is routing, not knowledge: the file map, the project rules, and the "when the user asks for X, read file Y first" lines.
+- The live proof in this session was one such line in the workshop CLAUDE.md, which says that any request to create, write, draft or review a prompt must read `.claude/rules/prompt-writing.md` first. A plain prompt-creation request triggered exactly that read, and the resulting prompt then pulled in the company, churn, product-vision and template files as inputs, without any of that being asked for.
+- Product knowledge does not go in CLAUDE.md. It goes in the context files that CLAUDE.md points at.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 01-08-2026)
+
+---
+
+## Q181: How do I set up CLAUDE.md on a brand new project, and can I copy files across from another project?
+
+**Short answer:** Brainstorm first, then run `/init`. Running `/init` on an empty folder fails, because there is nothing for Claude to read and therefore nothing to write.
+
+The sequence, exactly as it was demonstrated live:
+
+1. Open the empty folder in your IDE and start Claude Code.
+2. Describe what you want to build in plain English and ask to brainstorm it. The Superpowers plugin takes over, asks you about your data source and what the output has to be, and writes a design file into the folder.
+3. Now run `/init`. The folder has context, so Claude reads it and generates a CLAUDE.md, including references to any rules files already present.
+4. Use `control + o` while it runs to watch what it is actually reading in the background.
+
+On copying from another project:
+
+- **Skills, agents and rules files can be copied freely.** Paste them into `.claude/skills/`, `.claude/agents/` or `.claude/rules/` in your new project, keeping the same folder structure.
+- **CLAUDE.md cannot be copied**, because it holds the orchestration and context of the project it was written for.
+- After pasting a copied file, give this prompt: tell Claude the file came from another project, ask it to remove every reference to that project, keep this project's context, and add the file's reference to CLAUDE.md. It handles the rest.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 01-08-2026)
+- https://code.claude.com/docs/en/skills (verified 01-08-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 01-08-2026)

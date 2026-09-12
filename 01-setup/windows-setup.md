@@ -10,7 +10,7 @@ Step-by-step guide to install and configure Claude Code on Windows.
 
 Before you start, make sure you have:
 
-1. **Windows 10 or Windows 11** - Press `Win + I` > System > About to check
+1. **Windows 10 (version 1809 or later) or Windows 11** - Press `Win + I` > System > About to check
 2. **4 GB+ RAM** - Any modern PC meets this
 3. **Internet connection** - Required throughout setup and usage
 4. **A Claude subscription** - Pro, Max, Teams, or Enterprise. The free Claude.ai plan does not include Claude Code access. Subscribe at https://claude.com/pricing
@@ -24,6 +24,8 @@ Before you start, make sure you have:
 3. Click **"Windows PowerShell"** (you do NOT need to run as Administrator)
 
 A blue PowerShell window opens with a command prompt.
+
+Never used a terminal before? Anthropic's step-by-step terminal guide covers the basics: https://code.claude.com/docs/en/terminal-guide
 
 > **Important: pick the 64-bit PowerShell, not the x86 one.**
 > The search results may show two entries: `Windows PowerShell` and `Windows PowerShell (x86)`.
@@ -50,6 +52,18 @@ irm https://claude.ai/install.ps1 | iex
 ```
 
 This downloads and installs Claude Code. The native installer requires no dependencies (no Node.js, no npm). It auto-updates in the background. **Wait for the installation to complete** before continuing. You should see a success message.
+
+> **Wrong terminal? This is the most common Windows failure.** The line above is written for PowerShell. If you see any of these, you are not in PowerShell:
+>
+> | What you see | What happened | Fix |
+> |---|---|---|
+> | `'irm' is not recognized` | You are in CMD | Close it. Open PowerShell (`Win + X`, then Windows PowerShell) and re-run the line above |
+> | `The token '&&' is not a valid statement separator` | You are in PowerShell but pasted the CMD command | Use the `irm` line above |
+> | `A parameter cannot be found that matches parameter name 'fsSL'` or `'bash' is not recognized` | You pasted the Mac command into Windows | Use the `irm` line above |
+> | The command prints a long script instead of installing | You ran `irm https://claude.ai/install.ps1` without the `\| iex` part | Paste the whole line, including `\| iex` |
+> | `Could not create SSL/TLS secure channel` | Older Windows 10 without TLS 1.2 enabled | Run `[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12` first, then re-run the install line |
+>
+> Your prompt shows `PS C:\Users\YourName>` in PowerShell and `C:\Users\YourName>` without the `PS` in CMD. Source: https://code.claude.com/docs/en/troubleshoot-install and https://code.claude.com/docs/en/terminal-guide
 
 ### Step 2: Add Claude to your User PATH
 
@@ -84,15 +98,33 @@ If you prefer Command Prompt instead of PowerShell:
 curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
 ```
 
-### Alternative: Install via WinGet
+### Fallback 1: Install via WinGet (when the install script fails)
 
-If you have WinGet available (included in Windows 11 and recent Windows 10 updates):
+If the `irm` line fails (blocked by a corporate network, proxy, or antivirus), WinGet avoids the script download entirely. It is included in Windows 11 and recent Windows 10 updates:
 
 ```powershell
 winget install Anthropic.ClaudeCode
 ```
 
-Note: WinGet installations do not auto-update. Run `winget upgrade Anthropic.ClaudeCode` periodically.
+Then open a new PowerShell window and run `claude --version`. Note: WinGet installations do not auto-update. Run `winget upgrade Anthropic.ClaudeCode` periodically, or set `CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE=1` to have Claude Code run the upgrade for you.
+
+### Fallback 2: Install via npm (when WinGet is not available)
+
+This is the route that worked for participants in earlier cohorts whose machines blocked both the script and WinGet.
+
+1. Install Node.js 22 or later from https://nodejs.org/en/download (an older Node prints an `EBADENGINE` warning during install but still works, 22 keeps it clean).
+2. In PowerShell, allow locally installed scripts to run, then install:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+npm install -g @anthropic-ai/claude-code
+npm list -g @anthropic-ai/claude-code
+claude --version
+```
+
+Do **not** use "Run as Administrator" for the npm install. The docs say it is not needed, and in earlier cohorts it caused permission problems later. To upgrade an npm install, run `npm install -g @anthropic-ai/claude-code@latest` (not `npm update -g`, which may not move you to the newest release).
+
+Source: https://code.claude.com/docs/en/setup (section "Install with npm").
 
 ---
 
@@ -197,17 +229,22 @@ Claude Code reads your project files automatically. You do not need to manually 
 
 ---
 
-## Section 8: Install the Antigravity IDE Extension (Optional)
+## Section 8: Install the Claude Code Extension in Your Editor (Optional)
 
-If you use Google Antigravity IDE (built on VS Code's extension ecosystem):
+Anthropic ships the Claude Code extension for VS Code and Cursor, and it also installs in other VS Code forks (Antigravity, Devin Desktop, Kiro) from the editor's Extensions view or from the Open VSX registry. Source: https://code.claude.com/docs/en/vs-code
 
-1. Open Antigravity IDE
+1. Open your editor (Antigravity, VS Code, or Cursor)
 2. Press `Ctrl + Shift + X` to open Extensions
-3. Search for "Claude Code"
-4. Click Install on the extension by Anthropic
+3. Search for "Claude Code" and click Install on the extension by Anthropic
+4. If the search finds nothing, install from Open VSX: https://open-vsx.org/extension/Anthropic/claude-code
 5. Press `Ctrl + Shift + P`, type "Claude Code", and select "Open in New Tab"
 
-This gives you inline diffs, @-mentions, and conversation history directly in your editor. Antigravity supports the VS Code extension marketplace, so the Claude Code extension works without any additional configuration.
+This gives you inline diffs, @-mentions, and conversation history directly in your editor. The extension bundles its own copy of the CLI for the chat panel. To type `claude` in the editor's integrated terminal you still need the standalone install from Section 2.
+
+**Terminal tips inside the editor:**
+
+1. Run `/terminal-setup` once inside Claude Code so Shift+Enter inserts a newline instead of submitting. Needed in VS Code and Cursor. Windows Terminal already supports it natively. Source: https://code.claude.com/docs/en/terminal-config
+2. If the display flickers or the scrollback jumps, run `/tui fullscreen` inside Claude Code.
 
 ---
 
@@ -215,10 +252,8 @@ This gives you inline diffs, @-mentions, and conversation history directly in yo
 
 If you prefer a graphical interface over the terminal:
 
-1. Download the Windows Desktop App:
-   - **x64 (most PCs):** https://claude.ai/api/desktop/win32/x64/exe/latest/redirect
-   - **ARM64:** https://claude.ai/api/desktop/win32/arm64/exe/latest/redirect (remote sessions only)
-2. Run the `.exe` installer
+1. Download the Windows Desktop App from the official page, which has x64 and ARM64 installers: https://code.claude.com/docs/en/desktop-quickstart
+2. Run the installer
 3. Launch Claude from the Start Menu
 4. Sign in with your Claude account
 5. Click the "Code" tab to start coding
@@ -265,7 +300,7 @@ wsl --install
 curl -fsSL https://claude.ai/install.sh | bash
 ```
 
-Both WSL 1 and WSL 2 are supported. WSL 2 additionally supports sandboxing for enhanced security.
+Both WSL 1 and WSL 2 are supported. WSL 2 also supports sandboxing.
 
 ---
 
@@ -341,19 +376,28 @@ Remove-Item -Path "$env:USERPROFILE\.claude.json" -Force
 
 | Problem | Solution |
 |---------|----------|
+| `'irm' is not recognized`, `&& is not valid`, `'bash' is not recognized` | Wrong terminal. See the "Wrong terminal" table under Section 2, Step 1 |
 | `Claude Code does not support 32-bit Windows. Please use the 64-bit version.` | You launched the x86 (32-bit) PowerShell. Close it. Press `Win + S`, type `PowerShell`, and pick the entry labeled **"Windows PowerShell"** without the `(x86)` suffix. Re-run the install command from the 64-bit window |
 | `claude: command not recognized` / `The term 'claude' is not recognized...` | Your User PATH is missing `C:\Users\<YourName>\.local\bin`. Run this in PowerShell, then open a fresh PowerShell window: `[Environment]::SetEnvironmentVariable("PATH", [Environment]::GetEnvironmentVariable("PATH", "User") + ";$HOME\.local\bin", "User")`. If you prefer the GUI: System Properties > Environment Variables > Edit User PATH > New > `%USERPROFILE%\.local\bin`, then restart PowerShell |
+| The install script fails or is blocked | Use Fallback 1 (WinGet) or Fallback 2 (npm) under Section 2 |
+| `Could not create SSL/TLS secure channel` | Older Windows 10. Run `[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12` then re-run the install line |
 | Browser does not open on login | Press `c` to copy the login URL, paste it in your browser |
 | Subscription required / authentication fails | Verify you have an active Claude Pro or Max subscription at https://claude.ai. Log out and log back in to refresh credentials |
-| Node version too old | Run `node --version` to check. If below v18.0.0, download the latest LTS version from https://nodejs.org |
-| "Git Bash not found" error | Install Git for Windows from https://git-scm.com/downloads/win, or set the path manually (see Section 11) |
-| Permission errors during install | You do NOT need to run as Administrator. The installer puts the binary in your user profile directory. If you still get permission denied, right-click PowerShell and select "Run as Administrator" |
+| Node version too old (npm route only) | Run `node --version`. The npm package needs Node.js 22 or later. Download from https://nodejs.org/en/download |
+| "Git Bash not found" error | Git for Windows is optional. Install it from https://git-scm.com/downloads/win, or set the path manually (see Section 10) |
+| Permission errors during install | You do NOT need to run as Administrator. The installer puts the binary in your user profile directory. If you still get permission denied, check that your antivirus or company policy is not blocking writes to `%USERPROFILE%\.local` |
+| `git clone` says `Permission denied (publickey)` | You used the SSH clone URL and have no SSH key set up. Use the HTTPS URL instead: `git clone https://github.com/qa-aman/next-leap-claude-code.git`. SSH keys are optional, set them up later if you want |
+| Pasting a screenshot into the terminal does nothing | Known limitation in some Windows terminals (seen in the August 2026 cohort). Workarounds: save the screenshot as a file and type its path in the prompt, or drag the image file into the terminal window, or use the Claude Code extension in your editor (Section 8) where image paste works |
+| Shift+Enter submits instead of adding a new line | Run `/terminal-setup` once inside Claude Code (VS Code and Cursor). Windows Terminal supports Shift+Enter natively |
+| Screen flickers or scrollback jumps | Run `/tui fullscreen` inside Claude Code |
 | WinGet update not available yet | Claude Code may notify you of updates before WinGet has the new version. Wait and try again later |
 
-For more help: https://code.claude.com/docs/en/troubleshooting
+Still stuck? Run `claude doctor` in PowerShell and read the output. It names the problem and usually the fix.
+
+For more help: https://code.claude.com/docs/en/troubleshoot-install and https://code.claude.com/docs/en/terminal-guide
 
 ---
 
 ## Source
 
-All instructions verified against the official Claude Code documentation at https://code.claude.com/docs/en/overview and https://code.claude.com/docs/en/setup (accessed March 2026).
+All instructions verified against the official Claude Code documentation at https://code.claude.com/docs/en/setup, https://code.claude.com/docs/en/troubleshoot-install, https://code.claude.com/docs/en/terminal-guide and https://code.claude.com/docs/en/vs-code (accessed 12-09-2026). The Windows fixes were also cross-checked against the live cohort write-up at https://shipwithailab.substack.com/p/claude-code-install-fails-the-same.

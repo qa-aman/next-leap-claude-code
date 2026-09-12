@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en" class="h-full">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Holographic Window - Head-Coupled Gaussian Splat Viewer</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+    "@mkkellogg/gaussian-splats-3d": "https://cdn.jsdelivr.net/npm/@mkkellogg/gaussian-splats-3d@0.4.7/build/gaussian-splats-3d.module.js"
+  }
+}
+</script>
+
+<style>
+  html, body { height: 100%; margin: 0; background: #05070c; overflow: hidden; }
+  #gl { display: block; width: 100vw; height: 100vh; }
+  .panel { background: rgba(9,13,20,.82); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,.09); }
+  input[type=range] { -webkit-appearance: none; appearance: none; height: 3px; background: rgba(255,255,255,.16); border-radius: 99px; outline: none; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 13px; height: 13px; border-radius: 99px; background: #38bdf8; cursor: pointer; box-shadow: 0 0 0 3px rgba(56,189,248,.2); }
+  input[type=range]::-moz-range-thumb { width: 13px; height: 13px; border: 0; border-radius: 99px; background: #38bdf8; cursor: pointer; }
+  #camWrap video, #camWrap canvas { transform: scaleX(-1); }
+  .kbd { font: 11px ui-monospace, Menlo, monospace; padding: 1px 5px; border-radius: 4px; background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.12); }
+  .hidden-soft { opacity: 0; pointer-events: none; }
+  .row { display: grid; grid-template-columns: 88px 1fr 46px; align-items: center; gap: 8px; }
+</style>
+</head>
+
+<body class="h-full text-slate-200 font-sans antialiased select-none">
+
+<canvas id="gl"></canvas>
+
+<!-- ===== Boot / permission overlay ===== -->
+<div id="boot" class="fixed inset-0 z-50 flex items-center justify-center bg-[#05070c]/95 px-6">
+  <div class="panel max-w-lg w-full rounded-2xl p-7">
+    <div class="text-[11px] uppercase tracking-[0.2em] text-sky-400 mb-2">Head-coupled perspective</div>
+    <h1 class="text-2xl font-semibold text-white mb-2">Holographic Window</h1>
+    <p class="text-sm text-slate-400 leading-relaxed mb-5">
+      Your webcam tracks your head. The renderer rebuilds an off-axis projection frustum every frame,
+      so the screen behaves like a window onto a 3D Gaussian splat instead of a flat picture.
+      Video never leaves the browser.
+    </p>
+
+    <label class="block text-xs text-slate-400 mb-1">Splat scene</label>
+    <select id="sceneSel" class="w-full mb-4 rounded-lg bg-slate-900/80 border border-white/10 px-3 py-2 text-sm text-slate-200">
+      <option value="https://huggingface.co/cakewalk/splat-data/resolve/main/nike.splat" data-scale="1">Nike shoe (8 MB)</option>
+      <option value="https://huggingface.co/cakewalk/splat-data/resolve/main/plush.splat" data-scale="1">Plush toy (9 MB)</option>
+      <option value="https://huggingface.co/cakewalk/splat-data/resolve/main/train.splat" data-scale="1">Train scene (33 MB)</option>
+      <option value="__custom__">Custom .splat / .ply / .ksplat URL…</option>
+    </select>
+    <input id="customUrl" placeholder="https://…/scene.ply" class="w-full mb-4 rounded-lg bg-slate-900/80 border border-white/10 px-3 py-2 text-sm hidden" />
+
+    <div class="flex gap-3">
+      <button id="startCam" class="flex-1 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold text-sm py-2.5 transition">
+        Start with webcam
+      </button>
+      <button id="startMouse" class="rounded-lg border border-white/15 hover:bg-white/5 text-sm px-4 py-2.5 transition">
+        Mouse only
+      </button>
+    </div>
+    <p id="bootNote" class="text-[11px] text-slate-500 mt-3 leading-relaxed">
+      Needs <span class="kbd">localhost</span> or HTTPS for camera access. First load pulls the MediaPipe model (~4 MB).
+    </p>
+  </div>
+</div>
+
+<!-- ===== Debug webcam PiP ===== -->
+<div id="camWrap" class="fixed bottom-4 left-4 z-30 panel rounded-xl overflow-hidden transition-opacity duration-200 hidden-soft">
+  <div class="relative">
+    <video id="cam" playsinline muted autoplay class="block w-[168px] h-[126px] object-cover bg-black"></video>
+    <canvas id="camOverlay" width="168" height="126" class="absolute inset-0 pointer-events-none"></canvas>
+  </div>
+  <div class="px-2 py-1 text-[10px] font-mono text-slate-400 flex justify-between border-t border-white/10">
+    <span id="camState">idle</span><span id="camFps">--</span>
+  </div>
+</div>
+
+<!-- ===== HUD ===== -->
+<div id="hud" class="fixed top-4 right-4 z-30 panel rounded-xl w-[286px] p-4 text-xs">
+  <div class="flex items-center justify-between mb-3">
+    <div class="font-semibold text-white text-sm">Holographic Window</div>
+    <div id="fps" class="font-mono text-[11px] text-sky-400">--</div>
+  </div>
+
+  <div id="loadBar" class="mb-3">
+    <div class="flex justify-between text-[10px] text-slate-400 mb-1"><span id="loadLabel">Loading splat…</span><span id="loadPct">0%</span></div>
+    <div class="h-1 rounded-full bg-white/10 overflow-hidden"><div id="loadFill" class="h-full w-0 bg-sky-400 transition-[width] duration-150"></div></div>
+  </div>
+
+  <div class="space-y-2.5">
+    <div class="row"><span class="text-slate-400">Smoothing</span><input id="sLerp" type="range" min="0.01" max="0.6" step="0.01" value="0.14"><span id="vLerp" class="font-mono text-[10px] text-slate-500 text-right">0.14</span></div>
+    <div class="row"><span class="text-slate-400">Parallax</span><input id="sGain" type="range" min="0" max="6" step="0.05" value="2.4"><span id="vGain" class="font-mono text-[10px] text-slate-500 text-right">2.40</span></div>
+    <div class="row"><span class="text-slate-400">Depth (Z)</span><input id="sZgain" type="range" min="0" max="2" step="0.05" value="0.8"><span id="vZgain" class="font-mono text-[10px] text-slate-500 text-right">0.80</span></div>
+    <div class="row"><span class="text-slate-400">Eye dist.</span><input id="sDist" type="range" min="0.6" max="5" step="0.05" value="1.8"><span id="vDist" class="font-mono text-[10px] text-slate-500 text-right">1.80</span></div>
+    <div class="row"><span class="text-slate-400">Window W</span><input id="sScreen" type="range" min="0.6" max="4" step="0.05" value="1.6"><span id="vScreen" class="font-mono text-[10px] text-slate-500 text-right">1.60</span></div>
+    <hr class="border-white/10 my-1">
+    <div class="row"><span class="text-slate-400">Scene Z</span><input id="sSceneZ" type="range" min="-6" max="0" step="0.05" value="-1.6"><span id="vSceneZ" class="font-mono text-[10px] text-slate-500 text-right">-1.60</span></div>
+    <div class="row"><span class="text-slate-400">Scene Y</span><input id="sSceneY" type="range" min="-2" max="2" step="0.02" value="0"><span id="vSceneY" class="font-mono text-[10px] text-slate-500 text-right">0.00</span></div>
+    <div class="row"><span class="text-slate-400">Scale</span><input id="sScale" type="range" min="0.1" max="4" step="0.05" value="1"><span id="vScale" class="font-mono text-[10px] text-slate-500 text-right">1.00</span></div>
+    <div class="row"><span class="text-slate-400">Yaw</span><input id="sYaw" type="range" min="-180" max="180" step="1" value="0"><span id="vYaw" class="font-mono text-[10px] text-slate-500 text-right">0</span></div>
+    <div class="row"><span class="text-slate-400">Pitch</span><input id="sPitch" type="range" min="-180" max="180" step="1" value="180"><span id="vPitch" class="font-mono text-[10px] text-slate-500 text-right">180</span></div>
+  </div>
+
+  <div class="flex flex-wrap gap-1.5 mt-3">
+    <button id="btnCal"   class="rounded-md border border-white/15 hover:bg-white/5 px-2 py-1 text-[11px]">Recenter</button>
+    <button id="btnCam"   class="rounded-md border border-white/15 hover:bg-white/5 px-2 py-1 text-[11px]">Cam</button>
+    <button id="btnFrame" class="rounded-md border border-white/15 hover:bg-white/5 px-2 py-1 text-[11px]">Frame</button>
+    <button id="btnMouse" class="rounded-md border border-white/15 hover:bg-white/5 px-2 py-1 text-[11px]">Mouse</button>
+    <button id="btnOff"   class="rounded-md border border-sky-400/40 bg-sky-400/10 text-sky-300 hover:bg-sky-400/20 px-2 py-1 text-[11px]">Off-axis: on</button>
+  </div>
+
+  <div id="status" class="mt-3 pt-2 border-t border-white/10 text-[10px] font-mono text-slate-500 leading-relaxed"></div>
+  <div class="mt-2 text-[10px] text-slate-600 leading-relaxed">
+    <span class="kbd">D</span> cam <span class="kbd">H</span> hud <span class="kbd">C</span> recenter <span class="kbd">M</span> mouse <span class="kbd">F</span> frame <span class="kbd">O</span> off-axis
+  </div>
+</div>
+
+<div id="err" class="fixed bottom-4 right-4 z-40 max-w-md panel rounded-xl px-4 py-3 text-xs text-rose-300 hidden"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import * as GaussianSplats3D from '@mkkellogg/gaussian-splats-3d';
+import { FaceLandmarker, FilesetResolver } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.21/vision_bundle.mjs';
+
+const MP_VER  = '0.10.21';
+const WASM    = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MP_VER}/wasm`;
+const MODEL   = 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task';
+
+const QS = new URLSearchParams(location.search);
+const $ = (id) => document.getElementById(id);
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const showErr = (msg) => { const e = $('err'); e.textContent = msg; e.classList.remove('hidden'); console.error(msg); };
+
+/* ------------------------------------------------------------------ *
+ * Tunables (bound to the HUD sliders)
+ * ------------------------------------------------------------------ */
+const P = {
+  lerp: 0.14,        // smoothing factor per 60fps frame
+  gain: 2.4,         // X/Y parallax gain: normalized head offset -> world units
+  zGain: 0.8,        // how much apparent face size drives eye distance
+  dist: 1.8,         // baseline eye distance from the window plane
+  screenW: 1.6,      // virtual window width in world units
+  sceneZ: -1.6, sceneY: 0, scale: 1, yaw: 0, pitch: 180,
+  near: 0.05, far: 500,
+  offAxis: true,     // false = plain symmetric frustum, for A/B comparison
+};
+
+/* ------------------------------------------------------------------ *
+ * Three.js scaffold
+ * ------------------------------------------------------------------ */
+const canvas = $('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight, false);
+renderer.setClearColor(0x05070c, 1);
+
+const scene = new THREE.Scene();
+// The camera is a bare transform holder: its projectionMatrix is authored by hand
+// every frame from the tracked eye position (generalized off-axis frustum).
+const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, P.near, P.far);
+camera.matrixAutoUpdate = true;
+
+// --- the "window frame" + diorama box that sell the illusion -------------
+const frameGroup = new THREE.Group();
+scene.add(frameGroup);
+let frameLines = null, boxLines = null;
+
+function buildFrame() {
+  if (frameLines) { frameGroup.remove(frameLines); frameLines.geometry.dispose(); }
+  if (boxLines)   { frameGroup.remove(boxLines);   boxLines.geometry.dispose(); }
+
+  const w = P.screenW, h = P.screenW / (innerWidth / innerHeight), d = 3.2;
+
+  const rim = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(-w/2, -h/2, 0), new THREE.Vector3( w/2, -h/2, 0),
+    new THREE.Vector3( w/2, -h/2, 0), new THREE.Vector3( w/2,  h/2, 0),
+    new THREE.Vector3( w/2,  h/2, 0), new THREE.Vector3(-w/2,  h/2, 0),
+    new THREE.Vector3(-w/2,  h/2, 0), new THREE.Vector3(-w/2, -h/2, 0),
+  ]);
+  frameLines = new THREE.LineSegments(rim, new THREE.LineBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.55 }));
+  frameGroup.add(frameLines);
+
+  const box = new THREE.BoxGeometry(w, h, d);
+  box.translate(0, 0, -d / 2);
+  boxLines = new THREE.LineSegments(new THREE.EdgesGeometry(box),
+    new THREE.LineBasicMaterial({ color: 0x1e3a5f, transparent: true, opacity: 0.65 }));
+  frameGroup.add(boxLines);
+}
+buildFrame();
+
+/* ------------------------------------------------------------------ *
+ * Off-axis (head-coupled) projection - Kooima's generalized perspective
+ *
+ * The window is a rectangle W x H centred on the origin in the z = 0 plane.
+ * The eye sits at (ex, ey, ez) in front of it. Every frame we rebuild an
+ * asymmetric frustum from the eye to the four window corners, so the window
+ * stays glued to the physical screen while the scene behind it shears.
+ * ------------------------------------------------------------------ */
+function applyOffAxisProjection(eye) {
+  if (!P.offAxis) {                             // A/B control: plain symmetric frustum
+    camera.aspect = innerWidth / innerHeight;
+    camera.position.set(0, 0, eye.z);
+    camera.quaternion.identity();
+    camera.updateProjectionMatrix();
+    camera.updateMatrixWorld(true);
+    return;
+  }
+  const w = P.screenW;
+  const h = P.screenW / (innerWidth / innerHeight);
+  const ez = Math.max(0.12, eye.z);           // never let the eye touch the window plane
+  const k  = P.near / ez;
+
+  const left   = (-w / 2 - eye.x) * k;
+  const right  = ( w / 2 - eye.x) * k;
+  const bottom = (-h / 2 - eye.y) * k;
+  const top    = ( h / 2 - eye.y) * k;
+
+  camera.projectionMatrix.makePerspective(left, right, top, bottom, P.near, P.far, THREE.WebGLCoordinateSystem);
+  camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();
+
+  camera.position.set(eye.x, eye.y, ez);
+  camera.quaternion.identity();               // always looking straight down -Z
+  camera.updateMatrixWorld(true);
+}
+
+/* ------------------------------------------------------------------ *
+ * Gaussian splat viewer (non self-driven: we own update/render order,
+ * which is what lets us keep a hand-authored projection matrix)
+ * ------------------------------------------------------------------ */
+let viewer = null, splatReady = false;
+
+async function loadSplat(url) {
+  splatReady = false;
+  $('loadBar').classList.remove('hidden');
+  $('loadLabel').textContent = 'Loading splat…';
+  $('loadPct').textContent = '0%';
+  $('loadFill').style.width = '0%';
+
+  if (viewer) { try { await viewer.dispose(); } catch (e) { /* already gone */ } viewer = null; }
+
+  viewer = new GaussianSplats3D.Viewer({
+    renderer, camera, threeScene: scene,
+    selfDrivenMode: false,
+    useBuiltInControls: false,
+    ignoreDevicePixelRatio: false,
+    // GPU-accelerated sort uses transform feedback + a fenced readback. On software
+    // GL (and some drivers) that readback comes back empty, the worker then returns a
+    // render count of 0 and NOTHING draws while every other status still reads healthy.
+    // The CPU/WASM sort handles ~270k splats in well under a frame, so it is the default.
+    // Opt back in with ?gpusort=1 if your GPU handles it.
+    gpuAcceleratedSort: QS.get('gpusort') === '1',
+    sharedMemoryForWorkers: false,   // no COOP/COEP headers on a plain static server
+    // Required: in static mode the scene transform is baked at build time, so the
+    // auto-fit and every scene slider below would silently do nothing.
+    dynamicScene: QS.get('dynamic') !== '0',
+    halfPrecisionCovariancesOnGPU: true,
+    antialiased: false,
+    logLevel: GaussianSplats3D.LogLevel.None,
+  });
+
+  try {
+    await viewer.addSplatScene(url, {
+      showLoadingUI: false,
+      splatAlphaRemovalThreshold: 5,
+      progressiveLoad: true,
+      onProgress: (pct, msg, stage) => {
+        const p = clamp(Math.round(pct || 0), 0, 100);
+        $('loadPct').textContent = p + '%';
+        $('loadFill').style.width = p + '%';
+        if (msg) $('loadLabel').textContent = String(msg).slice(0, 34);
+      },
+    });
+    splatReady = true;
+    measureSplatBounds();
+    applySceneTransform();
+    $('loadBar').classList.add('hidden');
+  } catch (e) {
+    showErr('Splat load failed: ' + (e?.message || e) + ' - check the URL allows cross-origin reads.');
+    $('loadLabel').textContent = 'Load failed';
+  }
+}
+
+/* --- auto-fit ---------------------------------------------------------
+ * A splat file's origin is usually nowhere near the object (nike.splat's
+ * content sits ~1.8 units below its origin), and the scale is arbitrary.
+ * So we measure the cloud once, then centre and scale it into the diorama.
+ * Bounds use 2nd/98th percentiles per axis, because splat scenes are full
+ * of far-flung floater splats that would blow up a raw min/max box.
+ * -------------------------------------------------------------------- */
+const fit = { center: new THREE.Vector3(), radius: 1, base: 1, ready: false };
+
+function measureSplatBounds() {
+  const M = viewer.splatMesh;
+  const s = M.getScene(0);
+  s.position.set(0, 0, 0); s.quaternion.identity(); s.scale.setScalar(1);
+  M.updateTransforms();
+
+  const N = M.getSplatCount();
+  const step = Math.max(1, Math.floor(N / 8000));
+  const xs = [], ys = [], zs = [], v = new THREE.Vector3();
+  for (let i = 0; i < N; i += step) { M.getSplatCenter(i, v, true); xs.push(v.x); ys.push(v.y); zs.push(v.z); }
+  if (!xs.length) return false;
+
+  const pct = (arr, p) => { arr.sort((a, b) => a - b); return arr[Math.min(arr.length - 1, Math.floor(p * (arr.length - 1)))]; };
+  const lo = new THREE.Vector3(pct(xs, 0.02), pct(ys, 0.02), pct(zs, 0.02));
+  const hi = new THREE.Vector3(pct(xs, 0.98), pct(ys, 0.98), pct(zs, 0.98));
+
+  fit.center.addVectors(lo, hi).multiplyScalar(0.5);
+  // Half-diagonal of the trimmed box: rotation-invariant, so yaw/pitch never rescale.
+  fit.radius = Math.max(1e-4, hi.clone().sub(lo).length() * 0.5);
+  fit.base = (P.screenW * 0.62) / fit.radius;
+  fit.ready = true;
+  return true;
+}
+
+function applySceneTransform() {
+  if (!viewer || !splatReady || !viewer.splatMesh) return;
+  if (viewer.splatMesh.getSceneCount() < 1) return;
+
+  const s = viewer.splatMesh.getScene(0);
+  const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(
+    THREE.MathUtils.degToRad(P.pitch), THREE.MathUtils.degToRad(P.yaw), 0, 'YXZ'));
+  const k = (fit.ready ? fit.base : 1) * P.scale;
+
+  // Scene matrix is T * R * S, so cancel the measured centre after R and S.
+  const offset = fit.center.clone().applyQuaternion(q).multiplyScalar(-k);
+
+  s.quaternion.copy(q);
+  s.scale.setScalar(k);
+  s.position.set(offset.x, offset.y + P.sceneY, offset.z + P.sceneZ);
+  viewer.splatMesh.updateTransforms();
+}
+
+/* ------------------------------------------------------------------ *
+ * Head tracking - MediaPipe Face Landmarker
+ * ------------------------------------------------------------------ */
+const NOSE = 1, EYE_R = 33, EYE_L = 263;    // canonical face-mesh indices
+
+const track = {
+  mode: 'idle',                              // 'idle' | 'face' | 'mouse'
+  raw:  new THREE.Vector3(0, 0, P.dist),     // latest measurement
+  smooth: new THREE.Vector3(0, 0, P.dist),   // lerped, what the camera actually uses
+  centerX: 0.5, centerY: 0.5, refIpd: 0.115, // calibration
+  has: false, lastDetect: 0, detectFps: 0,
+};
+
+let landmarker = null, video = null, camCtx = null, lastVideoTime = -1;
+
+async function startFaceTracking() {
+  video = $('cam');
+  camCtx = $('camOverlay').getContext('2d');
+
+  $('camState').textContent = 'model…';
+  const fileset = await FilesetResolver.forVisionTasks(WASM);
+  landmarker = await FaceLandmarker.createFromOptions(fileset, {
+    baseOptions: { modelAssetPath: MODEL, delegate: 'GPU' },
+    runningMode: 'VIDEO',
+    numFaces: 1,
+    outputFaceBlendshapes: false,
+    outputFacialTransformationMatrixes: false,
+  });
+
+  $('camState').textContent = 'camera…';
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user' }, audio: false,
+  });
+  video.srcObject = stream;
+  await video.play();
+
+  track.mode = 'face';
+  $('camWrap').classList.remove('hidden-soft');
+  $('camState').textContent = 'tracking';
+}
+
+let detectAcc = 0, detectCount = 0;
+function detectHead(now) {
+  if (track.mode !== 'face' || !landmarker || !video || video.readyState < 2) return;
+  if (video.currentTime === lastVideoTime) return;
+  lastVideoTime = video.currentTime;
+
+  let res;
+  try { res = landmarker.detectForVideo(video, now); }
+  catch (e) { return; }
+
+  const t = performance.now();
+  detectAcc += t - track.lastDetect; detectCount++;
+  if (detectCount >= 15) { track.detectFps = Math.round(1000 / (detectAcc / detectCount)); detectAcc = 0; detectCount = 0; }
+  track.lastDetect = t;
+
+  const lm = res?.faceLandmarks?.[0];
+  track.has = !!lm;
+  if (!lm) { $('camState').textContent = 'no face'; drawOverlay(null); return; }
+  $('camState').textContent = 'tracking';
+
+  const nose = lm[NOSE], er = lm[EYE_R], el = lm[EYE_L];
+  const vAspect = (video.videoWidth || 4) / (video.videoHeight || 3);
+
+  // Inter-ocular width in normalized units -> a cheap monocular depth proxy.
+  const ipd = Math.hypot((el.x - er.x), (el.y - er.y) / vAspect);
+
+  // Webcam image is not mirrored: moving your head to your own left raises nose.x.
+  // Negate so the virtual eye tracks your real-world position.
+  const dx = (track.centerX - nose.x);
+  const dy = (track.centerY - nose.y);
+
+  track.raw.x = dx * P.gain;
+  track.raw.y = dy * (P.gain / vAspect);
+
+  const zRatio = clamp(track.refIpd / Math.max(ipd, 1e-4), 0.35, 3.0);
+  track.raw.z = P.dist * (1 + (zRatio - 1) * P.zGain);
+
+  drawOverlay(lm);
+}
+
+function drawOverlay(lm) {
+  if (!camCtx) return;
+  const W = 168, H = 126;
+  camCtx.clearRect(0, 0, W, H);
+  if (!lm) return;
+  const nose = lm[NOSE], er = lm[EYE_R], el = lm[EYE_L];
+
+  camCtx.strokeStyle = 'rgba(56,189,248,.7)'; camCtx.lineWidth = 1;
+  camCtx.beginPath(); camCtx.moveTo(er.x * W, er.y * H); camCtx.lineTo(el.x * W, el.y * H); camCtx.stroke();
+
+  camCtx.fillStyle = '#38bdf8';
+  camCtx.beginPath(); camCtx.arc(nose.x * W, nose.y * H, 3.5, 0, Math.PI * 2); camCtx.fill();
+
+  // calibration crosshair
+  camCtx.strokeStyle = 'rgba(255,255,255,.22)';
+  camCtx.beginPath();
+  camCtx.moveTo(track.centerX * W - 6, track.centerY * H); camCtx.lineTo(track.centerX * W + 6, track.centerY * H);
+  camCtx.moveTo(track.centerX * W, track.centerY * H - 6); camCtx.lineTo(track.centerX * W, track.centerY * H + 6);
+  camCtx.stroke();
+}
+
+function calibrate() {
+  if (track.mode === 'face' && track.has) {
+    // Freeze the current pose as "dead centre".
+    track.centerX = clamp(track.centerX - track.raw.x / Math.max(P.gain, 1e-6), 0.1, 0.9);
+    track.centerY = clamp(track.centerY - track.raw.y / Math.max(P.gain / 1.333, 1e-6), 0.1, 0.9);
+  } else {
+    track.centerX = 0.5; track.centerY = 0.5;
+  }
+  track.raw.set(0, 0, P.dist);
+}
+
+// --- mouse fallback ------------------------------------------------------
+addEventListener('pointermove', (e) => {
+  if (track.mode !== 'mouse') return;
+  track.raw.x = (0.5 - e.clientX / innerWidth) * -2 * P.gain * 0.5;
+  track.raw.y = (0.5 - e.clientY / innerHeight) * 2 * P.gain * 0.5 / (innerWidth / innerHeight);
+  track.raw.z = P.dist;
+});
+
+/* ------------------------------------------------------------------ *
+ * Main loop
+ * ------------------------------------------------------------------ */
+let last = performance.now(), fpsAcc = 0, fpsN = 0;
+
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.1, (now - last) / 1000); last = now;
+
+  detectHead(now);
+
+  // Frame-rate independent lerp: P.lerp is the per-60fps-frame factor.
+  const a = 1 - Math.pow(1 - clamp(P.lerp, 0.001, 0.999), dt * 60);
+  track.smooth.lerp(track.raw, a);
+
+  applyOffAxisProjection(track.smooth);
+
+  if (viewer && splatReady) {
+    viewer.update();
+    viewer.render();
+  } else {
+    renderer.render(scene, camera);
+  }
+
+  fpsAcc += dt; fpsN++;
+  if (fpsAcc >= 0.5) {
+    $('fps').textContent = Math.round(fpsN / fpsAcc) + ' fps';
+    $('camFps').textContent = track.mode === 'face' ? track.detectFps + ' hz' : track.mode;
+    fpsAcc = 0; fpsN = 0;
+    $('status').textContent =
+      `eye  x ${track.smooth.x.toFixed(3)}  y ${track.smooth.y.toFixed(3)}  z ${track.smooth.z.toFixed(3)}\n` +
+      `mode ${track.mode}${track.mode === 'face' && !track.has ? ' (lost)' : ''}   splat ${splatReady ? 'ready' : 'loading'}`;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Wiring
+ * ------------------------------------------------------------------ */
+function bind(sliderId, valId, key, fmt = (v) => v.toFixed(2), after = null) {
+  const s = $(sliderId), v = $(valId);
+  const sync = () => { P[key] = parseFloat(s.value); v.textContent = fmt(P[key]); if (after) after(); };
+  s.addEventListener('input', sync); sync();
+}
+bind('sLerp',  'vLerp',  'lerp');
+bind('sGain',  'vGain',  'gain');
+bind('sZgain', 'vZgain', 'zGain');
+bind('sDist',  'vDist',  'dist');
+bind('sScreen','vScreen','screenW', (v) => v.toFixed(2), () => {
+  buildFrame();
+  if (fit.ready) { fit.base = (P.screenW * 0.62) / fit.radius; applySceneTransform(); }
+});
+bind('sSceneZ','vSceneZ','sceneZ',  (v) => v.toFixed(2), applySceneTransform);
+bind('sSceneY','vSceneY','sceneY',  (v) => v.toFixed(2), applySceneTransform);
+bind('sScale', 'vScale', 'scale',   (v) => v.toFixed(2), applySceneTransform);
+bind('sYaw',   'vYaw',   'yaw',     (v) => v.toFixed(0), applySceneTransform);
+bind('sPitch', 'vPitch', 'pitch',   (v) => v.toFixed(0), applySceneTransform);
+
+const toggleCam   = () => $('camWrap').classList.toggle('hidden-soft');
+const toggleHud   = () => $('hud').classList.toggle('hidden-soft');
+const toggleFrame = () => { frameGroup.visible = !frameGroup.visible; };
+const toggleMouse = () => {
+  track.mode = track.mode === 'mouse' ? (landmarker ? 'face' : 'idle') : 'mouse';
+  $('camFps').textContent = track.mode;
+};
+
+const toggleOffAxis = () => {
+  P.offAxis = !P.offAxis;
+  const b = $('btnOff');
+  b.textContent = 'Off-axis: ' + (P.offAxis ? 'on' : 'off');
+  b.className = 'rounded-md px-2 py-1 text-[11px] border ' + (P.offAxis
+    ? 'border-sky-400/40 bg-sky-400/10 text-sky-300 hover:bg-sky-400/20'
+    : 'border-white/15 hover:bg-white/5 text-slate-400');
+};
+
+$('btnOff').onclick   = toggleOffAxis;
+$('btnCal').onclick   = calibrate;
+$('btnCam').onclick   = toggleCam;
+$('btnFrame').onclick = toggleFrame;
+$('btnMouse').onclick = toggleMouse;
+
+addEventListener('keydown', (e) => {
+  const k = e.key.toLowerCase();
+  if (k === 'd') toggleCam();
+  else if (k === 'h') toggleHud();
+  else if (k === 'c') calibrate();
+  else if (k === 'm') toggleMouse();
+  else if (k === 'f') toggleFrame();
+  else if (k === 'o') toggleOffAxis();
+});
+
+addEventListener('resize', () => {
+  renderer.setSize(innerWidth, innerHeight, false);
+  camera.aspect = innerWidth / innerHeight;
+  buildFrame();
+});
+
+$('sceneSel').addEventListener('change', (e) => {
+  $('customUrl').classList.toggle('hidden', e.target.value !== '__custom__');
+});
+
+function chosenUrl() {
+  const sel = $('sceneSel').value;
+  return sel === '__custom__' ? $('customUrl').value.trim() : sel;
+}
+
+async function boot(useCamera) {
+  const url = chosenUrl();
+  if (!url) { showErr('Enter a splat URL first.'); return; }
+  $('boot').remove();
+  loadSplat(url);                    // splat streams in parallel with camera setup
+
+  // Always start on mouse so the window is live immediately - fetching the MediaPipe
+  // model and the camera permission can take several seconds, and a frozen scene in
+  // the meantime reads as a broken app. Face tracking takes over the moment it is ready.
+  track.mode = 'mouse';
+  if (!useCamera) return;
+
+  try { await startFaceTracking(); }
+  catch (e) {
+    showErr('Head tracking unavailable (' + (e?.message || e) + '). Staying on mouse control.');
+    track.mode = 'mouse';
+    $('camState').textContent = 'unavailable';
+  }
+}
+
+$('startCam').onclick   = () => boot(true);
+$('startMouse').onclick = () => boot(false);
+
+if (!location.protocol.startsWith('http')) {
+  $('bootNote').innerHTML =
+    'Opened from <span class="kbd">file://</span> - the splat sort worker and the camera will both be blocked. ' +
+    'Serve it instead: <span class="kbd">npx serve .</span>';
+}
+
+// Debug handle: tweak live from the console, e.g. HW.P.gain = 4 or HW.track.raw.set(0.4, 0, 1.8)
+window.HW = { P, track, camera, renderer, scene, THREE, get viewer() { return viewer; } };
+
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

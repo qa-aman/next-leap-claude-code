@@ -26,6 +26,8 @@ Before you start, make sure you have:
 
 If you prefer iTerm2 or another terminal, use that instead. Any terminal app works.
 
+Never used a terminal before? Anthropic's step-by-step terminal guide covers the basics: https://code.claude.com/docs/en/terminal-guide
+
 ---
 
 ## Section 2: Install Claude Code (Native Install - Recommended)
@@ -40,15 +42,17 @@ This downloads and installs the Claude Code binary to `~/.local/bin/claude`. The
 
 **Wait for the installation to complete.** You should see a success message.
 
+**Then close the Terminal window and open a new one.** The `claude --version` check in the next section fails inside the same window that ran the install, because that window's PATH was read before the install happened. This caught participants in the August 2026 cohort.
+
 ### Alternative: Install via Homebrew
 
-If you prefer Homebrew:
+If you prefer Homebrew, there are two casks. `claude-code` tracks the stable channel (about a week behind). `claude-code@latest` tracks the latest channel:
 
 ```bash
 brew install --cask claude-code
 ```
 
-Note: Homebrew installations do not auto-update. Run `brew upgrade claude-code` periodically to stay current.
+Note: Homebrew installations do not auto-update. Run `brew upgrade claude-code` (or `brew upgrade claude-code@latest`) periodically, or set `CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE=1` to have Claude Code run the upgrade for you.
 
 ---
 
@@ -60,7 +64,7 @@ Confirm Claude Code installed correctly:
 claude --version
 ```
 
-You should see a version number printed (e.g., `2.0.30`).
+You should see a version number printed (e.g., `2.1.269 (Claude Code)`).
 
 For a more detailed check:
 
@@ -157,17 +161,22 @@ Claude Code reads your project files automatically. You do not need to manually 
 
 ---
 
-## Section 8: Install the Antigravity IDE Extension (Optional)
+## Section 8: Install the Claude Code Extension in Your Editor (Optional)
 
-If you use Google Antigravity IDE (built on VS Code's extension ecosystem):
+Anthropic ships the Claude Code extension for VS Code and Cursor, and it also installs in other VS Code forks (Antigravity, Devin Desktop, Kiro) from the editor's Extensions view or from the Open VSX registry. Source: https://code.claude.com/docs/en/vs-code
 
-1. Open Antigravity IDE
+1. Open your editor (Antigravity, VS Code, or Cursor)
 2. Press `Cmd + Shift + X` to open Extensions
-3. Search for "Claude Code"
-4. Click Install on the extension by Anthropic
+3. Search for "Claude Code" and click Install on the extension by Anthropic
+4. If the search finds nothing, install from Open VSX: https://open-vsx.org/extension/Anthropic/claude-code
 5. Press `Cmd + Shift + P`, type "Claude Code", and select "Open in New Tab"
 
-This gives you inline diffs, @-mentions, and conversation history directly in your editor. Antigravity supports the VS Code extension marketplace, so the Claude Code extension works without any additional configuration.
+This gives you inline diffs, @-mentions, and conversation history directly in your editor. The extension bundles its own copy of the CLI for the chat panel. To type `claude` in the editor's integrated terminal you still need the standalone install from Section 2.
+
+**Terminal tips inside the editor:**
+
+1. Run `/terminal-setup` once inside Claude Code so Shift+Enter inserts a newline instead of submitting. Needed in VS Code and Cursor. Apple Terminal, iTerm2, Warp and Ghostty support it natively. Source: https://code.claude.com/docs/en/terminal-config
+2. If the display flickers or the scrollback jumps, run `/tui fullscreen` inside Claude Code.
 
 ---
 
@@ -175,7 +184,7 @@ This gives you inline diffs, @-mentions, and conversation history directly in yo
 
 If you prefer a graphical interface over the terminal:
 
-1. Download the macOS Desktop App from: https://claude.ai/api/desktop/darwin/universal/dmg/latest/redirect
+1. Download the macOS Desktop App (universal build for Intel and Apple Silicon) from the official page: https://code.claude.com/docs/en/desktop-quickstart
 2. Open the `.dmg` file and drag Claude to your Applications folder
 3. Launch Claude from Applications
 4. Sign in with your Claude account
@@ -235,9 +244,12 @@ rm ~/.claude.json
 | `curl: (22) ... error: 403` when running the install script | The install URL is being blocked (corporate network, proxy, or VPN). See **Case 2** below for the npm fallback |
 | Browser does not open on login | Press `c` to copy the login URL, paste it in your browser |
 | Subscription required / authentication fails | Verify you have an active Claude Pro or Max subscription at https://claude.ai. Log out and log back in to refresh credentials |
-| Node version too old | Run `node --version` to check. If below v18.0.0, download the latest LTS version from https://nodejs.org |
-| Permission errors during install | Do not use `sudo`. The native installer puts the binary in `~/.local/bin/` which does not require root. If you still get permission denied, run `sudo curl -fsSL https://claude.ai/install.sh \| bash` |
+| Node version too old (npm route only) | Run `node --version` to check. The npm package needs Node.js 22 or later. Download from https://nodejs.org/en/download |
+| Permission errors during install | Never `sudo npm install -g`, the docs say so explicitly. The native installer puts the binary in `~/.local/bin/` which does not need root. If `~/.local` itself is not writable, the docs' fix is `sudo chown -R $(whoami) ~/.local`, then re-run the installer. See https://code.claude.com/docs/en/troubleshoot-install |
 | Search not working | Claude Code includes ripgrep. If search fails, install it manually: `brew install ripgrep` |
+| Shift+Enter submits instead of adding a new line | Run `/terminal-setup` once inside Claude Code (VS Code, Cursor). Apple Terminal, iTerm2, Warp and Ghostty support it natively |
+| Screen flickers or scrollback jumps | Run `/tui fullscreen` inside Claude Code |
+| `git clone` says `Permission denied (publickey)` | You used the SSH clone URL with no SSH key set up. Use the HTTPS URL instead: `git clone https://github.com/qa-aman/next-leap-claude-code.git` |
 
 For more help: https://code.claude.com/docs/en/troubleshooting
 
@@ -315,10 +327,10 @@ Then run the npm install command above. Once installed, `claude --help` should w
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-Note: the npm and Homebrew routes do not auto-update. Run `npm update -g @anthropic-ai/claude-code` (or `brew upgrade`) periodically to stay current.
+Note: the npm and Homebrew routes do not auto-update. To upgrade an npm install run `npm install -g @anthropic-ai/claude-code@latest` (not `npm update -g`, which may not move you to the newest release). For Homebrew run `brew upgrade claude-code`. The npm package needs Node.js 22 or later.
 
 ---
 
 ## Source
 
-All instructions verified against the official Claude Code documentation at https://code.claude.com/docs/en/overview and https://code.claude.com/docs/en/setup (accessed March 2026).
+All instructions verified against the official Claude Code documentation at https://code.claude.com/docs/en/setup, https://code.claude.com/docs/en/troubleshoot-install, https://code.claude.com/docs/en/terminal-guide and https://code.claude.com/docs/en/vs-code (accessed 12-09-2026). The fixes were also cross-checked against the live cohort write-up at https://shipwithailab.substack.com/p/claude-code-install-fails-the-same.

@@ -1,0 +1,1881 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code: Beyond the Sessions</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --panel2: #1c2330;
+      --border: #2a3140;
+      --text: #e6edf3;
+      --muted: #9aa7b5;
+      --accent: #d97757;
+      --accent2: #7aa2f7;
+      --green: #3fb950;
+      --mono: "SF Mono", ui-monospace, "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f6f8fa;
+        --panel: #ffffff;
+        --panel2: #f0f3f6;
+        --border: #d8dee4;
+        --text: #1f2328;
+        --muted: #59636e;
+        --accent: #c4552f;
+        --accent2: #3b5bdb;
+      }
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.55;
+      font-size: 15px
+    }
+
+    a {
+      color: var(--accent2);
+      text-decoration: none
+    }
+
+    a:hover {
+      text-decoration: underline
+    }
+
+    .wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 40px 22px 80px
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 26px;
+      margin-bottom: 26px
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase
+    }
+
+    h1 {
+      font-size: 34px;
+      margin: 10px 0 12px;
+      letter-spacing: -.5px;
+      line-height: 1.15
+    }
+
+    .lede {
+      color: var(--muted);
+      max-width: 78ch;
+      font-size: 15.5px
+    }
+
+    .lede strong {
+      color: var(--text)
+    }
+
+    .verified {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center
+    }
+
+    .pill {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 5px 13px;
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    .pill b {
+      color: var(--text);
+      font-weight: 600
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--bg);
+      padding: 14px 0 12px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 26px
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center
+    }
+
+    .chip {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: .12s
+    }
+
+    .chip:hover {
+      color: var(--text);
+      border-color: var(--accent)
+    }
+
+    .chip.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 600
+    }
+
+    #q {
+      flex: 1;
+      min-width: 190px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 7px 13px;
+      font-size: 13px;
+      font-family: inherit
+    }
+
+    #q:focus {
+      outline: none;
+      border-color: var(--accent)
+    }
+
+    .sec-head {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 38px 0 4px
+    }
+
+    .sec-head h2 {
+      font-size: 21px;
+      margin: 0;
+      letter-spacing: -.3px
+    }
+
+    .count {
+      font-size: 11px;
+      color: var(--muted);
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      padding: 2px 9px;
+      border-radius: 999px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 600
+    }
+
+    .gapbadge {
+      font-size: 11px;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      background: transparent;
+      padding: 2px 9px;
+      border-radius: 999px;
+      letter-spacing: .06em;
+      font-weight: 600
+    }
+
+    .sec-desc {
+      color: var(--muted);
+      margin: 6px 0 16px;
+      max-width: 82ch;
+      font-size: 14.5px
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 13px
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 15px 17px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px
+    }
+
+    .cmd {
+      font-family: var(--mono);
+      font-size: 14px;
+      color: var(--accent);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      word-break: break-word
+    }
+
+    .star {
+      color: var(--green);
+      font-size: 12px
+    }
+
+    .desc {
+      font-size: 14px;
+      color: var(--text);
+      opacity: .92
+    }
+
+    .why {
+      font-size: 13.5px;
+      color: var(--muted);
+      border-left: 2px solid var(--border);
+      padding-left: 11px
+    }
+
+    .why b {
+      color: var(--text);
+      font-weight: 600
+    }
+
+    .meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 4px
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 2px 8px;
+      border-radius: 5px;
+      letter-spacing: .04em
+    }
+
+    .tag.new {
+      color: var(--green);
+      border-color: rgba(63, 185, 80, .45)
+    }
+
+    .link {
+      font-size: 11.5px;
+      font-family: var(--mono)
+    }
+
+    code {
+      font-family: var(--mono);
+      font-size: .9em;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      padding: 1px 5px;
+      border-radius: 4px
+    }
+
+    .callout {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 14px 17px;
+      margin: 18px 0;
+      font-size: 14px;
+      color: var(--muted)
+    }
+
+    .callout b {
+      color: var(--text)
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 14px;
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap
+    }
+
+    th, td {
+      text-align: left;
+      padding: 9px 13px;
+      border-bottom: 1px solid var(--border)
+    }
+
+    th {
+      color: var(--accent);
+      font-size: 11.5px;
+      letter-spacing: .1em;
+      text-transform: uppercase
+    }
+
+    td:first-child {
+      font-family: var(--mono);
+      font-size: 13px;
+      white-space: nowrap
+    }
+
+    /* workflow cards */
+    .wgrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(430px, 1fr));
+      align-items: start;
+      gap: 15px
+    }
+
+    .wcard {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 11px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 11px
+    }
+
+    .wtitle {
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -.2px
+    }
+
+    .wrow {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      gap: 11px;
+      font-size: 14px;
+      align-items: start
+    }
+
+    .wlab {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-top: 3px
+    }
+
+    .wrow.now .wtxt {
+      color: var(--muted)
+    }
+
+    .wrow.new .wtxt {
+      color: var(--text)
+    }
+
+    .wbuilt {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding-top: 3px;
+      border-top: 1px dashed var(--border);
+      margin-top: 2px
+    }
+
+    .piece {
+      font-family: var(--mono);
+      font-size: 11px;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      color: var(--accent2);
+      padding: 2px 8px;
+      border-radius: 5px
+    }
+
+    .payoff {
+      font-size: 13.5px;
+      color: var(--green);
+      font-weight: 600
+    }
+
+    .how {
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+      margin-top: 2px
+    }
+
+    .how>summary {
+      cursor: pointer;
+      color: var(--accent2);
+      font-size: 13px;
+      font-weight: 700;
+      list-style: none;
+      user-select: none
+    }
+
+    .how>summary::-webkit-details-marker {
+      display: none
+    }
+
+    .how>summary::before {
+      content: "▸ ";
+      font-size: 11px
+    }
+
+    .how[open]>summary::before {
+      content: "▾ "
+    }
+
+    .how>summary:hover {
+      text-decoration: underline
+    }
+
+    .how ol {
+      margin: 12px 0 0;
+      padding-left: 19px
+    }
+
+    .how li {
+      font-size: 13.5px;
+      margin-bottom: 9px;
+      line-height: 1.5
+    }
+
+    .how li::marker {
+      color: var(--accent);
+      font-weight: 700
+    }
+
+    .how pre {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 10px 12px;
+      margin: 8px 0 0;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      line-height: 1.5;
+      overflow-x: auto;
+      color: var(--text)
+    }
+
+    .heads {
+      margin-top: 11px;
+      font-size: 13px;
+      color: var(--accent);
+      border-left: 2px solid var(--accent);
+      padding-left: 10px
+    }
+
+    .heads b {
+      color: var(--text)
+    }
+
+    .noresult {
+      color: var(--muted);
+      padding: 40px 0;
+      text-align: center;
+      display: none
+    }
+
+    footer {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px
+    }
+
+    footer a {
+      font-family: var(--mono);
+      font-size: 12.5px
+    }
+
+    .srcs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 14px;
+      margin-top: 10px
+    }
+
+    @media(max-width:640px) {
+      h1 {
+        font-size: 26px
+      }
+
+      .grid {
+        grid-template-columns: 1fr
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <header>
+      <div class="eyebrow">Claude Code Workshop · Reference</div>
+      <h1>Beyond the Sessions</h1>
+      <p class="lede">Eight <strong>workflows</strong> a PM cannot build with what our sessions taught, and the
+        reference detail behind them. The existing decks cover setup, skills, subagents and multi-agent patterns.
+        This one starts with what those pieces let you actually <em>do</em>: reports that write themselves overnight,
+        context that stops going stale, checking a build yourself before you sign it off. Then it covers the parts
+        that make those possible, including the undo button nobody knows exists.</p>
+      <div class="verified">
+        <span class="pill">Checked against <b>CHANGELOG v2.1.269</b></span>
+        <span class="pill">Sourced from <b>code.claude.com/docs</b></span>
+        <span class="pill">Compiled <b>01-08-2026</b>, updated <b>12-09-2026</b></span>
+        <span class="pill"><b>★</b> = start here if you only read one section</span>
+      </div>
+    </header>
+
+    <div class="toolbar">
+      <div class="chips">
+        <button class="chip active" data-f="all">All</button>
+        <button class="chip" data-f="workflow">Workflows</button>
+        <button class="chip" data-f="star">★ Start here</button>
+        <button class="chip" data-f="safety">Safety net</button>
+        <button class="chip" data-f="automation">Automation</button>
+        <button class="chip" data-f="context">Context &amp; models</button>
+        <button class="chip" data-f="scale">Scale &amp; guardrails</button>
+        <button class="chip" data-f="noterminal">No terminal</button>
+        <button class="chip" data-f="enterprise">Enterprise</button>
+        <input id="q" type="search" placeholder="Search everything…" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="callout">
+      <b>How to read this.</b> Start with <b>Workflows worth building</b>. Those are the things a PM cannot do today
+      with what the sessions taught, written as the chore they replace rather than as a feature list. Sections 1 to 10
+      after it are the reference detail: the individual pieces, what each one does, and why it matters. A
+      <span class="tag new">NEW</span> tag means it shipped recently enough that it is not in any existing deck, and
+      the badge beside each numbered heading says which deck it would slot into if you teach it later.
+    </div>
+
+    <!-- ===================== 0. WORKFLOWS ===================== -->
+    <section data-cat="workflow star">
+      <div class="sec-head">
+        <h2>Workflows worth building</h2>
+        <span class="count">The part that changes your week</span>
+      </div>
+      <p class="sec-desc">Not commands. These are things a PM cannot do today with what the eight sessions taught,
+        where the pieces already exist and nobody has put them together. Each one replaces a recurring manual chore.
+        The commands are listed only as the parts you assemble, the same way the Skills session teaches a skill
+        rather than teaching Markdown.</p>
+
+      <div class="wgrid">
+
+        <div class="wcard" data-cat="workflow star" data-k="schedule routine digest monday recurring cron automate ritual">
+          <div class="wtitle">1. The recurring report writes itself before you wake up</div>
+          <div class="wrow now">
+            <div class="wlab">Today</div>
+            <div class="wtxt">Every Monday you spend 45 minutes rebuilding the same competitive digest, or every Friday
+              the same sprint summary. You do it by hand because it needs fresh input each time.</div>
+          </div>
+          <div class="wrow new">
+            <div class="wlab">Instead</div>
+            <div class="wtxt">Take a skill you already wrote and turn it into a routine. It runs on Anthropic's cloud,
+              <b>so it fires whether your laptop is on or off</b>, and delivers the finished digest to Slack or a
+              branch. Your job changes from writing it to reacting to it.</div>
+          </div>
+          <div class="wbuilt"><span class="piece">a committed skill</span><span class="piece">/schedule</span><span
+              class="piece">a connected repo</span><span class="piece">a connector for delivery</span></div>
+          <div class="payoff">Turns a weekly chore into a Monday-morning read.</div>
+          <details class="how">
+            <summary>How to do it</summary>
+            <ol>
+              <li><b>Know where it runs, because that decides everything else.</b> A routine created with
+                <code>/schedule</code> executes on Anthropic-managed cloud infrastructure, so it keeps working with
+                your laptop closed. The trade is that it works from repositories and connectors you attach, <b>not
+                  from your local folder</b>. If the job genuinely must touch local files, create a <b>Local</b>
+                routine instead (Desktop app, Routines, New routine, Local), which is a Desktop scheduled task and
+                does need your machine awake.</li>
+              <li><b>Get it right by hand first.</b> Run the skill interactively and check the output. A schedule
+                multiplies whatever you already have, including the flaws, and you will not be watching when it runs.
+              </li>
+              <li><b>Commit what it needs.</b> Each run clones the repo fresh, so the skill and any input files must
+                be pushed. A skill sitting only in your local <code>.claude/skills/</code> is invisible to the
+                routine.</li>
+              <li><b>Create it.</b> Run <code>/schedule</code> and answer the questions about cadence, repositories
+                and prompt. If your account has no GitHub access yet it will point you at <code>/web-setup</code>
+                first.
+                <pre>/schedule
+
+Every Monday at 7am, read competitive.md in this repo,
+research each competitor listed there, and write a
+digest with a source URL for every claim.
+Send it to me as a Slack DM.</pre>
+              </li>
+              <li><b>Decide how the output reaches you</b>, since it cannot write to your laptop. Either let it push
+                to a <code>claude/…</code> branch, which is always accepted, or deliver through a connector like Slack
+                or email. Note that MCP servers you added locally with <code>claude mcp add</code> do <b>not</b> carry
+                over: add it as a connector on claude.ai, or commit a <code>.mcp.json</code> so it travels with the
+                repo.</li>
+              <li><b>Test it now, not on Monday.</b> <code>/schedule run</code> triggers it immediately.
+                <code>/schedule list</code> shows everything registered, and <code>/schedule update</code> changes
+                one.</li>
+              <li><b>Read the first real output before you trust it.</b> Then fix the prompt, not the schedule. Most
+                bad recurring output is a vague brief, not a broken cron.</li>
+            </ol>
+            <div class="heads"><b>Watch out:</b> a green run status only means the session started and exited without
+              an infrastructure error. It does not mean the task worked. Open the run and read the transcript, because
+              blocked network calls and missing connector tools surface there, not in the status dot.</div>
+          </details>
+        </div>
+
+        <div class="wcard" data-cat="workflow star" data-k="hooks stale knowledge base context auto update maintain">
+          <div class="wtitle">2. Your context files stop going stale</div>
+          <div class="wrow now">
+            <div class="wlab">Today</div>
+            <div class="wtxt">Session 4 says put everything in knowledge folders, so you do, for two weeks. Then
+              <code>product-knowledge/</code> drifts from reality and every answer quietly gets worse, because keeping
+              it current is manual and invisible.</div>
+          </div>
+          <div class="wrow new">
+            <div class="wlab">Instead</div>
+            <div class="wtxt">A hook does the upkeep. One fires when a session ends and appends what changed to your
+              work log or knowledge folder. Another fires at session start and loads today's brief. This repo already
+              does exactly this with <code>refresh-docs.sh</code>, which is why its CLAUDE.md is never out of date.</div>
+          </div>
+          <div class="wbuilt"><span class="piece">SessionStart hook</span><span class="piece">Stop hook</span><span
+              class="piece">your knowledge folder</span></div>
+          <div class="payoff">The assembly line maintains itself instead of decaying.</div>
+          <details class="how">
+            <summary>How to do it</summary>
+            <ol>
+              <li><b>Pick the moment.</b> <code>Stop</code> fires when a turn ends, which is right for "record what
+                just changed". <code>SessionStart</code> fires when a session opens, which is right for "load today's
+                brief".</li>
+              <li><b>Write the script</b> at <code>.claude/hooks/your-hook.sh</code> and make it executable with
+                <code>chmod +x</code>. Have it exit 0 quietly when there is nothing to do, so it never blocks a normal
+                turn.</li>
+              <li><b>Wire it up.</b> Easiest path is <code>/hooks</code>, which walks you through it. The equivalent
+                in <code>.claude/settings.json</code> is:
+                <pre>{
+  "hooks": {
+    "Stop": [{
+      "hooks": [{
+        "type": "command",
+        "command": "bash .claude/hooks/your-hook.sh",
+        "async": true,
+        "timeout": 120
+      }]
+    }]
+  }
+}</pre>
+                Use <code>$CLAUDE_PROJECT_DIR/.claude/hooks/your-hook.sh</code> instead if you want the path resolved
+                absolutely regardless of where the session was started.
+              </li>
+              <li><b>Guard against a loop</b> if your hook itself calls <code>claude -p</code>. Set an environment
+                variable and exit early when it is already set, or the hook will trigger itself forever. This repo's
+                <code>refresh-docs.sh</code> does exactly that, and is worth reading before you write your own.</li>
+              <li><b>Prove it fired.</b> Make a trivial change, end the turn, and check the result. Have the script
+                append one line to a log file every run, so "did it run" is never a guess.</li>
+            </ol>
+            <div class="heads"><b>Watch out:</b> a hook that fails silently looks identical to one that is working.
+              The log line in step 5 is the whole difference.</div>
+          </details>
+        </div>
+
+        <div class="wcard" data-cat="workflow star" data-k="verify acceptance QA test build screenshot playwright browser signoff">
+          <div class="wtitle">3. Check the build yourself before you sign it off</div>
+          <div class="wrow now">
+            <div class="wlab">Today</div>
+            <div class="wtxt">A ticket says Done. You either trust it, click through it manually, or wait for QA. When
+              you find a bug you write the repro steps by hand and hope they are reproducible.</div>
+          </div>
+          <div class="wrow new">
+            <div class="wlab">Instead</div>
+            <div class="wtxt">Claude drives the real product in a browser, walks the flow from your acceptance
+              criteria, and reports what actually happened with screenshots at each step. A failed step becomes a bug
+              report with exact repro steps, already written.</div>
+          </div>
+          <div class="wbuilt"><span class="piece">Playwright MCP</span><span class="piece">Chrome DevTools MCP</span><span
+              class="piece">/verify</span><span class="piece">your acceptance criteria</span></div>
+          <div class="payoff">You verify your own feature instead of taking Done on trust.</div>
+          <details class="how">
+            <summary>How to do it</summary>
+            <ol>
+              <li><b>Connect a browser.</b> Add the Playwright MCP or the Chrome DevTools MCP, then run
+                <code>/mcp</code> and confirm it shows as connected before you go further.</li>
+              <li><b>Hand it the acceptance criteria as numbered steps</b>, plus the URL and how to log in. Keep
+                credentials in <code>.env</code> and point at them, do not paste them into the prompt.</li>
+              <li><b>Ask for observation, not a verdict.</b> The wording matters:
+                <pre>Walk this flow one step at a time.
+After each step, take a screenshot and tell me
+what you actually SEE, and whether it matches
+what step N expects.
+Do not summarise or judge until the end.</pre>
+              </li>
+              <li><b>Turn each failure into a bug report.</b> Ask for the exact steps to reproduce plus the screenshot
+                at the failing step. That is a ticket an engineer can act on without a conversation.</li>
+              <li><b>Re-run the same prompt after the fix.</b> Because the steps are written down, your acceptance
+                check is now repeatable instead of a one-off click-through.</li>
+            </ol>
+            <div class="heads"><b>Watch out:</b> if you ask "does this work?", it will tend to say yes. Ask what it
+              saw at each step, and let yourself decide whether that passes.</div>
+          </details>
+        </div>
+
+        <div class="wcard" data-cat="workflow star" data-k="data csv export tickets survey analysis dashboard pivot">
+          <div class="wtitle">4. A raw export becomes a decision, not an afternoon</div>
+          <div class="wrow now">
+            <div class="wlab">Today</div>
+            <div class="wtxt">A CSV of 2,000 support tickets or survey responses lands on you. You spend an afternoon
+              in pivot tables, eyeball a few hundred rows, and present a guess about what people are asking for.</div>
+          </div>
+          <div class="wrow new">
+            <div class="wlab">Instead</div>
+            <div class="wtxt">Claude reads every row, sorts them into a taxonomy you define, counts the trend month on
+              month, and produces an interactive dashboard plus the deck. Because it reads all of them, the long tail
+              stops being invisible.</div>
+          </div>
+          <div class="wbuilt"><span class="piece">a categorization skill</span><span class="piece">subagents for
+              volume</span><span class="piece">/dataviz</span></div>
+          <div class="payoff">Every row read, not a sampled guess.</div>
+          <details class="how">
+            <summary>How to do it</summary>
+            <ol>
+              <li><b>Put the export where Claude can read it</b>, and if it contains customer data keep that folder
+                out of git before you start, not after.</li>
+              <li><b>Define the taxonomy yourself, first.</b> Write the categories and one line on what belongs in
+                each. If you let it invent buckets, they shift between runs and you can never trend the numbers month
+                on month.</li>
+              <li><b>Batch it if the file is large.</b> Ask for subagents to process chunks and write intermediate
+                results to files, so one long run cannot lose everything:
+                <pre>Categorise every row in data/tickets.csv using the
+taxonomy in taxonomy.md. Process in batches of 200
+with subagents, write each batch to
+outputs/batches/, then merge.
+Never invent a category outside taxonomy.md.</pre>
+              </li>
+              <li><b>Ask for counts before conclusions:</b> volume per category, month on month, and the biggest
+                movers. Then ask for the dashboard or deck off those numbers.</li>
+              <li><b>Spot-check about 20 rows</b> against their assigned category before you present anything. If the
+                edge cases are wrong, tighten the taxonomy wording and re-run.</li>
+            </ol>
+            <div class="heads"><b>Watch out:</b> the value here is that every row gets read. Do not let it sample
+              "for speed" unless you asked for a sample and say so in the readout.</div>
+          </details>
+        </div>
+
+        <div class="wcard" data-cat="workflow star" data-k="add-dir multi repo spec code is it built cross reference">
+          <div class="wtitle">5. Answer "is this actually built?" without asking an engineer</div>
+          <div class="wrow now">
+            <div class="wlab">Today</div>
+            <div class="wtxt">Your specs live in one place and the code in another. To check whether a business rule
+              really shipped, or what the code does in an edge case your spec forgot, you ask someone and wait.</div>
+          </div>
+          <div class="wrow new">
+            <div class="wlab">Instead</div>
+            <div class="wtxt">Add both directories to one session. Now you can ask Claude to compare the spec against
+              the implementation and list every rule in the doc that has no matching code, and the reverse: behaviour
+              in the code that no spec describes.</div>
+          </div>
+          <div class="wbuilt"><span class="piece">/add-dir</span><span class="piece">your spec folder</span><span
+              class="piece">the code repo</span></div>
+          <div class="payoff">Spec-to-code drift becomes something you can audit yourself.</div>
+          <details class="how">
+            <summary>How to do it</summary>
+            <ol>
+              <li><b>Start in your specs folder</b>, the side you know best, then pull the code in rather than the
+                other way around.</li>
+              <li><b>Add the second directory:</b> <code>/add-dir /path/to/the-code-repo</code>. Both are now readable
+                in one session, with no copying between them.</li>
+              <li><b>Ask for a mapping, one row per rule:</b>
+                <pre>For every business rule in specs/billing.md, find
+where it is implemented in the code repo.
+Output a table: rule | file:line | IMPLEMENTED /
+PARTIAL / NOT FOUND.
+Cite file:line for every row. If you cannot find
+it, say NOT FOUND rather than guessing.</pre>
+              </li>
+              <li><b>Run it in reverse.</b> Ask what the code does that no spec describes. That direction is where the
+                undocumented edge cases live, and it is the half people forget to ask for.</li>
+              <li><b>Open two or three of the cited <code>file:line</code> references yourself.</b> If the citations
+                are real, the rest of the table is probably trustworthy. If they are not, stop and re-scope.</li>
+            </ol>
+            <div class="heads"><b>Watch out:</b> treat NOT FOUND as "ask an engineer about this one", not as proof it
+              was never built. Absence of evidence is not evidence of absence.</div>
+          </details>
+        </div>
+
+        <div class="wcard" data-cat="workflow star" data-k="team distribute plugin marketplace onboarding share setup">
+          <div class="wtitle">6. Your setup becomes the team's setup</div>
+          <div class="wrow now">
+            <div class="wlab">Today</div>
+            <div class="wtxt">You build skills that save you hours. A teammate asks how, and the honest answer is
+              "copy my folder and change the paths". Most of them never do, so the leverage stays with you.</div>
+          </div>
+          <div class="wrow new">
+            <div class="wlab">Instead</div>
+            <div class="wtxt">Package your skills, hooks and commands as one plugin and host a marketplace. A teammate
+              installs it with a single command and has your whole working setup, versioned. Claude can also generate
+              the ramp-up guide from how you actually use it.</div>
+          </div>
+          <div class="wbuilt"><span class="piece">claude plugin init</span><span class="piece">a marketplace</span><span
+              class="piece">/team-onboarding</span></div>
+          <div class="payoff">One person's system becomes the team's default.</div>
+          <details class="how">
+            <summary>How to do it</summary>
+            <ol>
+              <li><b>Pick only what is stable.</b> Ship the three or four skills you use weekly and whose output shape
+                has stopped changing. A half-finished skill costs your teammates more than it saves.</li>
+              <li><b>Scaffold the plugin:</b> <code>claude plugin init &lt;name&gt;</code>. It creates the structure
+                for you, so you are not guessing at a manifest.</li>
+              <li><b>Move the pieces in</b> (skills, hooks, commands, MCP config) and install it locally first.
+                Confirm each skill still triggers when it should, since paths often change in the move.</li>
+              <li><b>Check the cost before you push it out.</b> <code>claude plugin details &lt;name&gt;</code> shows
+                the component inventory and the projected per-session token cost. If that number is high, trim before
+                your team pays it on every session.</li>
+              <li><b>Distribute it</b> as a marketplace repo. A teammate adds the marketplace once and installs with a
+                single command, and updates flow through the same way.</li>
+              <li><b>Generate the ramp-up guide</b> with <code>/team-onboarding</code>, which writes it from how you
+                actually work rather than from what you remember to document.</li>
+            </ol>
+            <div class="heads"><b>Watch out:</b> your skills probably reference paths from your repo. Test the install
+              in a different project before handing it to anyone.</div>
+          </details>
+        </div>
+
+        <div class="wcard" data-cat="workflow star" data-k="background notification long research ping mobile babysit">
+          <div class="wtitle">7. Long work runs while you are in meetings</div>
+          <div class="wrow now">
+            <div class="wlab">Today</div>
+            <div class="wtxt">A deep competitive scan takes 20 minutes, so you sit and watch it, or start it and
+              forget. Either way the terminal owns your attention.</div>
+          </div>
+          <div class="wrow new">
+            <div class="wlab">Instead</div>
+            <div class="wtxt">Kick the work off in the background, go to your meeting, and get a notification when it
+              finishes or when it needs a decision from you. A hook can fire that alert to your desktop or phone.</div>
+          </div>
+          <div class="wbuilt"><span class="piece">background agents</span><span class="piece">Notification hook</span><span
+              class="piece">Remote Control</span></div>
+          <div class="payoff">Research runs on its schedule, not yours.</div>
+          <details class="how">
+            <summary>How to do it</summary>
+            <ol>
+              <li><b>Brief it properly before you walk away.</b> Anything vague will either stall waiting for you or
+                confidently produce the wrong thing for 20 minutes. State the output file and the format up front.
+              </li>
+              <li><b>Send it to the background.</b> Run <code>/bg</code> inside a session to move it into agent view,
+                or press <code>←</code> on an empty prompt to do both in one step. <code>Ctrl+B</code> pushes a
+                running command or agent to the background.</li>
+              <li><b>Know the limit: this runs on your machine, not in the cloud.</b> Sleep pauses the work and it
+                resumes on wake, but a full shutdown stops it. If it genuinely has to finish while your laptop is off,
+                that is a cloud routine (workflow 1), not a background session.</li>
+              <li><b>Get told when it matters.</b> Add a <code>Notification</code> hook, which fires both when an
+                agent needs input and when it completes:
+                <pre>{
+  "hooks": {
+    "Notification": [{
+      "hooks": [{
+        "type": "command",
+        "command": "bash .claude/hooks/notify.sh"
+      }]
+    }]
+  }
+}</pre>
+                Inside <code>notify.sh</code>, one line is enough: on macOS an
+                <code>osascript</code> display-notification call, on Linux <code>notify-send</code>.
+              </li>
+              <li><b>For alerts away from the machine</b>, enable Remote Control so it can push to your phone instead
+                of a desktop banner you will not see.</li>
+              <li><b>Come back through <code>claude agents</code></b>, which lists every session with its status, and
+                attach to the one that finished or is waiting on you.</li>
+            </ol>
+            <div class="heads"><b>Watch out:</b> a background session uses the same quota as an interactive one.
+              Running five in parallel burns roughly five times the usage for that period.</div>
+          </details>
+        </div>
+
+        <div class="wcard" data-cat="workflow star" data-k="context degrade long session quality compact three hours">
+          <div class="wtitle">8. Your three-hour session stops getting dumber</div>
+          <div class="wrow now">
+            <div class="wlab">Today</div>
+            <div class="wtxt">Long sessions quietly degrade. Claude forgets a decision from an hour ago, repeats
+              itself, or contradicts something you settled. So you start over and re-explain everything.</div>
+          </div>
+          <div class="wrow new">
+            <div class="wlab">Instead</div>
+            <div class="wtxt">Treat context as a budget you can see and steer. Watch it fill, and when it gets tight
+              compact the conversation while telling it what to keep, rather than clearing and losing the thread.
+              Park reference material in files the session loads on demand instead of pasting it in.</div>
+          </div>
+          <div class="wbuilt"><span class="piece">/context</span><span class="piece">/compact with
+              instructions</span><span class="piece">load-on-demand files</span></div>
+          <div class="payoff">The long working session stays as sharp as the first ten minutes.</div>
+          <details class="how">
+            <summary>How to do it</summary>
+            <ol>
+              <li><b>Look at the budget early.</b> Run <code>/context</code> near the start of a real working session
+                so you know what normal looks like, rather than only checking once things feel wrong.</li>
+              <li><b>Stop pasting reference material.</b> Put the long document in a file and give Claude the path.
+                It then reads what it needs, when it needs it, instead of carrying the whole thing all session.</li>
+              <li><b>Compact with instructions, do not clear.</b> Steer what survives:
+                <pre>/compact Keep every decision we made, the open
+questions, and the file paths we are working in.
+Drop the full file contents and the tool output.</pre>
+              </li>
+              <li><b>Use <code>/btw</code> for side questions</b> ("what does this acronym mean") so a quick
+                digression does not become permanent weight in a careful thread.</li>
+              <li><b>Reserve <code>/clear</code> for genuinely switching task.</b> If you clear by reflex and regret
+                it, <code>/rewind</code> can now resume from before the clear.</li>
+            </ol>
+            <div class="heads"><b>Watch out:</b> quality degrades well before the window is technically full. If
+              answers start feeling vague or repetitive, that is the signal, not an error message.</div>
+          </details>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================== 1. CHECKPOINTS ===================== -->
+    <section data-cat="safety star">
+      <div class="sec-head">
+        <h2>1. Checkpoints and rewind</h2>
+        <span class="count">Not covered anywhere</span>
+        <span class="gapbadge">extends: Setup</span>
+      </div>
+      <p class="sec-desc">The single biggest gap. Every session teaches plan mode as the way to stay safe <em>before</em>
+        Claude acts, and nothing teaches the recovery path <em>after</em> it acts. People are running Claude Code
+        believing there is no undo.</p>
+      <div class="grid">
+
+        <div class="card" data-cat="safety star" data-k="rewind undo restore checkpoint">
+          <div class="cmd">/rewind <span class="star">★</span></div>
+          <div class="desc">Roll the conversation, your code, or both back to an earlier checkpoint. Claude Code
+            checkpoints your files automatically as it edits, so you can step back to any earlier state.</div>
+          <div class="why"><b>Why it matters:</b> this is the answer to "Claude just rewrote a file I needed". Most
+            people reach for git or panic instead.</div>
+          <div class="meta"><span class="tag">slash</span><a class="link"
+              href="https://code.claude.com/docs/en/checkpointing">docs / checkpointing</a></div>
+        </div>
+
+        <div class="card" data-cat="safety star" data-k="escape double esc rewind menu">
+          <div class="cmd">Esc Esc <span class="star">★</span></div>
+          <div class="desc">Press Escape twice on an empty input to open the rewind menu directly. The fastest path to
+            the same restore, with no command to remember.</div>
+          <div class="why"><b>Why it matters:</b> a two-key undo is something people will actually use under pressure.
+          </div>
+          <div class="meta"><span class="tag">keys</span><a class="link"
+              href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div>
+        </div>
+
+        <div class="card" data-cat="safety" data-k="rewind before clear resume">
+          <div class="cmd">/rewind past a /clear</div>
+          <div class="desc">Rewind can now resume a conversation from <em>before</em> you ran <code>/clear</code>, so a
+            reflexive clear is no longer a one-way door.</div>
+          <div class="why"><b>Why it matters:</b> the workshop actively teaches <code>/clear</code> as the reset
+            button. This is the safety valve for that advice.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.191</span><a class="link"
+              href="https://code.claude.com/docs/en/checkpointing">docs / checkpointing</a></div>
+        </div>
+
+        <div class="card" data-cat="safety star" data-k="limitations bash subagent symlink git not tracked">
+          <div class="cmd">What rewind will NOT save you from <span class="star">★</span></div>
+          <div class="desc">Five official limitations: changes made by <b>bash commands</b> are not tracked, <b>subagent
+              edits</b> are not restored, <b>external changes</b> (your editor, a teammate) are not tracked,
+            <b>symlinked and hard-linked paths</b> are not restored, and it is <b>not a replacement for version
+              control</b>.</div>
+          <div class="why"><b>Why it matters:</b> teach the limits with the feature, or people will trust it in exactly
+            the multi-agent situations where it does not apply.</div>
+          <div class="meta"><span class="tag">gotcha</span><a class="link"
+              href="https://code.claude.com/docs/en/checkpointing">docs / checkpointing</a></div>
+        </div>
+
+        <div class="card" data-cat="safety" data-k="safe mode troubleshooting disable customizations">
+          <div class="cmd">claude --safe-mode</div>
+          <div class="desc">Start with every customization disabled: CLAUDE.md, plugins, skills, hooks and MCP servers.
+            The clean-room baseline for "is it my config or is it Claude?".</div>
+          <div class="why"><b>Why it matters:</b> once someone has 40 skills and a hook, this is the only sane first
+            debugging step.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.169</span><a class="link"
+              href="https://code.claude.com/docs/en/settings">docs / settings</a></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================== 2. HOOKS ===================== -->
+    <section data-cat="automation star">
+      <div class="sec-head">
+        <h2>2. Hooks, the deterministic layer</h2>
+        <span class="count">Named once, never taught</span>
+        <span class="gapbadge">extends: Skills</span>
+      </div>
+      <p class="sec-desc">Skills and CLAUDE.md <em>ask</em> Claude to behave a certain way, and a model can always
+        decide otherwise. A hook is a shell command the harness runs on an event, so it happens every time. This repo
+        already ships one (<code>.claude/hooks/refresh-docs.sh</code>, a Stop hook that refreshes the docs after a
+        turn changes source files), and no deck explains the mechanism.</p>
+
+      <table>
+        <tr>
+          <th>Event</th>
+          <th>Fires when</th>
+          <th>PM use</th>
+        </tr>
+        <tr>
+          <td>PreToolUse</td>
+          <td>Before a tool runs</td>
+          <td>Hard-block edits to a protected file</td>
+        </tr>
+        <tr>
+          <td>PostToolUse</td>
+          <td>After a tool succeeds</td>
+          <td>Auto-format or lint what Claude just wrote</td>
+        </tr>
+        <tr>
+          <td>PostToolUseFailure</td>
+          <td>After a tool fails</td>
+          <td>Capture the failure for a retry loop</td>
+        </tr>
+        <tr>
+          <td>PermissionRequest</td>
+          <td>A permission prompt is raised</td>
+          <td>Auto-approve a known-safe pattern</td>
+        </tr>
+        <tr>
+          <td>UserPromptSubmit</td>
+          <td>You hit enter</td>
+          <td>Inject standing context into every prompt</td>
+        </tr>
+        <tr>
+          <td>Stop / StopFailure</td>
+          <td>The turn ends</td>
+          <td>Refresh docs, run tests, notify</td>
+        </tr>
+        <tr>
+          <td>SubagentStart / SubagentStop</td>
+          <td>A subagent begins or ends</td>
+          <td>Log or audit delegated work</td>
+        </tr>
+        <tr>
+          <td>PreCompact</td>
+          <td>Before context is compacted</td>
+          <td>Save state, or block the compaction</td>
+        </tr>
+        <tr>
+          <td>SessionStart / SessionEnd</td>
+          <td>Session opens or closes</td>
+          <td>Load a daily brief, write a work log</td>
+        </tr>
+        <tr>
+          <td>Notification</td>
+          <td>Claude needs input or finishes</td>
+          <td>Desktop or mobile alert on long runs</td>
+        </tr>
+        <tr>
+          <td>MessageDisplay</td>
+          <td>An assistant message renders</td>
+          <td>Transform or hide text as it displays</td>
+        </tr>
+      </table>
+
+      <div class="grid">
+        <div class="card" data-cat="automation star" data-k="hooks command manage">
+          <div class="cmd">/hooks <span class="star">★</span></div>
+          <div class="desc">View and configure hooks interactively instead of hand-editing JSON.</div>
+          <div class="why"><b>Why it matters:</b> the entry point that makes hooks approachable for a non-engineer.
+          </div>
+          <div class="meta"><span class="tag">slash</span><a class="link"
+              href="https://code.claude.com/docs/en/hooks">docs / hooks</a></div>
+        </div>
+        <div class="card" data-cat="automation" data-k="precompact block compaction decision">
+          <div class="cmd">PreCompact can block</div>
+          <div class="desc">A PreCompact hook can stop a compaction by exiting with code 2 or returning
+            <code>{"decision":"block"}</code>.</div>
+          <div class="why"><b>Why it matters:</b> protects a long research run from being summarized at the worst
+            moment.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.105</span><a class="link"
+              href="https://code.claude.com/docs/en/hooks">docs / hooks</a></div>
+        </div>
+        <div class="card" data-cat="automation" data-k="continueOnBlock posttooluse feedback">
+          <div class="cmd">continueOnBlock</div>
+          <div class="desc">A <code>PostToolUse</code> option that feeds the hook's rejection reason back to Claude and
+            lets the turn continue, instead of just failing.</div>
+          <div class="why"><b>Why it matters:</b> turns a hook from a wall into a correction. Claude learns the rule
+            mid-turn.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.139</span><a class="link"
+              href="https://code.claude.com/docs/en/hooks">docs / hooks</a></div>
+        </div>
+        <div class="card" data-cat="automation" data-k="args exec form quoting">
+          <div class="cmd">hook <code>args: string[]</code></div>
+          <div class="desc">Exec form that spawns the command directly with no shell, so paths with spaces never need
+            quoting.</div>
+          <div class="why"><b>Why it matters:</b> removes the most common reason a hand-written hook silently breaks.
+          </div>
+          <div class="meta"><span class="tag new">NEW v2.1.139</span><a class="link"
+              href="https://code.claude.com/docs/en/hooks">docs / hooks</a></div>
+        </div>
+        <div class="card" data-cat="automation" data-k="DirectoryAdded add-dir hook">
+          <div class="cmd">DirectoryAdded</div>
+          <div class="desc">Fires after <code>/add-dir</code> registers a new working directory mid-session.</div>
+          <div class="why"><b>Why it matters:</b> lets you auto-load that folder's conventions the moment it joins the
+            session.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.219</span><a class="link"
+              href="https://code.claude.com/docs/en/hooks">docs / hooks</a></div>
+        </div>
+        <div class="card" data-cat="automation" data-k="terminalSequence notification bell title">
+          <div class="cmd">terminalSequence</div>
+          <div class="desc">A hook JSON output field that emits desktop notifications, window titles and bells without a
+            controlling terminal.</div>
+          <div class="why"><b>Why it matters:</b> the clean way to get "your agent finished" alerts from background
+            runs.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.141</span><a class="link"
+              href="https://code.claude.com/docs/en/hooks">docs / hooks</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 3. CONTEXT ===================== -->
+    <section data-cat="context star">
+      <div class="sec-head">
+        <h2>3. Context engineering</h2>
+        <span class="count">Partially covered</span>
+        <span class="gapbadge">extends: Setup</span>
+      </div>
+      <p class="sec-desc">The decks teach <code>/clear</code> and stop there. Context is the resource that decides
+        output quality, and there are five more tools for managing it.</p>
+      <div class="grid">
+
+        <div class="card" data-cat="context star" data-k="context window grid visualize">
+          <div class="cmd">/context [all] <span class="star">★</span></div>
+          <div class="desc">Shows how much of the context window is used, as a colored grid broken down by what is
+            consuming it.</div>
+          <div class="why"><b>Why it matters:</b> makes an invisible budget visible. Run it when answers start feeling
+            vague.</div>
+          <div class="meta"><span class="tag">slash</span><a class="link"
+              href="https://code.claude.com/docs/en/costs">docs / costs</a></div>
+        </div>
+
+        <div class="card" data-cat="context star" data-k="compact summarize steer">
+          <div class="cmd">/compact [instructions] <span class="star">★</span></div>
+          <div class="desc">Summarizes the conversation to free space while keeping the thread. The optional
+            instructions steer what survives, e.g. <code>/compact keep all the decisions and the open questions</code>.
+          </div>
+          <div class="why"><b>Why it matters:</b> the difference between <code>/clear</code> (lose everything) and
+            <code>/compact</code> (keep the thread). Most people only know the first.</div>
+          <div class="meta"><span class="tag">slash</span><a class="link"
+              href="https://code.claude.com/docs/en/costs">docs / costs</a></div>
+        </div>
+
+        <div class="card" data-cat="context" data-k="btw side question no history">
+          <div class="cmd">/btw &lt;question&gt;</div>
+          <div class="desc">Ask a side question that sees the full context but is not added to the conversation history,
+            and has no tools. Press <code>c</code> to copy the raw markdown answer.</div>
+          <div class="why"><b>Why it matters:</b> ask "what does this acronym mean" without polluting a careful
+            research thread.</div>
+          <div class="meta"><span class="tag">slash</span><a class="link"
+              href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div>
+        </div>
+
+        <div class="card" data-cat="context" data-k="recap returning summary away">
+          <div class="cmd">/recap</div>
+          <div class="desc">A short summary of what has happened so far, generated for you when you come back to a
+            session after time away.</div>
+          <div class="why"><b>Why it matters:</b> PM sessions get interrupted constantly. This rebuilds <em>your</em>
+            context, not Claude's.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.108</span><a class="link"
+              href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div>
+        </div>
+
+        <div class="card" data-cat="context" data-k="prompt caching 1 hour ttl cost">
+          <div class="cmd">1-hour prompt caching</div>
+          <div class="desc"><code>ENABLE_PROMPT_CACHING_1H</code> opts into a 1-hour cache TTL on API key, Bedrock,
+            Vertex and Foundry.</div>
+          <div class="why"><b>Why it matters:</b> long sessions over a big repo get materially cheaper.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.108</span><a class="link"
+              href="https://code.claude.com/docs/en/costs">docs / costs</a></div>
+        </div>
+
+        <div class="card" data-cat="context" data-k="doctor claude md trim bloat">
+          <div class="cmd">/doctor CLAUDE.md trim check</div>
+          <div class="desc">A <code>/doctor</code> check that proposes trimming checked-in <code>CLAUDE.md</code> files
+            by cutting content Claude could work out from the codebase itself.</div>
+          <div class="why"><b>Why it matters:</b> every workshop CLAUDE.md grows until it hurts. This is the pruning
+            tool.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.206</span><a class="link"
+              href="https://code.claude.com/docs/en/memory">docs / memory</a></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================== 4. MODELS ===================== -->
+    <section data-cat="context">
+      <div class="sec-head">
+        <h2>4. Models, effort and speed</h2>
+        <span class="count">Outdated in the decks</span>
+        <span class="gapbadge">extends: Setup, Agents</span>
+      </div>
+      <p class="sec-desc">The decks say "Sonnet for most things, Opus when it is hard". The model lineup and the
+        controls around it have both moved on.</p>
+      <div class="grid">
+
+        <div class="card" data-cat="context star" data-k="opus 5 default 1m context fast mode">
+          <div class="cmd">Claude Opus 5 <span class="star">★</span></div>
+          <div class="desc">Now the default Opus model (<code>claude-opus-5</code>), with a 1M context window and fast
+            mode at $10/$50 per Mtok.</div>
+          <div class="why"><b>Why it matters:</b> "Opus is the expensive one you avoid" is no longer the whole story.
+            A 1M window changes what fits in one session.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.219</span><a class="link"
+              href="https://code.claude.com/docs/en/model-config">docs / model-config</a></div>
+        </div>
+
+
+        <div class="card" data-cat="context" data-k="fable 5.1 mythos 1m context opt-in">
+          <div class="cmd">Claude Fable 5.1 <span class="star">★</span></div>
+          <div class="desc">Released 01-09-2026 (with Claude Mythos 5.1, the same model with different safeguards). The <code>fable</code> alias now resolves to it. 1M context, and Anthropic estimates about 25% less than Fable 5 for typical workloads. Not the default on any plan: opt in with <code>/model fable</code>.</div>
+          <div class="why"><b>Why it matters:</b> the top of the lineup moved again in September. For a Pro-plan cohort the daily default is still Sonnet 5 at medium effort, Opus 5 for review passes, Fable only for tasks larger than one sitting.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.257</span><a class="link"
+              href="https://www.anthropic.com/claude-fable-and-mythos-5-1">anthropic.com / announcement</a></div>
+        </div>
+
+        <div class="card" data-cat="context" data-k="skill doctor unused skills context cost">
+          <div class="cmd">/skill-doctor</div>
+          <div class="desc">Shows what each loaded skill costs in context and how often it is used, so you can turn off the ones you never call.</div>
+          <div class="why"><b>Why it matters:</b> in August one learner found 70% of installed plugins unused, each costing context on every session. This is the command that finds them.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.261</span><a class="link"
+              href="https://code.claude.com/docs/en/commands">docs / commands</a></div>
+        </div>
+
+        <div class="card" data-cat="context" data-k="diff panel focus view fullscreen">
+          <div class="cmd">/diff · /focus</div>
+          <div class="desc"><code>/diff</code> opens a panel beside the conversation in fullscreen mode showing uncommitted changes as Claude edits (new in v2.1.260). <code>/focus</code> (since v2.1.110, fullscreen only) shows only your prompt, a one-line summary and the answer.</div>
+          <div class="why"><b>Why it matters:</b> both replace "open the file and look" during a build, and both read well on a projector.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.260</span><a class="link"
+              href="https://code.claude.com/docs/en/commands">docs / commands</a></div>
+        </div>
+
+        <div class="card" data-cat="context" data-k="concise output style projector">
+          <div class="cmd">/output-style concise</div>
+          <div class="desc">A built-in Concise style: Claude leads with results and skips preamble and narration, while doing the work just as thoroughly. Also under Output style in <code>/config</code>.</div>
+          <div class="why"><b>Why it matters:</b> less scrolling for a room watching one screen.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.237</span><a class="link"
+              href="https://code.claude.com/docs/en/commands">docs / commands</a></div>
+        </div>
+
+        <div class="card" data-cat="context" data-k="plugin install reload not needed">
+          <div class="cmd">/plugin without /reload-plugins</div>
+          <div class="desc">Installing, enabling or disabling a plugin now takes effect when you close the <code>/plugin</code> menu.</div>
+          <div class="why"><b>Why it matters:</b> one fewer step in Session 1. The August decks and Q&amp;A still say to run <code>/reload-plugins</code>.</div>
+          <div class="meta"><span class="tag new">CHANGED v2.1.268</span><a class="link"
+              href="https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md">changelog</a></div>
+        </div>
+
+        <div class="card" data-cat="context" data-k="auto memory on by default four note types">
+          <div class="cmd">Auto memory</div>
+          <div class="desc">On by default. Claude writes four kinds of notes for itself (user, feedback, project, reference) into <code>~/.claude/projects/&lt;project&gt;/memory/</code>. Tell Claude "remember that ..." to add one by hand, and browse with <code>/memory</code>. The old <code>#</code> shortcut was removed in v2.0.70.</div>
+          <div class="why"><b>Why it matters:</b> the August answer "memory is not automatic" is no longer right. Corrections you give during a session land in memory without asking.</div>
+          <div class="meta"><span class="tag new">docs</span><a class="link"
+              href="https://code.claude.com/docs/en/memory">docs / memory</a></div>
+        </div>
+        <div class="card" data-cat="context" data-k="effort xhigh max reasoning level">
+          <div class="cmd">/effort</div>
+          <div class="desc">Set reasoning effort: <code>low</code>, <code>medium</code>, <code>high</code>,
+            <code>xhigh</code>, <code>max</code>. Also available as <code>--effort</code> and in the model picker.</div>
+          <div class="why"><b>Why it matters:</b> a second dial beside model choice. Cheaper than jumping a model tier
+            for a task that just needs more thinking.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.111</span><a class="link"
+              href="https://code.claude.com/docs/en/model-config">docs / model-config</a></div>
+        </div>
+
+        <div class="card" data-cat="context" data-k="fast mode toggle opus speed">
+          <div class="cmd">/fast</div>
+          <div class="desc">Toggles fast mode, which uses Opus with faster output on eligible plans. It does not drop
+            you to a smaller model.</div>
+          <div class="why"><b>Why it matters:</b> people assume "fast" means "dumber". It does not, and that
+            misconception stops them using it.</div>
+          <div class="meta"><span class="tag">slash</span><a class="link"
+              href="https://code.claude.com/docs/en/model-config">docs / model-config</a></div>
+        </div>
+
+        <div class="card" data-cat="context" data-k="fallback model overloaded unavailable">
+          <div class="cmd">fallbackModel</div>
+          <div class="desc">Configure up to three fallback models, tried in order when the primary is overloaded or
+            unavailable.</div>
+          <div class="why"><b>Why it matters:</b> an overnight or scheduled run survives a capacity blip instead of
+            dying.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.166</span><a class="link"
+              href="https://code.claude.com/docs/en/model-config">docs / model-config</a></div>
+        </div>
+
+        <div class="card" data-cat="context" data-k="option p t o switch model thinking">
+          <div class="cmd">Option+P / Option+T / Option+O</div>
+          <div class="desc">Switch model without clearing your prompt, toggle extended thinking, toggle fast mode. Alt
+            on Windows and Linux.</div>
+          <div class="why"><b>Why it matters:</b> you can escalate a half-typed prompt to a better model instead of
+            retyping it.</div>
+          <div class="meta"><span class="tag">keys</span><a class="link"
+              href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div>
+        </div>
+
+        <div class="card" data-cat="context enterprise" data-k="org default model restriction">
+          <div class="cmd">Org default models</div>
+          <div class="desc">Admins set an organization default, shown as "Org default" in <code>/model</code>. Org
+            restrictions can also constrain <code>--model</code> and <code>ANTHROPIC_MODEL</code>.</div>
+          <div class="why"><b>Why it matters:</b> explains why a teammate's model list looks different from yours.
+          </div>
+          <div class="meta"><span class="tag new">NEW v2.1.196</span><a class="link"
+              href="https://code.claude.com/docs/en/model-config">docs / model-config</a></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================== 5. SCALE / GUARDRAILS ===================== -->
+    <section data-cat="scale">
+      <div class="sec-head">
+        <h2>5. Guardrails that matter at scale</h2>
+        <span class="count">Not covered</span>
+        <span class="gapbadge">extends: Multi-Agent, Setup</span>
+      </div>
+      <p class="sec-desc">The multi-agent deck teaches fan-out and warns that it costs roughly 15x a normal chat. It
+        does not mention that Claude Code now ships hard caps to stop a runaway fan-out, or that sandboxing exists.</p>
+      <div class="grid">
+
+        <div class="card" data-cat="scale star" data-k="subagent cap concurrent runaway limit">
+          <div class="cmd">Runaway agent caps <span class="star">★</span></div>
+          <div class="desc">Concurrent subagents are capped (default 20,
+            <code>CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS</code>), as are spawns per session (default 200,
+            <code>CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION</code>, reset by <code>/clear</code>) and web searches per
+            session (default 200).</div>
+          <div class="why"><b>Why it matters:</b> the direct answer to the cost fear the multi-agent deck raises. There
+            is a floor under the worst case now.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.212/217</span><a class="link"
+              href="https://code.claude.com/docs/en/settings">docs / settings</a></div>
+        </div>
+
+        <div class="card" data-cat="scale star" data-k="sandbox network filesystem credentials bash">
+          <div class="cmd">Sandboxed Bash <span class="star">★</span></div>
+          <div class="desc">Run bash in filesystem and network isolation. Controls include
+            <code>sandbox.network.allowedDomains</code> / <code>deniedDomains</code> / <code>strictAllowlist</code>,
+            <code>sandbox.credentials</code> to block reading secrets, and <code>sandbox.filesystem.disabled</code>.
+          </div>
+          <div class="why"><b>Why it matters:</b> the real answer to "is it safe to let Claude run commands", which
+            comes up in every session and is currently answered only with permissions.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.187/216/219</span><a class="link"
+              href="https://code.claude.com/docs/en/sandboxing">docs / sandboxing</a></div>
+        </div>
+
+        <div class="card" data-cat="scale" data-k="permission parameter syntax Tool param value agent model opus">
+          <div class="cmd"><code>Tool(param:value)</code> rules</div>
+          <div class="desc">Permission rules can match a tool's input parameters, with wildcards. For example
+            <code>Agent(model:opus)</code> blocks subagents from using Opus.</div>
+          <div class="why"><b>Why it matters:</b> cost control as policy, not as a reminder. Cap the expensive model at
+            the permission layer.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.178</span><a class="link"
+              href="https://code.claude.com/docs/en/permissions">docs / permissions</a></div>
+        </div>
+
+        <div class="card" data-cat="scale star" data-k="less permission prompts allowlist scan">
+          <div class="cmd">/less-permission-prompts <span class="star">★</span></div>
+          <div class="desc">Scans your transcripts for the read-only Bash and MCP calls you keep approving, then
+            proposes a prioritized allowlist for <code>.claude/settings.json</code>.</div>
+          <div class="why"><b>Why it matters:</b> permission fatigue is the top reason people flip to bypass mode. This
+            fixes the cause instead.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.111</span><a class="link"
+              href="https://code.claude.com/docs/en/permissions">docs / permissions</a></div>
+        </div>
+
+        <div class="card" data-cat="scale" data-k="auto mode classifier hard deny shell">
+          <div class="cmd">Auto mode and hard_deny</div>
+          <div class="desc">Auto mode classifies commands rather than matching patterns.
+            <code>autoMode.classifyAllShell</code> routes every shell command through the classifier, and
+            <code>autoMode.hard_deny</code> blocks unconditionally regardless of intent. Denial reasons appear in
+            <code>/permissions</code>.</div>
+          <div class="why"><b>Why it matters:</b> a middle ground between approving everything by hand and bypassing
+            all prompts.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.136/193</span><a class="link"
+              href="https://code.claude.com/docs/en/permissions">docs / permissions</a></div>
+        </div>
+
+        <div class="card" data-cat="scale" data-k="worktree baseRef bgIsolation background">
+          <div class="cmd">worktree.baseRef / bgIsolation</div>
+          <div class="desc"><code>worktree.baseRef</code> chooses whether worktrees branch from
+            <code>origin/&lt;default&gt;</code> or local <code>HEAD</code>. <code>worktree.bgIsolation: "none"</code>
+            lets background sessions edit the working copy directly.</div>
+          <div class="why"><b>Why it matters:</b> the multi-agent deck teaches worktrees but not how to control where
+            they branch from, which is the usual first surprise.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.133/143</span><a class="link"
+              href="https://code.claude.com/docs/en/settings">docs / settings</a></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================== 6. NO TERMINAL ===================== -->
+    <section data-cat="noterminal">
+      <div class="sec-head">
+        <h2>6. Claude Code without a terminal</h2>
+        <span class="count">Not covered</span>
+        <span class="gapbadge">new session candidate</span>
+      </div>
+      <p class="sec-desc">Every session so far assumes a human sitting at a prompt. The whole non-interactive surface,
+        which is where automation actually lives, is untouched.</p>
+      <div class="grid">
+
+        <div class="card" data-cat="noterminal star" data-k="print mode headless scripting -p">
+          <div class="cmd">claude -p "query" <span class="star">★</span></div>
+          <div class="desc">Print mode: run a query non-interactively and exit. Pair with
+            <code>--output-format json</code> or <code>stream-json</code> for machine-readable output.</div>
+          <div class="why"><b>Why it matters:</b> this is how a workflow becomes a script. One line turns any skill
+            into something cron or CI can run.</div>
+          <div class="meta"><span class="tag">cli</span><a class="link"
+              href="https://code.claude.com/docs/en/headless">docs / headless</a></div>
+        </div>
+
+        <div class="card" data-cat="noterminal" data-k="pipe stdin cat file">
+          <div class="cmd">cat file | claude -p "…"</div>
+          <div class="desc">Pipe a file or another command's output straight into Claude.</div>
+          <div class="why"><b>Why it matters:</b> lets Claude sit in the middle of a normal shell pipeline, no project
+            setup needed.</div>
+          <div class="meta"><span class="tag">cli</span><a class="link"
+              href="https://code.claude.com/docs/en/headless">docs / headless</a></div>
+        </div>
+
+        <div class="card" data-cat="noterminal" data-k="github actions app pr review automation">
+          <div class="cmd">GitHub Actions and /install-github-app</div>
+          <div class="desc">Install the Claude GitHub App on a repo for PR reviews and automation, and run Claude Code
+            inside GitHub Actions.</div>
+          <div class="why"><b>Why it matters:</b> the bridge from "I use this locally" to "our repo uses this on every
+            PR".</div>
+          <div class="meta"><span class="tag">setup</span><a class="link"
+              href="https://code.claude.com/docs/en/github-actions">docs / github-actions</a></div>
+        </div>
+
+        <div class="card" data-cat="noterminal" data-k="ultrareview ci non interactive code review">
+          <div class="cmd">claude ultrareview [target]</div>
+          <div class="desc">Runs <code>/ultrareview</code>, a parallel multi-agent cloud code review, non-interactively
+            from CI or a script. Prints findings to stdout, <code>--json</code> for raw output.</div>
+          <div class="why"><b>Why it matters:</b> a concrete multi-agent workflow that runs with nobody watching.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.120</span><a class="link"
+              href="https://code.claude.com/docs/en/headless">docs / headless</a></div>
+        </div>
+
+        <div class="card" data-cat="noterminal" data-k="agent sdk python typescript build">
+          <div class="cmd">Claude Agent SDK</div>
+          <div class="desc">Build your own agents on the same harness Claude Code runs on, in Python or TypeScript.</div>
+          <div class="why"><b>Why it matters:</b> the honest answer to "can we productionize this?" once a PM's
+            internal tool proves useful.</div>
+          <div class="meta"><span class="tag">sdk</span><a class="link"
+              href="https://code.claude.com/docs/en/agent-sdk/overview">docs / agent-sdk</a></div>
+        </div>
+
+        <div class="card" data-cat="noterminal" data-k="remote control mobile push desktop app">
+          <div class="cmd">Remote Control, mobile and desktop</div>
+          <div class="desc"><code>/desktop</code> continues a session in the desktop app, <code>/mobile</code> shows a
+            QR code, and with Remote Control enabled Claude can send mobile push notifications when it needs you.</div>
+          <div class="why"><b>Why it matters:</b> long agent runs stop requiring you to babysit a terminal.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.110</span><a class="link"
+              href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================== 7. WORKFLOWS + SESSION ===================== -->
+    <section data-cat="automation">
+      <div class="sec-head">
+        <h2>7. Workflows and session control</h2>
+        <span class="count">Not covered</span>
+        <span class="gapbadge">extends: Multi-Agent</span>
+      </div>
+      <p class="sec-desc">Dynamic workflows are a newer orchestration layer above subagents, and a set of session
+        commands that did not exist when the decks were written.</p>
+      <div class="grid">
+
+        <div class="card" data-cat="automation star" data-k="workflows dynamic size guideline agents">
+          <div class="cmd">/workflows and workflow size <span class="star">★</span></div>
+          <div class="desc">Watch a multi-agent workflow run live, with status filtering. A "Dynamic workflow size"
+            setting in <code>/config</code> (or <code>workflowSizeGuideline</code>) steers how many agents Claude
+            spawns, and a separate setting stops the word "workflow" in a prompt from triggering one.</div>
+          <div class="why"><b>Why it matters:</b> the deck's biggest open question is "how do I control the cost of
+            fan-out". This is the dial.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.202/219</span><a class="link"
+              href="https://code.claude.com/docs/en/settings">docs / settings</a></div>
+        </div>
+
+        <div class="card" data-cat="automation star" data-k="goal completion condition keep working">
+          <div class="cmd">/goal &lt;condition&gt; <span class="star">★</span></div>
+          <div class="desc">Set a completion condition and Claude keeps working across turns until it is met. Works
+            interactively, in <code>-p</code>, and in Remote Control. Pass <code>clear</code> to remove it.</div>
+          <div class="why"><b>Why it matters:</b> shifts you from steering every turn to defining "done" once.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.139</span><a class="link"
+              href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div>
+        </div>
+
+        <div class="card" data-cat="automation" data-k="fork branch conversation experiment alias">
+          <div class="cmd">/branch (alias: /fork)</div>
+          <div class="desc">Branches the conversation at this point so you can explore an alternative path without
+            losing the original thread. <code>/fork</code> was renamed to <code>/branch</code> in v2.1.77 and still
+            works as an alias, so they are one command, not two.</div>
+          <div class="why"><b>Why it matters:</b> try a risky rewrite without losing the thread you spent an hour
+            building. Worth knowing the alias, because older notes and decks still say <code>/fork</code>.</div>
+          <div class="meta"><span class="tag">slash</span><a class="link"
+              href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div>
+        </div>
+
+        <div class="card" data-cat="automation" data-k="background tasks ctrl b detach">
+          <div class="cmd">/background, /tasks, Ctrl+B</div>
+          <div class="desc">Detach a session to run in the background, list background tasks and running subagents, or
+            push a running command to the background with <code>Ctrl+B</code>.</div>
+          <div class="why"><b>Why it matters:</b> reclaims your terminal during a long run, which is most PM research
+            tasks.</div>
+          <div class="meta"><span class="tag">slash</span><a class="link"
+              href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div>
+        </div>
+
+        <div class="card" data-cat="automation" data-k="cd add-dir working directory multi repo">
+          <div class="cmd">/cd and /add-dir</div>
+          <div class="desc">Move a session to a new working directory without breaking the prompt cache, or add another
+            directory so Claude can read files outside the current project.</div>
+          <div class="why"><b>Why it matters:</b> PM work spans repos. This is how one session reads the spec repo and
+            the code repo together.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.169</span><a class="link"
+              href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div>
+        </div>
+
+        <div class="card" data-cat="automation" data-k="team onboarding ramp up guide usage">
+          <div class="cmd">/team-onboarding</div>
+          <div class="desc">Generates a teammate ramp-up guide from your own local Claude Code usage.</div>
+          <div class="why"><b>Why it matters:</b> exactly the artifact a workshop graduate needs to bring their team
+            along.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.101</span><a class="link"
+              href="https://code.claude.com/docs/en/slash-commands">docs / skills</a></div>
+        </div>
+
+        <div class="card" data-cat="automation" data-k="agents json scripting session list">
+          <div class="cmd">claude agents --json</div>
+          <div class="desc">Lists live Claude sessions as JSON for scripting: status bars, session pickers, tmux
+            integration. <code>--cwd</code> scopes it to a directory.</div>
+          <div class="why"><b>Why it matters:</b> this is the supported version of the PID registry pattern the
+            workshop demonstrates by hand.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.145</span><a class="link"
+              href="https://code.claude.com/docs/en/cli-reference">docs / cli-reference</a></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================== 8. PLUGINS ===================== -->
+    <section data-cat="automation">
+      <div class="sec-head">
+        <h2>8. Plugins, past installing them</h2>
+        <span class="count">Install-only coverage</span>
+        <span class="gapbadge">extends: Skills</span>
+      </div>
+      <p class="sec-desc">Session 4 covers which plugins to install. Nothing covers authoring or distributing one,
+        which is how a team standardizes.</p>
+      <div class="grid">
+        <div class="card" data-cat="automation" data-k="plugin init scaffold author create">
+          <div class="cmd">claude plugin init &lt;name&gt;</div>
+          <div class="desc">Scaffolds a new plugin in <code>.claude/skills</code>. Bundle skills, hooks, commands and
+            MCP servers into one installable unit.</div>
+          <div class="why"><b>Why it matters:</b> the step from "my skills" to "our team's toolkit".</div>
+          <div class="meta"><span class="tag new">NEW v2.1.157</span><a class="link"
+              href="https://code.claude.com/docs/en/plugins">docs / plugins</a></div>
+        </div>
+        <div class="card" data-cat="automation" data-k="marketplace distribute share team">
+          <div class="cmd">Plugin marketplaces</div>
+          <div class="desc">Host your own marketplace so a teammate installs your toolkit with one command. Admins can
+            allowlist org marketplaces via <code>pluginSuggestionMarketplaces</code>.</div>
+          <div class="why"><b>Why it matters:</b> the distribution answer for the skills people build in the workshop.
+          </div>
+          <div class="meta"><span class="tag">docs</span><a class="link"
+              href="https://code.claude.com/docs/en/plugin-marketplaces">docs / marketplaces</a></div>
+        </div>
+        <div class="card" data-cat="automation star" data-k="plugin token cost projected context">
+          <div class="cmd">Projected context cost <span class="star">★</span></div>
+          <div class="desc">The <code>/plugin</code> browse pane shows per-turn and per-invocation token estimates, and
+            <code>claude plugin details</code> shows a plugin's component inventory and per-session cost.</div>
+          <div class="why"><b>Why it matters:</b> plugins are not free. This makes the context tax visible before you
+            install.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.139/143</span><a class="link"
+              href="https://code.claude.com/docs/en/plugins">docs / plugins</a></div>
+        </div>
+        <div class="card" data-cat="automation" data-k="reload skills rescan restart">
+          <div class="cmd">/reload-skills</div>
+          <div class="desc">Re-scan skill directories without restarting the session.</div>
+          <div class="why"><b>Why it matters:</b> removes the restart loop when you are iterating on a skill, which is
+            the workshop's core exercise.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.152</span><a class="link"
+              href="https://code.claude.com/docs/en/slash-commands">docs / skills</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 9. ENTERPRISE ===================== -->
+    <section data-cat="enterprise">
+      <div class="sec-head">
+        <h2>9. Enterprise, observability and access</h2>
+        <span class="count">Not covered</span>
+        <span class="gapbadge">new session candidate</span>
+      </div>
+      <p class="sec-desc">The questions that arrive the moment a PM tries to roll Claude Code out past themselves.
+        Worth having answers ready even if you never present them.</p>
+      <div class="grid">
+        <div class="card" data-cat="enterprise" data-k="managed settings policy admin version pin">
+          <div class="cmd">Managed settings</div>
+          <div class="desc">Admin-tier settings that override user and project config, including
+            <code>requiredMinimumVersion</code> and <code>requiredMaximumVersion</code> (Claude Code refuses to start
+            outside the range) and <code>enforceAvailableModels</code>.</div>
+          <div class="why"><b>Why it matters:</b> the answer to "how does IT keep this consistent across the org".</div>
+          <div class="meta"><span class="tag new">NEW v2.1.163/175</span><a class="link"
+              href="https://code.claude.com/docs/en/settings">docs / settings</a></div>
+        </div>
+        <div class="card" data-cat="enterprise" data-k="opentelemetry otel metrics logs telemetry">
+          <div class="cmd">OpenTelemetry</div>
+          <div class="desc">Metrics and log events for usage, cost, tool calls and workflow runs, with attributes like
+            <code>workflow.run_id</code>, <code>agent_id</code> and <code>app.entrypoint</code>. Assistant responses are
+            redacted unless explicitly enabled.</div>
+          <div class="why"><b>Why it matters:</b> how an org measures adoption and spend without watching individuals.
+          </div>
+          <div class="meta"><span class="tag">enterprise</span><a class="link"
+              href="https://code.claude.com/docs/en/monitoring-usage">docs / monitoring</a></div>
+        </div>
+        <div class="card" data-cat="enterprise" data-k="analytics dashboard team usage">
+          <div class="cmd">Analytics dashboard</div>
+          <div class="desc">The official surface for team-level usage tracking, separate from per-session
+            <code>/usage</code> and <code>/cost</code>.</div>
+          <div class="why"><b>Why it matters:</b> the number a manager will ask you for after the workshop.</div>
+          <div class="meta"><span class="tag">enterprise</span><a class="link"
+              href="https://code.claude.com/docs/en/analytics">docs / analytics</a></div>
+        </div>
+        <div class="card" data-cat="enterprise" data-k="ca cert proxy tls corporate network">
+          <div class="cmd">Corporate TLS and proxies</div>
+          <div class="desc">The OS CA certificate store is trusted by default, so enterprise TLS proxies work without
+            extra setup. <code>CLAUDE_CODE_CERT_STORE=bundled</code> reverts to bundled CAs only.</div>
+          <div class="why"><b>Why it matters:</b> the most common reason Claude Code fails on a locked-down work
+            laptop.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.101</span><a class="link"
+              href="https://code.claude.com/docs/en/settings">docs / settings</a></div>
+        </div>
+        <div class="card" data-cat="enterprise" data-k="attribution session url commit pr">
+          <div class="cmd">attribution.sessionUrl</div>
+          <div class="desc">Omit the claude.ai session link from commits and PRs created in web and Remote Control
+            sessions.</div>
+          <div class="why"><b>Why it matters:</b> some orgs do not want an external link in their git history.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.183</span><a class="link"
+              href="https://code.claude.com/docs/en/settings">docs / settings</a></div>
+        </div>
+        <div class="card" data-cat="enterprise" data-k="mcp login logout cli auth always load">
+          <div class="cmd">claude mcp login / logout</div>
+          <div class="desc">Authenticate MCP servers from the CLI without opening <code>/mcp</code>. The
+            <code>alwaysLoad</code> server option skips tool-search deferral so a server's tools are always available.
+          </div>
+          <div class="why"><b>Why it matters:</b> makes MCP auth scriptable, which matters for onboarding a whole team.
+          </div>
+          <div class="meta"><span class="tag new">NEW v2.1.186</span><a class="link"
+              href="https://code.claude.com/docs/en/mcp">docs / mcp</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 10. TERMINAL / A11Y ===================== -->
+    <section data-cat="enterprise">
+      <div class="sec-head">
+        <h2>10. Terminal comfort and accessibility</h2>
+        <span class="count">Not covered</span>
+        <span class="gapbadge">extends: Setup</span>
+      </div>
+      <p class="sec-desc">Small quality-of-life items. The accessibility one is not optional if you are running a
+        workshop for a mixed audience.</p>
+      <div class="grid">
+        <div class="card" data-cat="enterprise star" data-k="screen reader accessibility ax plain text">
+          <div class="cmd">Screen reader mode <span class="star">★</span></div>
+          <div class="desc">Opt-in plain-text rendering: <code>claude --ax-screen-reader</code>,
+            <code>CLAUDE_AX_SCREEN_READER=1</code>, or <code>"axScreenReader": true</code>. Includes announcements for
+            deleted text.</div>
+          <div class="why"><b>Why it matters:</b> the TUI is unusable with a screen reader without it. Worth stating
+            once in any session.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.208</span><a class="link"
+              href="https://code.claude.com/docs/en/settings">docs / settings</a></div>
+        </div>
+        <div class="card" data-cat="enterprise" data-k="tui fullscreen flicker rendering">
+          <div class="cmd">/tui fullscreen</div>
+          <div class="desc">Switch to flicker-free fullscreen rendering in the same conversation.
+            <code>CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN=1</code> keeps output in native scrollback instead.</div>
+          <div class="why"><b>Why it matters:</b> fixes the "my terminal is flickering" complaint, and the opposite
+            complaint about losing scrollback.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.110</span><a class="link"
+              href="https://code.claude.com/docs/en/terminal-config">docs / terminal-config</a></div>
+        </div>
+        <div class="card" data-cat="enterprise" data-k="vim visual mode remap jj escape">
+          <div class="cmd">Vim visual mode</div>
+          <div class="desc">Visual (<code>v</code>) and visual-line (<code>V</code>) modes with operators, plus
+            <code>vimInsertModeRemaps</code> to map sequences like <code>jj</code> to Escape.</div>
+          <div class="why"><b>Why it matters:</b> for the vim users in the room, this decides whether the prompt feels
+            native.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.118/208</span><a class="link"
+              href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div>
+        </div>
+        <div class="card" data-cat="enterprise" data-k="theme auto match terminal dark light">
+          <div class="cmd">/theme auto</div>
+          <div class="desc">"Auto (match terminal)" follows your terminal's dark or light mode.</div>
+          <div class="why"><b>Why it matters:</b> a one-line fix for the unreadable-on-a-projector problem.</div>
+          <div class="meta"><span class="tag new">NEW v2.1.111</span><a class="link"
+              href="https://code.claude.com/docs/en/settings">docs / settings</a></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="noresult" id="noresult">Nothing matches that filter or search.</div>
+
+    <!-- ===================== TEACHING MAP ===================== -->
+    <section>
+      <div class="sec-head">
+        <h2>If you teach these, where do they go</h2>
+      </div>
+      <p class="sec-desc">A suggested mapping from the gaps above into the existing session structure, so nothing here
+        needs a brand new deck unless you want one.</p>
+      <table>
+        <tr>
+          <th>Gap</th>
+          <th>Slots into</th>
+          <th>Rough size</th>
+        </tr>
+        <tr>
+          <td>Checkpoints and rewind</td>
+          <td>Setup, right after plan mode</td>
+          <td>2 slides</td>
+        </tr>
+        <tr>
+          <td>Context engineering</td>
+          <td>Setup, replacing the /clear one-liner</td>
+          <td>2 slides</td>
+        </tr>
+        <tr>
+          <td>Models, effort, fast mode</td>
+          <td>Setup FAQ refresh</td>
+          <td>1 slide</td>
+        </tr>
+        <tr>
+          <td>Hooks</td>
+          <td>Skills, as the fourth primitive</td>
+          <td>3 slides</td>
+        </tr>
+        <tr>
+          <td>Plugin authoring</td>
+          <td>Skills, after the skill-building lab</td>
+          <td>2 slides</td>
+        </tr>
+        <tr>
+          <td>Runaway caps and sandboxing</td>
+          <td>Multi-Agent, next to the cost warning</td>
+          <td>2 slides</td>
+        </tr>
+        <tr>
+          <td>Workflows and /goal</td>
+          <td>Multi-Agent, as the layer above subagents</td>
+          <td>2 slides</td>
+        </tr>
+        <tr>
+          <td>Headless, CI, GitHub, SDK</td>
+          <td>A new Session 9: automation</td>
+          <td>Half a session</td>
+        </tr>
+        <tr>
+          <td>Enterprise and observability</td>
+          <td>A new Session 9, or an appendix</td>
+          <td>Appendix</td>
+        </tr>
+      </table>
+    </section>
+
+    <footer>
+      <div><b>How this list was built.</b> Every concept taught across the six workshop decks was inventoried, then
+        compared against the official Claude Code CHANGELOG (v2.1.220) and the docs. Anything that appeared only as a
+        one-line command listing, only in the Q&amp;A, or nowhere at all is included here. Version tags cite the release
+        that introduced the feature.</div>
+      <div class="srcs">
+        <a href="https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md">CHANGELOG</a>
+        <a href="https://code.claude.com/docs/en/checkpointing">Checkpointing</a>
+        <a href="https://code.claude.com/docs/en/hooks">Hooks</a>
+        <a href="https://code.claude.com/docs/en/sandboxing">Sandboxing</a>
+        <a href="https://code.claude.com/docs/en/headless">Headless</a>
+        <a href="https://code.claude.com/docs/en/plugins">Plugins</a>
+        <a href="https://code.claude.com/docs/en/model-config">Model config</a>
+        <a href="https://code.claude.com/docs/en/permissions">Permissions</a>
+        <a href="https://code.claude.com/docs/en/settings">Settings</a>
+        <a href="https://code.claude.com/docs/en/monitoring-usage">Monitoring</a>
+        <a href="https://code.claude.com/docs/en/github-actions">GitHub Actions</a>
+        <a href="https://code.claude.com/docs/en/agent-sdk/overview">Agent SDK</a>
+      </div>
+      <div style="margin-top:14px">Claude Code ships weekly. Re-check the CHANGELOG before you present this, and run
+        <code>/release-notes</code> for what is on your own machine.</div>
+    </footer>
+
+  </div>
+
+  <script>
+    const chips = [...document.querySelectorAll('.chip')];
+    const cards = [...document.querySelectorAll('.card, .wcard')];
+    const sections = [...document.querySelectorAll('section')];
+    const q = document.getElementById('q');
+    const noresult = document.getElementById('noresult');
+    let filter = 'all';
+
+    function apply() {
+      const term = q.value.trim().toLowerCase();
+      let visible = 0;
+      cards.forEach(c => {
+        const cat = c.dataset.cat || '';
+        const hay = (c.textContent + ' ' + (c.dataset.k || '')).toLowerCase();
+        const okF = filter === 'all' || cat.includes(filter);
+        const okQ = !term || hay.includes(term);
+        const show = okF && okQ;
+        c.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      // hide a section whose cards are all hidden
+      sections.forEach(s => {
+        const own = [...s.querySelectorAll('.card, .wcard')];
+        if (!own.length) { s.style.display = (filter === 'all' && !term) ? '' : 'none'; return; }
+        s.style.display = own.some(c => c.style.display !== 'none') ? '' : 'none';
+      });
+      noresult.style.display = visible ? 'none' : 'block';
+    }
+
+    chips.forEach(ch => ch.onclick = () => {
+      chips.forEach(c => c.classList.remove('active'));
+      ch.classList.add('active');
+      filter = ch.dataset.f;
+      apply();
+    });
+    q.addEventListener('input', apply);
+    apply();
+  </script>
+</body>
+
+</html>

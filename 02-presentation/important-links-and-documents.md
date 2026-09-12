@@ -1,6 +1,6 @@
 # Important Links and Documents
 
-*Claude Code for PMs — Official Reference Pack*
+*Claude Code Workshop - Official Reference Pack*
 
 ---
 
@@ -26,7 +26,8 @@
 
 - **Workshop repo (GitHub):** https://github.com/qa-aman/next-leap-claude-code
 - **LinkedIn:** https://www.linkedin.com/in/amanmparmar
-- **Substack:** https://amanparmar3.substack.com/
+- **Substack:** https://shipwithailab.substack.com/
+- **Setup guide with the five install errors and fixes (Substack):** https://shipwithailab.substack.com/p/claude-code-install-fails-the-same
 - **GitHub:** https://github.com/qa-aman
 
 **Aman's open-source repos to use & remix:**
@@ -50,6 +51,16 @@
 - **Memory & CLAUDE.md:** https://code.claude.com/docs/en/memory
 - **Sessions:** https://code.claude.com/docs/en/sessions
 - **Changelog:** https://code.claude.com/docs/en/changelog
+- **Setup (install, update, uninstall):** https://code.claude.com/docs/en/setup
+- **Troubleshoot installation and login:** https://code.claude.com/docs/en/troubleshoot-install
+- **Terminal guide for people new to the terminal:** https://code.claude.com/docs/en/terminal-guide
+- **Terminal configuration (Shift+Enter, flicker, theme):** https://code.claude.com/docs/en/terminal-config
+- **Permission modes (auto, manual, plan):** https://code.claude.com/docs/en/permission-modes
+- **Models and effort in Claude Code:** https://code.claude.com/docs/en/model-config
+- **Claude models overview (Fable 5.1, Opus 5, Sonnet 5, Haiku 4.5):** https://platform.claude.com/docs/en/about-claude/models/overview
+- **Fable 5.1 announcement, 01-09-2026:** https://www.anthropic.com/claude-fable-and-mythos-5-1
+- **Desktop app quickstart:** https://code.claude.com/docs/en/desktop-quickstart
+- **VS Code, Cursor and other editors:** https://code.claude.com/docs/en/vs-code
 
 ---
 

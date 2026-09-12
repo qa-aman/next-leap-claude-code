@@ -1,5 +1,7 @@
 # Claude Code Integrations Setup
 
+> Coming from Cursor, Codex or Gemini CLI? Run `/import cursor` (or `codex`, `gemini`) inside Claude Code to bring your instruction files, MCP servers, commands, subagents and skills across. Add `--dry-run` to preview first. Needs Claude Code v2.1.265 or later for Cursor (run `claude update`). Source: https://code.claude.com/docs/en/commands (verified 12-09-2026)
+
 ## Atlassian (Jira + Confluence)
 
 Connects Claude Code to your Atlassian Cloud site. You can create Confluence pages, search/create Jira tickets, and more - all from the terminal.

@@ -35,7 +35,9 @@ Workshop workspace for the "Claude Code for PMs" course. It contains realistic p
 | `14-templates/` | Reusable PM artifact templates (PRDs, OKRs, retros, status reports, etc.) |
 | `15-prototype/` | Runnable Next.js 14 prototype of the MeetFlow UI (the "ux-zone"). The only executable code in the repo. |
 | `16-zomato/` | A second `ux-zone` prototype variant plus its build-prompt chain. |
-| `outputs/` | Write all generated content here |
+| `docs/` | Design specs written by the `superpowers` workflow (`docs/superpowers/specs/`) |
+| `videos/` | HyperFrames video projects (currently `vidaxl-brand-teaser`) |
+| `outputs/` | Write all generated content here, inside the current month's cohort folder (e.g. `outputs/aug-2026-cohort/`), never loose in `outputs/` |
 
 ## Prototype (the only runnable code)
 
@@ -52,8 +54,16 @@ There is no test runner or linter wired up; `typecheck` is the check to run befo
 
 This repo is also a live Claude Code toolkit. Before hand-rolling a PM artifact, check whether a skill or agent already does it.
 
-- **`.claude/skills/`** (40+ skills) - PM deliverable generators: `write-prd`, `feature-spec`, `okr-writer`, `prioritization`, `write-user-stories`, `stakeholder-update`, `jira-ticket-creator`, `mom` (Smart Brevity meeting minutes), plus publishing skills (`md-to-confluence`, `ppt-builder`), `work-log` (builds this repo's daily work log from Claude Code session transcripts), `ticket-category-analysis` (categorizes free-text support tickets into a 3-tier taxonomy, then builds a dashboard and a management deck), and writing skills. Invoke with `/<skill-name>`.
-- **`.claude/agents/`** - specialized subagents: `pm-request-router` (triages vague requests), `prd-drafter` / `prd-quality-loop` / `prd-critic` (PRD pipeline), `churn-diagnoser`, `interview-insight-synthesizer`, `competitor-snapshot`, `feedback-triangulator`, `senior-code-reviewer`. Prefer these over ad-hoc work for their domains.
+- **`.claude/skills/`** (~65 skills) - PM deliverable generators: `write-prd`, `feature-spec`, `okr-writer`, `prioritization`, `write-user-stories`, `stakeholder-update`, `jira-ticket-creator`, `mom` (Smart Brevity meeting minutes), plus publishing skills (`md-to-confluence`, `ppt-builder`), `work-log` (builds this repo's daily work log from Claude Code session transcripts), `ticket-category-analysis` (categorizes free-text support tickets into a 3-tier taxonomy, then builds a dashboard and a management deck), `ux-designer` (designs new UI or reviews existing UI, ships a self-contained HTML mockup or a Figma file, and gates it with `scripts/check_mockup.py` plus a browser audit before handover), and writing skills. Invoke with `/<skill-name>`. Some skills are vendored from `heygen-com/hyperframes` (all the `hyperframes-*`, video, and captions skills) and pinned by hash in `skills-lock.json` - edit those upstream, not in place. `launch-announcement-workspace/` is a skill-eval workspace, not a skill.
+- **`.claude/agents/`** - specialized subagents. Prefer these over ad-hoc work for their domains:
+  - `aman` - the default PM co-pilot; routes a vague PM ask to the right skill and produces the artifact end to end.
+  - `pm-request-router` - triages a vague request into PRD / COMPETITOR / CHURN and dispatches; never answers itself.
+  - `prd-drafter` - one-page PRD from company + strategy context.
+  - `churn-diagnoser` (top 3 drivers, 2+ sources each) and `churn-pattern-analyst` (read-only, ranked drivers with cited verbatims).
+  - `interview-insight-synthesizer` - four-stage pipeline over `07-user-interviews/`.
+  - `competitor-snapshot` (internal docs only) and `competitor-intel-analyst` (live first-party web research, validates every URL).
+  - `feedback-triangulator` - fans out over interviews + survey + churn, keeps issues corroborated by 2 or 3 sources.
+  - `senior-code-reviewer` (correctness/security), `code-improver` (report on named files), `code-improver-recent` (inline scan of the current diff).
 - **`.claude/hooks/`** - `refresh-docs.sh` is a Stop hook (wired via `.claude/settings.local.json`) that auto-updates CLAUDE.md and README.md from the diff after a turn changes source files but leaves the docs stale.
 - **`.claude/rules/`** - path-triggered rules that auto-load when you touch matching files. Know these fire without being asked:
   - `08-product-features/**` -> PRDs must cite a persona, use real baselines, include a "What we're NOT building" section, link to Q2 OKRs.

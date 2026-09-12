@@ -589,7 +589,7 @@
               <div class="csub">Part 6</div>
             </div>
             <div class="card">
-              <div class="ch">Antigravity IDE integration</div>
+              <div class="ch">Editor integration (Antigravity, VS Code, Cursor)</div>
               <div class="csub">Part 7</div>
             </div>
             <div class="card">
@@ -683,27 +683,25 @@ claude --help</code></pre>
         <div class="body">
           <div class="cards" style="grid-template-columns:repeat(5,1fr)">
             <div class="card"><span class="num">1</span>
-              <div class="ch">claude: command not found</div>
-              <div class="cdesc">Close and reopen terminal. Or add export PATH=$HOME/.local/bin:$PATH to ~/.zshrc</div>
+              <div class="ch">claude: command not found / not recognized</div>
+              <div class="cdesc">Install worked, PATH did not. Close and reopen the terminal first. Mac: echo 'export PATH="$HOME/.local/bin:$PATH"' &gt;&gt; ~/.zshrc. Windows: the SetEnvironmentVariable line from the previous slide</div>
             </div>
             <div class="card"><span class="num">2</span>
+              <div class="ch">'irm' is not recognized / '&amp;&amp;' is not valid (Windows)</div>
+              <div class="cdesc">Wrong terminal. 'irm' not recognized means you are in CMD, not PowerShell. Open PowerShell (prompt starts with PS) and paste the irm line again</div>
+            </div>
+            <div class="card"><span class="num">3</span>
+              <div class="ch">The install script is blocked</div>
+              <div class="cdesc">Corporate network, proxy or antivirus. Windows: winget install Anthropic.ClaudeCode. Any OS: npm install -g @anthropic-ai/claude-code (Node 22+, on Windows run Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned first)</div>
+            </div>
+            <div class="card"><span class="num">4</span>
               <div class="ch">Browser does not open on login</div>
               <div class="cdesc">Press the letter c in the terminal to copy the login URL, then paste it manually</div>
             </div>
-            <div class="card"><span class="num">3</span>
-              <div class="ch">Subscription required / auth fails</div>
-              <div class="cdesc">You need Claude Pro, Max, Teams, or Enterprise. The free Claude.ai plan does not
-                include Claude Code</div>
-            </div>
-            <div class="card"><span class="num">4</span>
-              <div class="ch">Git Bash not found (Windows only)</div>
-              <div class="cdesc">Install Git for Windows from git-scm.com/downloads/win — Claude Code needs it on native
-                Windows</div>
-            </div>
             <div class="card"><span class="num">5</span>
-              <div class="ch">PowerShell execution policy error</div>
-              <div class="cdesc">Run: Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned, then retry
-              </div>
+              <div class="ch">Subscription required / auth fails</div>
+              <div class="cdesc">You need Claude Pro, Max, Team, or Enterprise. The free Claude.ai plan does not
+                include Claude Code. Anything else: run claude doctor and read the output</div>
             </div>
           </div>
         </div>
@@ -846,33 +844,28 @@ claude --help</code></pre>
                 current session.</div>
             </div>
             <div class="card">
-              <div class="ch">/config</div>
-              <div class="csub">Change settings mid-session</div>
-              <div class="cdesc">Opens the settings interface: default model, permissions, status line. No need to
-                hand-edit JSON.</div>
+              <div class="ch">/config &nbsp;·&nbsp; /memory &nbsp;·&nbsp; #</div>
+              <div class="csub">Settings and standing rules</div>
+              <div class="cdesc">/config opens settings: default model, permissions, status line. /memory opens your memory files. To save a rule, just tell Claude "remember that ..." and it lands in auto memory.</div>
             </div>
             <div class="card">
-              <div class="ch">/memory &nbsp;·&nbsp; #</div>
-              <div class="csub">View and add standing rules</div>
-              <div class="cdesc">/memory opens your memory files. Start a message with # to save a quick rule Claude
-                applies from then on.</div>
+              <div class="ch">/diff &nbsp;·&nbsp; /focus</div>
+              <div class="csub">See what changed, or see less</div>
+              <div class="cdesc">/diff opens a panel of your uncommitted changes as Claude edits (new in v2.1.260, 03-09-2026). /focus shows only your prompt, a one-line summary and the answer. Both need /tui fullscreen.</div>
             </div>
             <div class="card">
-              <div class="ch">continue</div>
-              <div class="csub">Un-stick a stalled agent</div>
-              <div class="cdesc">If a run stops or a write is rejected, type continue (or Ctrl+C first). It resumes from
-                where it stopped, so don&#x27;t kill the session.</div>
+              <div class="ch">/doctor &nbsp;·&nbsp; /skill-doctor</div>
+              <div class="csub">Health check your setup</div>
+              <div class="cdesc">/doctor finds PATH problems, broken settings, unused plugins and MCP servers. /skill-doctor shows what each skill costs in context and how often it runs.</div>
             </div>
             <div class="card">
-              <div class="ch">claude --continue &nbsp;·&nbsp; --resume</div>
-              <div class="csub">Reopen a closed session</div>
-              <div class="cdesc">Run in the terminal. --continue reopens the latest session here; --resume lets you pick
-                one from a list. Full history intact.</div>
+              <div class="ch">/model &nbsp;·&nbsp; /effort</div>
+              <div class="csub">Pick the brain and how hard it thinks</div>
+              <div class="cdesc">Sonnet 5 is the workshop default on a Pro plan (the built-in effort default is high, set medium with /effort to save tokens). Opus 5 for a review pass. Fable 5.1 (01-09-2026) is opt-in with /model fable.</div>
             </div>
           </div>
         </div>
-        <div class="foot">/status, /usage, /cost, /config, /memory: the five you&#x27;ll type without thinking within a
-          week.</div>
+        <div class="foot">Closed the terminal? claude --continue reopens the latest session, claude --resume lets you pick one. Stalled run? Type continue.</div>
       </div>
       <div class="pagenum">09 / 23</div>
     </section>
@@ -882,37 +875,35 @@ claude --help</code></pre>
           <div class="tag">PART 3 · CORE COMMANDS</div>
         </div>
         <h2 class="stitle">Four Modes, One Shortcut: Shift+Tab Cycles Them</h2>
-        <div class="lead">The active mode shows in the status line. Press Shift+Tab to rotate through all four.</div>
+        <div class="lead">The active mode shows in the status line. On a Pro, Max or Team plan a new session starts in Auto mode. Shift+Tab cycles Auto to Manual to Accept edits to Plan, then Auto again.</div>
         <div class="body">
           <div class="cards" style="grid-template-columns:repeat(4,1fr)">
             <div class="card">
-              <div class="ch">Default</div>
-              <div class="csub">Asks before every write</div>
-              <div class="cdesc">Approves each file edit and command as it comes. Day-to-day work where you want to
-                review each change.</div>
+              <div class="ch">Auto</div>
+              <div class="csub">The starting mode on Pro, Max, Team</div>
+              <div class="cdesc">A second model, the classifier, reviews each action instead of you. Long tasks, less prompt fatigue. It asks once before reading outside your project folder, and when it blocks an action, Claude is told which rule stopped it. Workshop tip: switch to Manual before changing settings files.</div>
             </div>
             <div class="card">
-              <div class="ch">Plan</div>
-              <div class="csub">Read-only, proposes first</div>
-              <div class="cdesc">Claude explores and writes a plan but cannot edit until you approve. Anthropic
-                recommends this for any non-trivial, multi-file change.</div>
+              <div class="ch">Manual (default)</div>
+              <div class="csub">Asks before every write</div>
+              <div class="cdesc">Approves each file edit and command as it comes. Sensitive work, or when you want to
+                review each change. A Bash prompt here offers "Yes, and switch to auto mode".</div>
             </div>
             <div class="card">
               <div class="ch">Accept edits</div>
               <div class="csub">Auto-approves file edits</div>
-              <div class="cdesc">Applies edits without asking, but still prompts for bash, network, and other tool
-                calls. Good for a mechanical refactor you trust.</div>
+              <div class="cdesc">Applies edits and common file commands without asking, but still prompts for other
+                tool calls. Good for a mechanical change you trust.</div>
             </div>
             <div class="card">
-              <div class="ch">Auto (bypass)</div>
-              <div class="csub">Skips most prompts, highest risk</div>
-              <div class="cdesc">Runs with almost no permission checks. Sandboxes, throwaway containers, or CI only.
-                Never on a machine with important uncommitted work.</div>
+              <div class="ch">Plan</div>
+              <div class="csub">Read-only, proposes first</div>
+              <div class="cdesc">Claude explores and writes a plan but cannot edit until you approve. Use it for
+                anything spanning three or more files, or before Claude touches a live document.</div>
             </div>
           </div>
         </div>
-        <div class="foot">Start in Plan mode when stakes are high, before Claude touches a live document or an important
-          file.</div>
+        <div class="foot">Start in Plan mode when stakes are high. Bypass permissions (no checks at all) exists too, but only inside a throwaway container.</div>
       </div>
       <div class="pagenum">09 / 23</div>
     </section>
@@ -988,35 +979,34 @@ claude --help</code></pre>
         <div class="srow">
           <div class="tag">PART 4 · CLAUDE.md</div>
         </div>
-        <h2 class="stitle">CLAUDE.md vs Memory: Two Different Things</h2>
-        <div class="lead">A question that comes up every session. Anthropic split memory out of CLAUDE.md so each stays
-          focused.</div>
+        <h2 class="stitle">CLAUDE.md vs Auto Memory: Two Different Things</h2>
+        <div class="lead">A question that comes up every session. You write CLAUDE.md. Claude writes its own memory, and both load at the start of every session.</div>
         <div class="body">
           <div class="two" style="grid-template-columns:1fr 1fr">
             <div class="panel">
               <div class="phead">CLAUDE.md</div>
-              <div class="psub">What this project is</div>
+              <div class="psub">Instructions you write. Target under 200 lines.</div>
               <ul class="bul">
                 <li>Project structure, tech stack, file map</li>
                 <li>Hard rules and conventions for this repo</li>
                 <li>Things to never do here</li>
                 <li>Committed to git, shared with the team</li>
+                <li>Long files still load (cut-off is 4 MiB) but adherence drops. Move overflow into .claude/rules/</li>
               </ul>
             </div>
             <div class="panel">
-              <div class="phead">Memory</div>
-              <div class="psub">Standing rules and preferences</div>
+              <div class="phead">Auto memory</div>
+              <div class="psub">Notes Claude writes itself. On by default.</div>
               <ul class="bul">
-                <li>Recurring rules Claude applies everywhere: date format, tone, naming</li>
-                <li>Add one fast: start a message with #</li>
-                <li>View and edit them with /memory</li>
-                <li>The rule of thumb: fix the same mistake twice, save it as a memory</li>
+                <li>Four kinds: who you are, corrections you gave, project decisions, where things live</li>
+                <li>Lives in ~/.claude/projects/&lt;project&gt;/memory/ with a MEMORY.md index (first 200 lines or 25KB load)</li>
+                <li>Add one yourself: tell Claude "remember that ...". Browse and edit with /memory. (The old # shortcut was removed in v2.0.70)</li>
+                <li>Machine-local. It does not follow you to another laptop</li>
               </ul>
             </div>
           </div>
         </div>
-        <div class="foot">Project facts go in CLAUDE.md. A rule you want followed every time goes in memory, not
-          CLAUDE.md.</div>
+        <div class="foot">Project facts and rules go in CLAUDE.md. Your corrections and preferences land in auto memory, mostly without you asking.</div>
       </div>
       <div class="pagenum">12 / 23</div>
     </section>
@@ -1170,20 +1160,17 @@ claude --help</code></pre>
         <div class="srow">
           <div class="tag">PART 7 · IDE INTEGRATION</div><span class="live">LIVE DEMO</span>
         </div>
-        <h2 class="stitle">Antigravity IDE: Claude Inline in Your Editor</h2>
-        <div class="lead">Antigravity IDE supports the extension marketplace, so the Claude Code extension installs
-          without extra configuration.</div>
+        <h2 class="stitle">Your Editor: Claude Inline in Antigravity, VS Code or Cursor</h2>
+        <div class="lead">Anthropic ships the extension for VS Code and Cursor. It also installs in other VS Code forks such as Antigravity from the Extensions view, or from the Open VSX registry if the search finds nothing.</div>
         <div class="body">
           <div class="two" style="grid-template-columns:1.05fr .95fr">
             <ul class="bul">
               <li>What you get: inline diffs, @-mentions, conversation history in your editor</li>
-              <li>Mac install: Cmd+Shift+X to open Extensions, search Claude Code, click Install</li>
-              <li>Windows install: Ctrl+Shift+X, search Claude Code, click Install</li>
+              <li>Install: Cmd+Shift+X (Mac) or Ctrl+Shift+X (Windows), search Claude Code, click Install. Not found? open-vsx.org/extension/Anthropic/claude-code</li>
               <li>After install: Cmd/Ctrl+Shift+P &gt; type Claude Code &gt; Open in New Tab</li>
-              <li>Same CLAUDE.md and settings apply — no duplicate setup needed</li>
-              <li>Install once per machine: the IDE terminal is the same shell as your system terminal</li>
-              <li>No Antigravity subscription needed, Claude Code bills to your Claude plan</li>
-              <li>Prefer the terminal? You do not need the IDE extension at all</li>
+                            <li>The extension bundles its own CLI. To type claude in the editor terminal you still need the standalone install</li>
+              <li>In VS Code or Cursor run /terminal-setup once so Shift+Enter adds a new line</li>
+              <li>No editor subscription needed. Prefer the terminal? You do not need the extension at all</li>
             </ul>
             <div class="panel">
               <div class="phead">IDE vs Terminal</div>
@@ -1192,8 +1179,8 @@ claude --help</code></pre>
                 <li>IDE: @-mention files with cursor</li>
                 <li>IDE: plan review as markdown doc</li>
                 <li>Terminal: full command set</li>
-                <li>Terminal: MCP config via CLI</li>
-                <li>Both share history and settings</li>
+                <li>Terminal: MCP config via CLI, /tui fullscreen if it flickers</li>
+                <li>Both share CLAUDE.md, history and settings</li>
               </ul>
             </div>
           </div>
@@ -1451,7 +1438,7 @@ claude --help</code></pre>
     <section class="slide" data-kind="closing">
       <div class="slide-in hero">
         <h1 class="htitle big">Questions?</h1>
-        <div class="who">Aman Parmar · Senior Product Manager</div>
+        <div class="who">Aman Parmar · Ship with AI Lab</div>
         <div class="links"><a href="https://amanparmar3.substack.com/" target="_blank"
             rel="noopener"><span>Substack</span>https://amanparmar3.substack.com/</a><a
             href="https://www.linkedin.com/in/amanmparmar" target="_blank"

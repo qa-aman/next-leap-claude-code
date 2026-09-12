@@ -1,0 +1,346 @@
+<!doctype html>
+<!--
+  UX Designer mockup shell.
+  Copy this file, then replace ONLY the marked sections. Do not rewrite the shell.
+
+  What is already wired for you:
+    1. Audited token layer, light + dark, in :root below.
+    2. Theme toggle, viewport switcher (desktop / tablet / mobile), and state switcher in the toolbar.
+    3. The #ux-manifest block, which scripts/check_mockup.py reads. Keep it accurate.
+    4. The decision panel at the bottom. Fill it in. An empty one is worse than none.
+
+  The toolbar is review chrome, not part of the design. It sits outside #stage and is
+  excluded from the audit via data-ux-chrome.
+
+  Rules that the gate enforces, so save yourself a round trip:
+    - spacing values come from var(--space-*), never a raw off-grid px
+    - every interactive element gets :focus-visible and a >=44px hit area
+    - one [data-primary] per [data-scope]
+    - every data-fetching screen ships default, empty, loading and error states
+-->
+<html lang="en" data-theme="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REPLACE - Screen name</title>
+
+<script type="application/json" id="ux-manifest">
+{
+  "screen": "REPLACE - screen name",
+  "persona": "REPLACE - who this is for",
+  "goal": "REPLACE - the one decision this screen serves",
+  "posture": "REPLACE - sovereign | transient | daemonic",
+  "states": ["default", "empty", "loading", "error"],
+  "contrast_pairs": [
+    { "name": "body text on page",        "fg": "--fg",         "bg": "--bg",           "min": 4.5 },
+    { "name": "body text on surface",     "fg": "--fg",         "bg": "--surface",      "min": 4.5 },
+    { "name": "muted text on surface",    "fg": "--fg-muted",   "bg": "--surface",      "min": 4.5 },
+    { "name": "muted text on page",       "fg": "--fg-muted",   "bg": "--bg",           "min": 4.5 },
+    { "name": "primary button label",     "fg": "--primary-fg", "bg": "--primary",      "min": 4.5 },
+    { "name": "primary boundary on page", "fg": "--primary",    "bg": "--bg",           "min": 3.0 },
+    { "name": "interactive boundary",     "fg": "--border-strong", "bg": "--surface",   "min": 3.0 },
+    { "name": "success text on tint",     "fg": "--success",    "bg": "--success-tint", "min": 4.5 },
+    { "name": "warning text on tint",     "fg": "--warning",    "bg": "--warning-tint", "min": 4.5 },
+    { "name": "danger text on tint",      "fg": "--danger",     "bg": "--danger-tint",  "min": 4.5 }
+  ]
+}
+</script>
+
+<style>
+/* ============================================================
+   1. TOKENS - see references/visual-system.md
+   Change values here, never inline. Re-run the gate after editing.
+   ============================================================ */
+:root {
+  color-scheme: light dark;
+
+  --space-1:4px;  --space-2:8px;  --space-3:12px; --space-4:16px;
+  --space-5:20px; --space-6:24px; --space-8:32px; --space-10:40px;
+  --space-12:48px; --space-16:64px;
+
+  --text-xs:12px; --text-sm:14px; --text-base:16px; --text-lg:18px;
+  --text-xl:20px; --text-2xl:24px; --text-3xl:30px; --text-4xl:36px;
+
+  --radius-sm:6px; --radius-md:10px; --radius-lg:16px; --radius-full:9999px;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.06);
+  --shadow-md: 0 1px 2px rgba(0,0,0,.06), 0 4px 8px -2px rgba(0,0,0,.08);
+  --shadow-lg: 0 2px 4px rgba(0,0,0,.06), 0 12px 24px -6px rgba(0,0,0,.12);
+
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  --bg:#ffffff;          --bg-subtle:#f7f7f8;     --bg-inset:#f0f0f2;
+  --surface:#ffffff;     --border:#d6d6de;        --border-strong:#8d8d97;
+  --fg:#16161a;          --fg-muted:#55555f;      --fg-subtle:#8a8a96;
+  --primary:#4f39d9;     --primary-hover:#4130b8; --primary-fg:#ffffff;
+  --primary-tint:#eeebfd;
+  --success:#0f6b39;     --success-tint:#e6f5ec;
+  --warning:#7a4f00;     --warning-tint:#fdf3e0;
+  --danger:#a81f18;      --danger-tint:#fdeceb;
+}
+
+/* data-theme="light" keeps the :root defaults above. "auto" follows the OS. "dark" forces dark. */
+@media (prefers-color-scheme: dark) {
+  html[data-theme="auto"] {
+    --bg:#0b0b0f;        --bg-subtle:#131318;     --bg-inset:#08080b;
+    --surface:#17171d;   --border:#3a3a46;        --border-strong:#6d6d82;
+    --fg:#f2f2f5;        --fg-muted:#adadba;      --fg-subtle:#7c7c8f;
+    --primary:#a894ff;   --primary-hover:#bcadff; --primary-fg:#12101f;
+    --primary-tint:#211c3c;
+    --success:#63dd8d;   --success-tint:#0f2a1b;
+    --warning:#f0bd68;   --warning-tint:#2b2109;
+    --danger:#ff9990;    --danger-tint:#301413;
+  }
+}
+html[data-theme="dark"] {
+  --bg:#0b0b0f;        --bg-subtle:#131318;     --bg-inset:#08080b;
+  --surface:#17171d;   --border:#3a3a46;        --border-strong:#6d6d82;
+  --fg:#f2f2f5;        --fg-muted:#adadba;      --fg-subtle:#7c7c8f;
+  --primary:#a894ff;   --primary-hover:#bcadff; --primary-fg:#12101f;
+  --primary-tint:#211c3c;
+  --success:#63dd8d;   --success-tint:#0f2a1b;
+  --warning:#f0bd68;   --warning-tint:#2b2109;
+  --danger:#ff9990;    --danger-tint:#301413;
+}
+
+/* ============================================================
+   2. BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin:0; }
+html { -webkit-text-size-adjust:100%; }
+body {
+  font-family: var(--font);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  color: var(--fg);
+  background: var(--bg-subtle);
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { max-width:100%; display:block; }
+button, input, select, textarea { font: inherit; color: inherit; }
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; }
+}
+
+/* ============================================================
+   3. REVIEW CHROME - not part of the design, excluded from audit
+   ============================================================ */
+.chrome {
+  position: sticky; top:0; z-index:100;
+  display:flex; flex-wrap:wrap; gap: var(--space-3); align-items:center;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg); border-bottom:1px solid var(--border);
+}
+.chrome__title { font-size: var(--text-sm); font-weight:600; margin-right:auto; }
+.chrome__group { display:flex; gap: var(--space-1); align-items:center; }
+.chrome__label {
+  font-size: var(--text-xs); color: var(--fg-muted);
+  text-transform: uppercase; letter-spacing:.06em; margin-right: var(--space-1);
+}
+.chip {
+  min-height:44px; display:inline-flex; align-items:center;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm); font-weight:500;
+  background: var(--surface); color: var(--fg);
+  border:1px solid var(--border); border-radius: var(--radius-sm);
+  cursor:pointer;
+}
+.chip:hover { background: var(--bg-inset); border-color: var(--border-strong); }
+.chip[aria-pressed="true"] { background: var(--primary-tint); border-color: var(--primary); color: var(--fg); font-weight:600; }
+
+/* ============================================================
+   4. STAGE - viewport frame
+   ============================================================ */
+#stage {
+  margin: var(--space-8) auto var(--space-12);
+  background: var(--bg);
+  border:1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: clip;
+  transition: max-width .2s ease;
+}
+#stage[data-viewport="desktop"] { max-width:1440px; }
+#stage[data-viewport="tablet"]  { max-width:834px; }
+#stage[data-viewport="mobile"]  { max-width:390px; }
+[data-state]:not([data-active]) { display:none; }
+
+/* ============================================================
+   5. YOUR DESIGN - replace everything under this line.
+   Use var(--space-*) for spacing. No raw off-grid px values.
+   ============================================================ */
+.page { padding: var(--space-8); }
+.h1 { font-size: var(--text-3xl); line-height:1.2; letter-spacing:-.015em; margin:0 0 var(--space-2); }
+.sub { color: var(--fg-muted); margin:0 0 var(--space-8); max-width:65ch; }
+.card {
+  background: var(--surface); border:1px solid var(--border);
+  border-radius: var(--radius-md); padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+.btn {
+  min-height:44px; display:inline-flex; align-items:center; justify-content:center;
+  gap: var(--space-2); padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm); font-weight:600;
+  border-radius: var(--radius-sm); border:1px solid transparent; cursor:pointer;
+  transition: background .15s cubic-bezier(.2,.8,.2,1), border-color .15s;
+}
+.btn--primary { background: var(--primary); color: var(--primary-fg); box-shadow: inset 0 1px 0 rgba(255,255,255,.14), var(--shadow-sm); }
+.btn--primary:hover { background: var(--primary-hover); }
+.btn--secondary { background: var(--surface); color: var(--fg); border-color: var(--border-strong); }
+.btn--secondary:hover { background: var(--bg-inset); }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity:.55; cursor:not-allowed; }
+.empty { text-align:center; padding: var(--space-16) var(--space-6); color: var(--fg-muted); }
+.skel { background: var(--bg-inset); border-radius: var(--radius-sm); height: var(--space-4); }
+
+/* ============================================================
+   6. DECISION PANEL
+   ============================================================ */
+.why {
+  max-width:900px; margin:0 auto var(--space-16); padding: var(--space-6);
+  background: var(--surface); border:1px solid var(--border); border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+}
+.why h2 { font-size: var(--text-lg); margin:0 0 var(--space-4); }
+.why ol { margin:0; padding-left: var(--space-5); }
+.why li { margin-bottom: var(--space-2); }
+.why b { color: var(--fg); }
+</style>
+</head>
+
+<body>
+
+<!-- REVIEW CHROME ------------------------------------------------------- -->
+<div class="chrome" data-ux-chrome>
+  <span class="chrome__title">REPLACE - Screen name</span>
+
+  <div class="chrome__group">
+    <span class="chrome__label">State</span>
+    <button class="chip" data-set-state="default" aria-pressed="true">Default</button>
+    <button class="chip" data-set-state="empty"   aria-pressed="false">Empty</button>
+    <button class="chip" data-set-state="loading" aria-pressed="false">Loading</button>
+    <button class="chip" data-set-state="error"   aria-pressed="false">Error</button>
+  </div>
+
+  <div class="chrome__group">
+    <span class="chrome__label">Width</span>
+    <button class="chip" data-set-viewport="desktop" aria-pressed="true">Desktop</button>
+    <button class="chip" data-set-viewport="tablet"  aria-pressed="false">Tablet</button>
+    <button class="chip" data-set-viewport="mobile"  aria-pressed="false">Mobile</button>
+  </div>
+
+  <div class="chrome__group">
+    <button class="chip" id="themeToggle">Theme: Auto</button>
+  </div>
+</div>
+
+<!-- STAGE ---------------------------------------------------------------- -->
+<main id="stage" data-viewport="desktop">
+
+  <!-- ===== DEFAULT ===== -->
+  <section class="page" data-state="default" data-active>
+    <h1 class="h1">REPLACE - what this screen is</h1>
+    <p class="sub">REPLACE - one line saying what the user can do here. Use real content, never lorem ipsum. Real content is what exposes layout bugs.</p>
+
+    <div class="card" data-scope="main">
+      <p style="margin:0 0 var(--space-4)">REPLACE - the actual content.</p>
+      <button class="btn btn--primary" data-primary>Primary action</button>
+      <button class="btn btn--secondary">Secondary</button>
+    </div>
+  </section>
+
+  <!-- ===== EMPTY ===== the first thing a new user sees, so design it properly -->
+  <section class="page" data-state="empty">
+    <div class="empty">
+      <h1 class="h1">REPLACE - nothing here yet</h1>
+      <p class="sub" style="margin-inline:auto">REPLACE - say why it is empty and what to do about it. Never just "No data".</p>
+      <button class="btn btn--primary" data-primary>REPLACE - the one action</button>
+    </div>
+  </section>
+
+  <!-- ===== LOADING ===== skeleton, not a spinner: it shows the shape of what is coming -->
+  <section class="page" data-state="loading" aria-busy="true">
+    <div class="skel" style="width:40%; height:var(--space-8); margin-bottom:var(--space-6)"></div>
+    <div class="card">
+      <div class="skel" style="width:100%; margin-bottom:var(--space-3)"></div>
+      <div class="skel" style="width:80%;  margin-bottom:var(--space-3)"></div>
+      <div class="skel" style="width:55%"></div>
+    </div>
+  </section>
+
+  <!-- ===== ERROR ===== what went wrong, in plain language, and what to do next -->
+  <section class="page" data-state="error">
+    <div class="card" role="alert" style="border-color:var(--danger); background:var(--danger-tint)">
+      <h1 class="h1" style="font-size:var(--text-xl); color:var(--danger)">REPLACE - what went wrong, plainly</h1>
+      <p style="margin:0 0 var(--space-4); color:var(--fg)">REPLACE - what the user can do about it. Never show an error code alone.</p>
+      <button class="btn btn--primary" data-primary>Try again</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- DECISION PANEL -------------------------------------------------------- -->
+<section class="why" data-ux-chrome>
+  <h2>Why this design</h2>
+  <ol>
+    <li><b>Who and goal:</b> REPLACE</li>
+    <li><b>Posture:</b> REPLACE, so REPLACE density decision</li>
+    <li><b>Hierarchy:</b> first REPLACE, then REPLACE, last REPLACE</li>
+    <li><b>Excise removed:</b> REPLACE - what the user no longer has to do</li>
+    <li><b>Conventions borrowed:</b> REPLACE pattern from REPLACE, per Jakob's Law</li>
+    <li><b>States shipped:</b> default, empty, loading, error</li>
+    <li><b>Assumptions:</b> REPLACE</li>
+    <li><b>Open questions:</b> REPLACE</li>
+  </ol>
+</section>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var stage = document.getElementById('stage');
+
+  function press(group, el) {
+    group.forEach(function (b) { b.setAttribute('aria-pressed', String(b === el)); });
+  }
+
+  var stateBtns = [].slice.call(document.querySelectorAll('[data-set-state]'));
+  stateBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var want = btn.dataset.setState;
+      stage.querySelectorAll('[data-state]').forEach(function (s) {
+        if (s.dataset.state === want) { s.setAttribute('data-active', ''); }
+        else { s.removeAttribute('data-active'); }
+      });
+      press(stateBtns, btn);
+    });
+  });
+
+  var vpBtns = [].slice.call(document.querySelectorAll('[data-set-viewport]'));
+  vpBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      stage.dataset.viewport = btn.dataset.setViewport;
+      press(vpBtns, btn);
+    });
+  });
+
+  var order = ['auto', 'light', 'dark'];
+  var label = { auto: 'Auto', light: 'Light', dark: 'Dark' };
+  var toggle = document.getElementById('themeToggle');
+  toggle.addEventListener('click', function () {
+    var next = order[(order.indexOf(root.dataset.theme) + 1) % order.length];
+    root.dataset.theme = next;
+    toggle.textContent = 'Theme: ' + label[next];
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Multi-Agent Systems for PMs — Theory + Practical</title>
+  <title>Multi-Agent Systems with Claude Code - Theory + Practical</title>
   <style>
     :root {
       --bg: #0D0D0D;
@@ -700,8 +700,8 @@
     </aside>
 
     <main>
-      <p class="meta">Teaching reference for PMs</p>
-      <h1>Multi-Agent Systems for PMs</h1>
+      <p class="meta">Teaching reference for every role</p>
+      <h1>Multi-Agent Systems with Claude Code</h1>
       <p class="lede">A simple guide to using multiple AI agents together in Claude Code. Every idea comes with a PM
         example, plus a <strong>step-by-step practical you can run live in this repo</strong>
         (<code>next-leap-claude-code</code>) during the session.</p>
@@ -969,22 +969,15 @@ Save the output to outputs/interview-synthesis.md.</code></pre>
           <h5>Steps</h5>
           <ol>
             <li>Start Claude Code in the repo: <code>claude</code></li>
-            <li>Run the slash command: <code>/agents</code></li>
-            <li>Switch to the <strong>Library</strong> tab → <strong>Create new agent</strong> → choose
-              <strong>Project</strong> (saves to <code>.claude/agents/</code> so the cohort can use the same
-              definition).
-            </li>
-            <li>Select <strong>Generate with Claude</strong>. When asked, describe the subagent:
-              <pre><code>A churn-pattern analyst that reads user feedback survey
-responses and pulls out the top churn drivers, with supporting
-verbatim quotes, frequency tags, and severity tags. Read-only.
+            <li>Ask Claude to create the subagent in plain words. Since v2.1.198 <code>/agents</code> no longer opens a wizard, it only prints a reminder to ask Claude or edit <code>.claude/agents/</code> directly. Paste this:
+              <pre><code>Create a project subagent in .claude/agents/ called churn-pattern-analyst.
+It reads user feedback survey responses and pulls out the top churn drivers,
+with supporting verbatim quotes, frequency tags, and severity tags. Read-only:
+tools Read, Grep, Glob only, no Write or Edit. Model: sonnet.
 Always cite the line from the file where each quote came from.</code></pre>
             </li>
-            <li>For tools, deselect Write/Edit. Keep only read-only tools (<code>Read</code>, <code>Grep</code>,
-              <code>Glob</code>).
-            </li>
-            <li>Choose model: <strong>Sonnet</strong> (good balance of cost and quality).</li>
-            <li>Press <kbd>s</kbd> to save. The file lands at <code>.claude/agents/churn-pattern-analyst.md</code>.</li>
+            <li>Open the file Claude wrote at <code>.claude/agents/churn-pattern-analyst.md</code> and check the frontmatter: <code>name</code>, <code>description</code> (this is the trigger), <code>tools</code> (read-only), <code>model: sonnet</code>.</li>
+            <li>No restart needed. Claude Code watches <code>.claude/agents/</code> and picks up the new file within a few seconds. Ask it to use the agent by name.</li>
             <li>Use it on real data:
               <pre><code>Use the churn-pattern-analyst agent on 06-user-feedback/.
 Save the report to outputs/churn-drivers.md.</code></pre>
@@ -1102,7 +1095,8 @@ outputs/churn-drivers.md.</code></pre>
             <li>While they run, use <kbd>Shift</kbd> + <kbd>↓</kbd> to flip through teammates and listen in. Press
               <kbd>Enter</kbd> to focus a teammate; <kbd>Esc</kbd> to come back to the lead.
             </li>
-            <li>When done, tell the lead: <code>Clean up the team.</code></li>
+            <li>When done, just exit the session. Since v2.1.178 cleanup happens automatically when the session exits (the old <code>TeamCreate</code> and <code>TeamDelete</code> tools no longer exist).</li>
+            <li>Two things that changed after August 2026: teammates now use the leader's model unless the spawn names one (the "Default teammate model" setting was removed from <code>/config</code> in v2.1.234), and once the flag is on, a subagent that Claude names on its own launches as a teammate, so a team can form even when you did not ask for one.</li>
           </ol>
           <div class="callout warn" style="margin-top:14px;">
             <div class="label">Verify before you copy</div>
@@ -2062,7 +2056,7 @@ Output: outputs/roadmap-stress-test-[DATE].md</code></pre>
       </section>
 
       <footer>
-        <p>Multi-agent systems for PMs · Teaching reference</p>
+        <p>Multi-agent systems with Claude Code · Teaching reference</p>
         <p>Built from official Anthropic sources. Every practical is grounded in real files from this repo
           (<code>next-leap-claude-code</code>) so the cohort can run them live during the session.</p>
       </footer>

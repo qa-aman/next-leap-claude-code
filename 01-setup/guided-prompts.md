@@ -1,6 +1,6 @@
 # Guided Prompts - Claude Code for PMs
 
-Work through these prompts one at a time. Each one builds on what you've learned. Copy-paste the prompt into Claude Code and watch what happens.
+Work through these prompts one at a time. Each one builds on what you've learned. Copy-paste the prompt into Claude Code and watch what happens. No coding background is needed for any of them: every prompt reads plain documents (interviews, personas, meeting notes) and works the same for engineers, product, design, analytics, operations and HR.
 
 ---
 

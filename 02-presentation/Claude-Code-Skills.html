@@ -554,7 +554,7 @@
         <div class="hsub">Teach Claude a habit. Use it forever.</div>
         <div class="hnote">By the end of this session you will know: how a skill is structured, why the description
           field is the trigger mechanism, and how to build and invoke skills that stick.</div>
-        <div class="hmeta">Aman Parmar · Senior Product Manager</div>
+        <div class="hmeta">Aman Parmar · Ship with AI Lab</div>
       </div>
       <div class="pagenum">01 / 22</div>
     </section>
@@ -802,7 +802,8 @@ structured markdown summary.
               <li>SKILL.md is required. All other files are optional but powerful.</li>
               <li>references/ holds detailed docs Claude loads on demand, not on startup.</li>
               <li>scripts/ holds code Claude can execute. assets/ holds templates, examples.</li>
-              <li>Target 100 to 200 lines, hard cap 500. Overflow goes to subfolders.</li>
+              <li>Target 100 to 200 lines, docs say keep SKILL.md under 500. Overflow goes to subfolders.</li>
+              <li>Do not confuse this with CLAUDE.md: that file has no line cut-off (only a 4 MiB one). Its target is under 200 lines because adherence drops as it grows.</li>
             </ul>
             <pre class="code"><code>my-skill/
   SKILL.md          &lt;- required
@@ -816,7 +817,7 @@ structured markdown summary.
     sample.md       &lt;- examples</code></pre>
           </div>
         </div>
-        <div class="foot">If your SKILL.md is approaching 500 lines, move reference docs to references/ and link to
+        <div class="foot">Run /skill-doctor to see what each skill costs in context and how often it fires. If your SKILL.md is approaching 500 lines, move reference docs to references/ and link to
           them.</div>
       </div>
       <div class="pagenum">09 / 22</div>
@@ -826,7 +827,7 @@ structured markdown summary.
         <div class="srow">
           <div class="tag">PART 5 · WHEN TO CREATE A SKILL</div>
         </div>
-        <h2 class="stitle">The 3-Repeat Rule: Paste It Three Times, Then Make It a Skill</h2>
+        <h2 class="stitle">The Twice Rule: Once Is a Prompt, Twice Is a Skill</h2>
         <div class="body">
           <div class="two" style="grid-template-columns:1fr 1fr">
             <div class="panel">
@@ -841,7 +842,7 @@ structured markdown summary.
             <div class="panel">
               <div class="phead">MAKE THE SKILL</div>
               <ul class="bul">
-                <li>You paste the same instructions 3 or more times.</li>
+                <li>You have pasted the same instructions twice. The docs give no number, this is the workshop rule: if it happened twice, it will happen again.</li>
                 <li>A section of CLAUDE.md has grown into a procedure.</li>
                 <li>A team member asks &#x27;how do I get Claude to do X?&#x27;</li>
                 <li>The output format is stable and reusable.</li>
@@ -1066,7 +1067,7 @@ Can you confirm by Wednesday?</code></pre>
             </div>
             <div class="card"><span class="num">4</span>
               <div class="ch">Test auto-trigger.</div>
-              <div class="cdesc">In Antigravity IDE, say the trigger phrase naturally. Watch whether Claude loads the
+              <div class="cdesc">In your editor or terminal, say the trigger phrase naturally. Watch whether Claude loads the
                 skill.</div>
             </div>
             <div class="card"><span class="num">5</span>
@@ -1244,7 +1245,7 @@ Can you confirm by Wednesday?</code></pre>
     <section class="slide" data-kind="closing">
       <div class="slide-in hero">
         <h1 class="htitle big">Questions?</h1>
-        <div class="who">Aman Parmar · Senior Product Manager</div>
+        <div class="who">Aman Parmar · Ship with AI Lab</div>
         <div class="links"><a href="https://amanparmar3.substack.com/" target="_blank"
             rel="noopener"><span>Substack</span>https://amanparmar3.substack.com/</a><a
             href="https://www.linkedin.com/in/amanmparmar" target="_blank"

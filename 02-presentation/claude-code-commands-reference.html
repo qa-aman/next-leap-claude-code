@@ -354,7 +354,7 @@
 
   <header>
     <div class="wrap">
-      <p class="eyebrow">Claude Code for PMs &middot; Workshop Reference</p>
+      <p class="eyebrow">Claude Code Workshop &middot; Reference</p>
       <h1>Claude Code Commands Reference</h1>
       <p class="lede">Every slash command, CLI command, keyboard shortcut, and input mode worth knowing, grouped by how
         often you reach for them. Sourced from the official Claude Code documentation. <span class="star">&#9733;</span>
@@ -362,7 +362,7 @@
       <div class="meta">
         <span class="pill">Verified against <a
             href="https://code.claude.com/docs/en/commands">code.claude.com/docs</a></span>
-        <span class="pill">Updated 11-07-2026</span>
+        <span class="pill">Updated 12-09-2026 (Claude Code v2.1.269)</span>
         <span class="pill">Type <b>/</b> in Claude Code to see this live menu</span>
       </div>
     </div>
@@ -413,8 +413,7 @@
         </div>
         <div class="card" data-cat="essential slash">
           <div class="cmd">/model <span class="arg">[model]</span><span class="star">&#9733;</span></div>
-          <p class="desc">Switch the model (opus, sonnet, haiku, fable) and save it as default. Opus for hard reasoning,
-            Haiku for quick lookups.</p>
+          <p class="desc">Switch the model (haiku, sonnet, opus, fable) and save it as default. Sonnet 5 at medium effort for daily work on a Pro plan, Opus 5 for hard reasoning and review passes, Haiku 4.5 for quick lookups. <span style="color:var(--muted)">fable</span> resolves to Fable 5.1 (01-09-2026), opt-in only.</p>
           <div class="link"><a href="https://code.claude.com/docs/en/model-config">docs / model</a></div>
         </div>
         <div class="card" data-cat="essential slash">
@@ -460,7 +459,7 @@
         </div>
         <div class="card" data-cat="essential slash">
           <div class="cmd">/agents<span class="star">&#9733;</span></div>
-          <p class="desc">Create, edit, and manage specialized subagents that run tasks in their own context window.</p>
+          <p class="desc">Since v2.1.198 this no longer opens a wizard. It prints a reminder to ask Claude to create or manage a subagent, or to edit <span style="color:var(--muted)">.claude/agents/</span> directly. To build one: describe the agent in plain words and Claude writes the file.</p>
           <div class="link"><a href="https://code.claude.com/docs/en/sub-agents">docs / sub-agents</a></div>
         </div>
       </div>
@@ -566,8 +565,8 @@
           <div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div>
         </div>
         <div class="card" data-cat="slash">
-          <div class="cmd">/diff</div>
-          <p class="desc">Open an interactive diff viewer showing your uncommitted changes.</p>
+          <div class="cmd">/diff <span class="arg">&middot; /focus</span></div>
+          <p class="desc">/diff opens a panel beside the conversation (fullscreen mode) showing your uncommitted changes as Claude edits. /focus toggles a view with only your last prompt, a one-line summary and the answer.</p>
           <div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div>
         </div>
         <div class="card" data-cat="slash">
@@ -674,7 +673,7 @@
         </div>
         <div class="card" data-cat="slash">
           <div class="cmd">/plugin <span class="arg">[subcommand]</span></div>
-          <p class="desc">Install and manage Claude Code plugins.</p>
+          <p class="desc">Install and manage Claude Code plugins. Since v2.1.268 an install, enable or disable takes effect when you close the menu. <span style="color:var(--muted)">/reload-plugins</span> is no longer needed.</p>
           <div class="link"><a href="https://code.claude.com/docs/en/plugins">docs / plugins</a></div>
         </div>
         <div class="card" data-cat="slash">
@@ -705,9 +704,34 @@
         </div>
         <div class="card" data-cat="slash">
           <div class="cmd">/doctor</div>
-          <p class="desc"><b>Skill.</b> Run a setup checkup that diagnoses install and config issues, and can fix them.
+          <p class="desc"><b>Skill.</b> Run a setup checkup that diagnoses install and config issues, and can fix them: duplicate installs, PATH problems, unparseable settings, unused skills, MCP servers and plugins versus their context cost, slow hooks, and an oversized CLAUDE.md.
           </p>
-          <div class="link"><a href="https://code.claude.com/docs/en/skills">docs / skills</a></div>
+          <div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div>
+        </div>
+        <div class="card" data-cat="slash">
+          <div class="cmd">/skill-doctor</div>
+          <p class="desc">Show what each loaded skill costs in context and how often it gets used, so you can turn off the ones you never call. Needs v2.1.252 or later.</p>
+          <div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div>
+        </div>
+        <div class="card" data-cat="slash">
+          <div class="cmd">/advisor <span class="arg">[model|off]</span></div>
+          <p class="desc">Enable or disable the advisor tool, which consults a second model for guidance at key moments during a task. Leave it off while learning, it spends extra tokens.</p>
+          <div class="link"><a href="https://code.claude.com/docs/en/advisor">docs / advisor</a></div>
+        </div>
+        <div class="card" data-cat="slash">
+          <div class="cmd">/import <span class="arg">[codex|gemini|cursor]</span></div>
+          <p class="desc">Bring configuration from Cursor, OpenAI Codex or Gemini CLI into Claude Code: instruction files, MCP servers, commands, subagents and skills. Add <span style="color:var(--muted)">--dry-run</span> to preview. Needs v2.1.213 or later, Cursor import needs v2.1.265.</p>
+          <div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div>
+        </div>
+        <div class="card" data-cat="slash">
+          <div class="cmd">/output-style <span class="arg">[name]</span></div>
+          <p class="desc">List and switch output styles. The built-in "Concise" style leads with results and skips narration, useful on a projector.</p>
+          <div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div>
+        </div>
+        <div class="card" data-cat="slash">
+          <div class="cmd">/tui <span class="arg">[default|fullscreen]</span></div>
+          <p class="desc">Switch the terminal renderer. <span style="color:var(--muted)">fullscreen</span> stops flicker and scrollback jumps.</p>
+          <div class="link"><a href="https://code.claude.com/docs/en/fullscreen">docs / fullscreen</a></div>
         </div>
         <div class="card" data-cat="slash">
           <div class="cmd">/fast <span class="arg">[on|off]</span></div>

@@ -22,6 +22,13 @@ Answers to open questions from workshop sessions, sourced from official Anthropi
 - **July 2026 Session 7 additions:** 12-07-2026 (Q142-Q153 - Build Hours, Shopping Assistant MVP - see "July 2026 - Session 7 Additions" section)
 - **July 2026 Session 8 additions:** 12-07-2026 (Q154-Q167 - Build Hours Part 2, Phase 2 login sessions and product matching - see "July 2026 - Session 8 Additions" section)
 - **August 2026 Session 1 additions:** 01-08-2026 (Q168-Q181 - new cohort, Claude Code Setup, Plugins and CLAUDE.md - see "August 2026 - Session 1 Additions" section)
+- **August 2026 Session 2 additions:** 01-08-2026 (Q182-Q195 - CLAUDE.md vs Memory, and building a skill from a live problem statement - see "August 2026 - Session 2 Additions" section)
+- **August 2026 Session 3 additions:** 02-08-2026 (Q196-Q206 - the ux-designer skill, a resume builder, and making CLAUDE.md portable - see "August 2026 - Session 3 Additions" section)
+- **August 2026 Session 4 additions:** 02-08-2026 (Q207-Q221 - improvement trackers, pushing a skill to GitHub, and building the first agent - see "August 2026 - Session 4 Additions" section)
+- **August 2026 Session 5 additions:** 08-08-2026 (Q222-Q237 - agent memory, routing agents, evaluation criteria, and usage limits - see "August 2026 - Session 5 Additions" section)
+- **August 2026 Session 6 additions:** 08-08-2026 (Q238-Q251 - agent teams, dynamic workflows, `/insights`, and skill versus rule, afternoon - see "August 2026 - Session 6 Additions" section)
+- **August 2026 Session 7 additions:** 15-08-2026 (Q252-Q266 - Build Hours, job scraper and resume builder from empty folder to phase zero - see "August 2026 - Session 7 Additions" section)
+- **August 2026 Session 8 additions:** 15-08-2026 (Q267-Q282 - Build Hours Part 2, phases one to five, evaluation criteria and the tailored resume, afternoon - see "August 2026 - Session 8 Additions" section)
 
 If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
@@ -320,7 +327,7 @@ It is **not** a PRD. A PRD describes *what to build and why*. `CLAUDE.md` descri
 - The agent **reads** them every session, so anything in there shapes future behavior.
 - They are **not enforced** like permissions or hooks. A `CLAUDE.md` rule saying "never delete files" is a strong preference, not a hard block. For hard blocks, use `settings.json` permissions or hooks.
 - Use `/memory` inside Claude Code to view and edit memory files quickly.
-- Use the `#` shortcut at the start of a message to add a quick memory entry to the appropriate `CLAUDE.md`.
+- Ask Claude "add this to CLAUDE.md" or "remember that ..." to add an entry without opening the file. (The `#` shortcut this answer originally cited was removed in v2.0.70, corrected 12-09-2026.)
 
 So: memory = soft guardrails (behavior). `settings.json` permissions and hooks = hard guardrails (enforcement).
 
@@ -2405,7 +2412,7 @@ New questions raised by the same NextLeap Applied Generative AI Bootcamp cohort 
 
 ## Q137: What are the ways to give Claude persistent memory, and how do I add a quick one?
 
-**Short answer:** There are three places: CLAUDE.md, the project memory file, and a rules file referenced from CLAUDE.md. For a rule that must not be missed, add it in more than one place. To add a quick memory, start a message with `#` and Claude will save it.
+**Short answer:** There are three places: CLAUDE.md, the project memory file, and a rules file referenced from CLAUDE.md. For a rule that must not be missed, add it in more than one place. To add a quick memory, tell Claude "remember that ..." and auto memory saves it. (This answer originally cited a `#` shortcut, which was removed in v2.0.70. Corrected 12-09-2026.)
 
 - Keep CLAUDE.md lean (roughly under 200 lines); if it grows too large it eats the context window and stops being fully effective.
 - Memories are sometimes not recalled if a request is not specific, which is why duplicating a critical rule into both memory and a referenced rules file is safer.
@@ -2954,7 +2961,9 @@ git clone https://github.com/<owner>/<repo>.git
 
 ## Q176: How do I install plugins, and which ones should a new cohort start with?
 
-**Short answer:** Type `/plugin`, go to the discover list, use the arrow keys to move and space to toggle each plugin, press `i` to install them all in one pass, then run `/reload-plugins` to activate them.
+**Short answer:** Type `/plugin`, go to the discover list, use the arrow keys to move and space to toggle each plugin, press `i` to install them all in one pass, then close the menu. Since Claude Code v2.1.268 (10-09-2026) the install takes effect when you close the menu, so `/reload-plugins` is no longer needed.
+
+> **Updated 12-09-2026.** The original answer said to run `/reload-plugins` after installing. That step was removed in v2.1.268.
 
 The eleven installed in this session and what each one is for:
 
@@ -2973,32 +2982,38 @@ The eleven installed in this session and what each one is for:
 | security | Security review guidance |
 
 - You can select all of them and install in a single pass. You do not have to install one at a time.
-- After `/reload-plugins` the terminal reports how many plugins, skills and agents are now active. Check that count matches what you selected.
+- Type `/` after closing the menu and the new plugin skills appear in the list. Run `/skill-doctor` a week later to see which of them you actually use, each unused plugin skill costs context on every session.
+- To type `claude` from your own laptop with an older Claude Code, run `claude update` first.
 
 **Sources:**
-- https://code.claude.com/docs/en/plugins (verified 01-08-2026)
-- https://code.claude.com/docs/en/plugin-marketplaces (verified 01-08-2026)
+- https://code.claude.com/docs/en/plugins (verified 12-09-2026)
+- https://code.claude.com/docs/en/plugin-marketplaces (verified 12-09-2026)
+- Changelog v2.1.268: https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
 
 ---
 
 ## Q177: Why do CLAUDE.md and skill files have a line limit, and what is the number?
 
-**Short answer:** Keep them under 500 lines. Anything beyond that is not read, so the instructions you wrote past that point are silently lost. The comfortable target is under 200 lines.
+**Short answer:** Two different numbers, and the August answer mixed them up. **CLAUDE.md:** target under 200 lines. There is no line cut-off, Claude Code loads the whole file (it only skips a file over 4 MiB), but the docs say longer files consume more context and reduce adherence. **SKILL.md:** the docs say keep it under 500 lines and move reference material to separate files.
 
-- The fix is not to delete content, it is to move the overflow into a `references/` file and link to it from the main file, so the detail loads only when it is needed.
-- The claude-md-management plugin exists to do exactly this: it checks your CLAUDE.md and skill files against the guidelines and pushes the excess into references.
-- The same discipline applies to skills, not only CLAUDE.md.
+> **Corrected 12-09-2026.** The original answer said content past 500 lines "is not read". That is not what the docs say. The file is read in full, adherence degrades.
+
+- For CLAUDE.md the fix is path-scoped rules in `.claude/rules/`, which load only when Claude touches matching files. `@path` imports help organisation but still load at launch, so they do not reduce context.
+- For a skill the fix is a `references/` folder linked from `SKILL.md`, so the detail loads only when needed.
+- `/doctor` now proposes trims for a checked-in CLAUDE.md by cutting content Claude can work out from the codebase itself (directory layouts, dependency lists). The claude-md-management plugin does a similar job.
 - This is a Claude Code architecture rule. Other IDEs and agents have their own context handling, so do not assume the same number carries across.
 
 **Sources:**
-- https://code.claude.com/docs/en/memory (verified 01-08-2026)
-- https://code.claude.com/docs/en/skills (verified 01-08-2026)
+- https://code.claude.com/docs/en/memory, section "My CLAUDE.md is too large" (verified 12-09-2026)
+- https://code.claude.com/docs/en/skills (verified 12-09-2026)
 
 ---
 
-## Q178: There is an "adviser" setting in the menu. What is it and should I turn it on?
+## Q178: There is an "advisor" setting in the menu. What is it and should I turn it on?
 
-**Short answer:** It lets a smaller model escalate to a stronger one when it gets stuck. Leave it off while you are learning, because it runs server side and consumes extra tokens.
+**Short answer:** The advisor tool (spelled with an o, the command is `/advisor`) lets Claude consult a second model for guidance at key moments during a task. Leave it off while you are learning, because it consumes extra tokens. Turn it on with `/advisor <model>`, off with `/advisor off`.
+
+> **Updated 12-09-2026.** Spelling corrected from "adviser" and the `/advisor [model|off]` command added, which appeared in the commands reference after the August session.
 
 - The behaviour it describes: when Claude needs stronger judgement on a complex decision, or is repeatedly failing and circling without progress, it escalates to an adviser model for guidance and then continues.
 - It is useful if you are running Sonnet or Haiku as your default and occasionally hit something they cannot handle, because you do not have to notice and switch models yourself.
@@ -3006,8 +3021,8 @@ The eleven installed in this session and what each one is for:
 - This is an experimental setting, so confirm current behaviour in the settings documentation rather than relying on this answer alone.
 
 **Sources:**
-- https://code.claude.com/docs/en/settings (verified 01-08-2026)
-- https://code.claude.com/docs/en/model-config (verified 01-08-2026)
+- https://code.claude.com/docs/en/advisor (verified 12-09-2026)
+- https://code.claude.com/docs/en/commands (verified 12-09-2026)
 
 ---
 
@@ -3062,3 +3077,1685 @@ On copying from another project:
 - https://code.claude.com/docs/en/memory (verified 01-08-2026)
 - https://code.claude.com/docs/en/skills (verified 01-08-2026)
 - https://code.claude.com/docs/en/sub-agents (verified 01-08-2026)
+
+---
+
+# August 2026 - Session 2 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 01-08-2026 during Session 2 (CLAUDE.md vs Memory, and building a skill from a live problem statement, afternoon). All URLs verified 01-08-2026.
+
+---
+
+## Q182: What is the difference between a global CLAUDE.md and a project CLAUDE.md, and when do I need one in a subfolder?
+
+**Short answer:** Global holds what is true of you across every project. Project holds what is true of this product. A subfolder file holds what is true only inside that folder, and it takes priority there.
+
+Claude Code reads CLAUDE.md at several levels and combines them:
+
+| Level | Location | What belongs there |
+|---|---|---|
+| Global | `~/.claude/CLAUDE.md` | Your working style, writing rules, conventions that apply everywhere. Example from the session: never use em dashes, always DD-MM-YYYY, verify every URL before it goes in a document |
+| Project | `<repo>/CLAUDE.md` | This product's structure, file map, rules, what never to do here |
+| Subfolder | `<repo>/<folder>/CLAUDE.md` | Routing and rules for one folder that has grown large enough to need its own context |
+
+- The parent file still loads. The subfolder file adds to it and wins inside that folder.
+- The test to apply: if the rule would still be true on a completely different project, it is global. If it only makes sense for this product, it is project level.
+- When you cannot decide, ask Claude where it should go and to give the logical reasoning, then read the reasoning and make the call yourself.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 01-08-2026)
+
+---
+
+## Q183: How do I build a global CLAUDE.md when I do not have any project work yet?
+
+**Short answer:** You do not write it in one sitting. It accumulates from the moments where Claude does something you did not want.
+
+- The global file shown in the session has been growing since the last quarter of 2025. It was never authored as a document, it was fed one rule at a time.
+- The pattern is: Claude produces something wrong, you correct it, and then you convert the correction into a standing rule instead of correcting it again next week.
+- The worked example given live: a generated document contained a URL that returned 404. The rule that went into the global file was that any link must be opened and confirmed working before it appears in any document.
+- Ask Claude directly to add the rule and to tell you whether it belongs global, project or subfolder. Do not guess.
+- Start with the things you already know about yourself: tone, date format, output length, formatting preferences, what you never want.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 01-08-2026)
+
+---
+
+## Q184: What is the difference between CLAUDE.md and memory? Is memory just the global CLAUDE.md?
+
+**Short answer:** They are different mechanisms. CLAUDE.md is the instruction and orchestration layer you author. Memory is a store of facts that persists across conversations, and like CLAUDE.md it exists at both project and global scope.
+
+- CLAUDE.md carries structure and instruction: the file map, the conventions, the hard rules, where to route a given request.
+- Memory carries recurring facts worth remembering: date format, tone, naming, a tool preference, a routine that already exists.
+- The project memory shown live sat under the project's own folder with a `MEMORY.md` index, and the three entries read out were: this workshop uses the Antigravity IDE, not VS Code, so replace VS Code references; all dates must be DD-MM-YYYY; and a daily 07:00 IST digest routine already exists.
+- Memory is not global-only. It works the same way as CLAUDE.md, at project level and at user level.
+- Same rule as Q182 applies when you are unsure which one a new instruction belongs in: ask Claude to decide with reasoning.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 01-08-2026)
+
+---
+
+## Q185: What exactly is a skill, and when should I create one instead of just writing a prompt?
+
+**Short answer:** A skill is a packaged set of instructions for one repeatable job. The threshold is simple: once is a prompt, twice is a skill.
+
+- The definition used in the session was deliberately non-technical. Think about your own job title and list what you actually do: write a PRD, run stakeholder communication, draft a certain email, build a certain report. Each of those is a candidate skill.
+- If a task will happen once or twice in a year, keep it as a prompt. If it has already happened twice, it will happen again, and it should be a skill.
+- A skill is a folder containing a `SKILL.md` with YAML frontmatter (`name` and `description`) plus the body. The description is what decides when it fires.
+- Skills are invoked with a slash command, or automatically when the request matches the description.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 01-08-2026)
+
+---
+
+## Q186: Are skills tied to the project they were built in, or can I reuse them elsewhere?
+
+**Short answer:** Reusable. A skill lives in `.claude/skills/<name>/` and can be copied into any repository. Only the project-specific references inside it need cleaning.
+
+- The skills in the workshop repo, for example `email-drafter` or `confluence-to-md`, have nothing to do with the fictional product they sit next to.
+- To move one: copy the skill folder into the target repo, then tell Claude the skill came from another project, ask it to strip the old references and adapt it to this project's context.
+- The same is true of agents and rules files. CLAUDE.md is the exception, because it carries this project's orchestration.
+- To pick up a skill someone else pushed, you pull inside the cloned repository. A pull will fail if the folder you have open is not the git repo, which is what happened live in this session.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 01-08-2026)
+- https://code.claude.com/docs/en/common-workflows (verified 01-08-2026)
+
+---
+
+## Q187: I can create a skill in the Claude Pro chat too. What is actually different about Claude Code?
+
+**Short answer:** Skills exist in more than one place. What Claude Code adds is the surrounding architecture: project and global CLAUDE.md, memory, custom subagents with their own memory, plugins and MCP.
+
+- The chat product has no context of your folder at all.
+- Claude Cowork can read and write files in a folder, and can use skills.
+- Claude Code adds custom subagents with persistent agent memory, the plugin system, hooks, settings and the full MCP surface. That is the part that does not transfer.
+- The practical framing given in the session: the advantage is not visible on a single task. It shows up over months, as the memory and the project architecture accumulate and you stop having to re-explain your context every session.
+
+**Sources:**
+- https://code.claude.com/docs/en/overview (verified 01-08-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 01-08-2026)
+- https://code.claude.com/docs/en/plugins (verified 01-08-2026)
+
+---
+
+## Q188: What is the ask user question tool, and is it a plugin I need to install?
+
+**Short answer:** It is built in. Nothing to install. You just tell Claude to use it.
+
+- Adding "if you have any doubt, use the ask user question tool before proceeding" to the end of a prompt makes Claude stop and ask scoped multiple-choice questions instead of assuming.
+- In this session it produced six questions before any work started: which service desk, how big the sample should be, what the management report should be, how categorisation should work, whether the taxonomy is fixed upfront, and what management decision the report has to drive.
+- The value is two-directional. It stops Claude guessing, and it forces you to state things you had not yet decided.
+- Use it on any prompt where the output format or scope matters, which is most PM and reporting work.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 01-08-2026)
+
+---
+
+## Q189: I do not have the real data. Where do I get sample data, do I need Hugging Face?
+
+**Short answer:** No. Ask Claude to generate it. In this session it produced a 450-ticket ServiceNow export across three months, with an answer key and a taxonomy sheet, from the problem statement alone.
+
+- Describe the shape you need: how many rows, which months, which columns, what the distribution should look like.
+- The generated file is a real Excel file you can open, edit and re-run against, not a mock-up.
+- This matters when your real data sits on a client environment you cannot share. You build and validate the pipeline on generated data, then point the finished skill at the real export.
+- When you do have real data, give Claude both a sample input file and a sample of the report you currently send to management, and ask it to update the skill to match both.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 01-08-2026)
+
+---
+
+## Q190: We built a dashboard, then we built a skill. How are these two related? Is the dashboard a skill?
+
+**Short answer:** No. The dashboard was a one-off piece of work. The skill is what that work became after it was validated, so the next month costs one command instead of a full session.
+
+The sequence demonstrated in the session, in order:
+
+1. Take the problem statement and solve it once, by hand, with Claude. Do not try to write a skill first.
+2. Produce a workflow document alongside the output and get the people who consume the report to agree with it.
+3. Only then ask Claude to convert the completed work into a skill.
+4. Prove the skill on fresh data in a brand new session with no context, to confirm it really is self-contained.
+
+- Step 4 was the proof: a new April-to-June sample file, a single slash command plus the file name, no prompt at all, and the same dashboard plus a PPT came back.
+- Skip step 1 when the problem is small and already well understood. The `work-log` skill in the same session was written directly, because the requirement was one paragraph long.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 01-08-2026)
+
+---
+
+## Q191: What is the difference between a skill and an agent, and which one should I build first?
+
+**Short answer:** An agent is a persona. A skill is one thing that persona can do. Build skills first, then an agent that calls them.
+
+- The analogy used: a senior product manager is the agent. Writing a PRD, running a spec review, drafting stakeholder communication and building a dashboard are the skills that person has.
+- A single agent can route to many skills. The `aman.md` agent shown live has a skills routing table, so a request for a PRD is routed to the PRD skill without the user naming it.
+- Overlap is fine. The same job can be done by a skill or by an agent. The distinction that matters is that agents have their own system prompt, their own tool permissions and their own persistent memory.
+- The order given: do the work, validate the work, turn it into a skill, confirm the skills work independently, then build an agent that invokes them. Start small.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 01-08-2026)
+- https://code.claude.com/docs/en/skills (verified 01-08-2026)
+
+---
+
+## Q192: My workflow lives in ServiceNow, Outlook and Teams. Can Claude actually act on those, or only on local files?
+
+**Short answer:** It can act on them, but through connectors and MCP servers, not through a local skill. A local skill can only reach your file system.
+
+- The distinction to hold: if the work is "read this file and produce that file", a local skill is enough. If the work is "read the inbox, send a mail, update the ticket, nudge the user", you need the systems connected.
+- Connectors are added from Claude settings, under Connectors, by browsing for the service and supplying your organisation's server URL.
+- MCP servers are the same idea at the Claude Code level, and are configured per project or per user.
+- The blocker raised in the session is a real one and worth checking early: if your company does not permit Claude access to those systems, you cannot automate the live flow. Build it against dummy data instead and use the working prototype to make the case internally.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 01-08-2026)
+- https://code.claude.com/docs/en/settings (verified 01-08-2026)
+
+---
+
+## Q193: What does the context percentage mean, and when should I run `/compact`?
+
+**Short answer:** It is how much of the conversation window is still free. Compact when it gets low. The rough guidance given in the session was to act once you are below around 40 percent remaining.
+
+- `/compact` summarises the conversation so far and continues from the summary, freeing space without losing the thread.
+- Long-running builds eat context quickly, which is why the percentage is worth keeping in the status line rather than discovering it late.
+- Unrelated work belongs in a separate terminal rather than the same conversation. Three terminals ran side by side in this session for three unrelated tasks.
+- Compaction is a summary, so it is lossy. If a detail must survive, put it in a file, in CLAUDE.md or in memory, not in the conversation.
+
+**Sources:**
+- https://code.claude.com/docs/en/costs (verified 01-08-2026)
+- https://code.claude.com/docs/en/slash-commands (verified 01-08-2026)
+
+---
+
+## Q194: I have a project that is already 70 or 80 percent built, or already deployed. How do I bring Claude into it?
+
+**Short answer:** Open a terminal in that folder, run `claude`, then run `/init`. It reads the existing code and generates a CLAUDE.md from what is actually there.
+
+- `/init` works well on an existing project precisely because there is code and git history to analyse. It fails on an empty folder, which is what was demonstrated in Session 1.
+- After `/init`, ask Claude to walk the project and explain what it does before asking it to change anything, so you can check its understanding is right.
+- Then continue as normal. Nothing about a deployed project blocks this, since Claude Code operates on the repository.
+- Skills, agents and rules files can be copied in from another project. CLAUDE.md cannot, because it carries the other project's orchestration.
+
+**Sources:**
+- https://code.claude.com/docs/en/quickstart (verified 01-08-2026)
+- https://code.claude.com/docs/en/cli-reference (verified 01-08-2026)
+
+---
+
+## Q195: I already pay for Cursor. Do I need both subscriptions? And can I dictate instead of typing?
+
+**Short answer:** No, you do not need both. The IDE is only a file viewer here, and Claude Code runs in the system terminal inside it. For dictation, Claude Code has a built-in voice mode.
+
+- Cursor and Antigravity are IDEs. Using their own agent panel consumes their credits. Using Claude Code inside them does not, because the terminal is the operating system's terminal, not the IDE's agent.
+- The only reason to run Claude Code inside an IDE at all is to see the files the agent writes without switching windows.
+- For dictation there are two separate things. Wispr Flow is a third-party tool that types wherever your cursor is, in any application, and is unrelated to Claude Code. Claude Code has its own voice input, which you may need to enable first.
+- Useful in the same family: `/terminal-setup` configures shift+enter for multi-line input, which several participants hit in this session.
+
+**Sources:**
+- https://code.claude.com/docs/en/ide-integrations (verified 01-08-2026)
+- https://code.claude.com/docs/en/terminal-config (verified 01-08-2026)
+- https://code.claude.com/docs/en/slash-commands (verified 01-08-2026)
+
+---
+
+# August 2026 - Session 3 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 02-08-2026 during Session 3 (the `ux-designer` skill, a resume builder from a real resume, and making CLAUDE.md portable). All URLs verified 02-08-2026.
+
+---
+
+## Q196: Can I take this project's CLAUDE.md, strip the project references, and use it as my global one?
+
+**Short answer:** Yes, and that is the right way to start a global file. Keep the generic rules, remove anything that names a project, and put the result in `~/.claude/CLAUDE.md`.
+
+- Claude Code reads memory at several levels. The user-level file at `~/.claude/CLAUDE.md` applies to every project on the machine. The project file at `./CLAUDE.md` applies only inside that repository.
+- What survives the strip: writing rules, date format, verification habits, how you want work delivered, edge cases you keep hitting. What must go: product names, personas, file maps, folder conventions, anything only true in one repo.
+- The reason to do it by stripping rather than by writing fresh is that a rules file is accumulated, not authored. You already have months of corrections sitting in the project file.
+- A useful check after the strip: read each line and ask whether it would still be true on a project you have not started yet. If not, it belongs in the project file.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 02-08-2026)
+
+---
+
+## Q197: Do I need to prompt this in the project, or does the global file handle it?
+
+**Short answer:** Global handles anything that applies everywhere. You only touch the project file for things that are true in that repo alone.
+
+- The files stack rather than compete. Claude Code loads the user-level file and the project file together, and a more specific file takes priority inside its own scope.
+- A subfolder can carry its own `CLAUDE.md` too, which is worth doing once a folder has grown enough to need its own routing.
+- Practical split used in the session: global holds who you are and how you work, project holds what the product is and where its files live.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 02-08-2026)
+
+---
+
+## Q198: Do spelling mistakes in my prompt matter?
+
+**Short answer:** No. Type `cloud dot md` instead of `CLAUDE.md` and it will still work it out. If it genuinely cannot, it asks rather than guessing.
+
+- This matters more than it sounds, because the most common beginner blocker is editing a prompt for two minutes before sending it.
+- The same applies to file names given approximately. Claude Code searches the repository rather than requiring an exact path.
+- Voice dictation is worth using for long instructions for exactly this reason. Claude Code has a built-in voice input, and third-party dictation tools type into any application including the terminal.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 02-08-2026)
+- https://code.claude.com/docs/en/terminal-config (verified 02-08-2026)
+
+---
+
+## Q199: It could not find the file the first time. Should I retype the whole prompt?
+
+**Short answer:** No. Send it, let it search, then correct it in the next turn. The conversation is the correction mechanism.
+
+- A failed file search is a normal turn, not a failed prompt. Reply with the right spelling or the right folder and it continues from where it was.
+- Retyping the full instruction costs more than the correction and loses the context it has already built.
+- If it repeatedly cannot locate something, check you opened the terminal inside the cloned repository. Claude Code only sees the folder it was started in and below.
+
+**Sources:**
+- https://code.claude.com/docs/en/quickstart (verified 02-08-2026)
+- https://code.claude.com/docs/en/cli-reference (verified 02-08-2026)
+
+---
+
+## Q200: My SKILL.md is getting long. What happens past 200 lines?
+
+**Short answer:** Move the overflow into reference files in the skill folder. The `SKILL.md` body stays short, the reference files can be as long as they need to be.
+
+- Skills load progressively. The frontmatter `name` and `description` are always in context, the `SKILL.md` body loads when the skill triggers, and bundled files under `references/`, `scripts/` and `assets/` load only when the body points to them.
+- That is why length in the body is expensive and length in a reference is nearly free.
+- The pattern to copy: `SKILL.md` says what to do and in what order, and a table at the top says which reference file to read for which job.
+- The Anthropic guidance is to keep the body under 500 lines. Around 200 is a good moment to start splitting rather than waiting for the ceiling.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 02-08-2026)
+- https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills (verified 02-08-2026)
+
+---
+
+## Q201: Where should a QC checklist live inside a skill?
+
+**Short answer:** In a reference file the `SKILL.md` body explicitly tells the model to read before handover. Not inline, and not as advice.
+
+- A checklist works only if the body names the moment it runs. "Run this before you show the user anything" is instruction, "here are some things to consider" is decoration.
+- The checklist in the resume skill built in this session was assembled from mistakes that had already happened: full email address, correct headline, custom PDF correct, experience section present, LinkedIn and GitHub links, and a truthfulness check against the source resume.
+- That is the pattern worth copying. Every time the skill gets something wrong, the correction becomes a checklist line, so it becomes a gate rather than a memory.
+- Where a check can be run mechanically, prefer a script in `scripts/` over a prose item, because a prose item can be passed by typing a word.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 02-08-2026)
+
+---
+
+## Q202: It added a change log. Is that a normal thing for a skill to do?
+
+**Short answer:** It is not automatic, it is something you ask for, and it is worth asking for on any skill that edits a document you care about.
+
+- The value is reviewability. When a skill rewrites a resume against a JD, the change log tells you which bullets moved, which wording changed, and what was added, so you can check it against the truth rather than reading the whole document again.
+- It also gives you something to correct. A wrong entry in the change log turns into a new checklist line for the next run.
+- Keep it as a file the skill writes, not as chat output, since chat output disappears with the session.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 02-08-2026)
+
+---
+
+## Q203: What does the ux-designer skill do, and when do I use it?
+
+**Short answer:** It designs new UI from a brief, or reviews existing UI and returns a ranked defect list. The default output is a clickable self-contained HTML mockup you can judge before development starts.
+
+- Two modes in one skill, because a review that cannot state what good looks like is only an opinion, and a design that was never audited is only a guess.
+- Design mode works in a fixed order: frame the user and the goal, structure the flow, set the hierarchy, then apply tokens, then build, then gate. The order exists to stop colour being chosen before the goal is known.
+- Review mode drives the real page in a browser, runs a mechanical audit first, then the 10 usability heuristics, then a diagnosis pass, and every finding ships with the exact element and the exact fix.
+- It ships its own gate: a static check script, a browser audit for computed contrast and hit targets, screenshots at 1440px and 390px, and driving every control to confirm dependent panels actually update.
+- Invoke it with `/ux-designer`, or just describe the screen you want, since the description covers phrases like "design this screen", "make a mockup" and "review this UI".
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 02-08-2026)
+- https://code.claude.com/docs/en/slash-commands (verified 02-08-2026)
+
+---
+
+## Q204: Is GitHub Copilot on the same line as Claude Code now?
+
+**Short answer:** On raw code completion they are comparable. The difference this cohort cares about is not completion, it is the architecture around it: skills, subagents, memory, hooks and rules files.
+
+- The honest framing given in the session was that reasoning quality and the surrounding architecture are what separate them, not any single generated file.
+- The test proposed was better than the argument: build the same skill in both tools, on the same problem, and observe what each one does with the structure.
+- Worth being clear about the limit of that answer. It was given by someone who has not used the competing agent tools himself, so it is a claim about Claude Code's architecture, not a measured comparison.
+- The features to compare against, concretely: `.claude/skills/` with progressive disclosure, `.claude/agents/` subagents with their own context, per-project and per-user memory, path-triggered rules, and hooks that fire on tool events.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 02-08-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 02-08-2026)
+- https://code.claude.com/docs/en/memory (verified 02-08-2026)
+
+---
+
+## Q205: Where do Perplexity, DeepSeek and Gemini fit alongside this?
+
+**Short answer:** Different jobs. Perplexity is for gathering data off the internet, not for building. Treat it as a knowledge-finder that feeds an experiment, not as a coding agent.
+
+- The distinction that matters is whether the tool acts on your file system. A chat model answers, an agent reads and writes files and runs commands.
+- Where Perplexity earns its place in a PM workflow: pulling data points for an experiment, market or competitor gathering, sourcing numbers you then verify yourself.
+- If you want research inside Claude Code rather than outside it, connect the source rather than copy-pasting. MCP servers and connectors let it reach systems and data directly.
+- The only comparison worth trusting is one you ran yourself on one identical task. Anything else, including this answer, is secondhand.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 02-08-2026)
+
+---
+
+## Q206: How do I make a skill portable across projects, along with my rules?
+
+**Short answer:** Skills, agents and rules files copy cleanly between projects. CLAUDE.md does not, because it carries one project's orchestration. Strip it first, or keep a generic copy at user level.
+
+- Copy the whole skill folder, `SKILL.md` plus `references/`, `scripts/` and `assets/`, into the new repository's `.claude/skills/`. Nothing else is needed for it to trigger.
+- For a skill you want everywhere, put it in `~/.claude/skills/` instead, and it is available in every project on the machine.
+- The same split applies to subagents: `.claude/agents/` for one project, `~/.claude/agents/` for all of them.
+- What does not travel is anything that names the project. That is exactly the strip described in Q196, and it is why the global file is worth building once rather than re-deriving per repo.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 02-08-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 02-08-2026)
+- https://code.claude.com/docs/en/memory (verified 02-08-2026)
+
+---
+
+# August 2026 - Session 4 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 02-08-2026 during Session 4 (improvement trackers, pushing a skill to GitHub, and building the first agent). All URLs verified 02-08-2026.
+
+---
+
+## Q207: What is the point of an `improvements.md` inside `references/` if it is not loaded when the skill runs?
+
+**Short answer:** That is exactly the point. It is your backlog for the skill, and leaving it out of `SKILL.md` keeps it from being treated as an instruction.
+
+- A skill loads in layers. The name and description are always in context, the `SKILL.md` body loads when the skill triggers, and bundled files under `references/` load only when the body points at them.
+- So a file that sits in `references/` and is never referenced is inert at runtime. It costs nothing in context and it cannot be mistaken for a rule the skill should follow.
+- What it buys you is a place to park an idea at the moment you have it, without stopping the work. "I want an API integration here" or "this should become HTML" goes in the file, dated, and the skill carries its own to-do list instead of it living in a notes app.
+- Keep it separate from the files the skill genuinely updates as it runs, such as a keyword tracker or a QC checklist. Those are referenced on purpose because the skill maintains them.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 02-08-2026)
+
+---
+
+## Q208: Should a job scraper be part of the resume-tailor skill, or a separate skill?
+
+**Short answer:** Separate. Then build an agent above them that invokes each skill in turn.
+
+- The test is whether the two jobs would ever be wanted independently. Scraping listings is useful without tailoring a resume, and tailoring is useful for a JD someone sent you directly. Two jobs, two skills.
+- A skill that grows a second unrelated responsibility gets harder to trigger correctly, because its description now has to describe both, and the model has to guess which half you meant.
+- The orchestration belongs one level up. An agent can call several skills in sequence, hold the context between them, and carry its own memory of what worked.
+- Practical shape from the session: a scraper skill, a resume-tailor skill, a tracker skill, and one job-hunter agent that runs them in order with you reviewing between steps.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 02-08-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 02-08-2026)
+
+---
+
+## Q209: How do I invoke a skill versus an agent?
+
+**Short answer:** A skill is `/skill-name`. A subagent is `@agent-name`. You can also just describe the task and let the right one trigger on its own.
+
+- `/` is the command surface. Typing `/competitive-analysis` runs that skill directly.
+- `@` addresses a subagent, the same way you would tag a person, because a subagent is closer to a persona with its own context and memory.
+- Neither is strictly necessary. Both skills and subagents carry a description whose whole job is to say when they should be used, so "improve my recent changes" can pull in the right agent without you naming it.
+- Naming it explicitly is still worth doing when you want to be certain, or when two of them could plausibly apply.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 02-08-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 02-08-2026)
+
+---
+
+## Q210: Can I get a shareable link for the HTML file it just built?
+
+**Short answer:** No. It is a file on your machine, so opening it directly and opening it through a local server are both local-only. A link other people can open needs deployment.
+
+- `localhost` is not a public address. It resolves to your own computer, so a `localhost` URL is meaningless to anyone else even on the same network.
+- For a self-contained HTML file with inline CSS and JS, double-clicking it and serving it locally are the same thing from the viewer's point of view. There is no advantage to the server version unless the page fetches other files.
+- To share it, either send the file itself, since a self-contained page opens anywhere, or deploy it to a host. That is a separate step and not something the local run can do for you.
+- This is why a single self-contained HTML file is worth insisting on. It can be emailed and opened on a phone with no build step.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 02-08-2026)
+
+---
+
+## Q211: If I build a skill inside the workshop repo, does my resume data end up in the instructor's GitHub?
+
+**Short answer:** No. Nothing on your machine reaches someone else's repository unless you open a pull request and they merge it.
+
+- Cloning a repository gives you a local copy. Edits stay local until you push, and you can only push to a repository you have write access to.
+- For a repository you do not own, the route is a fork or a pull request, and the owner has to merge it. That is a deliberate human step, not an automatic sync.
+- The safe habit regardless: keep anything with personal data in a folder that is git-ignored, or work in your own repository from the start.
+- Before any push, check what is actually staged. Credentials, API keys and personal details are the three that matter, and a push is hard to undo once it is public.
+
+**Sources:**
+- https://code.claude.com/docs/en/security (verified 02-08-2026)
+
+---
+
+## Q212: Should the repo be public or private if the skill handles my resume?
+
+**Short answer:** Private by default when personal data is involved. If you want it public as a portfolio piece, publish the method and strip the data.
+
+- The split used in the session: readme plus a poster page describing the workflow, the skill code included but with personal data removed, and the actual resumes and job descriptions left out entirely.
+- Ask what you are trying to show. A hiring manager wants to see that you built the system, not to read your address and phone number. The method is the portfolio, the data is not.
+- Watch for files created outside the folder you were thinking about. In this session an `index.html` was written one directory up from where the participant expected, which is exactly how something unintended gets committed.
+- Say what you want explicitly before pushing, for example "create a readme and a poster page, do not publish the actual skill files or any personal data", so the decision is made before the commit rather than after.
+
+**Sources:**
+- https://code.claude.com/docs/en/security (verified 02-08-2026)
+
+---
+
+## Q213: How do I turn a skill I built inside another project into its own project?
+
+**Short answer:** Make a folder, create `.claude/skills/` inside it, copy the skill folder across, then run `/init` to generate a `CLAUDE.md` from what is there.
+
+- A skill is just a folder: `SKILL.md` plus optional `references/`, `scripts/` and `assets/`. Copy the whole thing and it works in the new location with no other wiring.
+- `.claude` is a hidden folder, so Finder will not show it by default. **Command + Shift + dot** toggles hidden files on macOS. This blocks people far more often than it should.
+- `/init` is worth running once the skill is in place, because it reads what already exists and writes a `CLAUDE.md` describing it, rather than you writing that file from a blank page.
+- `CLAUDE.md` matters because it is read before your prompt. Without it, a run may open ten or fifteen files to work out what the project is. With it, it knows where to look first.
+- If you want the skill available in every project rather than one, put it in `~/.claude/skills/` instead.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 02-08-2026)
+- https://code.claude.com/docs/en/memory (verified 02-08-2026)
+
+---
+
+## Q214: Which model should I use, and does a design task need a bigger one?
+
+**Short answer:** Sonnet for day-to-day work. Opus for a review pass once something is built. At this level of task, the difference is smaller than the question suggests.
+
+- The instinct that architecture and design deserve more reasoning is right in principle. It just does not bite yet, because building a skill or an agent is not a complex enough workflow for the gap to show.
+- A pattern that does pay: build with Sonnet, then run a review pass with Opus asking what else could be improved. You get the stronger model where judgement matters and not where it does not.
+- Model choice is switchable per session with `/model`, and can be set per subagent in its frontmatter, so an expensive model can be reserved for the one agent that needs it.
+- Cost follows this directly. If you are hitting limits, the usual cause is running the heaviest model on routine work rather than the work itself being expensive.
+
+**Sources:**
+- https://code.claude.com/docs/en/model-config (verified 02-08-2026)
+- https://code.claude.com/docs/en/costs (verified 02-08-2026)
+- https://docs.anthropic.com/en/docs/about-claude/models/overview (verified 02-08-2026)
+
+---
+
+## Q215: When should I use plan mode?
+
+**Short answer:** When the task has enough steps that you would ask a colleague to come back with a plan before starting.
+
+- The analogy from the session is the useful one. If a task pulls data from three teams, has many steps, and ends in a report, you do not say "go do it". You say "plan it, show me, then build". Plan mode is that, for the same reason.
+- What it changes: the run researches and proposes an approach without editing anything. You read the plan, spot the missing step, ask for the change, and only then approve the build.
+- The value is that a wrong assumption costs you one paragraph of reading instead of an hour of undoing files.
+- For a one-file edit or a quick question it is overhead. For "create an agent that invokes these skills, scores the fit, and only proceeds above 85 percent" it is clearly worth it.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 02-08-2026)
+- https://code.claude.com/docs/en/interactive-mode (verified 02-08-2026)
+
+---
+
+## Q216: What happened to `/agents`? The wizard is gone.
+
+**Short answer:** It was removed. You now create a subagent by asking for one in a normal prompt, and it writes the file for you.
+
+- The old flow was an interactive window that walked you through name, description, tools and model. Everything that window collected is now just information you put in the prompt.
+- A working prompt looks like: create a project subagent in `.claude/agents/` called `code-improver` that scans files and suggests improvements for readability, performance and best practices, make it read-only, and use Sonnet.
+- The reason for the change is that the step-by-step wizard stopped adding anything once a plain prompt could carry the same detail and produce a better-written system prompt.
+- You can still edit the generated file directly afterwards, which you often should, and it is a plain Markdown file with YAML frontmatter.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 02-08-2026)
+
+---
+
+## Q217: What is the frontmatter in an agent file, and what does the colour do?
+
+**Short answer:** Frontmatter is the YAML block at the top that configures the agent. Everything below it is the agent's system prompt. Colour is only a visual tag.
+
+| Field | What it does |
+|---|---|
+| `name` | The identifier you invoke with `@` |
+| `description` | When it should be used. This is the trigger, so it carries the most weight |
+| `tools` | What it is allowed to use. Inherits everything if omitted |
+| `disallowedTools` | What it must not use. This is the field that actually enforces read-only |
+| `model` | Which model runs it, or `inherit` |
+| `memory` | Turns on a persistent memory folder for this agent |
+| `skills` | Skills preloaded into the agent's context at startup |
+| `color` | The colour shown when the agent is running. Cosmetic only |
+
+- The important lesson from the session: writing "you are strictly read only" in the body is not a control. The review found an agent whose body said exactly that while `disallowedTools` never blocked edit, so it could silently write files. Instructions in prose are intent, frontmatter is enforcement.
+- Colour has no functional effect. It exists so you can tell at a glance which agent is running.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 02-08-2026)
+
+---
+
+## Q218: How is an agent different from a skill, and is there really just one `MEMORY.md`?
+
+**Short answer:** A skill is a procedure. An agent is a persona with its own context and persistent memory. And yes, one `MEMORY.md`, but it is an index that points at the other memory files.
+
+- Think of a skill as instructions for doing a task, and an agent as someone who does that kind of work, remembers what happened last time, and gets better at it.
+- Structurally, a skill is a folder with `SKILL.md` plus optional references, scripts and assets. An agent is a single Markdown file in `.claude/agents/`, and when memory is enabled it gets its own memory directory alongside.
+- `MEMORY.md` is loaded into the agent's system prompt on every run, which is why it stays an index rather than a dump. It carries one line per memory pointing at the file that holds the detail, and the agent reads only the ones relevant to the task.
+- This is the part that compounds. Feedback captured after a stakeholder review becomes a memory, and the next report does not repeat the mistake. Six months later a new person inherits an agent that already knows how the work is done, instead of starting at zero.
+- Skills have no built-in memory architecture. If you want a skill to accumulate, you build the file yourself and reference it from `SKILL.md`, which is what the ATS keyword tracker was.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 02-08-2026)
+- https://code.claude.com/docs/en/skills (verified 02-08-2026)
+
+---
+
+## Q219: Can one agent review all my projects at once?
+
+**Short answer:** Not in one pass. An agent runs against the project you have open. To use the same agent everywhere, install it at user level, then run it once per project.
+
+- Project-level agents live in `.claude/agents/` and exist only in that repository. User-level agents live in `~/.claude/agents/` and are available in every project on the machine.
+- Where they conflict, the project version wins, which is what you want, since a project-specific agent usually knows something the generic one does not.
+- The scope of any single run is still the working directory. Reviewing five projects means opening each one and invoking the agent there.
+- Related question from the session, worth stating separately: an agent may rewrite its own definition file when you ask it to improve itself, and it will not necessarily tell you first. Copy the file before letting that happen, or say "do not modify this file, write the suggestions out instead". Then you keep every version and choose what to apply.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 02-08-2026)
+
+---
+
+## Q220: What is the right way to give an agent a set of known frameworks, and what does "official sources" mean?
+
+**Short answer:** Put the frameworks in a skill and preload it through the agent's `skills:` frontmatter field. Not pasted into the agent body, and not in a rules file. Official sources means the framework owner's own site.
+
+- Three mechanisms could carry a framework into an agent, and they are not equivalent. The `skills:` field injects the full content of each listed skill into the subagent's context at startup, which is what that field is designed for. Rules load through `CLAUDE.md` and are project-scoped, not agent-scoped. Pasting the content inline into the agent body is the anti-pattern, because the same hundred-plus lines then get copied into every agent that needs them and drift apart immediately.
+- So the shape is: one skill holding the frameworks, referenced by however many agents need it, updated in one place.
+- "Official sources" means react.dev for React, the Next.js docs for Next.js, Google's own published engineering practices, the framework author's own site. Not a blog post summarising them, and not a random site that ranked well.
+- Worth stating in the prompt explicitly, because the default is to search broadly. "Use official and authenticated sources only" changes where it looks.
+- The same session also named the five agent patterns, which are covered in Anthropic's own write-up: prompt chaining, routing, parallelization, orchestrator-workers, and evaluator-optimizer.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 02-08-2026)
+- https://code.claude.com/docs/en/skills (verified 02-08-2026)
+- https://www.anthropic.com/engineering/building-effective-agents (verified 02-08-2026)
+
+---
+
+## Q221: What is MCP, and how is it actually different from an API?
+
+**Short answer:** Both connect two systems. The difference is that an MCP server ships with its tools and permissions already defined, so you connect once instead of wiring up endpoints and hosting something yourself.
+
+- MCP stands for Model Context Protocol. It is an open standard for connecting an assistant to external tools and data, and Claude Code can connect to MCP servers directly.
+- With APIs you generate credentials, work out which endpoints you need, and usually run a server of your own. Reading, creating and editing a file might be three separate endpoints you have to handle.
+- With an MCP server, the provider has already decided what the tools are and what each one may do. The example used in the session: a Gmail server may let you create a draft but not edit an existing message. That constraint is part of the server, not something you configure.
+- That is the trade. You get much simpler setup and a safer default, and you give up the freedom to do anything the underlying API allows.
+- Practically, if a connector already exists for a system you use, connecting it beats copy-pasting data in and out.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 02-08-2026)
+
+---
+
+# August 2026 - Session 5 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 08-08-2026 during Session 5 (agent memory, routing agents, and evaluation criteria). All URLs verified 08-08-2026.
+
+---
+
+## Q222: The advice now is "give a goal and guardrails, not steps". Is that only for Opus, or for Sonnet too?
+
+**Short answer:** It applies to all the current models, not just the largest one. It is a statement about how capable the models have become, not about which one you picked.
+
+- The reasoning is that an explicit step list is a ceiling as well as a floor. If you spell out the route, Claude follows your route, and any better route or extra case it would have found is lost.
+- What replaces the steps is the goal, the constraints it must not break, and the definition of done. That leaves the method open while keeping the outcome pinned.
+- The same shift explains why a lot of older rules files and skill bodies now read as noise. Instructions written to compensate for weaker models are still being loaded and paid for in context, while the model already handles them.
+- Practical test before you send a prompt: is this line describing what "good" looks like, or is it describing how to get there? Keep the first, cut the second.
+- This does not mean drop the guardrails. Constraints, output format, and files that must not be touched are still worth stating explicitly, because those are outcomes rather than methods.
+
+**Sources:**
+- https://www.anthropic.com/engineering/claude-code-best-practices (verified 08-08-2026)
+
+---
+
+## Q223: What does `/init` actually do, and how often should I run it?
+
+**Short answer:** It scans the project and writes or updates `CLAUDE.md`. Weekly is a sensible cadence, not every session.
+
+- On a project with no `CLAUDE.md`, it reads the directory structure and the existing files, works out what the project is, and generates one.
+- On a project that already has one, it updates it rather than overwriting from scratch. In the live run this session it caught the skill count drifting from "40 plus" to 65 plus.
+- The reason to re-run it is drift. Every skill and agent you add is context Claude will not use unless something tells it they exist, and `CLAUDE.md` is that something.
+- Daily is unnecessary and burns tokens for nothing. Weekly, or right after a batch of new skills or agents, catches the drift that actually matters.
+- Worth knowing there are two levels: the project `CLAUDE.md` in the repo, and a personal one at `~/.claude/CLAUDE.md` that applies everywhere. `/init` writes the project one.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 08-08-2026)
+
+---
+
+## Q224: What exactly is an agent, how is it different from a skill, and is a "sub-agent" a third thing?
+
+**Short answer:** A skill is a procedure. An agent is a persona that holds memory and can call several skills. "Sub-agent" and "agent" are the same thing.
+
+- Think of an agent as a colleague rather than an instruction sheet. It has a role, a model, a tool list, and a memory that survives between runs.
+- A skill has none of that. It is a body of instructions that loads when triggered and leaves nothing behind.
+- One agent can invoke many skills. The worked example in the session was a senior PM agent that calls the PRD skill for one request, the Jira ticket skill for another, and the email skill for a third.
+- "Sub-agent" only signals that it is scoped to the project rather than installed globally. The file format and behaviour are identical. Project agents live in `.claude/agents/`, personal ones in `~/.claude/agents/`.
+- Both are Markdown files. An agent is YAML frontmatter with a name, description, tools and model, followed by a body that becomes its system prompt.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 08-08-2026)
+- https://code.claude.com/docs/en/skills (verified 08-08-2026)
+
+---
+
+## Q225: Where does an agent's memory live, and does Claude save to it automatically?
+
+**Short answer:** It lives in a memory folder tied to that agent. Claude writes to it on its own: auto memory is on by default, both for the main conversation and for any subagent that has the `memory` field set. Saying "keep this in memory" still works and guarantees the entry, but it is not required.
+
+> **Corrected 12-09-2026.** The August answer said memory is not automatic. The official memory page now says auto memory is on by default and Claude saves four kinds of notes itself: `user` (your role and preferences), `feedback` (corrections you give), `project` (decisions Claude cannot derive from the code), `reference` (where things live). It skips anything the codebase or CLAUDE.md already says, and it does not save something every session.
+
+- This was the single biggest point of confusion in the session, and it is worth separating cleanly. You never create the folder or the file by hand, so in that sense it is automatic. Claude does not decide on its own what is worth remembering, so in that sense it is not.
+- `MEMORY.md` is an index. It carries one line per memory pointing at the individual memory files, so the agent can see what it knows without loading everything.
+- An explicit "keep this in memory" guarantees the entry. A fact stated in passing may or may not be saved, Claude decides whether it would be useful in a future conversation. If it matters, say it.
+- The colleague analogy from the session is the right mental model. If a stakeholder gives feedback in a meeting a colleague missed, you tell them explicitly that from now on the report needs that extra section. You do not assume they absorbed it.
+- Good candidates for memory are decisions, constraints and corrections that should apply to every future run. Facts that are true only for today's task belong in the prompt.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory, section "Auto memory" (verified 12-09-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 12-09-2026)
+
+---
+
+## Q226: I looked for a memory folder for my skill and there isn't one. Do skills not have memory?
+
+**Short answer:** Correct, skills have no memory. If you want a skill to get better over time, that lives in `SKILL.md`, an `improvements` file, and rules files.
+
+- A skill is stateless by design. It loads, runs, and leaves nothing behind, which is exactly what you want for a repeatable procedure.
+- So improvement to a skill is a change to the skill, not a note it reads later. When an iteration exposes a defect, the fix belongs in `SKILL.md` or a referenced checklist so it is enforced on the next run.
+- `improvements.md` or `improvements.html` is a different thing again. That is your audit trail and backlog, recording what changed and what you still want, and it is for humans.
+- Yes, `SKILL.md` plus an improvements file is enough. That combination gives you enforcement in one file and history in the other.
+- If a body of knowledge needs to persist across many skills, a rules file or an agent with memory is the right home, not the skill.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 08-08-2026)
+- https://code.claude.com/docs/en/memory (verified 08-08-2026)
+
+---
+
+## Q227: In the agent frontmatter, what do `color`, `Glob`, and read-only versus write actually mean?
+
+**Short answer:** `color` is cosmetic, `Glob` is a file-search tool, and the tool list is what actually decides whether the agent can change anything.
+
+- `color` sets the highlight shown when that agent is invoked, so when several agents are in play you can see which one is running. Nothing more than that.
+- `Glob` is a tool for finding files by pattern across folders. It is a traversal capability, not a scope setting, and has nothing to do with the global-versus-project distinction. That confusion came up live and is worth being clear on.
+- Read-only versus write is decided by the tools you grant. An agent with Read and Glob can look but not touch. Add Write and it can create files. Add Edit and it can change existing ones.
+- Grant the narrowest set that does the job. In the session an agent was given Read, Glob and Write specifically so it could produce a brief file without being able to edit the transcripts it was reading.
+- Do not rely on the body text alone. Writing "you are strictly read only" in the prompt while leaving edit tools enabled is exactly the defect found in Session 4. The tool list is the enforcement, the prose is not.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 08-08-2026)
+- https://code.claude.com/docs/en/settings (verified 08-08-2026)
+
+---
+
+## Q228: Do I have to type `@agent-name`, or can I just describe what I want?
+
+**Short answer:** Either works. Every agent carries a description whose whole job is to say when it should be triggered, so a plain request usually finds the right one.
+
+- The demo in the session was a plain sentence about synthesising user interviews, and the correct agent picked it up without being named.
+- `@agent-name` is the explicit form. Use it when two agents could plausibly apply, or when you want to be certain which one runs.
+- This is why the `description` field deserves real effort. It is the trigger, not documentation. A vague description means the agent either never fires or fires on the wrong request.
+- The same holds for skills with `/skill-name`. Naming it is a guarantee, describing the task is a convenience.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 08-08-2026)
+
+---
+
+## Q229: What is prompt chaining with quality gates?
+
+**Short answer:** Splitting a job into sequential stages and putting a pass condition between each one, so stage two cannot start on bad output from stage one.
+
+- The pattern matters because errors compound. If stage one extracts three pain points when it should have found thirty, every stage after it produces a confident, well-structured, wrong answer.
+- A gate is a concrete condition, not an intention. "If fewer than N pain points per interview, re-read that interview before continuing" is a gate. "Be thorough" is not.
+- The agent built live this session used four stages: extract raw pain points, cluster into themes, rank by frequency and severity, then write the brief. Each had its own gate.
+- Write the gate as something checkable. A count, a required field, a format that either parses or does not. If the gate can be passed by asserting it was passed, it is decoration.
+- This is one of several documented agent patterns. The others named in the session were routing, parallelisation, orchestrator and evaluator-optimiser.
+
+**Sources:**
+- https://www.anthropic.com/engineering/building-effective-agents (verified 08-08-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 08-08-2026)
+
+---
+
+## Q230: What is a routing agent, and should I build it before or after the specialist agents?
+
+**Short answer:** It classifies a request and dispatches to the right specialist, and it never answers the request itself. Build it after the specialists, once you have three or four.
+
+- Its only two jobs are classification and dispatch. The moment a router starts answering requests directly, you have a second general assistant rather than a router.
+- The demo made the value obvious: one prompt about action item accuracy, and the router classified it as a PRD request and opened the PRD drafter, with nobody naming an agent.
+- The reason to build it late is that a router needs something to route to. With two agents you can remember which is which. At six or seven, spread across project and personal scope, you cannot, and that is when it earns its place.
+- Either order technically works. But building the orchestrator first tends to produce an abstraction designed around agents that do not exist yet.
+- Keep the classification set small and explicit. The session's router classified into four buckets, one of which was "unclear", which is what stops it guessing.
+
+**Sources:**
+- https://www.anthropic.com/engineering/building-effective-agents (verified 08-08-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 08-08-2026)
+
+---
+
+## Q231: Are evals, guardrails, QC checklists and edge cases all the same thing?
+
+**Short answer:** Yes, in practice. The terminology changed, the practice did not.
+
+- All four describe the same move: a set of conditions the output must satisfy before it counts as done, checked before anything is released.
+- If you have shipped software, you have done this. It was the QC checklist and the test criteria that had to pass before a build went to production. "Evals" and "guardrails" are the current words for it.
+- Knowing this is useful because it tells you where the work is. You are not learning a new discipline, you are writing down the checks you already apply by instinct.
+- The checks come from iteration, not from planning. The resume skill discussed in the session accumulated its checklist over four to five rounds, and each item traces back to a specific defect: a date format that drifted, a PDF header overlapping a rule line, content overlapping between sections.
+- Write each one so it can fail. A rubric with points, a required field, a format check. "Make sure the output is good" is not a check.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 08-08-2026)
+- https://www.anthropic.com/engineering/building-effective-agents (verified 08-08-2026)
+
+---
+
+## Q232: Does `improvements.html` update itself after every run?
+
+**Short answer:** No. It updates when you ask for it. To make it automatic, put that instruction in `SKILL.md`.
+
+- Nothing writes a change log on its own. The file exists because it was asked for, and each entry exists because someone asked for that entry.
+- The fix is one line in `SKILL.md` telling the skill to append to the improvements file whenever it makes a change. After that it happens on every run.
+- You do not need to read `SKILL.md` to find out whether it already does this. Ask directly: "when I run this skill and it changes something, does the improvements file get updated?" Claude will check and tell you.
+- Keep the distinction clear. `SKILL.md` is what the skill enforces, the improvements file is the history of how it got there. Only the first changes behaviour.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 08-08-2026)
+
+---
+
+## Q233: The status line shows "5 hours 0 percent" and "7 days 10 percent". What do those mean, and can I burn a month's budget in a week?
+
+**Short answer:** They are two independent usage windows, a rolling 5-hour one and a 7-day one, each resetting on its own clock. It is not a monthly pot you can exhaust early.
+
+- Both windows run at the same time. Hitting the 5-hour limit pauses you until that window resets, even if your 7-day figure is low.
+- Each shows its own reset time in the status line, which is why one can read 0 percent while the other reads 10 percent.
+- This is the specific difference from a monthly credit model, and it was the concern raised in the session. A weekly ceiling means a heavy few days cannot leave you with nothing for the rest of the month, because the window rolls.
+- Limits vary by plan, and heavier models consume the allowance faster. If you are hitting the 5-hour window repeatedly, that is usually a signal to drop to a smaller model for routine work rather than to buy more capacity.
+- `/doctor` is worth running if usage looks higher than expected. It reports on the setup and flags context being consumed before you have typed anything.
+
+**Sources:**
+- https://support.anthropic.com/en/articles/11145838-using-claude-code-with-your-pro-or-max-plan (verified 08-08-2026)
+- https://code.claude.com/docs/en/costs (verified 08-08-2026)
+
+---
+
+## Q234: There is a dollar figure in my status line. Am I being charged extra?
+
+**Short answer:** Not necessarily, but it is worth confirming rather than assuming. Check whether usage credits are switched on in your account settings.
+
+- The status line is customisable, and a dollar figure there usually reflects the cost of the current session's usage rather than a charge on top of your plan.
+- The setting that matters is usage credits. With it off, hitting your plan limit stops you until the window resets. With it on, usage past the limit bills to credits. Neither is wrong, but you should know which one you have.
+- Find it in the account settings under usage and billing, on either the web app or the desktop app.
+- The practical check suggested in the session is a good one: screenshot the status line, open a new session, and ask Claude what that figure represents in your configuration. The status line is defined by your own config, so your setup is the authority on it.
+
+**Sources:**
+- https://code.claude.com/docs/en/statusline (verified 08-08-2026)
+- https://code.claude.com/docs/en/costs (verified 08-08-2026)
+
+---
+
+## Q235: It says medium effort. Should I turn it up to high?
+
+**Short answer:** Leave it on medium for normal work. Raise it for genuinely hard reasoning, and expect it to cost more and take longer.
+
+- Effort controls how much reasoning the model does before answering. Higher is not better in general, it is better for problems where the thinking is the hard part.
+- Most day-to-day work does not benefit. Writing a file, running a skill, making an edit, none of these get more correct with more deliberation, they just get slower.
+- Where it does pay is architecture decisions, tricky debugging, and reviewing something already built for defects you would not have thought to look for.
+- Model choice and effort are separate dials and interact. A larger model at medium effort is often a better trade than a smaller one at high effort.
+- The general shape from the session: a mid-tier model for daily use, a larger one for a review pass after something is built.
+
+**Sources:**
+- https://code.claude.com/docs/en/model-config (verified 08-08-2026)
+
+---
+
+## Q236: What is the ask-user-question tool, and why add it to every brainstorming prompt?
+
+**Short answer:** It makes Claude ask you clarifying questions before it starts building, instead of guessing your intent and being wrong at the end.
+
+- Adding a line like "use the ask user question tool" to an open-ended prompt turns a one-shot guess into a short interactive scoping conversation.
+- In the live demo it asked four questions before writing anything: reusable agent or one-off analysis, what evidence to draw on, how broad the scope should be, and whether to write findings to a file or reply in chat.
+- Each option comes with an explanation, and there is always a route to type your own answer or discuss it, so you are not forced into a choice you do not understand.
+- The value is the same as with a colleague. Better to clarify at the start than to receive something built on a wrong assumption and have to say it should have been checked.
+- Pairs well with dictating rather than typing. Speaking supplies far more context than you would type, and rambling mid-sentence is fine because the model reconstructs the intent.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 08-08-2026)
+- https://code.claude.com/docs/en/interactive-mode (verified 08-08-2026)
+
+---
+
+## Q237: I closed my editor and all my terminals disappeared along with the context. How do I get a session back?
+
+**Short answer:** Sessions are resumable. Use `--continue` for the most recent one in that folder, or `--resume` to pick from a list.
+
+- The conversation is not lost when the terminal closes. It is stored per project directory, so reopening in the same folder gives you access to its history.
+- `claude --continue` picks up the most recent conversation in the current directory without asking. `claude --resume` shows the list so you can choose.
+- `/rewind` is worth knowing alongside this. It steps back to an earlier checkpoint within a conversation, which is the fix when a run went wrong rather than when the terminal was closed.
+- Running many terminals at once does not slow Claude down, but it does load your machine, and each one holds its own separate context. Closing the ones you are not using is worth doing.
+- If you routinely work across several named sessions, keeping a short registry file in the project with what each one is for makes them findable later. This is a convention rather than a product feature.
+
+**Sources:**
+- https://code.claude.com/docs/en/cli-reference (verified 08-08-2026)
+- https://code.claude.com/docs/en/checkpointing (verified 08-08-2026)
+
+---
+
+# August 2026 - Session 6 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 08-08-2026 during Session 6 (agent teams, dynamic workflows, and skill versus rule). All URLs verified 08-08-2026.
+
+---
+
+## Q238: I asked Claude to create an agent and it wrote a spec and an implementation plan first. Why?
+
+**Short answer:** Because it read your repository and judged the task complex enough to warrant them. On a small task it goes straight to creating the agent.
+
+- This is the same behaviour that produced every agent in the previous session with no spec at all. Those were small, self-contained problems, so there was nothing to design.
+- On a full repository scan, with an existing architecture and real gaps, the model treats the work as a build rather than a one-liner and produces a design document first, then a plan, then the artifact.
+- The practical value is that you get a reviewable checkpoint before anything is written. Read the design file and confirm the goal is actually your goal, then approve the plan, then let it build.
+- If you do not want that, say so in the prompt. If you do want it on a task where Claude skipped it, asking for a plan first is equally valid.
+- The general point made in the session is that model capability now scales the process to the problem. A few months ago the same prompt would have produced the agent directly.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 08-08-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 08-08-2026)
+
+---
+
+## Q239: Once the agent is built, do I commit and push it? What is the branch workflow?
+
+**Short answer:** Verify it works locally first, then commit and push. Branch from the stable branch for the next piece of work.
+
+- The order matters. Run the thing, confirm the output is right, and only then push. Pushing an unverified build means the repository now records something nobody has checked.
+- Once a branch is stable and pushed, create the next branch from it rather than continuing to pile changes onto the same one. Merge back to main only when the changes are confirmed clean.
+- For an internal agent that only you use, pushing to GitHub carries no particular risk. The caution is about verification, not about exposure.
+- If the agent produces a wrong result, that is feedback rather than a failure. Tell it what was wrong and ask for it to be saved to memory, so the same mistake is not repeated on the next run.
+- A useful rule to add to `CLAUDE.md`, which came out of the `/insights` report this session, is to always commit and push after a task is verified green, and never leave verified work only staged.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 08-08-2026)
+- https://code.claude.com/docs/en/memory (verified 08-08-2026)
+
+---
+
+## Q240: I have two skills already. How do I create one agent that uses both?
+
+**Short answer:** Give Claude the problem statement and say "the agent should invoke these skills". Do not say "create an agent using these skills".
+
+- The phrasing distinction is real. "Using the skills" reads as an instruction about how to build the agent. "The agent should invoke these skills" describes what the finished agent does, which is what you actually want written into it.
+- You do not create any file or folder yourself. Describe the agent's job, name the skills it should reach for, and the file gets created for you.
+- Say why you want the agent, not just what it is. The reason drives the description field, and the description is what decides when the agent gets triggered later.
+- Append "use the ask user question tool if you have any doubt" to the prompt. It will interview you before writing anything, which is how you avoid discovering a wrong assumption after the file exists.
+- Worth being clear that an agent gets memory and a skill does not, so putting two skills under one agent is also how you give that pair of workflows a persistent memory.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 08-08-2026)
+- https://code.claude.com/docs/en/skills (verified 08-08-2026)
+
+---
+
+## Q241: What do `/doctor` and `/insights` do, and how do I get the findings into `CLAUDE.md`?
+
+**Short answer:** `/doctor` audits your setup and installation. `/insights` reviews how you have actually been using Claude. Copy the report, paste it back into Claude, and ask it to write the findings into `CLAUDE.md`.
+
+- Run each in its own terminal. Neither needs anything else typed alongside it.
+- `/doctor` looks at the health of the setup, including where context is being consumed before you have typed a command.
+- `/insights` reads across your sessions. In the live run this session it covered 336 messages across 32 sessions and reported what the person had worked on, what they did well, and where things went wrong.
+- The critique is direct. This run flagged commit hygiene and git workflow drift, and sub-agent orchestration overhead, on the participant's own project.
+- The loop only pays off if you close it. Copy the report, paste it into Claude in that same session, and ask for the relevant findings to be written into `CLAUDE.md` as rules. Claude already has the report in context, so it knows what you are referring to.
+- Monthly, or every couple of weeks, is a reasonable cadence. Running it daily tells you nothing new.
+
+**Sources:**
+- https://code.claude.com/docs/en/cli-reference (verified 08-08-2026)
+- https://code.claude.com/docs/en/memory (verified 08-08-2026)
+- https://code.claude.com/docs/en/monitoring-usage (verified 08-08-2026)
+
+---
+
+## Q242: How do I make auto mode the default, and why was my config change blocked in auto mode?
+
+**Short answer:** Ask Claude to set auto mode as the default for new terminals. The block is deliberate: configuration changes that affect every session require manual approval.
+
+- Shift+Tab toggles between manual and auto for the current session, and the current mode shows at the bottom of the terminal.
+- To make it stick, open a terminal and say you want auto mode as the default whenever a new terminal opens. It writes the setting for you rather than you editing the file by hand.
+- The block is the interesting part. A configuration change affects every future session, so the auto-mode classifier refuses to make it without asking, precisely because auto mode exists to skip prompts.
+- The fix is to switch to manual, make the configuration change, then go back to auto. The new terminal you open afterwards will come up in auto mode.
+- This is worth understanding rather than working around. Anything that changes global behaviour will keep asking for confirmation, by design.
+
+**Sources:**
+- https://code.claude.com/docs/en/settings (verified 08-08-2026)
+- https://code.claude.com/docs/en/interactive-mode (verified 08-08-2026)
+
+---
+
+## Q243: What is `claude agents`, and does it show agents I did not create?
+
+**Short answer:** It opens a single view of every agent running across all your terminals, with status. Yes, it shows Claude's own dispatched agents too, not only yours.
+
+- Run `claude agents` in a new terminal instead of plain `claude`. You get one screen listing what is running, what has finished, and which agent is waiting on your input.
+- Selecting an entry drops you into that session. Control+C twice brings you back to the view, so you can move between agents without hunting through terminal windows.
+- The value is entirely about not missing a blocked agent. If something has been waiting on your answer for twenty minutes in a terminal you are not looking at, this is where you see it.
+- It reports every agent in the picture, including ones Claude spawned by itself during a task. That is expected rather than a bug.
+- If you have only built skills and no agents, and nothing is currently running, the view will be empty.
+
+**Sources:**
+- https://code.claude.com/docs/en/cli-reference (verified 08-08-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 08-08-2026)
+
+---
+
+## Q244: What are agent teams and how do I turn them on?
+
+**Short answer:** A lead agent creates a shared task list, several teammates work on it independently, and they can talk to each other before the lead reports back. It is experimental and off by default.
+
+- Enable it by setting `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS` to `1`, either in your shell or under `env` in `settings.json`. Nothing happens until it is on.
+- Once it is on, saying "create an agent team" is the reliable trigger. But the docs also say Claude may name a subagent on its own, and while agent teams are enabled a named subagent launches as a teammate, so a team can form even when you did not ask for one.
+- Teammates use the leader's model unless the spawn names one. The "Default teammate model" setting was removed from `/config` in v2.1.234 (17-08-2026).
+
+> **Corrected 12-09-2026.** The August answer gave the setting name loosely and said a team only forms when you ask for one. Both corrected against the agent-teams page.
+- The architecture mirrors a real team. A lead creates the shared task list, the teammates work their items, they communicate with each other, and the lead consolidates and reports to you.
+- You must specify the roles and the workflow. The team will not infer that you wanted an engineer, a designer and a sales lead, or that you wanted two rounds of debate. Say it.
+- Keep it small. Three to five agents is the sensible range, and the pattern suits bounded tasks where you want several distinct perspectives on the same artifact.
+- The worked example this session was a PRD review: a skeptical engineering lead, a design critic and a sales critic, each critiquing independently, then each receiving the other two critiques before a second round.
+
+**Sources:**
+- https://code.claude.com/docs/en/agent-teams (verified 12-09-2026)
+- Changelog v2.1.234: https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
+
+---
+
+## Q245: What is the difference between an agent team and a sub-agent?
+
+**Short answer:** Sub-agents do not collaborate with each other. Agent teams do.
+
+- A sub-agent runs in its own context window, does its job, and reports back. If you run several, they work in parallel but in isolation, and none of them knows what the others found.
+- In an agent team, the teammates exchange their findings. That is the whole point of the pattern, and it is what makes a second round of debate possible.
+- Use a sub-agent when you want a side task done without cluttering your main conversation.
+- Use an agent team when you want three or more angles on the same thing and you want those angles to react to each other.
+- The lead agent in a team is the orchestrator. You do not need to build a separate router agent on top of it.
+
+**Sources:**
+- https://code.claude.com/docs/en/agent-teams (verified 08-08-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 08-08-2026)
+
+---
+
+## Q246: What is a dynamic workflow, and how is it different from an agent team?
+
+**Short answer:** Put "dynamic workflow" in your prompt and it plans the whole multi-stage job itself, deciding what runs in parallel and what has to be sequential. An agent team needs you to specify the roles and the workflow.
+
+- Watch it run with `/workflows`. You will see the stages and how many agents are on each one. The live run this session had 12 agents on one stage and 6 on another.
+- The self-organising part is the difference that matters. It works out that verification cannot start until the changes are done, without being told.
+- A design principle worth copying regardless of whether you use this: the agent that made the change is never the agent that verifies it.
+- The natural fit is a full development cycle, where one set of agents builds, another tests, and another does user-acceptance checks, looping until it is done.
+- It is expensive. A single development run described in the session exhausted a full 5-hour limit, and one earlier job used 113 agents. Use agent teams for small bounded work and save this for genuinely complex tasks.
+
+**Sources:**
+- https://code.claude.com/docs/en/agent-teams (verified 08-08-2026)
+- https://code.claude.com/docs/en/costs (verified 08-08-2026)
+- https://www.anthropic.com/engineering/multi-agent-research-system (verified 08-08-2026)
+
+---
+
+## Q247: Can I build a hierarchy of agent teams, with managers over team leads?
+
+**Short answer:** Untested. It was raised in the session and the honest answer was that nobody has tried it.
+
+- The proposal was groups of three agents, a team lead over each group, managers over the team leads, and a director at the top, mirroring an organisation chart.
+- The documented pattern is one lead over a small set of teammates. Nesting is not something the session could confirm works.
+- The counter-argument offered was that dynamic workflows already handle the coordination you would be hand-building, by deciding sequencing and parallelism itself.
+- If you try it, note that cost compounds with every layer. A three-level hierarchy multiplies the agent count fast, and agent count is what burns the limit.
+- This is worth testing on a small task and reporting back, rather than assuming either way.
+
+**Sources:**
+- https://code.claude.com/docs/en/agent-teams (verified 08-08-2026)
+
+---
+
+## Q248: Should I build a token-optimisation skill and apply it globally?
+
+**Short answer:** No. Token optimisation is not a task, so it is not a skill. Make it a rule in `CLAUDE.md`.
+
+- A skill is a predefined workflow with a fixed set of instructions, invoked for a specific job. Token optimisation is not a job you invoke, it is a standing behaviour you want everywhere.
+- The decisive problem is staleness. A skill that names a model is wrong the moment the model lineup changes. Naming a model that is later retired leaves you with a skill that cannot run.
+- The durable version is a rule that tells Claude to assess the complexity of the task and choose an appropriate model itself, naming no model at all. That survives every future model change.
+- The same logic applies more widely. Anything that depends on the current state of the product belongs in a rule, and anything that is a repeatable procedure belongs in a skill.
+- For the actual optimisation, `/doctor` and `/insights` are the tools. They report where context is being spent and what to change.
+- When you are unsure which of skill, rule or agent fits, describe the problem to Claude and ask for the reasoning with pros and cons, rather than just the recommendation.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 08-08-2026)
+- https://code.claude.com/docs/en/skills (verified 08-08-2026)
+- https://code.claude.com/docs/en/costs (verified 08-08-2026)
+
+---
+
+## Q249: What is the difference between Claude chat, Claude Cowork and Claude Code? Can I share skills between them?
+
+**Short answer:** Chat advises, Cowork executes on your system, Claude Code adds the terminal, agents and commands. Skills do not transfer from Cowork into a Claude Code project.
+
+- Claude chat is a conversation. You ask how to do something, it tells you, and you copy the answer out yourself.
+- Claude Cowork has access to your system and produces the output directly rather than describing it. The analogy used in the session was that chat is a phone call with a friend, and Cowork is that friend sitting at your machine doing the work.
+- Claude Code runs in the terminal and is where agents, agent teams, dynamic workflows and the slash commands live. Those are not available in the other two.
+- The limitation to know: a skill created in Claude Cowork is stored with that application, not in your project, so it cannot be invoked from a Claude Code project. Putting it in GitHub and pulling it does not change where the application looks.
+- Claude Code is aimed at technical users and Cowork at non-technical ones, but that split is loose in practice and plenty of non-technical people work in Claude Code.
+
+**Sources:**
+- https://code.claude.com/docs/en/desktop (verified 08-08-2026)
+- https://code.claude.com/docs/en/skills (verified 08-08-2026)
+- https://code.claude.com/docs/en/claude-code-on-the-web (verified 08-08-2026)
+
+---
+
+## Q250: How do I keep a named session I can reopen after a restart?
+
+**Short answer:** Claude sessions are resumable by directory, and a named registry on top of that lets you reopen a specific task by name.
+
+- The built-in mechanism is `claude --continue` for the most recent conversation in the current folder, and `claude --resume` to pick from a list. Closing the terminal does not delete the conversation.
+- The gap that leaves is naming. If you have six terminals on six different tasks, a list of recent conversations does not tell you which was which.
+- The registry demonstrated in the session is a convention layered on that, not a product feature. You register a terminal against a task name, and reopen that exact session by name later.
+- The setup shown was to give Claude the registry file and ask it to replicate the same structure under `.claude/` in your own project, then register each session as you start a new task.
+- The payoff is not having to re-explain context after a restart. The session comes back with its history, so you skip the "last time we were doing X" preamble entirely.
+
+**Sources:**
+- https://code.claude.com/docs/en/cli-reference (verified 08-08-2026)
+- https://code.claude.com/docs/en/interactive-mode (verified 08-08-2026)
+
+---
+
+## Q251: What does the `#` prefix do, and what is `/usage`?
+
+**Short answer:** The `#` shortcut no longer exists, it was removed in Claude Code v2.0.70. To add a memory, tell Claude in plain words: "remember that ...". Auto memory saves it. `/memory` opens the memory files. `/usage` shows your current session, week and total usage.
+
+> **Corrected 12-09-2026.** The August session taught `#` as the quick-memory prefix. The changelog entry for v2.0.70 reads: "Removed # shortcut for quick memory entry (tell Claude to edit your CLAUDE.md instead)".
+
+- Type "remember that ..." followed by what you want kept. Claude writes it to auto memory, so you skip opening the memory file.
+- `/usage` reports where you stand against the 5-hour and 7-day windows. The same information appears in the status line if you have it configured.
+- The broader advice given was not to memorise these shortcuts. Describing what you want in plain language reaches the same place, and remembering a long list of prefixes is more effort than it saves.
+- The full command list is available by typing `/` on its own, which shows everything available in your current setup.
+- The repository's own commands reference in the presentation folder has a starred filter for the essentials and the complete list behind it.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 08-08-2026)
+- https://code.claude.com/docs/en/cli-reference (verified 08-08-2026)
+- https://code.claude.com/docs/en/statusline (verified 08-08-2026)
+
+---
+
+# August 2026 - Session 7 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 15-08-2026 during Session 7 (Build Hours: job scraper and resume builder, design through phase zero). All URLs verified 15-08-2026.
+
+---
+
+## Q252: If there were no Claude Code and no Cursor, would we still be building agents? What is an agent, really?
+
+**Short answer:** Yes. An agent is a persona with instructions and a memory. Before LLMs it was a program. Now it is natural language plus code only where code is genuinely needed.
+
+- Before LLMs, an agent was a file of programming instructions that executed itself. Every case you wanted handled had to be written out by hand, because nothing in the loop could interpret intent.
+- What changed is that the model understands natural language, so the instructions no longer have to be exhaustive. You describe the job and the model works out the steps.
+- Code has not disappeared. A skill that builds a PDF or a PPT still needs scripts, because a model cannot produce a binary file by reasoning about it. The mix is natural language plus code where code is required.
+- The other half of an agent is persistence. Claude Code gives you that through the `.claude/` folder and the agent's memory directory. Without a tool providing it, you would build the same thing yourself as a folder of files you maintain by hand.
+- So the concept is older than the tooling. The tooling just removed the part that used to be most of the work.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 15-08-2026)
+- https://code.claude.com/docs/en/memory (verified 15-08-2026)
+
+---
+
+## Q253: In an interview, how do I answer "walk me through how you build an agent"?
+
+**Short answer:** Name the two routes, then walk one of them end to end. The route you pick tells the interviewer whether you have actually shipped something.
+
+- Route one, you have an idea and have never done the task manually. You brainstorm it with Claude first, let it ask you questions, agree the scope, and build the agent out of that conversation.
+- Route two, you have done the task by hand several times already. You produce the output manually once or twice, satisfy yourself it is right, and only then encode it as an agent. The ticket-analysis work in this cohort took route two.
+- Route two is the stronger interview answer when it is true, because it means you can describe the output you were aiming at before you automated anything.
+- The steps to walk through are the same either way: problem statement, scope in and scope out, architecture, phased build, then verification of what it produced.
+- Do not skip the scope-out half. Saying what the agent deliberately does not do is what separates someone who has built one from someone who has read about it.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 15-08-2026)
+- https://www.anthropic.com/engineering/claude-code-best-practices (verified 15-08-2026)
+
+---
+
+## Q254: I opened a brand new empty folder and ran `/init`. Why did nothing useful come out?
+
+**Short answer:** `/init` reads your project to write `CLAUDE.md`. An empty folder gives it nothing to read, so it asks you what you are building instead.
+
+- Run on an empty directory, it comes back asking for your stack, scope and data sources, because there is no code, no structure and no docs to describe.
+- The right order is to create some context first. In the session that meant registering the session, then brainstorming the product, then letting the design docs get written.
+- Once `spec.md`, `decisions.md` and an implementation plan existed, `/init` was re-run and produced a real `CLAUDE.md` written around what a future session cannot discover by reading the files itself.
+- That last point is what makes a good `CLAUDE.md`. It should carry the things a fresh session cannot infer, not restate the folder structure it can already see.
+- Re-run `/init` later as the project grows, or ask Claude directly to update `CLAUDE.md`, rather than treating it as a one-time command.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 15-08-2026)
+- https://code.claude.com/docs/en/quickstart (verified 15-08-2026)
+
+---
+
+## Q255: What exactly does `CLAUDE.md` do for a project?
+
+**Short answer:** It is the project's standing instructions. Claude reads it first, on every session, before it looks at anything else.
+
+- Think of it as the system instructions for that repository: how you want Claude to behave, what the project is, and what the rules of the codebase are.
+- It loads automatically, so anything in it applies to every prompt in that project without you restating it.
+- Keep it to what is durable. Commands that matter, conventions that are not obvious from the code, decisions that would otherwise be re-litigated.
+- There is a hierarchy. A user-level file applies across all your projects, a project file applies to that repo, and files further down the tree apply to their subtree.
+- If you find yourself repeating an instruction in prompts, that instruction belongs in `CLAUDE.md`. Ask Claude "add this to CLAUDE.md" and it edits the file for you (the old `#` prefix was removed in v2.0.70).
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 15-08-2026)
+
+---
+
+## Q256: Why did Claude write a spec and a plan before building, and where did the superpowers specs folder come from?
+
+**Short answer:** The brainstorming and writing-plans skills come from the superpowers plugin you installed earlier. They fire when the task is large enough to warrant a design first.
+
+- The plugin was installed back in the setup session. It has been present all along, which is why nobody noticed it until now.
+- It did not produce a spec folder in earlier sessions because the tasks were small. Creating a skill or an agent goes straight to creation. Designing a three-subsystem product from an empty repo does not.
+- The path it follows is questions, then approaches, then design, then spec, then plan, and it will not write implementation code until the design is approved.
+- The plan it wrote deliberately covered only phases zero to two, on the reasoning that writing phase-five tasks now means inventing details that depend on what the phase-one schema actually turns out to be. A second plan gets written once that is real.
+- If you want this behaviour on a task it would not normally trigger for, say so in the prompt. If you do not want it, say you want to go straight to the code.
+
+**Sources:**
+- https://code.claude.com/docs/en/plugins (verified 15-08-2026)
+- https://code.claude.com/docs/en/skills (verified 15-08-2026)
+
+---
+
+## Q257: Do I need an MCP server to call a third-party API like a job search API?
+
+**Short answer:** No. An API key in your env file is enough. MCP is for tools that expose a server, not for every HTTP API.
+
+- If a provider gives you a key, you put the key in `.env`, tell Claude the key is there and what it is for, and it calls the API directly. Nothing else is required.
+- The analogy that settled it in the session: the API key is a bike key. If you lend me your bike, I need the key and nothing else.
+- MCP is a different thing. It is a protocol for connecting Claude to a server that exposes tools, resources and prompts, which is worth it when a provider has built one, like the Indeed MCP server used as a second source in this build.
+- The two coexist happily. The project ended up using one MCP server and one plain REST API with a key.
+- Never commit the key. Keep it in `.env`, keep `.env` gitignored, and let whoever clones the repo bring their own.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 15-08-2026)
+- https://code.claude.com/docs/en/settings (verified 15-08-2026)
+
+---
+
+## Q258: If I am running everything locally in Claude Code, why do I need an LLM API key at all?
+
+**Short answer:** You do not, for anything you drive by hand in the terminal. You need one the moment the product itself has to make a model call without you sitting there.
+
+- Everything you do inside a Claude Code session is covered by your Claude Code plan. No separate API key is involved.
+- The key is for the application. When the job scraper scores a hundred jobs overnight, nobody is typing prompts, so the code has to call a model directly, and that call needs its own key.
+- Ask for the cost broken down by where the call happens, not as a single number. In this build it came out as three places: parsing the resume once, scoring each job, and tailoring each resume. Only the per-job scoring recurs at volume.
+- Once you can see that breakdown you can decide per feature. The scoring rationale was judged worth paying for, because knowing why a job matches and what is missing is the whole point of the list.
+- If cost is the blocker, say "no API calls at all" in the prompt and let it design a rules-based version instead. It will tell you what you lose.
+
+**Sources:**
+- https://docs.anthropic.com/en/api/overview (verified 15-08-2026)
+- https://docs.anthropic.com/en/docs/about-claude/pricing (verified 15-08-2026)
+- https://code.claude.com/docs/en/costs (verified 15-08-2026)
+
+---
+
+## Q259: There are four aggregator APIs and I do not know any of them. How do I choose?
+
+**Short answer:** Say you do not know, and ask for pros and cons plus a recommendation with reasoning. Do not ask for the answer, ask for the deciding criterion.
+
+- The prompt used was, in effect, "I want to use an aggregator API but I am not sure which one, help me understand the options with pros and cons of each". That is a legitimate prompt, not an admission of ignorance.
+- Claude then said it would do the homework rather than list them from memory, and went and checked. That is the behaviour you want, and if you do not get it, ask for it explicitly.
+- What came back was more useful than a comparison table: a single criterion nobody had asked for. Does the API return the full job description text, or only a snippet?
+- That one question eliminated the most attractive option. Adzuna had the most generous free tier and was rejected, because a snippet cannot drive resume tailoring. JSearch was chosen as primary, with the Indeed MCP server as a free second source.
+- Then record it. The comparison went into a research file and the choice went into `decisions.md`, so nobody re-asks in a month why it was not the free one.
+
+**Sources:**
+- https://www.anthropic.com/engineering/claude-code-best-practices (verified 15-08-2026)
+- https://code.claude.com/docs/en/common-workflows (verified 15-08-2026)
+
+---
+
+## Q260: Can I just scrape LinkedIn and the job boards directly instead?
+
+**Short answer:** No. Their terms prohibit it, your IP gets blocked, and the scrapers break constantly. It was rejected in the session without a second opinion.
+
+- Direct scraping of the major boards is against their terms of service, which is a decision you make before you consider whether it is technically possible.
+- The practical cost is just as real. Scraping from your own IP gets that IP blocked, and anti-bot handling becomes a permanent maintenance job rather than a one-time build.
+- The general rule given: before scraping anything, check whether it is allowed, and if you do not know, brainstorm it and ask whether it is fine legally and security wise. Do not assume.
+- Aggregator APIs exist precisely so you do not have to. One call reaches multiple boards, and the provider carries the terms and the maintenance.
+- The Indeed MCP server is the same principle. Where a provider has published an official route in, take it.
+
+**Sources:**
+- https://code.claude.com/docs/en/security (verified 15-08-2026)
+- https://code.claude.com/docs/en/mcp (verified 15-08-2026)
+
+---
+
+## Q261: What files should every project carry besides the code?
+
+**Short answer:** At minimum a spec, a decisions log, an implementation plan, and an improvements file. `decisions.md` is the one people skip and the one they miss most.
+
+- `decisions.md` records what was decided, when, why, and the rationale. The test is that anyone opening it later, including you, never has to ask "why this API and not that one".
+- `spec.md` states what the thing does and, just as importantly, what it does not. This build's spec explicitly said not multi-user, no accounts, not an auto-applier, not a scraper.
+- The implementation plan holds the phased build order with a status per item, so progress is visible without reading the code.
+- `improvements.md` is the running log of what changed, what was a bug fix, what was validation, and what was new. Several participants already keep an equivalent, sometimes named `quality-check.md`.
+- Ask for all of these in the same prompt as the design. They cost nothing to generate at the start and are painful to reconstruct later.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 15-08-2026)
+- https://www.anthropic.com/engineering/claude-code-best-practices (verified 15-08-2026)
+
+---
+
+## Q262: Why put the whole thing in Docker? Is Docker free, and does it expire?
+
+**Short answer:** Portability. Every dependency lives in the image instead of on your machine. Docker Desktop is free for personal use and small businesses, and it does not expire.
+
+- The alternative is installing a database, a headless browser and a language runtime directly on your Mac, and then asking every teammate to repeat that correctly.
+- With one image carrying the backend, SQLite on a volume and Chromium for PDF rendering, the environment is the same everywhere and nothing is installed on the host.
+- It also makes the database reachable without you setting up local database tooling, which was the specific pain that pushed the decision.
+- Claude will not always suggest it. If you want it, say so, and it will add the Dockerfile and Compose file and record the decision.
+- The one honest cost, which the plan itself flagged: with Compose alone, a code edit means a rebuild rather than a hot reload. Mounting the source is a two-line change if the cycle starts to hurt.
+
+**Sources:**
+- https://code.claude.com/docs/en/devcontainer (verified 15-08-2026)
+
+---
+
+## Q263: If I push this to GitHub, how do I stop my resume, my searches and my API keys going with it?
+
+**Short answer:** Gitignore the personal files, keep the keys in `.env`, keep the template generic, and then verify it mechanically rather than trusting that it happened.
+
+- Three things need excluding: the uploaded resume, the database holding what you searched and matched, and every API key.
+- Say it as a requirement before any code exists. In this session it was specified during the design, so the gitignore was written as part of the build rather than retrofitted.
+- Then check it. The session did not accept the claim, it confirmed the resume was ignored at a named line in the file. Assertion is not verification.
+- Personal identity comes out of the template too. Name, email and links load from config, so the committed template is generic and reusable by anyone who clones it.
+- The result is the split you want: someone can take your codebase, and cannot see your resume, your searches or your keys.
+
+**Sources:**
+- https://code.claude.com/docs/en/security (verified 15-08-2026)
+- https://code.claude.com/docs/en/settings (verified 15-08-2026)
+
+---
+
+## Q264: If everything is containerised, can a teammate clone it and just run it?
+
+**Short answer:** Partly. Containerising is roughly 40 percent of "they can run it". It guarantees the container starts. It cannot supply their key or their data.
+
+- Two different problems get merged here. "Does it start on their machine" is solved by the container. "Is it useful to them once it starts" is not.
+- After cloning, they still need their own API keys, which are deliberately not in the repo, and their own resume, which is deliberately gitignored.
+- So what you ship is a codebase plus setup instructions, and the readme has to spell out exactly which keys to generate and where to put them.
+- That is the correct outcome, not a shortfall. The alternative would mean committing your credentials and your personal data.
+- Write the readme as if the reader has never seen the project, because the clone-and-run experience is a different product from the app itself.
+
+**Sources:**
+- https://code.claude.com/docs/en/devcontainer (verified 15-08-2026)
+- https://code.claude.com/docs/en/security (verified 15-08-2026)
+
+---
+
+## Q265: Claude wrote tests alongside the build without being asked. What is TDD and do I want it?
+
+**Short answer:** Test driven development means the tests are written with the code, not after it. Yes, you want it, and you should ask for it if it is not offered.
+
+- The point is timing. Testing an entire module after it is finished means discovering design problems late, when fixing them is rework rather than an edit.
+- In this build the tests ran in parallel with phase zero, so the container config, the fail-first validation and the health endpoint were all proved as they were written.
+- Prove both directions. Phase zero confirmed not only that the healthy path passes but that a bad config fails, which was called out as the part worth proving.
+- If your project has no tests folder, that is a gap to close, and asking Claude to follow a TDD approach is enough to establish it.
+- Several participants already keep a quality-check file. That is a complement to tests, not a substitute, because a checklist you tick yourself is not a check.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 15-08-2026)
+- https://www.anthropic.com/engineering/claude-code-best-practices (verified 15-08-2026)
+
+---
+
+## Q266: My context is down to 30 percent. Should I wait until it runs out before compacting?
+
+**Short answer:** No. Compact at around 30 to 40 percent remaining. Output quality degrades before the context actually runs out.
+
+- `/compact` summarises the conversation so far, keeps the recent detail, and frees the rest of the window for the work still ahead.
+- Waiting for zero is the mistake. The responses get weaker as the window fills, so by the time you are forced to compact you have already been working with a degraded session.
+- Do it at a natural boundary. In the session it was run after phase zero finished and before phase one started, so nothing in flight was summarised away.
+- Anything that must survive compaction belongs in a file, not in the conversation. That is another reason the decisions log and the implementation plan exist.
+- `/usage` and the status line tell you where you stand against the five-hour and seven-day windows, which is a separate thing from the context window.
+
+**Sources:**
+- https://code.claude.com/docs/en/costs (verified 15-08-2026)
+- https://code.claude.com/docs/en/interactive-mode (verified 15-08-2026)
+
+---
+
+# August 2026 - Session 8 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 15-08-2026 during Session 8 (Build Hours Part 2: phases one to five, evaluation criteria and the tailored resume). All URLs verified 15-08-2026.
+
+---
+
+## Q267: How did my context go back to 100 percent, and can I run `/compact` at any point in a conversation?
+
+**Short answer:** `/compact` summarises the conversation so far and frees the window. Yes, you can run it any time, and around 30 to 40 percent remaining is the right moment.
+
+- What you are seeing after a compact is not more memory, it is the same window with the conversation replaced by a summary plus the recent detail.
+- Do not wait for zero. Quality drops as the window fills, because the model is carrying a large history into every response before it produces anything.
+- Run it at a boundary. In this session it was run after phase zero finished and before phase one started, so nothing in flight got summarised away.
+- Anything that must survive compaction belongs in a file, which is a second reason the decisions log, the implementation plan and the progress tracker exist.
+- The context window is a separate thing from your usage limits. `/usage` and the status line track the five-hour and seven-day windows, not this.
+
+**Sources:**
+- https://code.claude.com/docs/en/costs (verified 15-08-2026)
+- https://code.claude.com/docs/en/interactive-mode (verified 15-08-2026)
+
+---
+
+## Q268: I have five terminal tabs all called Claude. Can I rename them so I know which is which?
+
+**Short answer:** You can rename and recolour the tab in your editor, but the name dies with the tab. A session registry is the answer that survives a restart.
+
+- Right-click the terminal tab in your editor to rename it or change its colour. That is a purely local label.
+- The problem it does not solve is the one that actually bites. Close the editor, or quit because it has gone unresponsive, and both the tab and its name are gone.
+- The registry approach records the session by name in a file, so the session can be reopened by name after any restart. That is why no renaming was done in this session.
+- Claude Code also supports resuming a previous session directly, which is the mechanism the registry is built on top of.
+- Treat the registry file as project infrastructure, not a note. It belongs in the repo alongside the other project docs.
+
+**Sources:**
+- https://code.claude.com/docs/en/interactive-mode (verified 15-08-2026)
+- https://code.claude.com/docs/en/cli-reference (verified 15-08-2026)
+
+---
+
+## Q269: When I run `/doctor`, does it fix what it finds, or only diagnose it?
+
+**Short answer:** Only diagnose. It reports what is wrong and what it recommends, and you decide what to act on.
+
+- The framing given in the session was the useful one: the doctor diagnoses and prescribes, you still have to take the tablet.
+- It surfaces problems with your installation and setup and ranks the recommendations, so you can pick the ones worth doing rather than accepting everything.
+- Acting on it is a normal prompt. Point Claude at a specific recommendation and ask it to make the change.
+- Pair it with `/insights` on a weekly rhythm. In this session one participant's run found roughly 70 percent of installed plugins unused, at around 500 tokens per session.
+- Unused plugins are a real cost, not a tidiness issue, because their metadata loads into context on every session.
+
+**Sources:**
+- https://code.claude.com/docs/en/troubleshooting (verified 15-08-2026)
+- https://code.claude.com/docs/en/plugins (verified 15-08-2026)
+
+---
+
+## Q270: We built agents and skills earlier. Why does this project have an architecture and a plan when those did not?
+
+**Short answer:** Because those were local services you built for yourself, and this is a product someone else can clone and run. The difference showed up the moment the word scalable entered the brainstorm.
+
+- A skill or an agent that lives in your `.claude/` folder solves your problem on your machine. It is real work, it is just not something a second person can install.
+- A product needs the parts that make it transferable: an architecture, a phased plan, a backend, a container, and a decisions log explaining why it is shaped the way it is.
+- The input that caused the difference was named in the session. Saying the project should be scalable is what made the brainstorm produce a backend and a plan rather than a single skill file.
+- You can still build agents and skills inside the product afterwards, for bug fixing, resume generation or memory of past defects. They sit on top of it, they are not an alternative to it.
+- Both routes are legitimate. Decide which one you are on at brainstorm time, because it changes everything downstream.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 15-08-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 15-08-2026)
+
+---
+
+## Q271: If someone clones my repo, why do they have to bring their own API keys? Why not just give them a URL?
+
+**Short answer:** Because a clone runs on their machine with their credentials. A URL is a different product, and it means you pay for every user's usage.
+
+- Your keys are gitignored, so they never reach the repo. That is what stops the clone carrying your credentials, and it is also why the person cloning needs their own.
+- The URL version is genuinely possible, and it is the direction the product goes next. It just moves the cost onto you, because every search and every scoring call runs on your keys.
+- That is a business decision, not a technical one. The usual answer is to carry the cost until there is product-market fit, then introduce a paid tier.
+- The reason this cohort built the clone version is time. Deploying properly needs accounts, authentication, a hosted database and session handling, which was estimated at three to four more sessions.
+- The decision and the reasoning are recorded in `decisions.md`, so the next person picking this up does not re-ask it.
+
+**Sources:**
+- https://code.claude.com/docs/en/security (verified 15-08-2026)
+- https://code.claude.com/docs/en/settings (verified 15-08-2026)
+
+---
+
+## Q272: There is no deployed front end and no hosted back end. How is this a product?
+
+**Short answer:** Because everything the product needs runs inside the container: the application, the API layer and the database. Hosting is a distribution choice, not the definition.
+
+- The container carries the backend, the storage and the rendering dependencies. Someone who clones it runs the whole system, not a fragment of it.
+- Hosting adds reach, not capability. Plenty of installable tools are products without ever having a public URL.
+- The front end is the honest gap, and it was acknowledged as one. Adding it is a follow-on task on the existing codebase, not a redesign.
+- The test to apply is whether a second person can install it and get the intended outcome. If yes, it is a product. If it only works on your machine with your paths, it is a personal tool.
+- Keep the repo private if you want the code to stay yours while you decide.
+
+**Sources:**
+- https://code.claude.com/docs/en/devcontainer (verified 15-08-2026)
+- https://code.claude.com/docs/en/common-workflows (verified 15-08-2026)
+
+---
+
+## Q273: If I cannot use Docker, what else can I do? Can I just use a hosted database instead?
+
+**Short answer:** You can run everything natively, you just take on the dependency management yourself. A hosted database solves storage only, not the rest of the stack.
+
+- Without a container you install each dependency directly: the runtime, the database, the browser engine used for PDF rendering, and every version they expect.
+- That is exactly the work the container exists to remove. The image carries the dependencies, so the person cloning your repo does not reproduce your setup by hand.
+- A hosted database moves one piece off your machine and leaves the others where they were, so it is not a substitute for containerising.
+- If Docker will not install, that is a debuggable problem rather than a dead end. Screenshot the error, paste it into Claude in plan mode with your OS and version, and work the fix from there.
+- The trade-off worth knowing up front: with the code inside the image, a code edit means a rebuild rather than a reload, unless you mount the source directory.
+
+**Sources:**
+- https://code.claude.com/docs/en/devcontainer (verified 15-08-2026)
+- https://code.claude.com/docs/en/troubleshooting (verified 15-08-2026)
+
+---
+
+## Q274: Do I need a `decisions.md` on every project?
+
+**Short answer:** Yes, and it costs almost nothing. It records what you decided, when, why, and what you rejected.
+
+- The value shows up when someone asks why. In this session the file answered "why one user, no account, no login" without anyone having to reconstruct the reasoning.
+- Write the rejected option as well as the chosen one. "JSearch, not Adzuna, because a snippet cannot drive tailoring" is worth more than "JSearch".
+- The someone asking is usually you, three weeks later. That is the main audience.
+- It pairs with an improvements or quality-check file. The decisions log carries the why, the improvements file carries the defects you never want to see again.
+- Neither survives a compact if it only lives in the conversation. That is the point of them being files.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 15-08-2026)
+- https://www.anthropic.com/engineering/claude-code-best-practices (verified 15-08-2026)
+
+---
+
+## Q275: If I push this to GitHub, can I still keep it private?
+
+**Short answer:** Yes. A repository can be private, and privacy of the repo is separate from the gitignore rules inside it.
+
+- Private means only you and the people you invite can see it. Pushing does not publish.
+- The two controls do different jobs. Private controls who sees the repo, gitignore controls what enters it at all.
+- Keep both. Even in a private repo, keys and personal data should be gitignored, because the day you make it public or add a collaborator you do not want to re-audit history.
+- Verify the gitignore mechanically rather than trusting it. Confirm the specific file is ignored, do not assume the pattern caught it.
+- Before any first push, check for keys, resumes, databases and anything else personal.
+
+**Sources:**
+- https://code.claude.com/docs/en/security (verified 15-08-2026)
+- https://code.claude.com/docs/en/data-usage (verified 15-08-2026)
+
+---
+
+## Q276: Someone published a skill on GitHub. How do I install it, and should it be user scope or project scope?
+
+**Short answer:** Install steps differ per repo, so read that repo's instructions. Choose user scope if you want it available across all your projects.
+
+- There is no single install command for community work. Some ship as plugins through a marketplace, some as a package, some as files you copy into place.
+- The scope question is the one worth deciding deliberately. User scope makes the skill available in every project on your machine, project scope keeps it with one repo.
+- Pick project scope when the skill encodes something specific to that codebase, and user scope when it is general craft, like a front-end design skill.
+- Marketplaces are the cleanest route when the author offers one, because install and update both go through the same mechanism.
+- Review before you install. A skill is instructions your agent will follow, so read what it tells Claude to do.
+
+**Sources:**
+- https://code.claude.com/docs/en/plugin-marketplaces (verified 15-08-2026)
+- https://code.claude.com/docs/en/skills (verified 15-08-2026)
+
+---
+
+## Q277: Are there exit gates between phases? Do I need an `eval.md` if tests are already being written?
+
+**Short answer:** The gates were already there, one per phase, generated automatically. You do not need a separate file unless you want one.
+
+- Each phase in this build had its own evaluation criteria, phase zero through phase five, derived from what that phase was supposed to produce.
+- The distinction that matters: a test asks whether the code does the thing, an evaluation asks whether the output is good enough to build on. Phase one passing its tests is not the same as the parse being usable.
+- The criteria are concrete, not vague. Phase two checked that the committed template carries no personal data, that identity comes from config, that nothing is fetched over a network, and that the dark header survives printing.
+- Tests were written alongside the code under a TDD approach without being asked, because the approach had been set during planning.
+- If your team already works from an `eval.md`, keep it. Ask Claude to generate it from the phase criteria rather than maintaining two sources of truth.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 15-08-2026)
+- https://www.anthropic.com/engineering/claude-code-best-practices (verified 15-08-2026)
+
+---
+
+## Q278: Claude could not extract the bullets from my resume PDF. What is the fix?
+
+**Short answer:** Give it the HTML version instead of the PDF. Layout, not text, is what breaks the parse.
+
+- Claude reads PDFs natively, so no separate parsing library is needed. That is not where this failed.
+- The failure was structural. A two-column resume with a sidebar means the reading order is ambiguous, so sections were recovered but bullets under each experience entry were not.
+- Switching to the HTML version of the same resume fixed it completely, because the structure is explicit in the markup rather than inferred from position on a page.
+- After the switch the parse recovered all 19 bullets and every section, and phase one closed.
+- The reusable lesson: when a document parse is weak, look for a more structured version of the same document before you build a workaround.
+
+**Sources:**
+- https://docs.claude.com/en/docs/build-with-claude/pdf-support (verified 15-08-2026)
+- https://docs.claude.com/en/docs/build-with-claude/vision (verified 15-08-2026)
+
+---
+
+## Q279: The job API gives me 200 requests a month. How do I stop the build burning through the quota?
+
+**Short answer:** Ask the question open-ended rather than prescribing a limit, and read the real remaining quota from the API response instead of counting locally.
+
+- The free tier here was 200 requests per month, 10 jobs per request, so 2,000 jobs a month.
+- The prompt used was "how do we make sure we do not exceed 200 requests per month, is it possible to limit the search", phrased as a question rather than an instruction.
+- What came back was better than the instruction would have been: read the remaining quota from the response header, not from a counter in your own code, so the number is always true.
+- Had a hard limit of ten searches been dictated, that specific rule would have been implemented and the better design never surfaced.
+- Rate limiting matters as much as quota. Scoring ran at roughly 41 seconds per job on the free tier, with backoff on rate-limit responses, which is the real constraint on volume.
+
+**Sources:**
+- https://code.claude.com/docs/en/costs (verified 15-08-2026)
+- https://www.anthropic.com/engineering/claude-code-best-practices (verified 15-08-2026)
+
+---
+
+## Q280: We are hitting job boards through an aggregator API. Will LinkedIn block my IP? And can I use a web scraper connector instead?
+
+**Short answer:** No, because the aggregator is doing the fetching through a licensed route, not you. A scraper connector works on open public pages and will not get you past a login.
+
+- Going through the aggregator means you make one authenticated call to their API. You are not touching the job board directly, so there is nothing to block.
+- Scraping directly is the thing that gets blocked, and it is also usually against the site's terms.
+- The boundary to hold is authentication. If the content is behind a login, scraping it is out. The quick test given in the session: open the URL in an incognito window. If it will not load, it is not scrapable.
+- A scraper connector is genuinely useful for open public sites. It is just the wrong tool for a source that requires an account.
+- When you are unsure between two tools, describe your specific use case and ask Claude to compare them for that case, rather than asking which is better in general.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 15-08-2026)
+- https://code.claude.com/docs/en/security (verified 15-08-2026)
+
+---
+
+## Q281: Is asking better than instructing? And does that apply to Cowork and the chat app too?
+
+**Short answer:** Yes, ask rather than instruct whenever you are not certain. It applies to Claude Code and Cowork, both of which build things. Chat is for output, not for building.
+
+- An instruction constrains the search. Telling it to cap searches at ten gets you a cap at ten and nothing better.
+- The analogy used in the session: ask for the fastest route from A to B, not the fastest route along a path you have already picked. Naming the path throws away every alternative before it is considered.
+- The general move is to end your prompt with "apart from this, is there a better approach". It costs one sentence and regularly returns something you would not have specified.
+- This applies wherever the tool builds something for you. In the chat app you are asking for an output, so the same leverage is not there.
+- Use the question tool deliberately too. Asking Claude to check with you when it is unsure is what surfaces the scope decisions early rather than after the build.
+
+**Sources:**
+- https://www.anthropic.com/engineering/claude-code-best-practices (verified 15-08-2026)
+- https://code.claude.com/docs/en/common-workflows (verified 15-08-2026)
+
+---
+
+## Q282: My tailored resume dropped older experience and projects. How do I stop that happening again?
+
+**Short answer:** Convert the defect into a guardrail and an evaluation criterion. Fixing the one output and moving on guarantees it recurs.
+
+- This came up twice in the same session, from both sides. One participant's tailoring kept only the last few years of experience and one project out of four. The live run produced a resume with no work experience section at all.
+- The tailoring model itself stated the correct hard rule: it can reorder, reselect or rephrase what you already have, but it cannot add a claim you never made.
+- Relevance is not the only axis. Total years of experience matters to a reader independently of whether each role is relevant, which is exactly what the reselection destroyed.
+- The fix that holds is the one applied by the participant: record it as an edge case, add it to your quality-check file, add it to the improvements file, and make it a non-negotiable guardrail.
+- Then put it in the phase's evaluation criteria, so every future run is checked against it rather than relying on you spotting it again.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 15-08-2026)
+- https://code.claude.com/docs/en/common-workflows (verified 15-08-2026)
+
+---
+
+# September 2026 - Pre-read for Session 1
+
+Answers prepared 12-09-2026 for the questions that will come first with a mixed-role batch. Sources checked the same day.
+
+## Q283: Windows says `irm is not recognized` or `&& is not valid` when I paste the install line. What is wrong?
+
+**Short answer:** You are in the wrong terminal. `irm` not recognized means you are in Command Prompt, not PowerShell. `&&` not valid means the opposite, you pasted the CMD command into PowerShell. Open PowerShell (your prompt starts with `PS C:\`) and paste `irm https://claude.ai/install.ps1 | iex` again.
+
+- `A parameter cannot be found that matches parameter name 'fsSL'` or `'bash' is not recognized` means you pasted the Mac command into Windows. Same fix.
+- If the command prints a long script instead of installing, you ran `irm https://claude.ai/install.ps1` without the `| iex` part.
+- `Could not create SSL/TLS secure channel` on an older Windows 10: run `[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12` first, then the install line.
+- After a successful install, close PowerShell and open a new one before `claude --version`. The old window does not know the new PATH.
+
+**Sources:**
+- https://code.claude.com/docs/en/troubleshoot-install, section "Wrong install command on Windows" (verified 12-09-2026)
+- https://code.claude.com/docs/en/terminal-guide, Windows troubleshooting (verified 12-09-2026)
+
+## Q284: The install script is blocked on my office laptop. What now?
+
+**Short answer:** Two fallbacks, in order. Windows: `winget install Anthropic.ClaudeCode`, which avoids the script download. Any OS: `npm install -g @anthropic-ai/claude-code` with Node.js 22 or later (on Windows run `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned` first). Never use `sudo` or "Run as Administrator" for the npm install.
+
+**Sources:**
+- https://code.claude.com/docs/en/setup, sections "Install with WinGet" and "Install with npm" (verified 12-09-2026)
+
+## Q285: Which mode am I in when I start, and what changed in auto mode?
+
+**Short answer:** On a Pro, Max or Team plan a new session starts in auto mode, where a second model (the classifier) reviews actions instead of you. Shift+Tab moves you to manual, then accept-edits, then plan. Auto mode now asks once before the first file read outside your project folder, a Bash prompt in manual mode offers "Yes, and switch to auto mode", and a blocked action names the rule that stopped it. Switch to manual for settings changes.
+
+**Sources:**
+- https://code.claude.com/docs/en/permission-modes (verified 12-09-2026)
+- Changelog v2.1.246, v2.1.247, v2.1.257, v2.1.268: https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
+
+## Q286: Which model should I use, now that Fable 5.1 is out?
+
+**Short answer:** Sonnet 5 for daily work on a Pro plan, with effort set to medium via `/effort` (the built-in default effort is high on every model, medium is the workshop's token-saving choice). Opus 5 for a review pass or a hard reasoning task (it is the default model on Max, Team Premium, Enterprise and the API). Fable 5.1 (released 01-09-2026) is for tasks larger than a single sitting, is not the default on any plan, and is opt-in with `/model fable`. Haiku 4.5 for quick lookups.
+
+**Sources:**
+- https://code.claude.com/docs/en/model-config (verified 12-09-2026)
+- https://www.anthropic.com/claude-fable-and-mythos-5-1 (verified 12-09-2026)
+
+## Q287: I already have a Cursor project. Do I set everything up again?
+
+**Short answer:** No. Run `/import cursor` inside Claude Code in that project (needs Claude Code v2.1.265 or later, run `claude update` first). It brings your instruction files, MCP servers, commands, subagents and skills across. Add `--dry-run` to see what it found before it writes anything. The same works for `codex` and `gemini`.
+
+**Sources:**
+- https://code.claude.com/docs/en/commands (verified 12-09-2026)

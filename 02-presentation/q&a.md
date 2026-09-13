@@ -29,6 +29,8 @@ Answers to open questions from workshop sessions, sourced from official Anthropi
 - **August 2026 Session 6 additions:** 08-08-2026 (Q238-Q251 - agent teams, dynamic workflows, `/insights`, and skill versus rule, afternoon - see "August 2026 - Session 6 Additions" section)
 - **August 2026 Session 7 additions:** 15-08-2026 (Q252-Q266 - Build Hours, job scraper and resume builder from empty folder to phase zero - see "August 2026 - Session 7 Additions" section)
 - **August 2026 Session 8 additions:** 15-08-2026 (Q267-Q282 - Build Hours Part 2, phases one to five, evaluation criteria and the tailored resume, afternoon - see "August 2026 - Session 8 Additions" section)
+- **September 2026 Session 1 additions:** 13-09-2026 (Q288-Q301 - new cohort, Claude Code setup, plugins, CLAUDE.md and memory scopes - see "September 2026 - Session 1 Additions" section)
+- **September 2026 Session 2 additions:** 13-09-2026 (Q302-Q316 - skills, four ways to create one, routines, connectors, and an agents preview, afternoon - see "September 2026 - Session 2 Additions" section)
 
 If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
@@ -4759,3 +4761,443 @@ Answers prepared 12-09-2026 for the questions that will come first with a mixed-
 
 **Sources:**
 - https://code.claude.com/docs/en/commands (verified 12-09-2026)
+
+---
+
+# September 2026 - Session 1 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 13-09-2026 during Session 1 (Claude Code setup, plugins, CLAUDE.md and memory scopes). All URLs verified 13-09-2026.
+
+---
+
+## Q288: Claude Code in the desktop app, the VS Code extension, the Antigravity agent panel and the terminal. Which one is Claude Code, and which one should I use?
+
+**Short answer:** Three of the four are Claude Code. The IDE's own agent panel (Antigravity, Cursor) is not. It can call a Claude model, but it cannot run `/plugin`, a skill or a rules file. For the workshop, open a terminal inside your IDE, type `claude`, and work there.
+
+- The terminal is the full product. Everything else (desktop app Code tab, VS Code extension) is a window onto the same engine, so plugins, skills and commands behave the same.
+- `/plugin` typed into the Antigravity agent panel does nothing, and `/plugin` typed into a bare terminal also does nothing. You have to be inside a running `claude` session first. This is exactly what happened on screen.
+- If `claude` returns "no such file or directory", Claude Code is not installed. Go back to the setup guide.
+- The VS Code extension installs in VS Code, Cursor, Windsurf, VSCodium and other forks including Kiro. So the answer to "can I use Kiro" is yes, either through the extension or through a terminal inside it.
+- Aman keeps the terminal in the secondary sidebar so files sit in the middle and the agent on the right, but that is a preference, not a requirement.
+
+**Sources:**
+- https://code.claude.com/docs/en/ide-integrations (verified 13-09-2026)
+- https://code.claude.com/docs/en/vs-code (verified 13-09-2026)
+- https://code.claude.com/docs/en/setup (verified 13-09-2026)
+
+---
+
+## Q289: I have the Claude CLI with an API key in my bash profile. Does that work, and do I really need Pro?
+
+**Short answer:** If typing `claude` in a fresh terminal opens the Claude Code interface, it is installed. For these sessions, log in with a Claude.ai Pro account rather than an API key. Without a subscription or an API key, Claude Code redirects you to the subscription page and does not start.
+
+- API key billing works, but it is pay-per-token and you lose the Claude.ai-only features used in class, including voice dictation.
+- Pro is about $20 a month, roughly $23 to $24 with GST, cancellable after one month. Aman's rule for the cohort: take it for the seven sessions so you can build alongside, not just watch.
+- On first run, pick "Claude account with subscription", authorise in the browser, and return to the terminal.
+- OpenCode and other CLIs are out of scope for the sessions. Explore them afterwards.
+
+**Sources:**
+- https://code.claude.com/docs/en/setup (verified 13-09-2026)
+- https://code.claude.com/docs/en/costs (verified 13-09-2026)
+
+---
+
+## Q290: What is the difference between a plugin and a skill? I thought plugins connected to external apps.
+
+**Short answer:** A skill is one procedure: a `SKILL.md` with instructions Claude follows when the task matches. A plugin is a package that can carry several skills plus agents, hooks and MCP servers, installed together from a marketplace. Superpowers is one plugin with many skills inside.
+
+- Install once at user scope with `/plugin`, and the skills inside are available in every project. Nothing "connects" at call time, the files sit on your machine.
+- You do not need to type the skill name. Say "help me brainstorm" and the superpowers brainstorming skill fires. `/superpowers` lists what the plugin contains if you want to see it.
+- Some plugins do bundle an MCP server, which is the external-connection part you were thinking of (Playwright, GitHub, Figma). Others are pure skills (frontend-design, skill-creator).
+- Installed in class: frontend-design, superpowers, code-review, context7, skill-creator, code-simplifier, playwright, github, claude-md-management.
+
+**Sources:**
+- https://code.claude.com/docs/en/plugins (verified 13-09-2026)
+- https://code.claude.com/docs/en/discover-plugins (verified 13-09-2026)
+- https://code.claude.com/docs/en/skills (verified 13-09-2026)
+
+---
+
+## Q291: I typed `/super` and nothing appeared.
+
+**Short answer:** Either the plugin is not installed, or you typed it somewhere other than a running Claude Code session.
+
+- Slash commands only autocomplete inside `claude`. The IDE agent panel and a bare shell prompt both ignore them.
+- Run `/plugin`, use the arrow keys to reach superpowers, press space to select, then `i` to install. Or type `/plugin install superpowers@claude-plugins-official` directly.
+- After a fresh install, `/superpowers` should list brainstorming, writing plans, writing skills and the rest.
+
+**Sources:**
+- https://code.claude.com/docs/en/discover-plugins (verified 13-09-2026)
+
+---
+
+## Q292: When is CLAUDE.md created, what goes in it, and do I write it myself?
+
+**Short answer:** Run `/init` once your folder has something to read, and let Claude write the first version. On an empty folder it correctly produces nothing. If a CLAUDE.md already exists, `/init` audits it and proposes improvements instead of overwriting.
+
+- The order Pranjali asked about: get two to four docs in the folder first, then `/init`. Keep updating CLAUDE.md as the project grows, either by re-running `/init` or by asking Claude to update it in plain language, which is what Damini asked and yes, both routes are equivalent.
+- What belongs there is routing and rules, not documentation: which rules file to read for which request, date formats, folder conventions, what not to do. The workshop CLAUDE.md is 105 lines and routes any "write a prompt" request to `.claude/rules/prompt-writing.md`.
+- Size guidance is a target under 200 lines. Longer files still load, but adherence drops and every line costs context on every turn. `/doctor` will propose cuts.
+- Set `CLAUDE_CODE_NEW_INIT=1` for an interactive `/init` that also offers to set up skills, hooks and a personal `CLAUDE.local.md`.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 13-09-2026)
+- https://code.claude.com/docs/en/best-practices (verified 13-09-2026)
+- https://code.claude.com/docs/en/commands (verified 13-09-2026)
+
+---
+
+## Q293: I already have implementation-architecture.md and I build phase by phase with `/compact`, `/clear` and `/resume`. What does CLAUDE.md add?
+
+**Short answer:** Your architecture and plan files are the project's content. CLAUDE.md is the file that tells Claude which of those to read for which request, and the rules to apply while doing it. Without it, you drag files in by hand every time.
+
+- Your workflow already works because `/resume` restores the conversation. CLAUDE.md is what survives a `/clear`: it is re-read from disk at the start of every session and re-injected after every compaction.
+- Move the standing instructions out of your prompts and into it: the phase order, "read decisions.md before starting a phase", output formats, date formats.
+- The test from Aman: if you keep telling Claude the same thing, it belongs in CLAUDE.md or memory, not in the next prompt.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 13-09-2026)
+- https://code.claude.com/docs/en/context-window (verified 13-09-2026)
+
+---
+
+## Q294: Do I have to memorise commands like `/init`? Where do I learn them?
+
+**Short answer:** No. Type `/` inside Claude Code and the list appears with a one-line description each. Plain language works for most of them ("create a CLAUDE.md" runs `/init`). The ones worth knowing by name after Session 1: `/init`, `/model`, `/plugin`, `/compact`, `/clear`, `/context`, `/doctor`, `/skill-doctor`, `/statusline`, `/voice`.
+
+- The workshop repo carries `02-presentation/command-reference.html` with the same list grouped by purpose. Read that, not the PPTX, which is three months old.
+- Everything else becomes muscle memory once you use it daily, which is the actual reason to take the subscription.
+
+**Sources:**
+- https://code.claude.com/docs/en/commands (verified 13-09-2026)
+
+---
+
+## Q295: In `/model`, what is the difference between Opus "default" and the 1M option, and what does effort change?
+
+**Short answer:** The `[1m]` suffix selects the 1 million token context window for that model. Sonnet 5 runs with 1M natively, so it has no separate 1M entry. Effort (low, medium, high, xhigh, max) controls how much reasoning the model spends per turn; higher effort costs more tokens on a Pro plan.
+
+- The model picker sets the model for the current session and the default for new terminals. Change it mid-session whenever you like.
+- Aman's default: Opus or Sonnet at medium. Move to high only when a problem is genuinely complex.
+- Left and right arrow keys change effort on the same screen where you pick the model.
+
+**Sources:**
+- https://code.claude.com/docs/en/model-config (verified 13-09-2026)
+
+---
+
+## Q296: Is context the same as memory? And does `/clear` reset it?
+
+**Short answer:** No. Context is the information loaded into this one conversation, measured against the model's window (1M tokens on Opus and Sonnet 5). Memory is what Claude writes to disk and reloads next session. `/clear` empties the context and starts a fresh conversation. It does not touch memory or CLAUDE.md.
+
+- What you see as "32 percent left" is the window filling with conversation, tool results, skills and rules. It is not "remembering" anything across sessions.
+- After `/clear`, the previous conversation is still in `/resume`. Pass a name (`/clear phase-two`) to label it.
+- Memory files and CLAUDE.md are re-read from disk at the start of every session and after compaction, which is why a rule that lives there does not need repeating.
+
+**Sources:**
+- https://code.claude.com/docs/en/context-window (verified 13-09-2026)
+- https://code.claude.com/docs/en/memory (verified 13-09-2026)
+- https://code.claude.com/docs/en/commands (verified 13-09-2026)
+
+---
+
+## Q297: When should I `/compact` versus just open a new window?
+
+**Short answer:** Compact when you want to continue the same task and the window is 60 to 70 percent used. Open a new window when the next task is unrelated. Do not wait for auto-compact at the limit.
+
+- `/compact` replaces the history with a summary and keeps going. `/compact focus on the phase two decisions` steers what the summary keeps.
+- A new window with nothing in it is a new colleague with no briefing. That is fine for a new task, and it is why Aman keeps one named session per task and resumes it (the `ccs` registry, covered in a later session).
+- Anything that must survive compaction belongs in a file, not the conversation.
+
+**Sources:**
+- https://code.claude.com/docs/en/context-window (verified 13-09-2026)
+- https://code.claude.com/docs/en/commands (verified 13-09-2026)
+
+---
+
+## Q298: Where is project memory stored, how does global memory work, and do I have to say which one to use?
+
+**Short answer:** There is no "default memory". Every session loads your global CLAUDE.md (`~/.claude/CLAUDE.md`), the project CLAUDE.md, and the project's auto memory (`~/.claude/projects/<project>/memory/`). If you are not sure where a rule belongs, ask Claude, and it will check the docs and pick the scope.
+
+- Auto memory lives outside your repo, keyed to the project path, so it follows the project on your machine and is not committed to git. `MEMORY.md` is the index, one file per memory beside it. The first 200 lines or 25KB of the index load each session.
+- Global CLAUDE.md applies to every project on this machine. It is tied to your machine, not your Claude account, so a second laptop does not inherit it.
+- The scoping test from the session: "date format must be DD-MM-YYYY everywhere" applies to all projects, so it went into global CLAUDE.md. "MeetFlow's active sprint is 17-03 to 28-03" is project only.
+- When Claude keeps repeating a mistake, say so and ask "where should we save this so it does not happen again?" It will propose project memory, global CLAUDE.md, or a rules file, and can use the AskUserQuestion tool to interview you first.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 13-09-2026)
+- https://code.claude.com/docs/en/claude-directory (verified 13-09-2026)
+
+---
+
+## Q299: Once I create a skill, can I validate it? If I forget to point it at a folder, will Claude look elsewhere on its own?
+
+**Short answer:** A skill is a set of instructions and Claude follows what is written. It will not go hunting for a folder you did not name, and it cannot tell a stale document from a current one unless you say so. Validate by running it on a case where you already know the right answer.
+
+- Name the read order explicitly inside `SKILL.md`: first this folder, then that file, then produce the output. If two folders matter, list both.
+- Cross-check with Claude itself: ask it to review the skill against the official skills doc and the skill-creator reference before you rely on it. The skill-creator plugin exists for exactly this.
+- Run `/skill-doctor` occasionally. It shows what each skill costs in context and which ones are never invoked, which is how Aman found 19 unused plugin skills in his own setup.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 13-09-2026)
+- https://github.com/anthropics/skills/tree/main/skills/skill-creator (verified 13-09-2026)
+
+---
+
+## Q300: Where should I use Cursor and where Claude Code? Is asking Cursor for a code review the same as the code-review plugin?
+
+**Short answer:** Cursor and Antigravity are IDEs with an agent panel. Claude Code runs inside them, in the terminal. Use the IDE for files and the terminal for the agent. A code review from the IDE panel is a model plus the prompt you typed. The code-review plugin is a model plus Anthropic's own review procedure, so you do not write the guidelines yourself.
+
+- The same applies to Priyanka's Railway and Vercel projects: you do not add them as plugins. Open the project folder, start `claude`, and ask for a code review. The plugin runs.
+- Between Claude Code and Codex, Aman's position is to try both and decide. Between an IDE agent panel and Claude Code, he recommends Claude Code because the marketplace, skills and rules only exist there.
+- Pranjali's migration recipe from the session: open the existing folder, copy `prompt-writing.md` into `.claude/rules/`, run `/init`, then generate the remaining docs by asking for a prompt first and compare against the Antigravity versions.
+
+**Sources:**
+- https://code.claude.com/docs/en/how-claude-code-works (verified 13-09-2026)
+- https://code.claude.com/docs/en/plugins (verified 13-09-2026)
+
+---
+
+## Q301: How do I paste a screenshot into the terminal, and how does voice mode work?
+
+**Short answer:** Copy the image and press Ctrl+V (Cmd+V in iTerm2, Alt+V on Windows and WSL). An `[Image #1]` chip appears in the prompt. For voice, run `/voice` once, then hold space and speak, release to stop. Voice needs a Claude.ai login, not an API key.
+
+- The status-line task uses exactly this: screenshot Aman's status line, paste it, and ask Claude to build the same one. `/statusline` is the command that generates the script.
+- `/voice tap` switches to tap-to-start, tap-to-send if holding the key is awkward.
+- Aman's reason for pushing voice: typed prompts drop context, spoken ones carry the intention. Either way, state what the output is for, not just its filename.
+
+**Sources:**
+- https://code.claude.com/docs/en/interactive-mode (verified 13-09-2026)
+- https://code.claude.com/docs/en/voice-dictation (verified 13-09-2026)
+- https://code.claude.com/docs/en/statusline (verified 13-09-2026)
+
+---
+
+# September 2026 - Session 2 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 13-09-2026 during Session 2 (skills, four ways to create one, routines, connectors, and an agents preview). All URLs verified 13-09-2026.
+
+---
+
+## Q302: What is the difference between an agent and a skill? In both we give a prompt and both execute a set of steps. And can a skill be updated once it is created?
+
+**Short answer:** A skill is a workflow: a `SKILL.md` with step-by-step instructions that runs the same way every time it is invoked. An agent (subagent) is a persona: its own system prompt, its own context window, its own tool access, and optionally a persistent memory directory that lets it improve across runs. An agent can invoke skills. A skill has no memory, so you update it by editing its instructions.
+
+| | Skill | Agent (subagent) |
+|---|---|---|
+| Lives at | `.claude/skills/<name>/SKILL.md` | `.claude/agents/<name>.md` |
+| What it is | Instructions Claude follows when invoked | A system prompt plus tools, permissions, model, and optional memory |
+| Context | Runs in your conversation (unless `context: fork`) | Runs in its own context window, returns a summary |
+| Learns over time | No. You edit the file | Yes, if `memory: user`, `project` or `local` is set. The first 200 lines or 25KB of its `MEMORY.md` load into its prompt each run |
+| Invoked by | You (`/name`) or Claude, from the description | Claude, when a task matches the description, or you by name |
+
+- Aman's framing on the call: "consider yourself as the agent. PRD, user stories, interviews, Jira, prioritisation are your skills." An agent can list skills to preload in its `skills:` frontmatter, and the full content of each is injected at startup.
+- "So I cannot upgrade a skill?" You can. Open `SKILL.md` and change the instructions, or ask Claude to. The difference is that an agent with memory saves a correction ("in our organisation framework two is followed, not framework one") and applies it next run without you editing anything.
+- Keep agents narrow: one for developer, one for code review, one for PM. "Code review is not done by the person who has written the code."
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 13-09-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 13-09-2026)
+
+---
+
+## Q303: For a new project, what must exist under `.claude/`? Are the rules and agents written by us or given by Anthropic, and does Claude ship any skills by default?
+
+**Short answer:** Nothing under `.claude/` is required to start. Run `/init` to create `CLAUDE.md`, install the plugins you want, and let Claude create everything else when you ask for it. Anthropic ships plugins (superpowers, skill-creator, code-review), and plugins contain skills. Every skill under the workshop repo's `.claude/skills/` was built by cohorts, not shipped.
+
+- "In `.claude`, you do not need to create anything manually. Always ask Claude and Claude will create it." A folder named `skills` anywhere outside `.claude/` is not read.
+- The `.claude/` layout Claude uses: `skills/` (one folder per skill), `agents/` (one `.md` per agent), `rules/` (path-scoped instructions), `hooks/`, `settings.json`.
+- Plugin skills are invoked the same way as your own. On the call the confusion was "is it a plugin or a skill?" Both: superpowers is installed as a plugin, and `brainstorming` is one of the skills inside it.
+- Aman's public skills repo is organised by role (business analyst, data engineer, designer, PM, marketing and so on). Copy a folder into your `.claude/skills/` to use it.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 13-09-2026)
+- https://code.claude.com/docs/en/plugins (verified 13-09-2026)
+- https://code.claude.com/docs/en/skills (verified 13-09-2026)
+- https://github.com/qa-aman/claude-skills (verified 13-09-2026)
+
+---
+
+## Q304: How does the YAML frontmatter make Claude pick a skill I did not name? What is loaded into context and when?
+
+**Short answer:** Every skill's name and description are loaded into context at session start as a listing. That listing is how Claude matches "help me with the session debrief" to the `session-debrief` skill without a slash command. The body of `SKILL.md` loads only when the skill is invoked, and files in `references/`, `scripts/` and `assets/` load only when the body points to them and Claude needs them.
+
+- `/context` on a fresh session in the workshop repo showed 9.9K tokens spent on skill descriptions before any prompt. That is the listing. It scales at 1 percent of the model's context window, and if it overflows, Claude Code shortens the descriptions of the skills you invoke least.
+- The combined `description` and `when_to_use` text is capped at 1,536 characters per skill, so put the key use case first.
+- `disable-model-invocation: true` keeps a skill out of the listing entirely. Use it for skills only you should trigger.
+- Run `/skill-doctor` to find skills that are loaded and never invoked.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 13-09-2026)
+- https://code.claude.com/docs/en/how-claude-code-works (verified 13-09-2026)
+
+---
+
+## Q305: Global versus project skill: which should I use, how do I use a skill someone else made, and does a global skill cost more tokens?
+
+**Short answer:** `~/.claude/skills/` is personal and available in every project on your machine. `.claude/skills/` is project scoped and travels with the repo. Pick one level per skill. To use someone else's skill, copy its folder into one of those two places. Scope does not change token cost, but it does change where the skill is visible.
+
+- If the same name exists at both levels, the personal one wins.
+- Caveat Aman did not mention on the call: routines and cloud sessions do not read `~/.claude/skills/` on your machine. A skill that exists only globally reports "not found" inside a routine. If you want it in a routine, commit it to the repository's `.claude/skills/`.
+- Claude Code watches skill directories, so adding or editing a skill takes effect in the current session without a restart.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 13-09-2026)
+- https://code.claude.com/docs/en/routines (verified 13-09-2026)
+
+---
+
+## Q306: How long can a SKILL.md be? Aman said Claude stops reading after 200 lines.
+
+**Short answer:** The official guidance is "Keep SKILL.md under 500 lines. Move detailed reference material to separate files." There is no line at which Claude stops reading. Longer files cost more context on every invocation and reduce adherence, which is why the advice is to keep the body short and push templates, examples and frameworks into `references/`.
+
+- The 200-line number was the same overstatement made in Session 1 about CLAUDE.md. Treat 200 as a good working target and 500 as the documented ceiling.
+- The email-writer skill built on the call came in at 171 lines with a `references/core-stack/` folder and one module file per email type. That is the shape to copy.
+- If a skill grows past the target, ask Claude to move the overflow into `references/` and leave a pointer.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 13-09-2026)
+
+---
+
+## Q307: When does something deserve to be a skill, and what are the ways to create one?
+
+**Short answer:** Aman's rule: once, no skill. Twice, no skill. Three or more times on a regular cadence, even monthly, yes. If the task is vague (Neha's "analyse the market and find stocks"), do it by hand once, then decide which repeatable parts become skills. Four ways to create one were shown, in increasing order of quality.
+
+1. **Template prompt.** "As a PM, I want to create a skill for PRD. Here is the template we follow." skill-creator writes `SKILL.md`, an `evals/evals.json`, and copies the template into `assets/`.
+2. **Brainstorm first.** "We are just brainstorming. Use AskUserQuestion. Until we agree, do not start creating the skill." Superpowers' brainstorming skill interviews you (trigger, stack, done criteria, scope, where it lives) and only then proposes a design.
+3. **Describe the workflow with samples.** Write down the steps you follow today, attach one or two real example outputs, and ask Claude to turn that into a skill. Nikhil's solution-architecture flow is this shape.
+4. **Research the frameworks first.** "From top-selling books, research the best frameworks available, provide the references in a table, and give your recommendation." Then build the skill on the frameworks Claude found. The email skill came from this prompt and surfaced fourteen frameworks.
+
+- Whichever way, run it on real input, check the output, correct it, run again. "The result will not be 100%."
+- skill-creator now runs an eval loop: without-skill versus with-skill, with a local review page for feedback before finalising.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 13-09-2026)
+- https://github.com/anthropics/claude-plugins-official/tree/main/plugins/skill-creator (verified 13-09-2026)
+- https://claude.com/blog/improving-skill-creator-test-measure-and-refine-agent-skills (verified 13-09-2026)
+
+---
+
+## Q308: In a Java project, can a skill generate test cases automatically whenever a new method or file is written?
+
+**Short answer:** A skill on its own does not fire on file events. What the brainstorm on the call recommended is a hook that detects the new file and a thin skill that writes the test. `PostToolUse` matching `Edit|Write` fires after Claude writes a file. `FileChanged` fires when a watched file changes on disk, whoever wrote it.
+
+- Pranjali's answers set the design: automatic but ask first, Spring Boot with JUnit 5 and Mockito, done means `mvn test` passes, append to an existing test class, test private methods indirectly through public ones.
+- Claude pushed back on reflection-based tests for private methods ("fragile and often get deleted") and offered the alternative. Take that as the pattern: let the brainstorm challenge your first answer.
+- Run the same brainstorm prompt inside the actual Java repo so Claude can read the existing test style and Maven config before designing.
+
+**Sources:**
+- https://code.claude.com/docs/en/hooks (verified 13-09-2026)
+- https://code.claude.com/docs/en/skills (verified 13-09-2026)
+
+---
+
+## Q309: We invoke skills manually now. If we do not know which skill applies, will an agent pick the right one itself?
+
+**Short answer:** Yes, on two levels. Claude itself reads the skill listing and invokes a matching skill from its description, no agent needed. An agent can also invoke skills, and you can preload specific ones into it with the `skills:` frontmatter field, in which case the full skill content is injected at its startup.
+
+- The `aman.md` agent in the repo is a routing example: "help me with writing the spec" goes to the agent, which picks `write-prd`. Aman called it "not the best thing to do" as a design, because a persona should be narrow (PM, developer, QA), not one agent for everything.
+- Preloaded skills are injected in full, so a long skill preloaded into an agent costs context on every run. Preload only what the agent always needs.
+- If a listed skill is missing, Claude Code skips it and logs a warning. It does not fail.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 13-09-2026)
+- https://code.claude.com/docs/en/skills (verified 13-09-2026)
+
+---
+
+## Q310: When you say Granola is connected to Claude, what are we actually doing?
+
+**Short answer:** Adding a claude.ai connector. In the Claude desktop app go to Settings, Connectors, search for the service (Granola, Atlassian, Gmail, Slack), click Connect, and authenticate. Claude Code fetches your claude.ai connectors itself, so the MCP tools are available in the terminal without any command.
+
+- Once connected, you paste a Granola link or a Confluence URL and Claude reads it. No PDF export, no copy-paste.
+- Aman's habit: Granola runs for every meeting, including in-person client meetings, and the transcript link is what he gives to the session-debrief and email skills.
+- To disable a connector for one project, use the `/mcp` toggle. To add a server that is not a directory connector, use `claude mcp add`.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 13-09-2026)
+
+---
+
+## Q311: Can the email-drafting skill run inside Outlook, or do we always come to the terminal?
+
+**Short answer:** The skill runs in Claude Code. It cannot be embedded in Outlook. The two options are: draft into a file in the terminal and paste it, or connect an email provider through a connector so the skill drafts (or sends) directly. The Gmail connector now exposes draft, reply and send tools.
+
+- Aman previously drafted into Zoho through an MCP built on a Zoho refresh token. He no longer has that account, and Zoho is not in the connector directory, so Gmail is the path that works today.
+- A routine can send email through the Gmail connector on a schedule, which is how the arXiv digest on the call was delivered.
+- The skill is deliberately draft-only. Aman: "that's why human in the loop is required."
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 13-09-2026)
+- https://code.claude.com/docs/en/routines (verified 13-09-2026)
+
+---
+
+## Q312: I want a notification every time a new research paper on token optimisation is published, and the new releases from Anthropic and OpenAI. Skill, connector, or something else?
+
+**Short answer:** A routine. Run `/schedule` in any session (or create it at claude.ai/code/routines), describe the research, the cadence and where the result should land, and it runs in the cloud on schedule with your connectors. The one built on the call: every Monday 7:30 IST, scan arXiv for token-optimisation papers, email the digest through the Gmail connector. To add vendor releases, put their official release-notes URLs in the prompt.
+
+- Routines run on Anthropic-managed cloud, so "if something dependency on your local, then routines will not work." Each routine has its own model selector, defaulting to Sonnet.
+- The first run on the call failed: arXiv is not on the default Trusted network allowlist. Fix it in the routine's environment by switching network access to Custom and adding `arxiv.org` and `export.arxiv.org`. Claude's failure email listed the exact steps.
+- Connectors reach their services through Anthropic's servers, so Gmail worked even though arXiv did not.
+- Routines are available on Pro, Max, Team and Enterprise, and count against your account's daily run allowance.
+
+**Sources:**
+- https://code.claude.com/docs/en/routines (verified 13-09-2026)
+- https://code.claude.com/docs/en/cloud-environments (verified 13-09-2026)
+
+---
+
+## Q313: I ask a yes or no question and get ten lines. I ask for a simple project and it builds the whole thing. How do I make it brief?
+
+**Short answer:** Put the instruction in that project's `CLAUDE.md`: answer in the shortest form, do not start building until asked, confirm the plan first. Keep it project-level, not global, because other projects will want the detail.
+
+- CLAUDE.md loads into every prompt in that folder, so it is the right place for a standing style rule. Auto memory is for things Claude learns on its own, not for rules you want enforced.
+- For a one-off, Shift+Tab into plan mode: Claude explores and proposes without writing anything until you approve.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 13-09-2026)
+- https://code.claude.com/docs/en/permission-modes (verified 13-09-2026)
+
+---
+
+## Q314: I asked Claude to traverse a Java method to its leaf and extract the call graph. It burned 30 to 40 percent of my tokens before I thought to have it write a Python utility instead. Is there a skill that would have told me?
+
+**Short answer:** No skill fixes this, because every workflow is different. The fix is how you ask. Give the problem and the outcome, not the method, and brainstorm before building. "You just provide the problem statement. You do not mention that create this Python script. It may create something else."
+
+1. State the problem and the outcome: "I have these files, I want the full call graph from this method, how should we do this?"
+2. Ask for two or three approaches with pros and cons, and ask Claude to compare them against your own idea.
+3. Shift+Tab into plan mode, read the plan, approve it, then build.
+
+- Aman credited this to the Boris Cherny interview on Opus 5, where most of the system prompt was removed because instructing one method hides the nine other ways the model knows. His line: "Whenever thought process is there, our IQ is lesser than Claude. So leave that to Claude."
+- Skip the brainstorm only when the task is genuinely straightforward.
+
+**Sources:**
+- https://code.claude.com/docs/en/permission-modes (verified 13-09-2026)
+- https://code.claude.com/docs/en/how-claude-code-works (verified 13-09-2026)
+
+---
+
+## Q315: Skills are for repeated tasks. What do we do for a dynamic workflow where Claude has to decide the path on the fly?
+
+**Short answer:** If the branches are known ("if tokens drop below X do workflow A, else workflow B"), that is still a static skill with conditions written into it. The email skill does exactly this: it classifies the situation (incident, announcement, pushback) and follows the matching module. If Claude must invent the path with no rules, it is not a skill. Brainstorm the problem and let Claude propose a program or an agent design.
+
+- Test: can you write the decision rule down? If yes, it belongs in the skill body. If no, you do not yet have a workflow, you have a problem statement.
+- Sub-skills (Neha's "teach me French for kids and adults"): do not design the branching yourself. Ask Claude for the best pedagogical frameworks first, then ask how it would structure the skill, then iterate.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 13-09-2026)
+
+---
+
+## Q316: I have two projects in two directories. From the terminal in one, how do I reference or review code in the other?
+
+**Short answer:** Paste the other project's full path into the prompt: "review this folder `/path/to/other-project/src` and write the output here." The terminal has access to your whole filesystem. If you want the other project's skills, commands and agents available too, add it with `/add-dir`.
+
+- Global skills (`~/.claude/skills/`) are already visible from both projects, so `teach-me` at global level runs in either.
+- `permissions.additionalDirectories` in settings grants file access only. It does not load the other directory's skills. `/add-dir` does both.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 13-09-2026)
+- https://code.claude.com/docs/en/how-claude-code-works (verified 13-09-2026)

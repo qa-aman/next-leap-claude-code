@@ -1,0 +1,16 @@
+{
+  "eval_id": 1,
+  "eval_name": "concern-peer-spec",
+  "prompt": "I read Tomas's Enterprise tier SSO spec today. Two gaps: it never says what the user sees when SSO login fails (wrong IdP config, expired cert), and the audit log retention period is not defined anywhere, the compliance pilot asked for 12 months. Sprint starts 17-03-2026. Draft an email to Tomas about this. He owns the spec, I am a peer PM.",
+  "assertions": [
+    "Subject line names the benefit or the topic for the team, not 'issues', 'problems', or 'gaps'",
+    "Each of the two gaps is anchored to the spec (a section, a flow, or the word 'spec') and described as an observation, not a judgement of Tomas",
+    "Each gap states what fixing it unlocks for dev, QA, or the compliance pilot (forward-pointing)",
+    "The 12-month retention request from the compliance pilot is cited as the source of that need",
+    "Suggestions are phrased as suggestions in 'we' form and the email explicitly leaves the decision with Tomas (does not assign him rework with 'can you fix')",
+    "No 'why' questions directed at Tomas and no compliment sandwich opener",
+    "Closes with an invitation to correct or ask (door open), not with a demand",
+    "Every date is in DD-MM-YYYY format, and the text contains no em dashes, semicolons, exclamation marks, or emojis",
+    "Points are a numbered list, not unnumbered bullets"
+  ]
+}

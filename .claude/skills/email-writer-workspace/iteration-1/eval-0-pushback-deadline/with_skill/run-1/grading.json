@@ -1,0 +1,58 @@
+{
+  "expectations": [
+    {
+      "text": "Subject line starts with a keyword tag in caps (ACTION, DECISION, REQUEST, INFO, FYI, URGENT) or otherwise states the position, not a vague 'Re:' only",
+      "passed": true,
+      "evidence": "Subject: 'DECISION: Two-way Salesforce sync for the two pilots, 15-05-2026'"
+    },
+    {
+      "text": "The first sentence of the body states that two-way sync by 15-05-2026 is not possible (the no is up front, not after context)",
+      "passed": true,
+      "evidence": "First sentence: 'We cannot commit to two-way Salesforce sync by 15-05-2026.'"
+    },
+    {
+      "text": "The body contains a sentence acknowledging Marcus's underlying interest (the pilot promise) before or alongside the refusal",
+      "passed": true,
+      "evidence": "'You have already set 15-05-2026 with both pilots, so a date that slips again lands on you first.'"
+    },
+    {
+      "text": "The rate-limit constraint is stated as a concrete criterion (a third of volume, found 12-03-2026), not as a feeling",
+      "passed": true,
+      "evidence": "'Engineering found this on 12-03-2026: ... roughly a third of the sync volume'"
+    },
+    {
+      "text": "At least two distinct options are offered, one of which is one-way sync by 15-05-2026",
+      "passed": true,
+      "evidence": "Three numbered options, option 1 is one-way by 15-05-2026. Note: options 1 and 3 overlap (MECE miss)"
+    },
+    {
+      "text": "The email ends with a question or a request for a choice by a stated date, not with 'let me know your thoughts'",
+      "passed": true,
+      "evidence": "Calibrated question on what pilots need, then 'by 19-03-2026'"
+    },
+    {
+      "text": "No apology in the first sentence and no standalone filler sign-off line such as 'Best regards' or 'Thanks in advance'",
+      "passed": true,
+      "evidence": "No apology, no sign-off line"
+    },
+    {
+      "text": "Every date is in DD-MM-YYYY format, and the text contains no em dashes, semicolons, exclamation marks, or emojis",
+      "passed": false,
+      "evidence": "Two semicolons: one inside the bracketed assumption in the body line 17, one in the note. Dates all DD-MM-YYYY"
+    },
+    {
+      "text": "Body is at most 250 words",
+      "passed": true,
+      "evidence": "Body 222 words excluding the note"
+    }
+  ],
+  "pass_rate": 0.8888888888888888,
+  "passed": 8,
+  "total": 9,
+  "summary": {
+    "pass_rate": 0.8888888888888888,
+    "passed": 8,
+    "failed": 1,
+    "total": 9
+  }
+}

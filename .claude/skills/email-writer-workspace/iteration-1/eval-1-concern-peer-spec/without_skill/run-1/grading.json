@@ -1,0 +1,58 @@
+{
+  "expectations": [
+    {
+      "text": "Subject line names the benefit or the topic for the team, not 'issues', 'problems', or 'gaps'",
+      "passed": false,
+      "evidence": "Subject: 'Two gaps in the SSO spec before sprint starts'"
+    },
+    {
+      "text": "Each of the two gaps is anchored to the spec (a section, a flow, or the word 'spec') and described as an observation, not a judgement of Tomas",
+      "passed": true,
+      "evidence": "'The spec doesn't say what the user sees if SSO login fails' / 'isn't specified anywhere in the spec'"
+    },
+    {
+      "text": "Each gap states what fixing it unlocks for dev, QA, or the compliance pilot (forward-pointing)",
+      "passed": false,
+      "evidence": "Point 1 describes the user dead end (impact on user, ok), point 2 says 'it would help to confirm' with no stated unlock for dev or QA. Partial"
+    },
+    {
+      "text": "The 12-month retention request from the compliance pilot is cited as the source of that need",
+      "passed": true,
+      "evidence": "'I know the compliance pilot asked for 12 months'"
+    },
+    {
+      "text": "Suggestions are phrased as suggestions in 'we' form and the email explicitly leaves the decision with Tomas (does not assign him rework with 'can you fix')",
+      "passed": true,
+      "evidence": "'Happy to help think through either of these', no rework assigned, decision left open"
+    },
+    {
+      "text": "No 'why' questions directed at Tomas and no compliment sandwich opener",
+      "passed": true,
+      "evidence": "No why-questions, no compliment sandwich"
+    },
+    {
+      "text": "Closes with an invitation to correct or ask (door open), not with a demand",
+      "passed": true,
+      "evidence": "'Let me know what you think.' (weaker than an invitation to correct, but open)"
+    },
+    {
+      "text": "Every date is in DD-MM-YYYY format, and the text contains no em dashes, semicolons, exclamation marks, or emojis",
+      "passed": true,
+      "evidence": "Clean"
+    },
+    {
+      "text": "Points are a numbered list, not unnumbered bullets",
+      "passed": true,
+      "evidence": "Numbered 1 and 2"
+    }
+  ],
+  "pass_rate": 0.7777777777777778,
+  "passed": 7,
+  "total": 9,
+  "summary": {
+    "pass_rate": 0.7777777777777778,
+    "passed": 7,
+    "failed": 2,
+    "total": 9
+  }
+}

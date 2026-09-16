@@ -1,0 +1,11 @@
+{
+  "skill_name": "prd",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Write a PRD for Transcript Accuracy v2, the June 2026 bet to fix transcription in noisy rooms. Save it under the current cohort outputs folder.",
+      "expected_output": "A PRD following 14-templates/template-prd.md with all 8 sections, cited baselines (92% quiet-room accuracy), OKR-sourced targets (96%), 2-4 personas with file pointers, a NOT building list, DD-MM-YYYY dates, no leftover placeholders.",
+      "files": []
+    }
+  ]
+}

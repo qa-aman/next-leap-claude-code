@@ -1,0 +1,316 @@
+{
+  "metadata": {
+    "skill_name": "email-writer",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "<model-name>",
+    "analyzer_model": "<model-name>",
+    "timestamp": "2026-09-13T10:05:47Z",
+    "evals_run": [
+      0,
+      1
+    ],
+    "runs_per_configuration": 3
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8888888888888888,
+        "passed": 8,
+        "failed": 1,
+        "total": 9,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Subject line starts with a keyword tag in caps (ACTION, DECISION, REQUEST, INFO, FYI, URGENT) or otherwise states the position, not a vague 'Re:' only",
+          "passed": true,
+          "evidence": "Subject: 'DECISION: Two-way Salesforce sync for the two pilots, 15-05-2026'"
+        },
+        {
+          "text": "The first sentence of the body states that two-way sync by 15-05-2026 is not possible (the no is up front, not after context)",
+          "passed": true,
+          "evidence": "First sentence: 'We cannot commit to two-way Salesforce sync by 15-05-2026.'"
+        },
+        {
+          "text": "The body contains a sentence acknowledging Marcus's underlying interest (the pilot promise) before or alongside the refusal",
+          "passed": true,
+          "evidence": "'You have already set 15-05-2026 with both pilots, so a date that slips again lands on you first.'"
+        },
+        {
+          "text": "The rate-limit constraint is stated as a concrete criterion (a third of volume, found 12-03-2026), not as a feeling",
+          "passed": true,
+          "evidence": "'Engineering found this on 12-03-2026: ... roughly a third of the sync volume'"
+        },
+        {
+          "text": "At least two distinct options are offered, one of which is one-way sync by 15-05-2026",
+          "passed": true,
+          "evidence": "Three numbered options, option 1 is one-way by 15-05-2026. Note: options 1 and 3 overlap (MECE miss)"
+        },
+        {
+          "text": "The email ends with a question or a request for a choice by a stated date, not with 'let me know your thoughts'",
+          "passed": true,
+          "evidence": "Calibrated question on what pilots need, then 'by 19-03-2026'"
+        },
+        {
+          "text": "No apology in the first sentence and no standalone filler sign-off line such as 'Best regards' or 'Thanks in advance'",
+          "passed": true,
+          "evidence": "No apology, no sign-off line"
+        },
+        {
+          "text": "Every date is in DD-MM-YYYY format, and the text contains no em dashes, semicolons, exclamation marks, or emojis",
+          "passed": false,
+          "evidence": "Two semicolons: one inside the bracketed assumption in the body line 17, one in the note. Dates all DD-MM-YYYY"
+        },
+        {
+          "text": "Body is at most 250 words",
+          "passed": true,
+          "evidence": "Body 222 words excluding the note"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.7777777777777778,
+        "passed": 7,
+        "failed": 2,
+        "total": 9,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Subject line names the benefit or the topic for the team, not 'issues', 'problems', or 'gaps'",
+          "passed": false,
+          "evidence": "Subject: 'ACTION: Two gaps in the SSO spec before sprint starts today'. Uses 'gaps' and an ACTION tag aimed at the spec owner"
+        },
+        {
+          "text": "Each of the two gaps is anchored to the spec (a section, a flow, or the word 'spec') and described as an observation, not a judgement of Tomas",
+          "passed": true,
+          "evidence": "'The spec does not say what the user sees when SSO login fails' / 'The retention period is not defined anywhere'"
+        },
+        {
+          "text": "Each gap states what fixing it unlocks for dev, QA, or the compliance pilot (forward-pointing)",
+          "passed": true,
+          "evidence": "'engineering builds it once instead of improvising it mid-sprint' / 'closes the one thing the pilot is waiting on'"
+        },
+        {
+          "text": "The 12-month retention request from the compliance pilot is cited as the source of that need",
+          "passed": true,
+          "evidence": "'the compliance pilot asked for 12 months'"
+        },
+        {
+          "text": "Suggestions are phrased as suggestions in 'we' form and the email explicitly leaves the decision with Tomas (does not assign him rework with 'can you fix')",
+          "passed": false,
+          "evidence": "'If we add this now' is we-form, but the close 'Could we get both added before engineering starts building this week?' assigns the work rather than leaving the call with Tomas"
+        },
+        {
+          "text": "No 'why' questions directed at Tomas and no compliment sandwich opener",
+          "passed": true,
+          "evidence": "No why-questions, opens with the observation"
+        },
+        {
+          "text": "Closes with an invitation to correct or ask (door open), not with a demand",
+          "passed": true,
+          "evidence": "'Let me know if I have read either of these wrong.'"
+        },
+        {
+          "text": "Every date is in DD-MM-YYYY format, and the text contains no em dashes, semicolons, exclamation marks, or emojis",
+          "passed": true,
+          "evidence": "No dashes, semicolons, exclamation marks. No bad dates"
+        },
+        {
+          "text": "Points are a numbered list, not unnumbered bullets",
+          "passed": true,
+          "evidence": "Numbered 1 and 2"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.5555555555555556,
+        "passed": 5,
+        "failed": 4,
+        "total": 9,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Subject line starts with a keyword tag in caps (ACTION, DECISION, REQUEST, INFO, FYI, URGENT) or otherwise states the position, not a vague 'Re:' only",
+          "passed": false,
+          "evidence": "Subject: 'Salesforce Sync Commitment for 15-05-2026 - Need to Adjust Scope', no tag, position only hinted"
+        },
+        {
+          "text": "The first sentence of the body states that two-way sync by 15-05-2026 is not possible (the no is up front, not after context)",
+          "passed": false,
+          "evidence": "First sentence is 'Thanks for flagging the urgency here'. The no arrives in paragraph 2"
+        },
+        {
+          "text": "The body contains a sentence acknowledging Marcus's underlying interest (the pilot promise) before or alongside the refusal",
+          "passed": true,
+          "evidence": "'I know both pilots are counting on this.'"
+        },
+        {
+          "text": "The rate-limit constraint is stated as a concrete criterion (a third of volume, found 12-03-2026), not as a feeling",
+          "passed": true,
+          "evidence": "Rate limit and 12-03-2026 stated"
+        },
+        {
+          "text": "At least two distinct options are offered, one of which is one-way sync by 15-05-2026",
+          "passed": true,
+          "evidence": "One-way by 15-05 plus three two-way approaches (throttling, higher tier, phased)"
+        },
+        {
+          "text": "The email ends with a question or a request for a choice by a stated date, not with 'let me know your thoughts'",
+          "passed": false,
+          "evidence": "Ends asking for a 30-minute call, no date for a decision"
+        },
+        {
+          "text": "No apology in the first sentence and no standalone filler sign-off line such as 'Best regards' or 'Thanks in advance'",
+          "passed": false,
+          "evidence": "No apology, but closes with a 'Best, Aman' sign-off block"
+        },
+        {
+          "text": "Every date is in DD-MM-YYYY format, and the text contains no em dashes, semicolons, exclamation marks, or emojis",
+          "passed": true,
+          "evidence": "No dashes, semicolons, exclamation marks. Dates DD-MM-YYYY"
+        },
+        {
+          "text": "Body is at most 250 words",
+          "passed": true,
+          "evidence": "221 words"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.7777777777777778,
+        "passed": 7,
+        "failed": 2,
+        "total": 9,
+        "time_seconds": 0.0,
+        "tokens": 0,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "Subject line names the benefit or the topic for the team, not 'issues', 'problems', or 'gaps'",
+          "passed": false,
+          "evidence": "Subject: 'Two gaps in the SSO spec before sprint starts'"
+        },
+        {
+          "text": "Each of the two gaps is anchored to the spec (a section, a flow, or the word 'spec') and described as an observation, not a judgement of Tomas",
+          "passed": true,
+          "evidence": "'The spec doesn't say what the user sees if SSO login fails' / 'isn't specified anywhere in the spec'"
+        },
+        {
+          "text": "Each gap states what fixing it unlocks for dev, QA, or the compliance pilot (forward-pointing)",
+          "passed": false,
+          "evidence": "Point 1 describes the user dead end (impact on user, ok), point 2 says 'it would help to confirm' with no stated unlock for dev or QA. Partial"
+        },
+        {
+          "text": "The 12-month retention request from the compliance pilot is cited as the source of that need",
+          "passed": true,
+          "evidence": "'I know the compliance pilot asked for 12 months'"
+        },
+        {
+          "text": "Suggestions are phrased as suggestions in 'we' form and the email explicitly leaves the decision with Tomas (does not assign him rework with 'can you fix')",
+          "passed": true,
+          "evidence": "'Happy to help think through either of these', no rework assigned, decision left open"
+        },
+        {
+          "text": "No 'why' questions directed at Tomas and no compliment sandwich opener",
+          "passed": true,
+          "evidence": "No why-questions, no compliment sandwich"
+        },
+        {
+          "text": "Closes with an invitation to correct or ask (door open), not with a demand",
+          "passed": true,
+          "evidence": "'Let me know what you think.' (weaker than an invitation to correct, but open)"
+        },
+        {
+          "text": "Every date is in DD-MM-YYYY format, and the text contains no em dashes, semicolons, exclamation marks, or emojis",
+          "passed": true,
+          "evidence": "Clean"
+        },
+        {
+          "text": "Points are a numbered list, not unnumbered bullets",
+          "passed": true,
+          "evidence": "Numbered 1 and 2"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.8333,
+        "stddev": 0.0786,
+        "min": 0.7778,
+        "max": 0.8889
+      },
+      "time_seconds": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "tokens": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.6667,
+        "stddev": 0.1571,
+        "min": 0.5556,
+        "max": 0.7778
+      },
+      "time_seconds": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "tokens": {
+        "mean": 0.0,
+        "stddev": 0.0,
+        "min": 0,
+        "max": 0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.17",
+      "time_seconds": "+0.0",
+      "tokens": "+0"
+    }
+  },
+  "notes": []
+}

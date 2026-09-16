@@ -1,0 +1,39 @@
+{
+  "skill_name": "email-writer",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Marcus, our head of sales, wants me to commit to shipping two-way Salesforce sync by 15-05-2026 because he promised it to two enterprise pilots. Engineering found on 12-03-2026 that Salesforce API rate limits cap us at roughly a third of the sync volume the pilots need, and we have no workaround yet. One-way sync (MeetFlow to Salesforce) is doable by 15-05-2026. Write the reply email to Marcus.",
+      "expected_output": "A reply that states the no in the first line, shows understanding of Marcus's interest (pilot promise), gives a criterion (rate limit), offers at least two options, ends with a calibrated question and a date. Subject has a keyword tag.",
+      "files": [],
+      "assertions": [
+        "Subject line starts with a keyword tag in caps (ACTION, DECISION, REQUEST, INFO, FYI, URGENT) or otherwise states the position, not a vague 'Re:' only",
+        "The first sentence of the body states that two-way sync by 15-05-2026 is not possible (the no is up front, not after context)",
+        "The body contains a sentence acknowledging Marcus's underlying interest (the pilot promise) before or alongside the refusal",
+        "The rate-limit constraint is stated as a concrete criterion (a third of volume, found 12-03-2026), not as a feeling",
+        "At least two distinct options are offered, one of which is one-way sync by 15-05-2026",
+        "The email ends with a question or a request for a choice by a stated date, not with 'let me know your thoughts'",
+        "No apology in the first sentence and no standalone filler sign-off line such as 'Best regards' or 'Thanks in advance'",
+        "Every date is in DD-MM-YYYY format, and the text contains no em dashes, semicolons, exclamation marks, or emojis",
+        "Body is at most 250 words"
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "I read Tomas's Enterprise tier SSO spec today. Two gaps: it never says what the user sees when SSO login fails (wrong IdP config, expired cert), and the audit log retention period is not defined anywhere, the compliance pilot asked for 12 months. Sprint starts 17-03-2026. Draft an email to Tomas about this. He owns the spec, I am a peer PM.",
+      "expected_output": "A concern email that opens with what was noticed, anchors each point to the spec, says what each fix unlocks for dev/QA/the pilot, offers the fix as a suggestion in we-form, leaves the decision with Tomas, no why-questions, no compliment sandwich, closes with door open.",
+      "files": [],
+      "assertions": [
+        "Subject line names the benefit or the topic for the team, not 'issues', 'problems', or 'gaps'",
+        "Each of the two gaps is anchored to the spec (a section, a flow, or the word 'spec') and described as an observation, not a judgement of Tomas",
+        "Each gap states what fixing it unlocks for dev, QA, or the compliance pilot (forward-pointing)",
+        "The 12-month retention request from the compliance pilot is cited as the source of that need",
+        "Suggestions are phrased as suggestions in 'we' form and the email explicitly leaves the decision with Tomas (does not assign him rework with 'can you fix')",
+        "No 'why' questions directed at Tomas and no compliment sandwich opener",
+        "Closes with an invitation to correct or ask (door open), not with a demand",
+        "Every date is in DD-MM-YYYY format, and the text contains no em dashes, semicolons, exclamation marks, or emojis",
+        "Points are a numbered list, not unnumbered bullets"
+      ]
+    }
+  ]
+}

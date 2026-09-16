@@ -1,0 +1,58 @@
+{
+  "expectations": [
+    {
+      "text": "Subject line starts with a keyword tag in caps (ACTION, DECISION, REQUEST, INFO, FYI, URGENT) or otherwise states the position, not a vague 'Re:' only",
+      "passed": false,
+      "evidence": "Subject: 'Salesforce Sync Commitment for 15-05-2026 - Need to Adjust Scope', no tag, position only hinted"
+    },
+    {
+      "text": "The first sentence of the body states that two-way sync by 15-05-2026 is not possible (the no is up front, not after context)",
+      "passed": false,
+      "evidence": "First sentence is 'Thanks for flagging the urgency here'. The no arrives in paragraph 2"
+    },
+    {
+      "text": "The body contains a sentence acknowledging Marcus's underlying interest (the pilot promise) before or alongside the refusal",
+      "passed": true,
+      "evidence": "'I know both pilots are counting on this.'"
+    },
+    {
+      "text": "The rate-limit constraint is stated as a concrete criterion (a third of volume, found 12-03-2026), not as a feeling",
+      "passed": true,
+      "evidence": "Rate limit and 12-03-2026 stated"
+    },
+    {
+      "text": "At least two distinct options are offered, one of which is one-way sync by 15-05-2026",
+      "passed": true,
+      "evidence": "One-way by 15-05 plus three two-way approaches (throttling, higher tier, phased)"
+    },
+    {
+      "text": "The email ends with a question or a request for a choice by a stated date, not with 'let me know your thoughts'",
+      "passed": false,
+      "evidence": "Ends asking for a 30-minute call, no date for a decision"
+    },
+    {
+      "text": "No apology in the first sentence and no standalone filler sign-off line such as 'Best regards' or 'Thanks in advance'",
+      "passed": false,
+      "evidence": "No apology, but closes with a 'Best, Aman' sign-off block"
+    },
+    {
+      "text": "Every date is in DD-MM-YYYY format, and the text contains no em dashes, semicolons, exclamation marks, or emojis",
+      "passed": true,
+      "evidence": "No dashes, semicolons, exclamation marks. Dates DD-MM-YYYY"
+    },
+    {
+      "text": "Body is at most 250 words",
+      "passed": true,
+      "evidence": "221 words"
+    }
+  ],
+  "pass_rate": 0.5555555555555556,
+  "passed": 5,
+  "total": 9,
+  "summary": {
+    "pass_rate": 0.5555555555555556,
+    "passed": 5,
+    "failed": 4,
+    "total": 9
+  }
+}

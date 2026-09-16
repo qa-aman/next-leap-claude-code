@@ -1,0 +1,16 @@
+{
+  "eval_id": 0,
+  "eval_name": "pushback-deadline",
+  "prompt": "Marcus, our head of sales, wants me to commit to shipping two-way Salesforce sync by 15-05-2026 because he promised it to two enterprise pilots. Engineering found on 12-03-2026 that Salesforce API rate limits cap us at roughly a third of the sync volume the pilots need, and we have no workaround yet. One-way sync (MeetFlow to Salesforce) is doable by 15-05-2026. Write the reply email to Marcus.",
+  "assertions": [
+    "Subject line starts with a keyword tag in caps (ACTION, DECISION, REQUEST, INFO, FYI, URGENT) or otherwise states the position, not a vague 'Re:' only",
+    "The first sentence of the body states that two-way sync by 15-05-2026 is not possible (the no is up front, not after context)",
+    "The body contains a sentence acknowledging Marcus's underlying interest (the pilot promise) before or alongside the refusal",
+    "The rate-limit constraint is stated as a concrete criterion (a third of volume, found 12-03-2026), not as a feeling",
+    "At least two distinct options are offered, one of which is one-way sync by 15-05-2026",
+    "The email ends with a question or a request for a choice by a stated date, not with 'let me know your thoughts'",
+    "No apology in the first sentence and no standalone filler sign-off line such as 'Best regards' or 'Thanks in advance'",
+    "Every date is in DD-MM-YYYY format, and the text contains no em dashes, semicolons, exclamation marks, or emojis",
+    "Body is at most 250 words"
+  ]
+}

@@ -35,6 +35,7 @@ Answers to open questions from workshop sessions, sourced from official Anthropi
 - **September 2026 Session 4 additions:** 19-09-2026 (Q330-Q344 - multi-agent roles, reviewer independence, skill preload versus body, subagent defaults, and the nextleap-pm spec agent, Saturday morning - see "September 2026 - Session 4 Additions" section)
 - **September 2026 Session 5 additions:** 19-09-2026 (Q345-Q358 - travel planner multi-agent build part 1, brainstorm decisions, APIs over web search, Google Maps keys, feedback versus memory, subagent-driven TDD, cost per run, Gemini versus Vertex, and workflow versus subagents, Saturday afternoon - see "September 2026 - Session 5 Additions" section)
 - **September 2026 Session 6 additions:** 20-09-2026 (Q359-Q371 - travel planner build part 2, Gemini via a standalone server, /compact before a model switch, /context and /doctor, subagent file flow, /goal versus /loop, adding an agent, branching for major changes, free video tooling, parallel terminals, marketing context in the same repo, /voice, Sunday morning - see "September 2026 - Session 6 Additions" section)
+- **September 2026 Session 7 additions:** 20-09-2026 (Q372-Q383 - travel planner build part 3, payments and the cart boundary, agent harness, /insights, the trip revision agent, delegating a decision to Claude, worktrees for a parallel build, the feature-dev plugin, how agents communicate, the permission classifier, documenting a build from session transcripts, and shipping a Claude plugin, Sunday afternoon - see "September 2026 - Session 7 Additions" section)
 
 If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
@@ -6052,3 +6053,190 @@ New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 20
 **Sources:**
 - https://code.claude.com/docs/en/voice-dictation (verified 20-09-2026)
 - https://code.claude.com/docs/en/commands (verified 20-09-2026)
+
+
+---
+
+# September 2026 - Session 7 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 20-09-2026 during Session 7 (travel planner build, part 3, Sunday afternoon). All URLs verified 20-09-2026.
+
+---
+
+## Q372: How do I add a payment step so the agent books the flight? How do I give it my bank access safely?
+
+**Short answer:** Do not. Let the agent search, compare and add to the cart, then hand the payment to a human. That was the session's rule ("stop till the cart") and it is how Anthropic describes reliable agents: checkpoints where a human reviews before an irreversible action. Payment is the most irreversible action in the flow.
+
+- The build shape: a `booking` agent that fills the cart and returns a link or a summary, and a human who pays on the provider's own checkout. Never store bank credentials in the project or in `.env`, and never paste them into a chat.
+- If a gateway is needed later (Stripe or a regional equivalent), ask Claude to interview you first: which gateway, which account, test mode or live, what the refund path is. Build against the gateway's test mode until the cart-to-payment handoff is boring.
+- Two mechanisms in Claude Code enforce the boundary rather than hoping the model respects it: a permission rule that makes any payment tool call ask, and a hook on the tool call that blocks it outright unless a human flag is set. In auto mode the classifier already blocks "sending sensitive data to external endpoints" by default.
+- Priyanka's industry note from the session: platforms are moving to pre-funded agent wallets with a spend threshold that pings you for authorisation. The risk is then capped at the wallet balance. Watch that space, do not wire a bank account to an agent today.
+
+**Sources:**
+- https://www.anthropic.com/engineering/building-effective-agents (verified 20-09-2026)
+- https://code.claude.com/docs/en/permissions (verified 20-09-2026)
+- https://code.claude.com/docs/en/hooks-guide (verified 20-09-2026)
+- https://code.claude.com/docs/en/permission-modes (verified 20-09-2026)
+
+---
+
+## Q373: There is news that an OpenAI agent overrode human instructions. Is it true? And what is an "agent harness"?
+
+**Short answer:** Check the vendor's own page before believing or repeating it. The session's rule: "always look for the official resources, and if it comes from the official resources, then also it can be true." An agent harness is the machinery around the model that decides what it may do: which tools it gets, what memory it keeps, which actions stop and wait for a human, and when it must stop entirely. The harness, not the model's good intentions, is what keeps an agent inside its job.
+
+- In Claude Code the harness is visible as permissions (allow, ask, deny per tool), permission modes (manual, plan, auto with a classifier), hooks that run deterministic checks at lifecycle points, and sandboxing for file and network access. Anthropic's guidance for agents is the same idea: "autonomous agents should stop at checkpoints or when encountering blockers" for human review.
+- What the classifier blocks in auto mode by default: downloading and executing code (`curl | bash`), sending sensitive data to external endpoints, production deploys and migrations, mass deletion, granting IAM or repo permissions, modifying shared infrastructure, irreversibly destroying files that existed before the session. In the session it blocked exactly one of these, the HeyGen CLI install, forty minutes after the concept was explained.
+- For AI news, the first-party feeds are the vendor newsrooms and engineering blogs. A screenshot of a headline is not a source.
+
+**Sources:**
+- https://www.anthropic.com/engineering/building-effective-agents (verified 20-09-2026)
+- https://code.claude.com/docs/en/permission-modes (verified 20-09-2026)
+- https://code.claude.com/docs/en/permissions (verified 20-09-2026)
+- https://www.anthropic.com/news (verified 20-09-2026)
+
+---
+
+## Q374: What is `/insights`, and how often should I run it? (paraphrased from the session)
+
+**Short answer:** `/insights` analyses your recent Claude Code sessions on this machine and writes an HTML report on how you work: what you work on, how you use Claude Code, where things go wrong (misunderstood requests, buggy code), and features to try, with suggested `CLAUDE.md` additions you can paste. The session's advice: run it every two weeks or monthly so you have data points to improve against.
+
+- A single run analyses up to 200 sessions it has not seen before and skips very short ones. The report header shows the analysed count against the total.
+- The latest report lands at `~/.claude/usage-data/report.html`, with a timestamped copy per run. Reports are deleted on the same schedule as session data, 30 days by default.
+- It works on any plan and provider. The analysis tokens count against your plan. Sessions from other devices and claude.ai are not included, and it is not available in cloud sessions.
+- The line worth acting on from the host's report: "never print long content in chat, write every deliverable directly to a file." Long chat output burns the output token ceiling and the context window at the same time.
+
+**Sources:**
+- https://code.claude.com/docs/en/costs (verified 20-09-2026)
+- https://code.claude.com/docs/en/commands (verified 20-09-2026)
+
+---
+
+## Q375: For a pre-trip date change, can we just rerun `plan-trip`? Do we need a new subagent at all?
+
+**Short answer:** For a pure date shift with no trip started, rerunning the planner with the new dates is a valid answer, and Yash's point was accepted in the session. The new agent earns its place for the mid-trip cases: it has to know which day the traveller is on, keep the days already lived untouched, and rerun only the workers that the change affects. The design the room chose: a small classifier agent plus the existing workers, not a bigger agent that replans on its own.
+
+- What `trip-revision` does: reads `brief.json`, `itinerary.json` and the change request, derives the current day from today's date versus the start date, classifies the change (date shift, duration change, cut short), and writes `revision.json` naming which workers rerun for which days and what input is still missing.
+- What it does not do: call the travel tools or write itinerary days. The orchestrator's `revise-trip` skill reads `revision.json`, re-dispatches only the named workers for the named days, re-synthesises, and reruns review with the same six checks. Same repair loop as a fresh plan.
+- Folder decision, delegated to Claude and justified from how TripIt and Wanderlog behave: overwrite the trip in place and keep a `revisions.json` log, so the one shareable link stays valid.
+- The live run showed why the classifier is worth having: it refused to compute anything without a start date, flagged that "3-day trip" contradicted the stored 5-day plan, and rejected a city not in the itinerary until that rule was relaxed on purpose.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 20-09-2026)
+- https://code.claude.com/docs/en/skills (verified 20-09-2026)
+
+---
+
+## Q376: When Claude asks me a design question I cannot answer, what do I type? (paraphrased from "take a call as I am not sure")
+
+**Short answer:** Delegate the decision explicitly and ask for the reasoning: "You can take a call on this as I am not sure. Take the best judgment as per how the industry works, and then provide me the details of which call you have taken, with logical reasons." Claude then researches the convention, picks, and explains, and the reason goes into `decisions.md`.
+
+- Why the wording matters: "as per how the industry works" sends Claude to look at real products (in the session it checked TripIt and Wanderlog before choosing "edit in place plus a revision log"). "With logical reasons" makes the choice reviewable. Without both, you get a guess presented as a fact.
+- Pair it with the guard used at the start of every build in this cohort: "As of now we are just brainstorming. Ask me as many questions as possible until we are both on the same page. Once we agree, then only start building." Plan mode does the same job structurally, keeping exploration separate from execution.
+- Read every option before choosing. The host's rule from the session: "these are the questions which you need to read carefully, all the highlights and the details, because accordingly the flow will be built." A wrong click at brainstorm time becomes an architecture.
+
+**Sources:**
+- https://code.claude.com/docs/en/best-practices (verified 20-09-2026)
+
+---
+
+## Q377: Can I build the standalone server in a second session while the revision agent build is still running in this one?
+
+**Short answer:** Yes, with a worktree. Claude proposed it in the session: a separate directory with its own working tree that shares the repo's git history, on its own branch, with a second Claude Code session opened inside it. Edits in the two directories cannot collide. The caveat the host gave: the worktree starts from what is committed, so uncommitted work in the first session does not appear in the second until it is committed and merged.
+
+- Start it: `claude --worktree standalone-server`. Claude Code creates it under `.claude/worktrees/` and by default branches from the repository's default branch. To branch from the current HEAD instead, set `worktree.baseRef` to `"head"`. The repo needs at least one commit.
+- Resuming a session that was inside a worktree returns it to that worktree. Clean up with `git worktree remove`, adding `--force` if it has uncommitted changes.
+- To watch both sessions from one screen rather than two terminals, use agent view. Cross-session messaging lets one session pass findings to the other.
+- Two sessions share your plan's usage window. The host's build ran at 18 percent of the 5-hour window on Sonnet, which left room for a second session.
+
+**Sources:**
+- https://code.claude.com/docs/en/worktrees (verified 20-09-2026)
+- https://code.claude.com/docs/en/common-workflows (verified 20-09-2026)
+- https://code.claude.com/docs/en/agent-view (verified 20-09-2026)
+
+---
+
+## Q378: What did the `feature-dev` plugin actually do? Were we doing QA, or do we need to worry about tests?
+
+**Short answer:** `feature-dev` is a plugin from Anthropic's official marketplace that runs a guided feature build: it explores the codebase, plans against the implementation plan, implements task by task with commits, and then runs its own code reviewer, which scores each potential issue for confidence and reports the ones worth fixing. In the session it found 8 blocking bugs in the revision build, all were fixed, and the project's own eval script (`revision-evals.sh` over six fixtures) passed 6 of 6. So the QA was happening, in two layers.
+
+- Layer one is the plugin's reviewer (bugs, logic errors, convention violations, with a 0 to 100 confidence per finding). Layer two is the project's fixtures and eval scripts written during the Session 5 TDD pass, which the reviewer also asked to extend ("add round-trip and non-terminal fixtures so a future change can't silently reintroduce these bugs").
+- What you still check by hand: the user interface. The host's line: "backend perspective it is really good, but when it comes to UI, overlapping and layout, there you send screenshots and go back and forth."
+- Install it once: `/plugin`, then find `feature-dev` in the `claude-plugins-official` marketplace, which Claude Code registers automatically on first interactive start. Invoke with `/feature-dev` and point it at the plan.
+- Reconcile the numbers yourself. The reviewer said 8, the fix pass said 7 plus one flagged. Read the flagged one before saying "go ahead."
+
+**Sources:**
+- https://code.claude.com/docs/en/discover-plugins (verified 20-09-2026)
+- https://code.claude.com/docs/en/plugins (verified 20-09-2026)
+
+---
+
+## Q379: How do the agents talk to each other, and where is that wiring kept? Is it the MD files?
+
+**Short answer:** Yes, through files, and the wiring lives in the orchestrator skill, not in the agents. The orchestrator (`plan-trip`, a skill run by the main session) dispatches destination, logistics and budget at once via the Agent tool. Each worker reads `brief.json`, calls the travel tools MCP server itself, and writes its own file. No worker reads another worker's file. Only the orchestrator reads all three, writes `itinerary-draft.md`, then dispatches review, which reads the brief and the draft and writes `review.json` with a pass or fail per check and the owner of each failure. If review fails, the orchestrator re-dispatches only that owner, once, then writes `itinerary.md` and `itinerary.json`.
+
+- So the answer to "where is logistics talking to review maintained": nowhere, on purpose. Logistics never talks to review. Review talks to the orchestrator through `review.json`, and the orchestrator talks to logistics through a re-dispatch. Independence of the reviewer is a structural property of that file flow.
+- Subagents return a summary to the caller and nothing else, and they do not share context with each other. Files are the only durable channel between them, which is why every worker in this project writes one file and returns three lines.
+- The generated page that shows this is `docs/demo-runs/agent-communication.html` in the repo. To make your own: "help me understand how these agents communicate, in parallel or in sequence, at what step, create an HTML file."
+- This is the orchestrator-worker pattern from Session 3's agent-teams discussion, inside one session instead of across sessions.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 20-09-2026)
+
+---
+
+## Q380: Claude refused to run the HeyGen install command. Why, and what were re-render, SFX and the ChatGPT scene pack about?
+
+**Short answer:** The install was `curl | bash`, downloading a remote script and executing it in one step. The permission classifier blocks that class of command by default because it cannot see what the script will do. Claude said so ("reasonable to keep that gated") and the host ran it in a plain terminal. On the video terms: re-render is regenerating the same video with the requested changes (background music, new images); SFX is sound effects, which had been in an earlier prompt and were dropped; the scene pack was seven images plus a timing file made outside Claude Code and handed to the agent.
+
+- The classifier's default block list (auto mode): downloading and executing code, sending sensitive data externally, production deploys and migrations, mass deletion on cloud storage, granting IAM or repo permissions, modifying shared infrastructure, irreversibly destroying pre-existing files. Deny and explicit ask rules run before the classifier and still apply.
+- The image recipe, since Claude is not the tool for images: upload the rendered video to an image-capable model, ask for one image per scene and a handoff file naming each image with its start and end time, download the pack into the project, and prompt the video agent to "use this pack, keep each image for exactly the time given." The video's own script was read from the audio, nobody retyped it.
+- Before any re-render, copy the previous MP4 to a new name or say "do not touch this video, create a new one." The session's second render overwrote the first.
+- Which image model: whatever you have access to. The host picked a larger one only because the class needed a clean result on the first try.
+
+**Sources:**
+- https://code.claude.com/docs/en/permission-modes (verified 20-09-2026)
+- https://code.claude.com/docs/en/auto-mode-config (verified 20-09-2026)
+
+---
+
+## Q381: Can you share every step and prompt we performed in this project as a document? How would I make one for my own build?
+
+**Short answer:** Every Claude Code session is already on disk as a full transcript, `~/.claude/projects/<project>/<session>.jsonl`, with every message, tool call and result. The host's prompt at the close: "look for the JSONL files, what prompts we have given, what flow we have taken to build this product, create one HTML file, even if lengthy, as elaborative as possible." Claude reads the transcripts and git history and writes the walkthrough.
+
+- Anchor it in facts: ask for the git log to be merged in so each step carries its commit and date. Claude did this unprompted ("let me pull full git history to anchor it with hard facts").
+- The `.local/` or `docs/` folder is the place, not chat. A long deliverable printed in chat eats the context window (see Q374).
+- Transcripts are cleaned up after `cleanupPeriodDays`, 30 days by default, so generate the document while the sessions still exist, or raise the setting.
+- For the cohort: the repo link in the important-links doc is the single place to find this and every future build. Bookmark the profile, not the individual repo.
+
+**Sources:**
+- https://code.claude.com/docs/en/claude-directory (verified 20-09-2026)
+- https://code.claude.com/docs/en/costs (verified 20-09-2026)
+
+---
+
+## Q382: Videos are 143 MB and Claude did not commit them. Why? (paraphrased from the session)
+
+**Short answer:** Git hosts cap file and repository sizes, and the HyperFrames `.gitignore` already excludes renders and snapshots, so Claude skipped them and said so. The right home for rendered video is object storage or a shared drive, with the link in the README. Commit the script, the storyboard, the timing file and the source images, which are small and are what someone would rebuild from.
+
+- If a large binary has already been committed, history has to be rewritten to remove it, which is slow and breaks clones. Keep the ignore rule in place before the first render.
+- The `.agents` folder that the HyperFrames install creates was also kept out of git in Session 6 for a different reason: each person installs it once in their own clone.
+- For the cohort, the host uploaded the videos folder to Drive and shared the link in the meeting chat.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 20-09-2026)
+
+---
+
+## Q383: I want to ship my tool as a Claude Code plugin. How do I package it, and how do I make it show up when someone searches the marketplace?
+
+**Short answer:** Put the plugin in a folder with a `.claude-plugin/plugin.json` manifest plus your skills, agents, hooks or MCP config, validate it with `claude plugin validate ./your-plugin`, push it to GitHub, and either publish a marketplace file of your own or submit it to Anthropic's community marketplace. Once it is in a marketplace, anyone adds that marketplace and installs your plugin with `/plugin`.
+
+- Two public marketplaces exist. `claude-plugins-official` is curated by Anthropic with no application process. `claude-community` takes third-party submissions after review, through the Console form at platform.claude.com/plugins/submit (individuals) or the claude.ai admin form (Team and Enterprise organisations). Approved plugins are pinned by commit and the catalog syncs nightly.
+- Your own marketplace is one JSON file in a repo (`.claude-plugin/marketplace.json`) listing plugins by path, GitHub repo, git URL, npm package or zip. Users run `/plugin marketplace add <owner>/<repo>` and install from it. Keep it in a private repo to limit it to your team.
+- Test locally first: `claude --plugin-dir ./your-plugin` loads it for one session without installing.
+- The session's build advice for the project itself: pick one language the models are strong in (Python), implement two or three techniques rather than twenty, validate the plugin standalone on dummy data, then think about where it sits in the flow. "Build something and fail, build something and fail, that will give a lot of learning."
+
+**Sources:**
+- https://code.claude.com/docs/en/plugins (verified 20-09-2026)
+- https://code.claude.com/docs/en/plugin-marketplaces (verified 20-09-2026)
+- https://code.claude.com/docs/en/discover-plugins (verified 20-09-2026)

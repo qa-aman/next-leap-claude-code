@@ -31,6 +31,10 @@ Answers to open questions from workshop sessions, sourced from official Anthropi
 - **August 2026 Session 8 additions:** 15-08-2026 (Q267-Q282 - Build Hours Part 2, phases one to five, evaluation criteria and the tailored resume, afternoon - see "August 2026 - Session 8 Additions" section)
 - **September 2026 Session 1 additions:** 13-09-2026 (Q288-Q301 - new cohort, Claude Code setup, plugins, CLAUDE.md and memory scopes - see "September 2026 - Session 1 Additions" section)
 - **September 2026 Session 2 additions:** 13-09-2026 (Q302-Q316 - skills, four ways to create one, routines, connectors, and an agents preview, afternoon - see "September 2026 - Session 2 Additions" section)
+- **September 2026 Session 3 additions:** 16-09-2026 (Q317-Q329 - agents, agent memory, agent teams, and dynamic workflows, evening - see "September 2026 - Session 3 Additions" section)
+- **September 2026 Session 4 additions:** 19-09-2026 (Q330-Q344 - multi-agent roles, reviewer independence, skill preload versus body, subagent defaults, and the nextleap-pm spec agent, Saturday morning - see "September 2026 - Session 4 Additions" section)
+- **September 2026 Session 5 additions:** 19-09-2026 (Q345-Q358 - travel planner multi-agent build part 1, brainstorm decisions, APIs over web search, Google Maps keys, feedback versus memory, subagent-driven TDD, cost per run, Gemini versus Vertex, and workflow versus subagents, Saturday afternoon - see "September 2026 - Session 5 Additions" section)
+- **September 2026 Session 6 additions:** 20-09-2026 (Q359-Q371 - travel planner build part 2, Gemini via a standalone server, /compact before a model switch, /context and /doctor, subagent file flow, /goal versus /loop, adding an agent, branching for major changes, free video tooling, parallel terminals, marketing context in the same repo, /voice, Sunday morning - see "September 2026 - Session 6 Additions" section)
 
 If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
@@ -5201,3 +5205,850 @@ New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 13
 **Sources:**
 - https://code.claude.com/docs/en/skills (verified 13-09-2026)
 - https://code.claude.com/docs/en/how-claude-code-works (verified 13-09-2026)
+
+---
+
+# September 2026 - Session 3 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 16-09-2026 during Session 3 (agents, agent memory, and dynamic workflows, evening). All URLs verified 16-09-2026.
+
+---
+
+## Q317: What is auto mode, and how is it different from the mode where Claude asks me before every edit?
+
+**Short answer:** A permission mode decides what Claude can do without asking you. Manual mode (config value `default`) stops before most file edits, shell commands and network calls. Auto mode replaces you with a second model, a classifier, that reviews each action instead. On Pro, Max and Team plans auto mode is the built-in starting mode, which is why Nikhil saw Claude Code edit files without asking and Antigravity did not.
+
+| Mode | What runs without a prompt | Use it for |
+|---|---|---|
+| Manual (`default`) | Reads only | Sensitive work, unfamiliar code |
+| Accept edits | Reads and file edits | Iterating on a codebase you trust |
+| Plan | Reads, plus classifier-approved commands when auto mode is available | Exploring before changing anything |
+| Auto | Classifier reviews actions instead of you | Hands-off work |
+
+- Shift+Tab cycles the modes in a running session. `claude --permission-mode default` starts in Manual.
+- Priyanka's `/compact` then `/clear` between phases is a separate thing: it manages context, not permissions. Both habits can coexist.
+- Your organisation can turn auto mode off, in which case the session starts in Manual.
+
+**Sources:**
+- https://code.claude.com/docs/en/permission-modes (verified 16-09-2026)
+
+---
+
+## Q318: If I switch models in the middle of a session, do I lose the context or the cache?
+
+**Short answer:** You keep the conversation. `/model` changes which model answers the next turn, and the whole conversation so far is sent to it, so the new model knows everything the old one did. What you lose is the prompt cache for the old model, which means the first request after a switch costs more tokens than a cached turn would have.
+
+- The pattern Aman uses: research on a higher model (Fable or Opus), then `/model sonnet` for execution in the same chat.
+- `opusplan` does this switch for you: Opus during plan mode, Sonnet for execution.
+- Yash's Codex question (5.5 to 5.6) is the same idea in another tool: switching is fine, just not every turn, because each switch re-sends the context.
+- Resumed sessions keep the model they were using, not your current default.
+
+**Sources:**
+- https://code.claude.com/docs/en/model-config (verified 16-09-2026)
+- https://code.claude.com/docs/en/prompt-caching (verified 16-09-2026)
+
+---
+
+## Q319: Is there a command that tells Claude "this prompt is for a subagent"? Does an agent invoke itself when the job is done?
+
+**Short answer:** No command. Say "use a subagent" or name the agent ("use the code-improver agent on `lib/store.ts`"), and Claude delegates. Claude also delegates on its own when a task matches an agent's `description`, so the description is the trigger, the same way it is for a skill. Nothing runs at "end of project" by itself. For that you want a hook (Q326).
+
+- Subagents run in their own context window with their own system prompt and tool access. Your main conversation is not visible to them. They return a summary.
+- Aman's line on the call was "agents or subagents, both are similar." In Claude Code the file under `.claude/agents/` is called a subagent. The docs use that word.
+- The `/agents` interactive wizard was removed in v2.1.198. Running `/agents` now prints a reminder to ask Claude or edit `.claude/agents/` directly. The file locations and frontmatter fields are unchanged.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 16-09-2026)
+
+---
+
+## Q320: Which model does a subagent use? On the call it was said "Sonnet by default."
+
+**Short answer:** It inherits the main conversation's model unless something says otherwise. The code-improver used Sonnet because the prompt asked for it, and `model: sonnet` landed in the frontmatter. Leave `model` out and the subagent runs on whatever your session is on, which on an Opus session means Opus.
+
+The docs give the resolution order:
+
+1. A `model` Claude passes for that specific invocation.
+2. The subagent's `model` frontmatter (`sonnet`, `opus`, `haiku`, `fable`, a full ID, or `inherit`).
+3. `CLAUDE_CODE_SUBAGENT_MODEL`, if you set it, to force every subagent onto one model.
+4. Otherwise, the main conversation's model.
+
+- Built-in Explore also inherits now (as of v2.1.198), capped at Opus on the Claude API. It no longer always runs on Haiku.
+- The practical rule from the session stands: for a file-reading or report-writing agent, put `model: sonnet` in the file. Just know it is your choice, not a default.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 16-09-2026)
+
+---
+
+## Q321: Subagents and agent teams appeared as two diagrams. Are they the same thing? Do subagents talk to each other?
+
+**Short answer:** Two different things. A subagent is spawned by the main agent, does one job in its own context, and reports back. It does not talk to other subagents. An agent team is several full Claude Code sessions: one lead, teammates that each have their own context, a shared task list, and direct messaging between teammates. Agent teams are experimental and off by default.
+
+| | Subagents | Agent teams |
+|---|---|---|
+| Who coordinates | The main agent manages all work | Teammates self-coordinate through messages and a shared task list |
+| Talk to each other | No | Yes, and you can talk to any teammate directly |
+| Enable | Nothing to enable | `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` in settings.json or the environment |
+
+- This repo's committed `.claude/settings.json` already sets the flag, so the September cohort has teams on when they clone it.
+- Whether subagents "combine their work or report individually" depends on the prompt and on whether you used a workflow (Q327). A plain subagent call always returns one summary to the caller.
+
+**Sources:**
+- https://code.claude.com/docs/en/agent-teams (verified 16-09-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 16-09-2026)
+
+---
+
+## Q322: For code review, do I need an agent or is a skill enough? Does a skill have memory?
+
+**Short answer:** Agent. A skill has no memory. It is a `SKILL.md` that runs the same way every time, and the only way to change its behaviour is to edit the file. An agent is a persona with its own system prompt, tools and, if you set `memory:`, a directory it reads and writes across runs. Code review is a persona whose judgement should improve with every review, so it gets memory.
+
+- Aman's test: "when to create an agent is when you want a persistent memory," meaning the workflow changes with use. A fixed set of steps run on a schedule is a skill.
+- The email-writer example: to drop Smart Brevity you edit the skill. You cannot tell a skill "from next time onwards." An agent you can.
+- The plugin code-review agent has no idea of your company's review conventions. Put your patterns in a reference file, point your own agent at it, and the review becomes contextual.
+- An agent can list skills to preload in `skills:` frontmatter, so `pm-nidhi` runs `prd`, `competitive-analysis` and `email-writer` without you typing `/prd`.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 16-09-2026)
+- https://code.claude.com/docs/en/skills (verified 16-09-2026)
+
+---
+
+## Q323: Does an agent save its findings to memory automatically and learn from them next time?
+
+**Short answer:** Partly. Setting `memory: project` (or `user`, `local`) gives the subagent instructions and the Read, Write and Edit tools for its memory directory, and loads the first 200 lines or 25KB of its `MEMORY.md` into every run. Whether it writes something after a given task is the subagent's call. The docs say to ask it ("now that you are done, save what you learned to your memory") and, better, to put that instruction in the agent file so it maintains memory on its own.
+
+| Scope | Location | Use when |
+|---|---|---|
+| `project` (recommended) | `.claude/agent-memory/<name>/` | Knowledge is project-specific and can be shared through git |
+| `user` | `~/.claude/agent-memory/<name>/` | The agent should remember across all your projects |
+| `local` | `.claude/agent-memory-local/<name>/` | Project-specific, not committed |
+
+- On the call, "this user is not available with us, save this in memory" worked because the instruction was explicit. Twenty minutes later a fresh run answered from `persona_status.md`.
+- Subagent memory is part of auto memory. If auto memory is off (`autoMemoryEnabled` or `CLAUDE_CODE_DISABLE_AUTO_MEMORY`), the `memory` field does nothing.
+- Pranjali's chat question: the memory directory and `MEMORY.md` are created by Claude, nothing under `.claude/` is hand-made.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 16-09-2026)
+- https://code.claude.com/docs/en/memory (verified 16-09-2026)
+
+---
+
+## Q324: How is agent memory actually built? Is there a database? And how is it different from RAG?
+
+**Short answer:** No database. Memory is a folder of Markdown files with `MEMORY.md` as the index. The agent reads the index first, then opens the file it points to, which is what Girish saw on screen: `MEMORY.md` to `persona_status.md` to "Sarah Chen." RAG is the step after that. When the memory outgrows what an index of Markdown files can hold, you build the retrieval store separately and give the agent its credentials.
+
+- Neeraj's legacy-system case: start with Markdown memory. "When the memories become too much large, then the RAG system will come into the picture."
+- The index has a hard budget: only the first 200 lines or 25KB of `MEMORY.md` are injected, and the agent is told to curate it if it grows past that. Detail belongs in the files the index points to.
+- Nidhi's own MCP server: ask Claude to integrate it with the agent. Connectors in the desktop app (Settings, Connectors, Atlassian) work the same way for Jira.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 16-09-2026)
+- https://code.claude.com/docs/en/mcp (verified 16-09-2026)
+
+---
+
+## Q325: I have several agents now. Do I have to remember which one to call?
+
+**Short answer:** No. Build one routing agent and talk only to it. This repo's `pm-request-router` classifies a request into PRD, competitor or churn and dispatches `prd-drafter`, `competitor-snapshot` or `churn-diagnoser`. It never answers itself. "You will have only one agent to talk to. It will talk to different agents."
+
+- The routing agent's tool list is just `Agent`, so it cannot do the work, only delegate.
+- Keep each specialist small. "Start with the smallest agent."
+- `claude agents` opens agent view, one screen showing every background session, what is running, what needs input and what is done.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 16-09-2026)
+- https://code.claude.com/docs/en/agent-view (verified 16-09-2026)
+
+---
+
+## Q326: How is a dynamic workflow different from a hook?
+
+**Short answer:** A hook is a shell command Claude Code runs at a fixed point in its lifecycle, before a tool call, after a turn, on stop. It is deterministic: the action always happens, the model does not choose. Lakshmi's word "validator" is right. A dynamic workflow is a JavaScript script that orchestrates many subagents at once. Claude writes the script for the task you describe and a runtime executes it in the background.
+
+- Hook examples from the session: validate an answer against official data before responding, refresh CLAUDE.md after a turn changes source files (this repo's `refresh-docs.sh` Stop hook).
+- Hooks can also be prompt-based or agent-based when the decision needs judgement rather than a rule, defaulting to Haiku.
+- In a workflow, subagents pass results to each other as files and structured returns. The script holds the loop and the branching, so your main context holds only the final answer.
+
+**Sources:**
+- https://code.claude.com/docs/en/hooks-guide (verified 16-09-2026)
+- https://code.claude.com/docs/en/workflows (verified 16-09-2026)
+
+---
+
+## Q327: How do I start a dynamic workflow, and how do I watch it?
+
+**Short answer:** Ask for one in your prompt. "Use a workflow to ..." or the keyword `ultracode` both opt in. Claude writes the script, shows the plan, and asks once for approval. `/workflows` lists running and completed runs. Select one and press Enter for the progress view with each phase, its agent count, tokens and elapsed time.
+
+- The two runs on the call: "use a workflow to find why Pro users churn: read the interviews, survey and competitive doc in parallel, keep only drivers corroborated by 2 or more sources, then adversarially verify every surviving driver against its source file" and a QA-fix-retest loop on a Next.js site with three QA subagents (Playwright, Chrome DevTools, static checks).
+- Set `/effort ultracode` and Claude plans a workflow for every substantive task in the session. That is expensive. Use it deliberately.
+- In the progress view, arrow keys move, Enter drills into an agent, `x` stops the selected agent or the whole run, Esc goes back.
+- Cost rule from the call: workflow agents inherit the session model, so on an Opus session say "use Sonnet for the agents" in the prompt, or the whole fan-out runs on Opus.
+
+**Sources:**
+- https://code.claude.com/docs/en/workflows (verified 16-09-2026)
+
+---
+
+## Q328: A workflow that loops "until zero bugs" - how long does it run? Is there a timeout?
+
+**Short answer:** Until the stop condition is met or you run out of tokens or stop it. There is no clock timeout. The stop condition is yours to write, and the docs' own examples add a second exit: "keep fixing until the type check passes or two rounds in a row make no progress." Write both.
+
+1. A success condition: zero blocker or critical issues, not zero issues of any severity.
+2. A no-progress condition: stop when two rounds find nothing new or fix nothing.
+3. Ask the agent to say why it exited. On the call: "it will also give a summary that this is something which issue I have found, but I don't find it critical or blocker, so that's why I have just exited the loop."
+
+- Lakshmi's "loop engineering" is this pattern. Bounded loops are the difference between a tool and a token drain.
+- Feed the QA agent your production Jira IDs so it reproduces known issues, and save its findings to memory or a database so the same bug is checked next time.
+
+**Sources:**
+- https://code.claude.com/docs/en/workflows (verified 16-09-2026)
+
+---
+
+## Q329: Does each subagent in a workflow have its own model? How do they pass work to each other?
+
+**Short answer:** Each `agent()` call in the script is its own subagent with its own context window, and the script can set a model per call. They do not share memory. The script collects what each one returns (text, or a validated object when a schema is given) and passes it into the next stage, often as a file. That is what Lakshmi described: "some output which can be treated as the input for some other agent."
+
+- The churn workflow had three readers, one merge step that received all three results, and one verifier per driver that opened the source files itself.
+- The QA workflow wrote bug records (ID, severity, steps, expected, actual, suspected file), the dev agent read them and wrote fixes with a root cause, and QA reran on the result.
+- A stopped or failed agent resolves to nothing rather than crashing the run, and the script filters those out.
+
+**Sources:**
+- https://code.claude.com/docs/en/workflows (verified 16-09-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 16-09-2026)
+
+---
+
+# September 2026 - Session 4 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 19-09-2026 during Session 4 (multi-agent roles and building the spec agent, Saturday morning). All URLs verified 19-09-2026.
+
+---
+
+## Q330: Which Anthropic course should a beginner start with?
+
+**Short answer:** Anthropic's own free courses live on Skilljar. Start with Claude 101, then Claude Code 101, then the Claude Platform track. Treat them as the 10-20%: the rest comes from running things on your own machine and fixing what breaks.
+
+- The catalogue also has AI fluency and building-with-the-API tracks. Pick by what you will practise this week, not by what sounds advanced.
+- For staying current, the docs site changes weekly. The Claude Code docs are the reference, the courses are the on-ramp.
+
+**Sources:**
+- https://anthropic.skilljar.com/ (verified 19-09-2026)
+- https://code.claude.com/docs/en/overview (verified 19-09-2026)
+
+---
+
+## Q331: Can I use these agent patterns in my company's own framework, like LangGraph, instead of Claude Code?
+
+**Short answer:** Yes. The patterns (a builder that is not its own reviewer, one agent per role, files as the handoff, memory that grows with use) are framework-independent. Anthropic's "Building effective agents" describes them without any Claude Code dependency. What Claude Code gives you is the packaging: frontmatter, tool scoping, memory directories and the Agent tool.
+
+- Before you build in any framework, brainstorm with Claude on the problem statement only, not the solution. Ask it whether this needs an agent, a skill, or a plain workflow, and ask for the reasoning so you can check it against your data points.
+- Manikandan's case (an organisation with its own framework): design the roles and handoffs here, then port the definitions. The system prompts and the review rule travel, the frontmatter does not.
+
+**Sources:**
+- https://www.anthropic.com/engineering/building-effective-agents (verified 19-09-2026)
+
+---
+
+## Q332: What agents do I need to build a product with a team of agents?
+
+**Short answer:** The session's set was six roles: product spec writer, solution architect, developer, reviewer, QA, and release-notes drafter. Priyanka added a project-management agent (Jira updates and follow-ups) and Aman added a designer agent that does UAT against your design standards. Anthropic's own `feature-dev` plugin is the reference: it runs seven phases (discovery, codebase exploration, clarifying questions, architecture design, implementation, quality review, summary) and dispatches Code Explorer, Code Architect and Code Reviewer subagents along the way.
+
+- Read `feature-dev`'s agent files before writing your own. Code Architect is about 51 lines, carries its rubric in the body, and sets `model: sonnet` explicitly.
+- Roles are not fixed. Add one when a distinct person would own that step in your company, drop one when nobody would.
+
+**Sources:**
+- https://github.com/anthropics/claude-plugins-official (verified 19-09-2026)
+- https://github.com/anthropics/claude-plugins-official/tree/main/plugins/feature-dev (verified 19-09-2026)
+- https://code.claude.com/docs/en/discover-plugins (verified 19-09-2026)
+
+---
+
+## Q333: Which agent records the decisions the other agents take, so someone can review them later?
+
+**Short answer:** Whichever agent owns that file. Give each role its artifacts: the PM agent writes `spec.md`, `decisions.md` and `changelog.md`, the architect writes `architecture.md`, and `feature-dev`'s final phase writes a summary of what was built. Then a builder can diff the changelog against the last build date and touch only what changed, and `decisions.md` explains the rationale to whoever inherits the product.
+
+- Put the file list in each agent's body ("you own `decisions.md`, append a dated entry whenever a choice is made") rather than hoping it happens.
+- Agent memory is separate from these files: memory is what the agent learns about how to do its job, `decisions.md` is a product record humans read.
+
+**Sources:**
+- https://github.com/anthropics/claude-plugins-official/tree/main/plugins/feature-dev (verified 19-09-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 19-09-2026)
+
+---
+
+## Q334: Why must a separate agent review the builder's work? Cannot the same agent review itself?
+
+**Short answer:** Because the agent that built something carries all the context and assumptions that produced it, so it grades its own work the way a developer reviews their own pull request. Anthropic's best-practices page says it directly: a verification subagent or a dynamic workflow "has a fresh model try to refute the result, so the agent doing the work isn't the one grading it."
+
+- When you ask Claude Code to review what it just built, it spawns a separate subagent that starts fresh from its definition, without the build conversation.
+- The MeetFlow follow-up-email workflow slide showed the anti-pattern: the same agent drafting and reviewing the email. That is the shape to avoid in your own workflows.
+- Ask the reviewer for evidence (test output, the command it ran, a screenshot), not a verdict.
+
+**Sources:**
+- https://code.claude.com/docs/en/best-practices (verified 19-09-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 19-09-2026)
+
+---
+
+## Q335: I have a reviewer agent and an evals.md file. Are they the same thing? Does the eval file do the reviewer's job?
+
+**Short answer:** No. The reviewer agent is the framework, the same for every product. `evals.md` is the context, different for every product. Your reviewer checks a login flow against your evals, the same reviewer checks a transcription product against someone else's. Point the agent at the file in its body ("every finding must be checked against `evals.md`") and it applies both.
+
+- Keep product context in files the agent reads, not in the agent body, so one agent serves many products.
+- The agent still needs your company or product context files to be present in the repo, or it reviews against nothing.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 19-09-2026)
+
+---
+
+## Q336: If the reviewer has no memory of why the builder made its choices, how can it review properly?
+
+**Short answer:** The same way a peer reviewer does. Pranjali described it: the reviewer gets the feature context and the design, then reviews against the team's framework (logging, exception handling, transactions), not against the builder's private reasoning. In Claude Code the docs state the rule: "A fork inherits everything the main session has at the moment it spawns. Any other subagent starts fresh from its definition." A reviewer subagent gets your review framework and the artifact, and that independence is the point.
+
+- Give the reviewer what a human reviewer would get: the spec, the design doc, the guidelines. Do not give it the builder's transcript.
+- If a review needs the builder's reasoning to make sense, that reasoning belongs in `decisions.md` (Q333), where the reviewer can read it as a document.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 19-09-2026)
+
+---
+
+## Q337: Should an agent's framework live in a skill attached to the agent, or in the agent body?
+
+**Short answer:** In the body, unless the skill is small and the agent will never leave this project. The docs say the `skills` frontmatter field preloads "the full skill content, not only the description" into the subagent's context on every run, whether the task needs it or not. Anthropic's own `feature-dev` agents list no skills and carry their rubric inline. Claude Code does not attach a skill on its own, you have to name it.
+
+| Preload via `skills:` | Rubric in the body |
+|---|---|
+| Whole SKILL.md injected every run | Only the body is injected |
+| Same reference every time, agent cannot skip it | Same, and shorter |
+| Silently degrades if the skill is renamed or removed | No external dependency |
+| Weak portability across projects | Portable to user level or a plugin |
+
+- Rule of thumb from the live comparison: preload only when the skill is a required rubric the body names, under about 10 KB, and the agent is project-scoped. Otherwise move the framework into the body and keep it short.
+- Subagents can still invoke any skill on demand through the Skill tool. That costs context only when it runs.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 19-09-2026)
+- https://code.claude.com/docs/en/skills (verified 19-09-2026)
+
+---
+
+## Q338: Does a subagent run on Sonnet by default?
+
+**Short answer:** No. When an agent file sets no `model`, the subagent inherits the main conversation's model, unless `CLAUDE_CODE_SUBAGENT_MODEL` is set. Anthropic's `feature-dev` agents run on Sonnet because each file says `model: sonnet`, not because Sonnet is the default.
+
+- Set `model: sonnet` yourself for execution-heavy agents when you want the cost saving. Leave it as `inherit` when the agent's judgement matters more than its cost, like `nextleap-pm`.
+- In a dynamic workflow, each `agent()` call can set its own model. Unset, it follows the same inheritance, which is why a workflow launched from an Opus session bills Opus per agent.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 19-09-2026)
+- https://code.claude.com/docs/en/costs (verified 19-09-2026)
+
+---
+
+## Q339: What does maxTurns do, and what happens when the agent hits it?
+
+**Short answer:** It caps the number of agentic turns a subagent takes before it stops, so a loop cannot run forever. `code-improver-recent` sets `maxTurns: 40`. When the limit is reached, Claude Code returns whatever the agent has so far, marked as partial, and Claude can message the agent to continue from where it stopped.
+
+- Use it on any agent that scans or loops (reviewers, fixers, researchers). Leave it off agents that must finish a fixed artifact, or set it generously.
+- A partial result is a signal that the task was too big for one run, not an error. Split the scope or raise the cap.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 19-09-2026)
+
+---
+
+## Q340: Is there a 200-line limit on agent files?
+
+**Short answer:** Not on the agent body. The 200-line figure belongs to agent memory: the docs say the subagent's system prompt includes "the first 200 lines or 25KB of `MEMORY.md`, whichever comes first," with instructions to curate the index if it grows past that. The agent body has no stated cap, and it should still be short because every line is context on every run. Anthropic's Code Architect is about 51 lines.
+
+- So: keep `MEMORY.md` as an index of one-line pointers to topic files, and keep the agent body to the framework the agent needs, nothing else.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 19-09-2026)
+- https://code.claude.com/docs/en/memory (verified 19-09-2026)
+
+---
+
+## Q341: Where should my PM agent live, and where does its memory go, if I work across several products?
+
+**Short answer:** The agent file at user level (`~/.claude/agents/`) so every project can invoke it, and the memory per project so product facts never leak between clients. The `memory` field takes `user`, `project` or `local`: `project` writes to `.claude/agent-memory/<name>/` inside the repo, `user` writes to `~/.claude/agent-memory/<name>/` and is shared everywhere.
+
+- Rule from the session: a generic standard ("a spec has no jargon") is global, so it can live in the agent body or in user memory. A product fact ("Sarah Chen has stopped using MeetFlow") is project memory.
+- Vishal's process question, brainstorm first or folders first: for an agent, brainstorm and create the agent, no project folders. For a product, the problem statement file comes first and the folders follow the plan.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 19-09-2026)
+- https://code.claude.com/docs/en/memory (verified 19-09-2026)
+
+---
+
+## Q342: The nextleap-pm agent is supposed to interview me until nothing is unclear. Why does the interview not run inside the agent?
+
+**Short answer:** Because subagents cannot ask you questions. The docs list `AskUserQuestion` among the tools removed from every subagent, even when the agent's `tools` field names it. So the agent returns a numbered question round, the main conversation asks you, and Claude sends the answers back with `SendMessage`. The docs say a completed subagent then "resumes in the background without a new `Agent` invocation" and treats messages from its launcher as task direction.
+
+- The behaviour you chose (ask until resolved) is unchanged, it is one hop longer.
+- You can also type straight into the agent's transcript from `/tasks` while it waits.
+- If you want the interview inside one context with no hop, make it a skill instead of an agent. Skills run in the main conversation and can ask directly. You lose per-agent memory.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 19-09-2026)
+
+---
+
+## Q343: What is spec-driven development, and what has to be in a spec that an agent builds from?
+
+**Short answer:** Development where the PM's spec, not a chat prompt, is the input the agents build from and are checked against. A spec for an agent needs three things a one-pager lacks: numbered requirements in a testable form ("WHEN [condition] THE SYSTEM SHALL [behaviour]"), a way to verify each one that the agent can turn into a pass or fail check, and an explicit Out of Scope list. Anthropic's best-practices page carries the verification rule: give the agent "something that produces a pass or fail, and the loop closes on its own."
+
+- The template built in the session (`14-templates/template-agent-spec.md`) has eleven sections: problem with cited evidence, users, outcome, prioritised user stories with Given/When/Then, functional requirements with a Verify line each, unchanged behaviour, edge cases, success criteria, out of scope, assumptions, and the clarifications resolved during the interview.
+- Keep it technology-free. The spec says what the user can do and how you will know, the builder decides how.
+- Out of Scope matters more with agents than with humans: an agent that notices an adjacent gap will build it unless the spec says not to.
+
+**Sources:**
+- https://code.claude.com/docs/en/best-practices (verified 19-09-2026)
+
+---
+
+## Q344: When agents take over the work, do we still need tools like Jira or ServiceNow?
+
+**Short answer:** The ones with deep integrations stay, because they become the data the agents read and write. Claude Code reaches them through MCP: Atlassian ships an MCP server, and once it is connected every agent in the session can read and update Jira. Thin single-purpose tools are the ones teams rebuild in-house.
+
+- Priority order from the session: save your own time first (a project-management agent that does the follow-ups), build tools only if there is time left.
+- For a microservices shop, give the developer agent the list of services as context and iterate. The agent does not replace a service, it builds and reviews inside it.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 19-09-2026)
+
+---
+
+# September 2026 - Session 5 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 19-09-2026 during Session 5 (travel planner multi-agent build, part 1, Saturday afternoon). All URLs verified 19-09-2026.
+
+---
+
+## Q345: We have a detailed milestone document with an implementation plan. Should we build exactly what it says, or brainstorm with Claude from the problem statement?
+
+**Short answer:** Take the problem statement only and brainstorm. The implementation plan in a course document is one team's answer on one day. In your job you will have the problem and nothing else, so the skill to practise is turning a problem into a design with Claude, not transcribing someone else's plan.
+
+- The prompt shape used in the session: share the problem statement, say "let's brainstorm first before doing any implementation plan," tell Claude to use its question tool, and add "until we are both on the same page, do not create anything." Claude then asks one decision at a time (purpose, runtime, data source, front end) and you answer with the room.
+- Anthropic's best-practices page carries the same rule: "letting Claude jump straight to coding can produce code that solves the wrong problem," so use plan mode to separate exploration from execution and approve the plan before Claude writes anything.
+- Keep the original document as a reference for the reviewer later: "does our build cover the five agents the brief named" is a fair check, "did we follow their file layout" is not.
+
+**Sources:**
+- https://code.claude.com/docs/en/best-practices (verified 19-09-2026)
+
+---
+
+## Q346: Claude gave us four runtime options (Claude Code native, Agent SDK app, plain API, native plus web API). How do we judge which is the right fit if none of us are architects?
+
+**Short answer:** Use Dhruv's rule from the session: go with Claude's recommendation unless you can say why another option is better, and if you override it, write the reason down. Then ask Claude for the justification per option (pros, cons, cost, what you lose) so the choice is a decision you can explain, not a guess.
+
+| Option | What it means | When it fits |
+|---|---|---|
+| Claude Code native | Agents are Markdown files under `.claude/agents/`, the orchestrator is a skill or the main session, zero app code | You want every agent readable and editable by a PM, and the users are people who run Claude Code |
+| Agent SDK app (Python or TypeScript) | Same agent loop as Claude Code, embedded in your own program with a web front end | You need a hosted product other people open in a browser |
+| Plain API orchestration | You write the tool loop yourself with the Client SDK | You already have a backend and want full control over the loop |
+| Native plus thin web API | Claude Code runs the agents, a small server exposes a request form | The session's final shape: agents stay as files, a Next.js front end calls them through the SDK |
+
+- The Agent SDK overview has a comparison table for exactly this fork (Agent SDK versus CLI versus Client SDK versus Managed Agents). Read it before answering the question next time.
+- The trade you make with native: the model provider is fixed to Claude (see Q356). A standalone server can call any model.
+
+**Sources:**
+- https://code.claude.com/docs/en/agent-sdk/overview (verified 19-09-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 19-09-2026)
+
+---
+
+## Q347: Claude recommended live web search for hotels, transport and attractions. Is that the right way for the agents to get facts?
+
+**Short answer:** Ask for APIs first. Web search is non-deterministic, slow (Claude's own estimate was one to three minutes per run) and gives the reviewer nothing to check against. The session's one question, "is there any API available instead of web search," turned up Google Places API (New) for attractions, restaurants and hotels, Google Routes API for Tokyo to Kyoto transit, plus free currency and weather feeds, each with a validated link.
+
+- Ask Claude to check what exists and validate every link before it answers. It did that in the session and rejected Amadeus (test data limited to a cached set of cities) on evidence, which then went into `techstack.md` under rejected APIs with reasons.
+- Wrap the APIs in an MCP server so every agent calls the same tool with the same key. In the session that was a Python FastMCP server over stdio with four tools: search places, routes, currency, weather. The MCP docs cover how Claude Code and subagents reach a local server.
+- Know the free tiers before you commit. Quotas Claude prints are its reading of the pricing page on that day, so open the vendor's pricing page once and confirm.
+- For social data (Priyanka's Instagram idea), the route is a scraping connector such as Apify or Firecrawl, not the model. Check the connector's free credit before you plan around it.
+
+**Sources:**
+- https://code.claude.com/docs/en/mcp (verified 19-09-2026)
+- https://developers.google.com/maps/documentation/places/web-service/op-overview (verified 19-09-2026)
+- https://developers.google.com/maps/documentation/routes (verified 19-09-2026)
+- https://developers.google.com/maps/billing-and-pricing/pricing (verified 19-09-2026)
+
+---
+
+## Q348: We answered a Claude question one way and then realised a better option (the web UI) was in the list. Can we go back?
+
+**Short answer:** Yes. Press `Esc` to interrupt Claude, then send a new message stating the change ("we want to build the front end as well"). Claude keeps the work done so far and re-plans from your correction. Answered questions do not reappear, so you state the new answer in prose instead of re-selecting it.
+
+- `Esc` once stops the current response or tool call mid-turn. Double `Esc` on an empty prompt opens the rewind menu, which restores code and conversation to an earlier checkpoint if you want the earlier state back rather than a correction on top.
+- Say what changed and why in one line. That line ends up in `decisions.md`, which is the whole point of the file.
+
+**Sources:**
+- https://code.claude.com/docs/en/interactive-mode (verified 19-09-2026)
+- https://code.claude.com/docs/en/checkpointing (verified 19-09-2026)
+
+---
+
+## Q349: Claude Code native means the user runs it from the terminal. Can we give people a simple front end instead?
+
+**Short answer:** Yes, and you do not have to give up the Markdown agents to get one. The session's shape: agents and the orchestrator skill stay as files under `.claude/`, a Next.js app takes the request form, and its route handler calls the Agent SDK, which runs the same agent loop as Claude Code. Whoever opens the page never logs into anything, the API key lives on your server.
+
+- The alternative Vishal described, a proper hosted web app with its own backend, is the Agent SDK app option from Q346. Same agents, more plumbing, and you own hosting.
+- A slash command is a skill, and a skill runs inside a Claude Code session. It is the right interface for you, not for a customer.
+- Build the UI last. First prove the agents produce a correct itinerary from the terminal, then put a form in front of it. The session got as far as the dry run, the UI is Session 6.
+
+**Sources:**
+- https://code.claude.com/docs/en/agent-sdk/overview (verified 19-09-2026)
+
+---
+
+## Q350: Which documents should exist before implementation, and in what order? Claude wrote the implementation plan before we had an architecture file.
+
+**Short answer:** The superpowers brainstorming skill writes `spec.md` with the architecture inside it, then `implementation-plan.md`. The order is right (architecture was decided before the plan), the packaging is one file. The session then asked for the files a team would expect: `architecture.md`, `techstack.md`, `decisions.md`, `changelog.md`, and `feedback.md`, all under the spec folder.
+
+| File | What goes in it |
+|---|---|
+| `spec.md` | Problem, decisions taken in brainstorming, functional requirements, success criteria, out of scope |
+| `architecture.md` | Roles, data flow, who writes which file, the repair loop |
+| `techstack.md` | Per layer: choices, the one picked, rejected options with reasons, external APIs |
+| `implementation-plan.md` | Numbered tasks with a brief and expected result each, run by subagents |
+| `decisions.md` | Every choice made during brainstorming and build, with the why |
+| `changelog.md` | What changed in the spec after the first commit, when, and why |
+| `feedback.md` | Every correction you gave Claude, so the same mistake is not repeated |
+
+- Keep the plugin's files and add yours. Do not rewrite the spec into your own shape mid-build.
+- The reason for `decisions.md` and `changelog.md` came from Session 4 (Neeraj's question): whoever inherits the product, human or agent, reads why before touching what.
+
+**Sources:**
+- https://github.com/obra/superpowers (verified 19-09-2026)
+- https://code.claude.com/docs/en/plugins (verified 19-09-2026)
+- https://code.claude.com/docs/en/best-practices (verified 19-09-2026)
+
+---
+
+## Q351: How do I create the Google Maps API key, which of the thirty Google Maps APIs do I enable, and is it the same key as Google AI Studio?
+
+**Short answer:** Different key, different console. Gemini keys come from Google AI Studio. Google Maps keys come from the Google Cloud console (`console.cloud.google.com`): pick or create a project, enable Places API (New) and Routes API, then create a key under APIs and Services, Credentials. Skip the legacy Places API.
+
+1. A project is mandatory. If you have none, the console asks you to create one before it lets you make a key.
+2. Enable the two APIs first. A key with no enabled APIs returns errors that look like a bad key.
+3. Restrict the key when the console offers it: application restriction (your server's IP or referrer) and API restriction (Places and Routes only). The session clicked "maybe later" and then said why not to. An unrestricted key that leaks bills your account.
+4. Put the key in `.env` as `GOOGLE_MAPS_API_KEY`, and check the variable name your code reads matches. Claude caught a mismatch in the session.
+5. Never paste the key into the chat. Claude will warn you, and a key in a transcript is a key you should rotate.
+
+**Sources:**
+- https://developers.google.com/maps/documentation/places/web-service/get-api-key (verified 19-09-2026)
+- https://developers.google.com/maps/api-security-best-practices (verified 19-09-2026)
+- https://developers.google.com/maps/documentation/places/web-service/op-overview (verified 19-09-2026)
+- https://developers.google.com/maps/documentation/routes (verified 19-09-2026)
+
+---
+
+## Q352: Is `feedback.md` the same thing as `MEMORY.md`? When do I use which?
+
+**Short answer:** Same job, two mechanisms. Auto memory is Claude Code's own feature: Claude writes notes from your corrections into a memory directory and reads them back on later sessions, and each subagent with `memory:` set does the same in its own folder. `feedback.md` is a file you keep by hand, with an instruction in the project that every correction gets appended and read before work. Use auto memory for the agent that learns, use `feedback.md` when you want one readable log a human can review and carry to another project.
+
+- Priyanka's per-agent question: an agent's own mistakes are fixed in that agent's file and its own memory. `feedback.md` at project level is the consolidated log across all of them. "Just consider it as log."
+- The host's own version is a global lessons ledger under `~/.claude/rules/`, which loads into every project. That is the pattern to copy: generic working rules go global, product facts stay in the project.
+- The session's instruction, reusable: "Whenever I correct you, add the point to feedback.md so that in future you do not make the same mistake again."
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 19-09-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 19-09-2026)
+
+---
+
+## Q353: Last cohort built phase by phase and validated each one. This time every task ran in one go through subagents. Which is right?
+
+**Short answer:** Both, for different systems. The plugin's subagent-driven development runs each task in the plan as its own subagent with TDD required: write the failing test, run it, confirm it fails, implement, pass. So unit-level validation happens inside every task, in parallel. Integration testing (does the orchestrator plus four agents plus MCP produce a correct itinerary) still runs at the end, which is what the dry run was.
+
+- Phase by phase makes sense when a phase produces something you must look at before deciding the next one (last cohort's data ingestion, then embeddings on top).
+- One go makes sense when tasks are independent and each has its own test. Five agents and an MCP server with four tools is that case.
+- If you are not using the plugin, still ask for TDD in the prompt. Anthropic's best-practices page recommends the same move in its prompt examples: "write a failing test that reproduces the issue, then fix it."
+- Each subagent gets a brief and returns a report. Read the report before the next task, not after all eleven.
+
+**Sources:**
+- https://code.claude.com/docs/en/best-practices (verified 19-09-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 19-09-2026)
+- https://github.com/obra/superpowers (verified 19-09-2026)
+
+---
+
+## Q354: Do we need a framework like LangGraph to build a multi-agent system, or is Claude enough?
+
+**Short answer:** Not needed. Claude Code and the Agent SDK give you the orchestration: an orchestrator that fans out to subagents, files as the handoff, a review step, and the repair loop. The session's five-agent travel planner has no framework in it. A framework is a choice you make when your organisation already standardised on one (Manikandan's case in Q331), not a requirement.
+
+- What the SDK provides that a framework would: the agent loop, tool calling, subagent spawning, MCP connections, session state, and hooks.
+- What you still write: the agent definitions (Markdown), the orchestrator skill, the MCP server for your tools, and the tests.
+- Anthropic's own guidance is to start with the simplest orchestrator-worker shape and add machinery only when a measured problem needs it.
+
+**Sources:**
+- https://www.anthropic.com/engineering/building-effective-agents (verified 19-09-2026)
+- https://code.claude.com/docs/en/agent-sdk/overview (verified 19-09-2026)
+
+---
+
+## Q355: The first full run cost $6.42 on Opus for one itinerary. How do we keep that down?
+
+**Short answer:** Set the model per agent. The workers (destination, logistics, budget) are execution tasks, so `model: sonnet` in their frontmatter. Keep Opus for the orchestrator if the synthesis needs it, or run the whole thing on Sonnet and compare the review verdicts. The docs' rule: Sonnet handles most coding tasks and costs less than Opus, reserve Opus for complex reasoning, and use `model: haiku` for simple subagent tasks.
+
+- Model resolution order for a subagent: the per-invocation `model` parameter, then the frontmatter `model`, then `CLAUDE_CODE_SUBAGENT_MODEL`, then the main conversation's model. If you set nothing, every agent runs on whatever your session runs on, which in the session was Opus.
+- `/usage` shows the session's token and cost estimate, and its attribution breakdown shows how much went to subagents, skills and each MCP server.
+- Repeated review runs (task 11 wants five) multiply the bill. Run one, read the verdict, then decide how many more.
+- Live API calls in the MCP server are a second bill (Google, not Anthropic). Cache tool results during development.
+
+**Sources:**
+- https://code.claude.com/docs/en/costs (verified 19-09-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 19-09-2026)
+
+---
+
+## Q356: Can we use another LLM, like Gemini, inside Claude Code to make it cheaper?
+
+**Short answer:** No. Claude Code and the Agent SDK run Claude models only. There is no place in a Claude Code native product where a Gemini key can be plugged in. The one provider switch is Google Cloud's Agent Platform (formerly Vertex AI): set `CLAUDE_CODE_USE_VERTEX=1`, enable the API on a Google Cloud project with billing, request access to the Claude models in Model Garden, and Claude Code then calls Claude Sonnet and Opus from Google's infrastructure. It is still Claude, billed through Google.
+
+- What Vertex changes: the endpoint and who bills you. What it does not change: the agents, the skill, the MCP server, the Next.js app. It is a configuration change, not a code change.
+- If you truly need Gemini, the shape has to change: a standalone server (FastAPI or similar) that calls any model's API, with the agent Markdown turned into system prompts. You lose the Claude Code runtime and the readable agent files. That is the option the room declined at decision 2.
+- How the session got this answer: an open question to Claude ("can I use a Gemini API here?"), not a leading one. It checked the SDK's auth options before answering and logged the result in `decisions.md`. Copy that habit.
+
+**Sources:**
+- https://code.claude.com/docs/en/google-vertex-ai (verified 19-09-2026)
+- https://code.claude.com/docs/en/third-party-integrations (verified 19-09-2026)
+- https://code.claude.com/docs/en/model-config (verified 19-09-2026)
+
+---
+
+## Q357: This project has an orchestrator and four agents each doing their own work. Is that a dynamic workflow?
+
+**Short answer:** No. It is subagents: Claude, in one session, spawns workers turn by turn and every result comes back into its context. A dynamic workflow is a script the runtime executes, started with `/workflow` or by asking for one, that holds the loop and the branching itself and can spawn dozens of agents per run (build, then QA, then fix, until a check passes). The docs' table: subagents are "a few delegated tasks per turn," workflows are "dozens to hundreds of agents per run."
+
+- The product you build (travel planner) uses subagents. The process you use to build it (a workflow that implements, reviews and fixes until tests pass) can be a dynamic workflow.
+- Cost is the reason to keep them apart. A workflow run counts against your plan's usage and rate limits, Claude Code flags runs above 25 agents or 1.5 million projected tokens, and the session's warning stands: on a subscription you can exhaust the window in an hour.
+- Agent teams are a third thing: a lead agent supervising peer sessions with a shared task list. Session 3 covered them.
+
+**Sources:**
+- https://code.claude.com/docs/en/workflows (verified 19-09-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 19-09-2026)
+
+---
+
+## Q358: Claude says "identity verification required" and the verify button fails. No email arrives and support has not replied. What now?
+
+**Short answer:** First check the plan and the email. In the session the account was on the free plan, the verify link failed twice, log out and log in did not help, and signing in with a different email worked immediately. Then upgrade to the Pro plan on the working email and install Claude Code from the setup guide. If a specific email is stuck, keep the support ticket open, but do not wait on it to start the course.
+
+- Claude Code needs a paid plan (Pro, Max, Team, Enterprise) or an API key. The free plan cannot run it, so the verification wall and the plan wall are two separate blockers.
+- Search your mail for "Claude" across all folders before assuming no email arrived.
+- For any install error after the upgrade: screenshot it, paste the screenshot into Claude, follow the fix. That was the host's advice and it covers most terminal and PATH problems.
+- Claude's status page shows whether claude.ai, the Console or the API is degraded. Check it before assuming the problem is your account. The session's "waiting for API response" stall was checked the same way.
+
+**Sources:**
+- https://code.claude.com/docs/en/setup (verified 19-09-2026)
+- https://support.claude.com/ (verified 19-09-2026)
+- https://status.claude.com/ (verified 19-09-2026)
+
+
+---
+
+# September 2026 - Session 6 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 20-09-2026 during Session 6 (travel planner build, part 2, Sunday morning). All URLs verified 20-09-2026.
+
+---
+
+## Q359: Yesterday Claude said Gemini cannot be used inside Claude Code. Today there is a plan to use it. What changed?
+
+**Short answer:** Nothing changed in Claude Code. The planner as built runs on the Claude Code runtime (agents as Markdown files, an orchestrator skill, subagents spawned by the session), and that runtime only serves Claude models. What was added overnight is `standalone-server-handover.md`: a plan to rebuild the same loop as a FastAPI server where each agent prompt becomes a Python function that calls a model API directly. In that shape the provider is your choice, Claude or Gemini or anything else, because Claude Code is no longer in the loop.
+
+- The handover doc scopes it as a separate Phase 2 (decision D23), reusing the MCP tools, the fixtures and the prompts, not a replacement of what exists. Claude estimated "2 to 3 days," and the session's rule stands: do not trust an LLM's time estimate, it is usually far shorter.
+- The provider switch that keeps Claude Code is Vertex AI: set `CLAUDE_CODE_USE_VERTEX=1` and the same Claude models are served from Google Cloud. It does not make Gemini available.
+- Before deciding on cost, open both pricing pages and compare per-million-token rates for the models you would actually run. A search result headline is not a price.
+
+**Sources:**
+- https://code.claude.com/docs/en/google-vertex-ai (verified 20-09-2026)
+- https://platform.claude.com/docs/en/agent-sdk/overview (verified 20-09-2026)
+- https://platform.claude.com/docs/en/about-claude/pricing (verified 20-09-2026)
+
+---
+
+## Q360: Shouldn't any product we build be provider agnostic? Why is ours tied to Claude Code?
+
+**Short answer:** It should be, when provider freedom is a requirement. Ours is tied because the room chose "Claude Code native" at decision 2 in Session 5, which trades portability for zero app code and agents any PM can read. That was a deliberate trade, logged in `decisions.md`. If provider freedom matters for your product, choose the Agent SDK or plain API option at brainstorm time, and write the reason down.
+
+- Claude Code native: agents are `.claude/agents/*.md`, the orchestrator is a skill, the user is someone running Claude Code. Fastest to build and teach, locked to Claude.
+- Agent SDK app: the same loop in Python or TypeScript, hosted anywhere, still Claude models through the SDK.
+- Plain API server: you own the orchestration, you pick the model per call. Most work, most freedom. This is what the handover doc describes.
+- The lesson for specs: put "provider agnostic: yes or no, and why" in the decisions file on day one, so the question is a recorded choice, not a surprise a day later.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 20-09-2026)
+- https://platform.claude.com/docs/en/agent-sdk/overview (verified 20-09-2026)
+
+---
+
+## Q361: Why run `/compact` before switching from Opus to Sonnet mid-session? (paraphrased from the session)
+
+**Short answer:** Because a model switch throws away the prompt cache. Each model has its own cache, so the first request after `/model` re-reads the entire conversation with no cache hits, at full price. Compacting first shrinks the conversation that has to be re-read. The reason given in the session, "so the context is not cached and passed to the other model," is not quite it: the context is passed either way, the cost is that none of it is cached.
+
+- The docs' advice: "Pick your model and effort level at the top of a session, then save `/compact` for natural breaks between tasks."
+- Claude Code asks you to confirm a `/model` switch only while the cache is still warm, which is the signal that the switch will cost a slow, uncached turn.
+- `/compact` itself is a large request (it reads everything it summarises). If you want a fresh start rather than continuity, `/clear` costs nothing.
+- Changing effort level has the same effect on most models. Changing a skill whose frontmatter names a different model is also a switch for that turn.
+
+**Sources:**
+- https://code.claude.com/docs/en/prompt-caching (verified 20-09-2026)
+- https://code.claude.com/docs/en/costs (verified 20-09-2026)
+
+---
+
+## Q362: `/context` shows 10 percent used before I type anything. How do I find out what is loading and cut it? (paraphrased from the session)
+
+**Short answer:** Run `/context` to see the breakdown (system prompt, system tools, MCP tools, memory files, agents, skills), then `/doctor` and `/skill-doctor` to act on it. In the session the host's setup showed 63.4K tokens of memory files, 6.3 percent of the window, before the first prompt.
+
+- `/context` visualises current usage as a grid and shows optimisation suggestions for context-heavy tools, memory bloat and capacity warnings. Pass `all` to expand the per-item breakdown.
+- `/doctor` finds unused skills, MCP servers and plugins versus their context cost, flags slow hooks, deduplicates local `CLAUDE.md` files against checked-in ones, trims `CLAUDE.md` content Claude could derive from the codebase, and migrates always-loaded guidance into skills that load on demand. It reports first and asks before changing anything.
+- `/skill-doctor` shows what each skill costs in context and how often it is used, so you can turn off the ones you never invoke. Requires Claude Code v2.1.252 or later.
+- The prompt-driven alternative from the session also works: screenshot the `/context` grid, ask Claude to analyse each category and write a step-by-step improvement file.
+
+**Sources:**
+- https://code.claude.com/docs/en/commands (verified 20-09-2026)
+- https://code.claude.com/docs/en/costs (verified 20-09-2026)
+
+---
+
+## Q363: Are `destination.md`, `logistics.md` and `budget.md` written by different subagents? Where do subagents come into the picture?
+
+**Short answer:** Yes, one file per worker. The orchestrator (the `plan-trip` skill in the main session) parses your request into `brief.json`, then spawns three subagents in parallel: destination research, logistics and budget. Each reads the brief, calls the travel tools MCP server, and writes its own file. The orchestrator synthesises a draft, then spawns the review subagent, which reads only the brief and the draft and writes `review.json` with a pass or fail per check.
+
+- The checks in `review.json`: days fit exactly, cities included, within budget, matches likes, avoids crowds, travel time realistic. Review has no tools, so it cannot fetch new data, only judge what the workers produced.
+- If review fails, the orchestrator sends the named failures back to the owning worker once, re-synthesises, re-reviews, then ships with warnings. In the France run "travel time realistic" failed because the rail tool held Japan data only, and the draft said so instead of inventing a duration.
+- To see this for your own run, ask for it: "create a user journey. Once a user gives the query, which agent is invoked, which tools are used, what was rejected and why, as an HTML file." The session's walkthrough showed a first attempt where all three workers were blocked because the MCP server was disabled and untrusted, which Claude fixed and reran.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 20-09-2026)
+
+---
+
+## Q364: What is `/goal`, and how is it different from `/loop`? (paraphrased from the session)
+
+**Short answer:** `/goal` sets a completion condition and Claude keeps working until a separate evaluator model confirms it is met, judges it impossible, or an error you must fix clears it. `/loop` re-runs a prompt on a time interval, like a cron. The session used `/goal` twice: "fix every static destination, review the fix with a subagent, verify with a QA agent, until no blocker or critical issues remain," and "give me the final video without any error, cut, element overlapping or audio issue."
+
+| | `/goal` | `/loop` |
+|---|---|---|
+| Next turn starts when | The previous turn finishes | A time interval elapses |
+| Stops when | The evaluator confirms the condition, or you run `/goal clear` | You stop it, or Claude decides the work is done |
+| Good for | Migrations until tests pass, a design doc until every acceptance criterion holds, a backlog until empty | Polling a deploy, checking CI every few minutes |
+
+- Write the condition as something Claude's own output can demonstrate ("`npm test` exits 0", "the QA agent reports zero blockers"). The evaluator does not run commands or read files, it judges the transcript.
+- Bound it: add "or stop after 20 turns" to the condition. The condition can be up to 4,000 characters.
+- If Claude keeps replying without using tools for several turns, Claude Code stops the loop and hands control back with the goal still set.
+- Evaluation runs on the small fast model and is typically negligible next to the main turns. `/goal` needs a trusted workspace because the evaluator is part of the hooks system.
+
+**Sources:**
+- https://code.claude.com/docs/en/goal (verified 20-09-2026)
+- https://code.claude.com/docs/en/scheduled-tasks (verified 20-09-2026)
+
+---
+
+## Q365: How do I add a new agent to the system, for example one that re-plans when my trip is delayed or extended?
+
+**Short answer:** Three steps: write the agent file, give the orchestrator a trigger to call it, and add a review check for its output. The session deferred the live build to the afternoon, but the shape is fixed by how the other four agents exist.
+
+1. **The agent file.** Create `.claude/agents/replan.md` with frontmatter (`name`, `description` stating when to use it, `tools` limited to what it needs, `model: sonnet`) and a body that says what it reads (`brief.json`, the shipped `itinerary.md`, the user's change: "day 3 delayed by one day") and what it writes (`itinerary-v2.md` plus a three-line summary).
+2. **The trigger.** The orchestrator skill gets a new step: if the user's message references an existing trip and a change, dispatch `replan` instead of the three workers. The re-planning agent may itself need logistics re-verified, so let it call the travel tools MCP server, or have the orchestrator re-dispatch logistics for the changed days only.
+3. **The check.** Review gets a seventh check: "unchanged days are identical to the shipped itinerary." Add a fixture for it under the review evals before you run it live.
+
+- Brainstorm it with Claude the same way the first five were designed: "we want a mid-trip re-planning agent, ask me one question at a time until we agree, then update spec, plan, decisions and changelog." Do it on a new branch (see Q366).
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 20-09-2026)
+- https://code.claude.com/docs/en/skills (verified 20-09-2026)
+
+---
+
+## Q366: Can I give Claude a reference website (Rome2Rio) after the build has started, or should I have given it at the start? And how do I avoid breaking what works?
+
+**Short answer:** You can give a reference at any point. For a major change, do it on a new branch off master, and merge only when the output on that branch is what you want. That is how the session handled Priyanka's Rome2Rio structure: keep the prompt ready, branch, apply, compare, merge.
+
+- The prompt shape: "Here is a reference site. The way it structures the answer is what we want: all transport options from origin to destination, one section per agent's output, FAQs at the end. Update the logistics and budget agents' output format and the orchestrator's synthesis step to match. Do not change the review checks." Attach a screenshot or the URL.
+- Ask Claude to work in a worktree so the main checkout stays untouched: `claude --worktree rome2rio-format` starts an isolated session on its own branch. Two sessions in two worktrees cannot collide on the same file.
+- Record it: one line in `decisions.md` ("output format follows Rome2Rio's per-mode listing, Priyanka's reference, 20-09-2026") and a changelog entry when it merges.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 20-09-2026)
+- https://code.claude.com/docs/en/worktrees (verified 20-09-2026)
+
+---
+
+## Q367: Is what we see in the terminal the final product, or will there be a front end where the user types the request?
+
+**Short answer:** There will be a front end. What ran on screen (a request typed into Claude Code, files written under `trips/`, `itinerary.md` opened in the editor) is the validation surface for the agents. The user-facing version is the standalone server plus a web UI from `standalone-server-handover.md`, which is next on the plan.
+
+- The order is deliberate: prove the agents, the tools and the review on real runs first, then wrap them. Every incident the France run surfaced (Japan-only rail data, the geocoding bug, missing dates) would have been a UI bug report otherwise.
+- When the UI is built, the `frontend-design` skill is a global constraint in the plan (constraint 12 from Session 5), and the Agent SDK is the bridge if the server keeps Claude models.
+- Until then the interactive HTML walkthrough is the closest thing to a demo: it shows what happened in order, per agent, with what was rejected and why.
+
+**Sources:**
+- https://platform.claude.com/docs/en/agent-sdk/overview (verified 20-09-2026)
+
+---
+
+## Q368: Is there a free platform to create videos? Are voice and video two different things?
+
+**Short answer:** The video in the session was made with HyperFrames, an open toolkit installed into the project with one command pasted into Claude Code; the host has not paid for it. The voice is separate: the script HyperFrames wrote was spoken by an ElevenLabs voice ("Bella") through an ElevenLabs API key in `.env`. Without that key you get the video without narration, or you record the narration yourself.
+
+- The install drops a `.agents` folder with the video agents and skills into the project. It was added to `.gitignore` in the session, so anyone cloning the repo runs the install command once themselves.
+- The prompt that worked: "Help me create an explainer video for this product. Before creating it, help me identify which category fits." Claude picked the faceless explainer skill, then a `/goal` was set: "final video without any error, cut, element overlapping or audio issue."
+- State the platform up front. "16:9 for YouTube" and "vertical for Instagram or Shorts" are different compositions, and the skill asks if you do not say.
+- Keep a list of every defect you find in a render (overlaps, cuts, audio gaps). Paste it into the next prompt as the verification conditions so the same defect does not ship twice.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 20-09-2026)
+- https://code.claude.com/docs/en/goal (verified 20-09-2026)
+
+---
+
+## Q369: If I open a second terminal and run Claude in parallel, will it hurt performance?
+
+**Short answer:** Parallel sessions are fine for independent work. Two rules: never let two sessions edit the same file, and watch memory, because each terminal plus the IDE adds up (the session's Activity Monitor showed Antigravity and Zoom as the heavy processes).
+
+- For safe parallel edits in one repo, use worktrees: `claude --worktree feature-a` in one terminal and `claude --worktree feature-b` in another. Each is a separate checkout on its own branch, so edits cannot collide. The repo needs at least one commit first.
+- Independent tasks that do not touch the codebase (a video render, a research question, a doc) can run in another terminal without a worktree.
+- Every open session counts against your plan's usage window, which is shared across all sessions and models.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 20-09-2026)
+- https://code.claude.com/docs/en/worktrees (verified 20-09-2026)
+
+---
+
+## Q370: Is there an easy way to generate a marketing script for our product? And can I pull context from one project into another?
+
+**Short answer:** For the script, clone the Marketing OS repo, open it in Claude Code, run `/onboard`, drop your brand documents into the uploads folder or answer the interview, then use its skills (campaign brief, social calendar, press release, landing page copy, LinkedIn post). For context: do not split one product across two projects. Put a `marketing/` folder inside the product repo so Claude sees the product and the marketing in one place.
+
+- `/onboard` builds a `knowledge/` folder (company, product, customers, ICP, voice) so every skill's output uses your real numbers and brand voice. It offers two paths: drop existing docs into uploads, or "type start and I'll interview you," about 15 to 20 minutes.
+- Why one repo: project memory (`CLAUDE.md`, `.claude/rules/`, `.claude/skills/`) is loaded from the folder you open. A second project starts with none of the product's context. Subfolders and nested `CLAUDE.md` files are the mechanism for keeping marketing, specs and code in one tree.
+- If you want to rebuild the workshop repo's agents and skills on your own machine to learn, clone it, do not try to "extract" it into another project. A role-specific scaffold (Product Manager AI OS: vault inbox, `/onboard`, connectors for Confluence, Jira, Gmail, Drive, Notion, Granola) is promised in two to four days.
+
+**Sources:**
+- https://github.com/qa-aman/marketing-os (verified 20-09-2026)
+- https://code.claude.com/docs/en/memory (verified 20-09-2026)
+
+---
+
+## Q371: Can I talk to Claude Code instead of typing? (paraphrased from "always speak rather than typing")
+
+**Short answer:** Yes. Run `/voice` once to enable dictation, then hold `Space` while you speak (or `/voice tap` to tap once to start and again to send). Speech is transcribed live into the prompt box, so you can mix voice and typing in one message. Speaking gives Claude more context per prompt because most people say three times more than they type.
+
+- Needs a Claude.ai login (Pro, Max, Team, Enterprise). Not available with a raw API key, Bedrock, Vertex or Foundry, and not in SSH or cloud sessions because the microphone is local.
+- Audio streams to Anthropic for transcription, nothing is processed locally. Transcription does not consume messages or tokens and does not count toward `/usage`.
+- On WSL you need WSLg (included with WSL2 from the Microsoft Store). On WSL1 run native Windows instead.
+- The VS Code extension supports the same dictation with the same account requirement, but not in Remote, Dev Container or Codespaces sessions.
+
+**Sources:**
+- https://code.claude.com/docs/en/voice-dictation (verified 20-09-2026)
+- https://code.claude.com/docs/en/commands (verified 20-09-2026)

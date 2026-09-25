@@ -116,7 +116,7 @@ make text read as machine-written.
 The email goes out under the user's name, so the user's own voice rules override any
 phrasing preference above. Check for these and apply them if present:
 
-1. `~/.claude/rules/aman-writing-style.md` for anything sent to a colleague, leadership,
+1. the `aman-writing-style` skill (`~/.claude/skills/aman-writing-style/SKILL.md`) for anything sent to a colleague, leadership,
    or a client. Its tone rule comes first: every point says what it unlocks for the team,
    never what someone failed to do. Hedge the suggestion, never the defect.
 2. `~/.claude/rules/personal-voice.md` for a casual one-to-one message to someone the

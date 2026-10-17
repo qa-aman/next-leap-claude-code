@@ -1,0 +1,127 @@
+{"case_id": "C001", "path": "Access & Identity > Password > Password expiry not notified", "confidence": "High", "reason": "Login stopped with no prior expiry warning."}
+{"case_id": "C002", "path": "Access & Identity > Password > Password expiry not notified", "confidence": "High", "reason": "Credentials expired without the 14 day reminder."}
+{"case_id": "C003", "path": "Access & Identity > Password > Password reset", "confidence": "High", "reason": "User forgot credentials and needs a reset."}
+{"case_id": "C004", "path": "Security & Compliance > Phishing and Fraud > Suspicious email reported", "confidence": "High", "reason": "Reports a suspicious link from an unknown sender."}
+{"case_id": "C005", "path": "Software & Applications > Licensing > License expired or reassigned", "confidence": "Medium", "reason": "Tool logged user out for no seat, reads as a licence reassigned."}
+{"case_id": "C006", "path": "Software & Applications > Licensing > License expired or reassigned", "confidence": "High", "reason": "Subscription has ended and the app will not open."}
+{"case_id": "C007", "path": "Access & Identity > Password > Password reset", "confidence": "Medium", "reason": "Cannot get in after two tries; reset most likely, lockout possible."}
+{"case_id": "C008", "path": "Access & Identity > Password > Password expiry not notified", "confidence": "High", "reason": "Password expired with no mail warning."}
+{"case_id": "C009", "path": "Email & Collaboration > Mail Client > Mail not syncing", "confidence": "High", "reason": "Mail visible on web but not arriving in the client."}
+{"case_id": "C010", "path": "Network & Connectivity > VPN > VPN will not connect", "confidence": "Medium", "reason": "Authentication fails only from home, points to remote access."}
+{"case_id": "C011", "path": "Access & Identity > Password > Account locked after failed attempts", "confidence": "High", "reason": "Too many attempts, account locked."}
+{"case_id": "C012", "path": "Access & Identity > Password > Account locked after failed attempts", "confidence": "High", "reason": "Locked out again, asks for unlock."}
+{"case_id": "C013", "path": "Access & Identity > Password > Account locked after failed attempts", "confidence": "Medium", "reason": "Account shows disabled; lockout is the closest fit."}
+{"case_id": "C014", "path": "Email & Collaboration > Mail Client > Mailbox full or quota", "confidence": "High", "reason": "Mailbox full, mails bouncing."}
+{"case_id": "C015", "path": "Email & Collaboration > Document Collaboration > Site or library access", "confidence": "Medium", "reason": "Cannot upload to the project library."}
+{"case_id": "C016", "path": "Software & Applications > CRM System > CRM report not loading", "confidence": "High", "reason": "Pipeline view never loads."}
+{"case_id": "C017", "path": "Network & Connectivity > VPN > VPN disconnects frequently", "confidence": "Medium", "reason": "Unstable connection since a new client version, reads as VPN drops."}
+{"case_id": "C018", "path": "Access & Identity > Password > Account locked after failed attempts", "confidence": "High", "reason": "Account blocked after three wrong attempts."}
+{"case_id": "C019", "path": "Email & Collaboration > Mail Client > Mail not syncing", "confidence": "High", "reason": "Sent items not updating on the laptop client."}
+{"case_id": "C020", "path": "Hardware > Laptop > Screen or display fault", "confidence": "High", "reason": "Half the screen flickers with lines."}
+{"case_id": "C021", "path": "Email & Collaboration > Document Collaboration > Site or library access", "confidence": "High", "reason": "Team site access denied after migration."}
+{"case_id": "C022", "path": "Security & Compliance > Phishing and Fraud > Suspicious email reported", "confidence": "High", "reason": "Fake mail asking for details, forwarded."}
+{"case_id": "C023", "path": "Software & Applications > Office Productivity Suite > Document or slide app fault", "confidence": "High", "reason": "Deck will not save, file in use."}
+{"case_id": "C024", "path": "Software & Applications > Browser and Plugins > Site not opening in browser", "confidence": "High", "reason": "Internal portal shows a certificate warning."}
+{"case_id": "C025", "path": "Access & Identity > MFA > MFA device lost or replaced", "confidence": "High", "reason": "Lost handset, cannot get the code."}
+{"case_id": "C026", "path": "Email & Collaboration > Distribution Lists > Distribution list change", "confidence": "Medium", "reason": "Still on a team mail group after leaving."}
+{"case_id": "C027", "path": "Network & Connectivity > Bandwidth and Performance > Slow network performance", "confidence": "Medium", "reason": "File transfers to the server are slow this week."}
+{"case_id": "C028", "path": "Access & Identity > Password > Password reset", "confidence": "Medium", "reason": "Details rejected after a recent change, likely a password issue."}
+{"case_id": "C029", "path": "Software & Applications > ERP System > ERP transaction error", "confidence": "Medium", "reason": "Entry fails with an error number, reads as a transaction error."}
+{"case_id": "C030", "path": "Security & Compliance > Phishing and Fraud > Suspicious email reported", "confidence": "High", "reason": "Impersonation asking for gift cards."}
+{"case_id": "C031", "path": "Network & Connectivity > LAN and Cabling > Port dead at desk", "confidence": "High", "reason": "Wall socket at new seat gives nothing."}
+{"case_id": "C032", "path": "Hardware > Printer > Print quality or paper jam", "confidence": "High", "reason": "Lines across printed pages."}
+{"case_id": "C033", "path": "Hardware > Peripherals > Headset or audio device", "confidence": "High", "reason": "No one can hear the user on calls."}
+{"case_id": "C034", "path": "Email & Collaboration > Distribution Lists > Distribution list change", "confidence": "High", "reason": "Add new joiners to a mail group."}
+{"case_id": "C035", "path": "Software & Applications > ERP System > ERP login failure", "confidence": "Medium", "reason": "Cannot get into a module since a patch."}
+{"case_id": "C036", "path": "Access & Identity > Account Provisioning > New joiner account setup", "confidence": "High", "reason": "Setup needed for a new starter."}
+{"case_id": "C037", "path": "Access & Identity > MFA > MFA device lost or replaced", "confidence": "High", "reason": "New phone, authenticator app empty."}
+{"case_id": "C038", "path": "Network & Connectivity > VPN > VPN disconnects frequently", "confidence": "High", "reason": "Tunnel drops every 20 minutes from home."}
+{"case_id": "C039", "path": "Access & Identity > Password > Password reset", "confidence": "Medium", "reason": "Invalid credentials message; reset is the likely fix."}
+{"case_id": "C040", "path": "Software & Applications > Licensing > New license request", "confidence": "Medium", "reason": "Trial expired, needs a full licence; could also be expiry."}
+{"case_id": "C041", "path": "Access & Identity > Account Provisioning > Role change access update", "confidence": "High", "reason": "Moved teams, old screens gone."}
+{"case_id": "C042", "path": "Software & Applications > ERP System > ERP transaction error", "confidence": "High", "reason": "Posting fails with a dump error."}
+{"case_id": "C043", "path": "Hardware > Printer > Printer offline", "confidence": "Medium", "reason": "Print jobs sit in the queue."}
+{"case_id": "C044", "path": "Hardware > Mobile > Company mobile setup", "confidence": "Medium", "reason": "Phone not syncing office data; mobile setup or mail sync."}
+{"case_id": "C045", "path": "Hardware > Printer > Print quality or paper jam", "confidence": "High", "reason": "Prints too light to read."}
+{"case_id": "C046", "path": "Network & Connectivity > VPN > VPN will not connect", "confidence": "Medium", "reason": "Session could not be created; text does not name the system."}
+{"case_id": "C047", "path": "Hardware > Peripherals > Keyboard or mouse fault", "confidence": "High", "reason": "Wireless mouse keeps disconnecting."}
+{"case_id": "C048", "path": "Hardware > Printer > Print quality or paper jam", "confidence": "High", "reason": "Paper jam error persists."}
+{"case_id": "C049", "path": "Access & Identity > Password > Account locked after failed attempts", "confidence": "High", "reason": "Sign-in says account locked."}
+{"case_id": "C050", "path": "Access & Identity > Account Provisioning > Role change access update", "confidence": "High", "reason": "Transferred, needs new screens."}
+{"case_id": "C051", "path": "Email & Collaboration > Mail Client > Mailbox full or quota", "confidence": "High", "reason": "Cannot send, storage limit reached."}
+{"case_id": "C052", "path": "Software & Applications > CRM System > CRM report not loading", "confidence": "Medium", "reason": "Dashboard blank for this user only."}
+{"case_id": "C053", "path": "Hardware > Laptop > Laptop slow or freezing", "confidence": "High", "reason": "Machine hangs with more than two apps open."}
+{"case_id": "C054", "path": "Software & Applications > Browser and Plugins > Add-in not loading", "confidence": "High", "reason": "Extension installed but does nothing."}
+{"case_id": "C055", "path": "Network & Connectivity > WiFi > Weak WiFi in a zone", "confidence": "High", "reason": "Almost no connectivity in the cafeteria."}
+{"case_id": "C056", "path": "Network & Connectivity > WiFi > Cannot join office WiFi", "confidence": "Medium", "reason": "Certificate prompt then fails to join the network."}
+{"case_id": "C057", "path": "Hardware > Laptop > Battery or charging fault", "confidence": "High", "reason": "Battery drains in one hour."}
+{"case_id": "C058", "path": "Hardware > Peripherals > Headset or audio device", "confidence": "High", "reason": "Audio only in one side of headphones."}
+{"case_id": "C059", "path": "Hardware > Laptop > Battery or charging fault", "confidence": "High", "reason": "Not charging when plugged in."}
+{"case_id": "C060", "path": "Email & Collaboration > Meetings and Calls > Call quality poor", "confidence": "Medium", "reason": "Video freezes for others on calls."}
+{"case_id": "C061", "path": "Software & Applications > Licensing > New license request", "confidence": "High", "reason": "Needs a design tool licence."}
+{"case_id": "C062", "path": "Network & Connectivity > VPN > VPN will not connect", "confidence": "Medium", "reason": "No connection from home since yesterday."}
+{"case_id": "C063", "path": "Hardware > Laptop > Laptop slow or freezing", "confidence": "High", "reason": "Very slow, fan loud."}
+{"case_id": "C064", "path": "Software & Applications > Licensing > New license request", "confidence": "High", "reason": "Requests a seat for analytics software."}
+{"case_id": "C065", "path": "Network & Connectivity > WiFi > Weak WiFi in a zone", "confidence": "High", "reason": "Signal drops on one floor only."}
+{"case_id": "C066", "path": "Security & Compliance > Audit and Review > Access review or evidence request", "confidence": "High", "reason": "Auditors want an access list."}
+{"case_id": "C067", "path": "Access & Identity > MFA > MFA device lost or replaced", "confidence": "High", "reason": "New device, authenticator empty."}
+{"case_id": "C068", "path": "Access & Identity > Account Provisioning > Leaver account deactivation", "confidence": "High", "reason": "Resigned user access to remove."}
+{"case_id": "C069", "path": "Software & Applications > Browser and Plugins > Site not opening in browser", "confidence": "Medium", "reason": "Page loads blank on this machine only."}
+{"case_id": "C070", "path": "Software & Applications > Office Productivity Suite > Spreadsheet crash or corruption", "confidence": "Medium", "reason": "Spreadsheet not responding on pivot refresh."}
+{"case_id": "C071", "path": "Network & Connectivity > VPN > VPN will not connect", "confidence": "High", "reason": "Stuck on connecting forever."}
+{"case_id": "C072", "path": "Hardware > Peripherals > Docking station not working", "confidence": "High", "reason": "Dock is dead."}
+{"case_id": "C073", "path": "Security & Compliance > Malware > Malware or virus alert", "confidence": "Medium", "reason": "Machine odd after opening an attachment."}
+{"case_id": "C074", "path": "Software & Applications > Browser and Plugins > Add-in not loading", "confidence": "High", "reason": "Toolbar button gone after update."}
+{"case_id": "C075", "path": "Network & Connectivity > WiFi > Cannot join office WiFi", "confidence": "High", "reason": "Laptop cannot see the office network."}
+{"case_id": "C076", "path": "Hardware > Peripherals > Keyboard or mouse fault", "confidence": "Medium", "reason": "Pointer jumps while typing."}
+{"case_id": "C077", "path": "Network & Connectivity > VPN > VPN disconnects frequently", "confidence": "Medium", "reason": "Keeps disconnecting during calls."}
+{"case_id": "C078", "path": "Software & Applications > Office Productivity Suite > Spreadsheet crash or corruption", "confidence": "High", "reason": "Big sheet closes on open."}
+{"case_id": "C079", "path": "Access & Identity > Account Provisioning > Leaver account deactivation", "confidence": "High", "reason": "Leaver needs accounts closed."}
+{"case_id": "C080", "path": "Hardware > Peripherals > Docking station not working", "confidence": "Medium", "reason": "Keyboard and mouse stop when docked."}
+{"case_id": "C081", "path": "Security & Compliance > Data Access Control > Removable media exception", "confidence": "High", "reason": "USB blocked, needs a one day exception."}
+{"case_id": "C082", "path": "Email & Collaboration > Meetings and Calls > Call quality poor", "confidence": "High", "reason": "Voice breaks in every call."}
+{"case_id": "C083", "path": "Security & Compliance > Data Access Control > Sensitive data access request", "confidence": "High", "reason": "Requests restricted client data."}
+{"case_id": "C084", "path": "Access & Identity > Group Membership > Application permission request", "confidence": "High", "reason": "Needs approval rights in a queue."}
+{"case_id": "C085", "path": "Access & Identity > MFA > MFA prompt loop", "confidence": "High", "reason": "Verification repeats every 5 minutes."}
+{"case_id": "C086", "path": "Access & Identity > Group Membership > Shared mailbox or folder access", "confidence": "High", "reason": "Shared drive from Finance not opening."}
+{"case_id": "C087", "path": "Security & Compliance > Malware > Malware or virus alert", "confidence": "High", "reason": "Threat detected and quarantined."}
+{"case_id": "C088", "path": "Software & Applications > CRM System > CRM sync or data issue", "confidence": "High", "reason": "Opportunities not showing latest numbers."}
+{"case_id": "C089", "path": "Software & Applications > Office Productivity Suite > Spreadsheet crash or corruption", "confidence": "Medium", "reason": "Workbook cannot be opened."}
+{"case_id": "C090", "path": "Hardware > Peripherals > Keyboard or mouse fault", "confidence": "High", "reason": "Some keys not typing."}
+{"case_id": "C091", "path": "Network & Connectivity > Bandwidth and Performance > Slow network performance", "confidence": "High", "reason": "Whole floor crawling since 10am."}
+{"case_id": "C092", "path": "Hardware > Laptop > Laptop slow or freezing", "confidence": "High", "reason": "Machine takes 15 minutes to start."}
+{"case_id": "C093", "path": "Hardware > Printer > Printer offline", "confidence": "Low", "reason": "Device missing from the list; printer is a guess."}
+{"case_id": "C094", "path": "Hardware > Mobile > Company mobile setup", "confidence": "Medium", "reason": "Cannot add work mail on a new phone."}
+{"case_id": "C095", "path": "Hardware > Peripherals > Headset or audio device", "confidence": "High", "reason": "Mic picks up too much noise."}
+{"case_id": "C096", "path": "Access & Identity > Group Membership > Application permission request", "confidence": "High", "reason": "Needs edit rights in the reporting tool."}
+{"case_id": "C097", "path": "Access & Identity > MFA > MFA prompt loop", "confidence": "High", "reason": "MFA approval loop between phone and laptop."}
+{"case_id": "C098", "path": "Hardware > Mobile > Company mobile setup", "confidence": "High", "reason": "New handset needs work apps."}
+{"case_id": "C099", "path": "Hardware > Laptop > Battery or charging fault", "confidence": "High", "reason": "Battery drains in one hour."}
+{"case_id": "C100", "path": "Email & Collaboration > Meetings and Calls > Cannot join or schedule meeting", "confidence": "High", "reason": "Cannot book a room in the invite."}
+{"case_id": "C101", "path": "Access & Identity > Password > Password reset", "confidence": "High", "reason": "Forgot credentials after holiday."}
+{"case_id": "C102", "path": "Email & Collaboration > Meetings and Calls > Call quality poor", "confidence": "Medium", "reason": "Video freezes for others on calls."}
+{"case_id": "C103", "path": "Access & Identity > Group Membership > Shared mailbox or folder access", "confidence": "High", "reason": "No permission on the team folder."}
+{"case_id": "C104", "path": "Software & Applications > ERP System > ERP transaction error", "confidence": "Medium", "reason": "Month-end batch job failed."}
+{"case_id": "C105", "path": "Hardware > Laptop > Screen or display fault", "confidence": "High", "reason": "Cracked screen after a fall."}
+{"case_id": "C106", "path": "Access & Identity > Group Membership > Shared mailbox or folder access", "confidence": "High", "reason": "No permission on the team folder."}
+{"case_id": "C107", "path": "Software & Applications > CRM System > CRM sync or data issue", "confidence": "Medium", "reason": "Data from another tool not flowing in."}
+{"case_id": "C108", "path": "Hardware > Laptop > Screen or display fault", "confidence": "High", "reason": "Display goes black randomly."}
+{"case_id": "C109", "path": "Software & Applications > CRM System > CRM sync or data issue", "confidence": "Medium", "reason": "Updated records missing next day."}
+{"case_id": "C110", "path": "Access & Identity > Account Provisioning > New joiner account setup", "confidence": "High", "reason": "New hire has no login."}
+{"case_id": "C111", "path": "Software & Applications > Office Productivity Suite > Document or slide app fault", "confidence": "High", "reason": "Document formatting breaks on reopen."}
+{"case_id": "C112", "path": "Hardware > Laptop > Laptop slow or freezing", "confidence": "High", "reason": "Machine takes 15 minutes to start."}
+{"case_id": "C113", "path": "Security & Compliance > Data Access Control > Removable media exception", "confidence": "High", "reason": "Pen drive copy blocked."}
+{"case_id": "C114", "path": "Security & Compliance > Audit and Review > Access review or evidence request", "confidence": "Medium", "reason": "Login history requested for a quarter."}
+{"case_id": "C115", "path": "Access & Identity > Account Provisioning > Role change access update", "confidence": "High", "reason": "Promoted but still sees old menus."}
+{"case_id": "C116", "path": "Security & Compliance > Data Access Control > Sensitive data access request", "confidence": "High", "reason": "Payroll folder access for audit."}
+{"case_id": "C117", "path": "Network & Connectivity > LAN and Cabling > Port dead at desk", "confidence": "High", "reason": "No connection through the cable at new desk."}
+{"case_id": "C118", "path": "Security & Compliance > Phishing and Fraud > Suspicious email reported", "confidence": "High", "reason": "Impersonation asking for gift cards."}
+{"case_id": "C119", "path": "Hardware > Laptop > Battery or charging fault", "confidence": "High", "reason": "Adapter warm but battery falls."}
+{"case_id": "C120", "path": "Access & Identity > Account Provisioning > Leaver account deactivation", "confidence": "High", "reason": "Leaver still active in the system."}
+{"case_id": "C121", "path": "Network & Connectivity > VPN > VPN will not connect", "confidence": "Medium", "reason": "Session could not be created; text does not name the system."}
+{"case_id": "C122", "path": "Access & Identity > MFA > MFA prompt loop", "confidence": "High", "reason": "Code asked again and again."}
+{"case_id": "C123", "path": "Network & Connectivity > WiFi > Cannot join office WiFi", "confidence": "Medium", "reason": "Certificate prompt then fails to join."}
+{"case_id": "C124", "path": "Software & Applications > CRM System > CRM report not loading", "confidence": "Low", "reason": "Can see a dashboard but cannot download; report or permission issue."}
+{"case_id": "C125", "path": "Software & Applications > ERP System > ERP login failure", "confidence": "High", "reason": "Finance system error at login."}
+{"case_id": "C126", "path": "Access & Identity > Account Provisioning > New joiner account setup", "confidence": "High", "reason": "New joiner has nothing set up."}
+{"case_id": "C127", "path": "Email & Collaboration > Meetings and Calls > Cannot join or schedule meeting", "confidence": "High", "reason": "Cannot join, invite says organiser not started."}

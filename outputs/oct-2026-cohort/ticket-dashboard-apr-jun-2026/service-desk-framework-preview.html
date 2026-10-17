@@ -1,0 +1,247 @@
+<title>Service Desk Review Apr-Jun 2026</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column, quarter-on-quarter tables, review tags that can be switched off */
+:root{
+  --bg:#F3F5F7; --surface:#FFFFFF; --sunk:#E8ECF0; --ink:#16202A; --muted:#55626F; --rule:#D3DAE1;
+  --accent:#1F5F8B; --accent-soft:#E1ECF4;
+  --ok:#2E7D4F; --ok-soft:#E2F2E8; --warn:#9A6200; --warn-soft:#FBEFD6; --crit:#B3261E; --crit-soft:#F8E1DF;
+  --tag:#6B3FA0; --tag-soft:#EFE7F8;
+  --f-display:"IBM Plex Sans Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"IBM Plex Sans",-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1419; --surface:#171E26; --sunk:#1E2731; --ink:#E6EBF0; --muted:#9AA7B4; --rule:#2B3642;
+  --accent:#7DB4DE; --accent-soft:#1B2C3B;
+  --ok:#6CC28F; --ok-soft:#18291F; --warn:#E3B04B; --warn-soft:#2E2512; --crit:#F08A82; --crit-soft:#331A18;
+  --tag:#C3A3EC; --tag-soft:#261C33; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1419; --surface:#171E26; --sunk:#1E2731; --ink:#E6EBF0; --muted:#9AA7B4; --rule:#2B3642;
+  --accent:#7DB4DE; --accent-soft:#1B2C3B;
+  --ok:#6CC28F; --ok-soft:#18291F; --warn:#E3B04B; --warn-soft:#2E2512; --crit:#F08A82; --crit-soft:#331A18;
+  --tag:#C3A3EC; --tag-soft:#261C33; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:920px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:28px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:2rem;font-weight:700}
+h2{font-size:1.35rem;font-weight:600}
+h3{font-size:1.02rem;font-weight:600}
+p{margin:0;max-width:70ch}
+.eyebrow{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+header{display:grid;gap:10px}
+.sample{background:var(--warn-soft);color:var(--ink);border:1px solid var(--rule);border-left:4px solid var(--warn);border-radius:8px;padding:10px 14px;font-size:.88rem}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--tag-soft);border:1px solid var(--rule);border-radius:8px;padding:10px 14px}
+.bar p{font-size:.88rem}
+.switch{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:500;cursor:pointer;user-select:none}
+.switch input{width:18px;height:18px;accent-color:var(--tag)}
+section{display:grid;gap:14px}
+.head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px}
+.fw{font-family:var(--f-mono);font-size:.72rem;color:var(--tag);background:var(--tag-soft);border-radius:4px;padding:2px 8px;white-space:nowrap}
+.note{font-size:.84rem;color:var(--tag);border-left:3px solid var(--tag);padding:2px 0 2px 10px}
+body.clean .fw, body.clean .note, body.clean .reviewonly{display:none}
+.panel{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:18px}
+.bluf{border-left:4px solid var(--accent);display:grid;gap:12px}
+.bluf .verdict{font-size:1.12rem;font-weight:500;max-width:none}
+ol{margin:0;padding-left:22px;display:grid;gap:6px}
+.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:620px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--rule)}
+th{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--sunk)}
+tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip{display:inline-block;font-family:var(--f-mono);font-size:.72rem;font-weight:500;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.ok{color:var(--ok);background:var(--ok-soft)} .warn{color:var(--warn);background:var(--warn-soft)} .crit{color:var(--crit);background:var(--crit-soft)} .na{color:var(--muted);background:var(--sunk)}
+.quad{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.quad .panel{display:grid;gap:8px;align-content:start}
+.q{font-family:var(--f-mono);font-size:.74rem;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+.chain{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.step{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:14px;display:grid;gap:6px;align-content:start;min-width:0}
+.step .n{font-family:var(--f-mono);font-size:.72rem;color:var(--muted)}
+.step b{font-family:var(--f-display);font-size:1.35rem;font-variant-numeric:tabular-nums}
+.step p{font-size:.85rem}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:12px 14px;display:grid;gap:2px;min-width:0}
+.kpi span{font-size:.78rem;color:var(--muted)}
+.kpi b{font-family:var(--f-display);font-size:1.5rem;font-variant-numeric:tabular-nums}
+.kpi small{font-family:var(--f-mono);font-size:.74rem;color:var(--muted)}
+.ssc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.ssc .panel{display:grid;gap:8px;align-content:start}
+.ssc h3.s{color:var(--ok)} .ssc h3.t{color:var(--crit)} .ssc h3.c{color:var(--accent)}
+.kcs article{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:16px 18px;display:grid;gap:10px}
+.kcs dl{display:grid;grid-template-columns:130px minmax(0,1fr);gap:6px 14px;margin:0;font-size:.88rem}
+.kcs dt{font-family:var(--f-mono);font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding-top:2px}
+.kcs dd{margin:0;min-width:0}
+.blank{color:var(--muted);font-style:italic}
+code{font-family:var(--f-mono);font-size:.85em;background:var(--sunk);padding:1px 5px;border-radius:4px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+footer{font-size:.8rem;color:var(--muted);display:grid;gap:6px}
+@media (max-width:760px){.chain,.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.ssc,.quad{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:420px){.chain,.kpis{grid-template-columns:minmax(0,1fr)}.kcs dl{grid-template-columns:minmax(0,1fr)}h1{font-size:1.6rem}}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Service desk quarterly review · ServiceNow export</div>
+  <h1>Service desk review: April to June 2026</h1>
+  <div class="meta"><span>521 tickets</span><span>Compared with January to March 2026 (450 tickets)</span><span><a href="https://claude.ai/artifact/1BCBokHvCc1xPhdbL5AhFT">Full dashboard</a></span></div>
+  <p class="sample"><strong>Sample data.</strong> Both quarters are generated test tickets used to design this report. The numbers show how the review works. They are not real service desk results.</p>
+  <div class="bar reviewonly">
+    <p>Preview for review. Purple tags name the framework behind each section. Switch them off to see what leadership would read.</p>
+    <label class="switch" for="rev"><input type="checkbox" id="rev" checked> Show framework tags</label>
+  </div>
+</header>
+
+<section class="reviewonly">
+  <div class="head"><h2>Framework map</h2><span class="fw">Your review</span></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Framework</th><th>How it is used here</th><th>What changes from today's dashboard</th></tr></thead>
+    <tbody>
+      <tr><td>Pyramid Principle / BLUF</td><td><span class="chip ok">Applied</span> Verdict and 3 decisions first</td><td>Today's summary gives 4 findings. This adds the decisions and who owns them</td></tr>
+      <tr><td>After Action Review</td><td><span class="chip ok">Applied</span> Last report's 3 calls vs this quarter</td><td>New. Today each quarter stands alone, with no check on what the last report asked for</td></tr>
+      <tr><td>Kirkpatrick levels</td><td><span class="chip warn">Adapted</span> As an outcome chain for each fix: adoption, volume, hours</td><td>New. Kirkpatrick is for training. The idea that carries over is to test a change step by step, from "used" to "paid off"</td></tr>
+      <tr><td>Blameless postmortem</td><td><span class="chip ok">Applied</span> Each risk gets evidence, impact, likely cause, fix, owner</td><td>Today a risk is a number. This adds the cause to check and the team that owns it</td></tr>
+      <tr><td>Start / Stop / Continue</td><td><span class="chip ok">Applied</span> Next quarter's list</td><td>New</td></tr>
+      <tr><td>Backward design (outcomes)</td><td><span class="chip warn">Adapted</span> Quarterly targets for leadership to set</td><td>New. Without agreed targets, next quarter's review has no plan to compare against</td></tr>
+      <tr><td>KCS article structure</td><td><span class="chip ok">Applied</span> Top recurring issues become knowledge article candidates</td><td>New. Turns the volume table into self-service work</td></tr>
+      <tr><td>Diátaxis</td><td><span class="chip ok">Applied</span> Each article tagged as a how-to or a known error</td><td>New</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="head"><h2>1. Bottom line</h2><span class="fw">BLUF · Minto</span></div>
+  <div class="panel bluf">
+    <p class="verdict">Two of last quarter's three calls moved the right way: urgent (P1) tickets now meet SLA, and Password tickets are falling. Laptop got worse, and a June spike in VPN tickets is the new risk.</p>
+    <h3>Three decisions for this quarter</h3>
+    <ol>
+      <li><strong>VPN:</strong> Network Operations to check the VPN client version rolled out from May. 10 tickets name it, and VPN tickets tripled in June.</li>
+      <li><strong>Laptop:</strong> Desktop Support to bring a recovery plan. Only 12 of 31 Laptop tickets met SLA, down from 13 of 26.</li>
+      <li><strong>Automation:</strong> pause the Password automation build. Volume already fell from 35 to 15 a month, and the bigger agent hours sit in Laptop, ERP and Licensing.</li>
+    </ol>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><span>Tickets</span><b>521</b><small>450 last quarter, +15.8%</small></div>
+    <div class="kpi"><span>SLA met</span><b>83.4%</b><small>83.8% last quarter</small></div>
+    <div class="kpi"><span>Agent hours</span><b>4,604</b><small>4,190 last quarter</small></div>
+    <div class="kpi"><span>Reopened</span><b>5.2%</b><small>3.9% last quarter</small></div>
+  </div>
+</section>
+
+<section>
+  <div class="head"><h2>2. What last quarter's report asked for, and what happened</h2><span class="fw">After Action Review</span></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Last report's call (Jan-Mar)</th><th>Jan-Mar</th><th>Apr-Jun</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Risk:</strong> urgent P1 tickets miss SLA</td><td class="n">4 of 11 met</td><td class="n">6 of 7 met</td><td><span class="chip ok">Fixed</span></td></tr>
+      <tr><td><strong>Effort:</strong> Laptop takes the most hours and half miss SLA</td><td class="n">13 of 26 met (50%)</td><td class="n">12 of 31 met (38.7%)</td><td><span class="chip crit">Worse</span></td></tr>
+      <tr><td><strong>Effort:</strong> Licensing, half miss SLA</td><td class="n">13 of 26 met (50%)</td><td class="n">13 of 20 met (65%)</td><td><span class="chip warn">Better, still below 70%</span></td></tr>
+      <tr><td><strong>Decision:</strong> automate Password tickets first</td><td class="n">20 → 30 → 38 a month</td><td class="n">35 → 21 → 15 a month</td><td><span class="chip ok">Falling</span></td></tr>
+      <tr><td><strong>Not foreseen:</strong> VPN</td><td class="n">10 → 9 → 13 a month</td><td class="n">11 → 13 → 39 a month</td><td><span class="chip crit">New risk</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="quad">
+    <div class="panel"><div class="q">What was supposed to happen</div><p>Fix P1 SLA, reduce Laptop and Licensing breaches, and take Password tickets off the desk.</p></div>
+    <div class="panel"><div class="q">What happened</div><p>P1 recovered and Password fell. Licensing improved a little. Laptop slipped further, and VPN tripled in June.</p></div>
+    <div class="panel"><div class="q">Why it was different</div><p>The export doesn't say what changed. These need confirming with each service owner: did a Password self-service flow go live in May, what changed for P1, and why Laptop breaches rose.</p></div>
+    <div class="panel"><div class="q">What to do next quarter</div><p>Keep what fixed P1. Move the focus from Password to Laptop and VPN. Agree targets now (section 6), so the next review has numbers to check against.</p></div>
+  </div>
+  <p class="note">Rule for the skill: each quarter opens with the previous report's calls and a result for each. A "why" from the data is labelled as a hypothesis until the owner confirms it.</p>
+</section>
+
+<section>
+  <div class="head"><h2>3. Did the Password change pay off?</h2><span class="fw">Outcome chain · adapted from Kirkpatrick</span></div>
+  <div class="chain">
+    <div class="step"><span class="n">1 · Used</span><b>66.7%</b><p>Password tickets arriving through the portal in June, up from 28.9% in March.</p></div>
+    <div class="step"><span class="n">2 · Volume moved</span><b>38 → 15</b><p>Password tickets a month, March to June.</p></div>
+    <div class="step"><span class="n">3 · Hours freed</span><b>4.4 h</b><p>A month. Password used 22.7 agent hours a month in Jan-Mar and 18.3 in Apr-Jun.</p></div>
+    <div class="step"><span class="n">4 · Business result</span><span class="chip na">Not in the export</span><p>Needs cost per agent hour or user downtime, which the export doesn't carry.</p></div>
+  </div>
+  <p>The fix worked, but Password was never where the hours are. Each Password ticket takes about 0.8 hours. This quarter Laptop used 707 agent hours, ERP System 494, Licensing 483 and VPN 360, against 55 for Password.</p>
+  <p class="note">Rule for the skill: every past "Decision" gets this 4-step chain the following quarter, so a fix is judged on hours freed, not only on volume.</p>
+</section>
+
+<section>
+  <div class="head"><h2>4. The three risks</h2><span class="fw">Blameless postmortem</span></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Risk and evidence</th><th>Impact</th><th>Likely cause (to confirm)</th><th>Fix to trial</th><th>Owner</th></tr></thead>
+    <tbody>
+      <tr><td><strong>VPN spike.</strong> 11 → 13 → 39 tickets a month. P1 and P2 tickets went 5 → 8 → 18</td><td>39 tickets in June, 18 of them urgent. 360 agent hours this quarter vs 215 last. SLA held at 30 of 33 in June</td><td>10 tickets say "unstable since the new client version", first seen in May. All 10 are VPN</td><td>Check the client rollout from May and publish a known-error article (section 7)</td><td>Network Operations</td></tr>
+      <tr><td><strong>Laptop SLA.</strong> 12 of 31 met, median 18 hours</td><td>707 agent hours, the most of any subcategory. Desktop Support has the lowest team SLA, 63.6%</td><td>Not visible in the export. It has no field for why a ticket waited (parts, vendor, user)</td><td>Add a wait-reason field to the export, then split breaches by reason</td><td>Desktop Support</td></tr>
+      <tr><td><strong>Licensing renewals.</strong> "Expired or reassigned" licences: 4 of 9 met SLA, median 20 hours</td><td>Users locked out of tools until a seat is found. 483 agent hours on Licensing this quarter</td><td>New licence requests do better (9 of 11). The gap is in renewals and reassignment</td><td>Review how expired seats are re-issued, with the service owner</td><td>Application Support</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Blameless means a cause is written as a missing step, field or check, never as a team's failure. Causes from ticket text stay "to confirm" until the owner agrees.</p>
+</section>
+
+<section>
+  <div class="head"><h2>5. Next quarter</h2><span class="fw">Start / Stop / Continue</span></div>
+  <div class="ssc">
+    <div class="panel"><h3 class="s">Start</h3><ol><li>VPN client check and a known-error article</li><li>A Laptop recovery plan with wait reasons</li><li>Close notes and wait reason in the export</li><li>Agreed quarterly targets</li></ol></div>
+    <div class="panel"><h3 class="t">Stop</h3><ol><li>Leading automation with Password. It already fell and frees 4.4 hours a month</li></ol></div>
+    <div class="panel"><h3 class="c">Continue</h3><ol><li>Whatever fixed P1 SLA</li><li>Portal-first for Password, now 66.7% of those tickets</li></ol></div>
+  </div>
+</section>
+
+<section>
+  <div class="head"><h2>6. Targets for next quarter</h2><span class="fw">Backward design · outcomes first</span></div>
+  <p>The export carries an SLA target for each ticket, but there are no agreed goals for the quarter. Without them, the next review can say what changed but not whether it was enough. Proposed outcomes, with the target left for leadership:</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Outcome</th><th class="n">Apr-Jun</th><th>Target for Jul-Sep</th><th>Owner</th></tr></thead>
+    <tbody>
+      <tr><td>Laptop tickets meet SLA</td><td class="n">38.7%</td><td class="blank">Leadership to set</td><td>Desktop Support</td></tr>
+      <tr><td>VPN tickets a month back to the April-May level</td><td class="n">39 in June</td><td class="blank">Leadership to set (Apr-May: 11 and 13)</td><td>Network Operations</td></tr>
+      <tr><td>Licensing renewals meet SLA</td><td class="n">4 of 9</td><td class="blank">Leadership to set</td><td>Application Support</td></tr>
+      <tr><td>Overall SLA met</td><td class="n">83.4%</td><td class="blank">Leadership to set</td><td>Service desk lead</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="kcs">
+  <div class="head"><h2>7. Knowledge articles to write</h2><span class="fw">KCS + Diátaxis</span></div>
+  <p>The six most common issue types this quarter. Each one repeats often enough that an article could let users fix it themselves, or tell them a fix is coming.</p>
+  <div class="tbl"><table>
+    <thead><tr><th>Issue type</th><th class="n">Tickets</th><th class="n">Via portal</th><th class="n">Median hrs</th><th>Article type</th><th>Writer</th></tr></thead>
+    <tbody>
+      <tr><td>VPN will not connect</td><td class="n">33</td><td class="n">51.5%</td><td class="n">4.0</td><td><span class="chip crit">Known error</span></td><td>Network Operations</td></tr>
+      <tr><td>VPN disconnects frequently</td><td class="n">30</td><td class="n">43.3%</td><td class="n">3.6</td><td><span class="chip crit">Known error</span></td><td>Network Operations</td></tr>
+      <tr><td>Account locked after failed attempts</td><td class="n">29</td><td class="n">41.4%</td><td class="n">0.8</td><td><span class="chip na">How-to</span></td><td>IAM Support</td></tr>
+      <tr><td>Password expiry not notified</td><td class="n">23</td><td class="n">60.9%</td><td class="n">0.8</td><td><span class="chip na">How-to</span></td><td>IAM Support</td></tr>
+      <tr><td>Spreadsheet crash or corruption</td><td class="n">17</td><td class="n">64.7%</td><td class="n">1.9</td><td><span class="chip na">How-to</span></td><td>Application Support</td></tr>
+      <tr><td>MFA device lost or replaced</td><td class="n">15</td><td class="n">46.7%</td><td class="n">1.3</td><td><span class="chip na">How-to</span></td><td>IAM Support</td></tr>
+    </tbody>
+  </table></div>
+  <article>
+    <h3>Sample article: VPN disconnects frequently</h3>
+    <dl>
+      <dt>Issue</dt><dd>In the user's words: "the tunnel drops every 20 minutes while working from home"</dd>
+      <dt>Environment</dt><dd>Remote work over VPN. Some tickets from May onward say "since the new client version"</dd>
+      <dt>Resolution</dt><dd class="blank">To be written by Network Operations. The export has no close notes, so the steps can't be taken from it</dd>
+      <dt>Cause</dt><dd>Under investigation (see risk 1)</dd>
+      <dt>Type</dt><dd><span class="chip crit">Known error</span> Tells users a fix is in progress and what to do meanwhile</dd>
+      <dt>Volume</dt><dd>30 tickets this quarter, 18 of them in June</dd>
+    </dl>
+  </article>
+  <p class="note">Rule for the skill: list the top issue types as article candidates each quarter. The resolution field stays blank until the export includes close notes. This is the one data gap that blocks writing articles automatically.</p>
+</section>
+
+<footer>
+  <p>Source: <code>servicenow-tickets-apr-jun-2026.xlsx</code> and <code>servicenow-tickets-2026.xlsx</code>, categorised and checked against their answer keys. All figures are computed from those two exports.</p>
+  <p>Sample data: generated tickets for designing and testing the report.</p>
+</footer>
+</div>
+
+<script>
+(function(){
+  var box=document.getElementById('rev');
+  function apply(){document.body.classList.toggle('clean',!box.checked);}
+  try{if(localStorage.getItem('sdr-rev')==='0'){box.checked=false;}}catch(e){}
+  apply();
+  box.addEventListener('change',function(){apply();try{localStorage.setItem('sdr-rev',box.checked?'1':'0');}catch(e){}});
+})();
+</script>

@@ -1,0 +1,987 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title id="doctitle">Ticket analysis</title>
+<style>
+:root{
+  color-scheme: light;
+  --surface-1:#fcfcfb; --page:#f9f9f7;
+  --ink-1:#0b0b0b; --ink-2:#52514e; --ink-3:#898781;
+  --grid:#e1e0d9; --axis:#c3c2b7; --hair:rgba(11,11,11,.10);
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300;
+  --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
+  --up:#006300;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(11,11,11,.04), 0 8px 24px -12px rgba(11,11,11,.14);
+}
+@media (prefers-color-scheme: dark){
+  :root:where(:not([data-theme="light"])){
+    color-scheme: dark;
+    --surface-1:#1a1a19; --page:#0d0d0d;
+    --ink-1:#ffffff; --ink-2:#c3c2b7; --ink-3:#898781;
+    --grid:#2c2c2a; --axis:#383835; --hair:rgba(255,255,255,.10);
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+    --up:#0ca30c;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 8px 24px -12px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --surface-1:#1a1a19; --page:#0d0d0d;
+  --ink-1:#ffffff; --ink-2:#c3c2b7; --ink-3:#898781;
+  --grid:#2c2c2a; --axis:#383835; --hair:rgba(255,255,255,.10);
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300;
+  --up:#0ca30c;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 8px 24px -12px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--page); color:var(--ink-1);
+  font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px; margin:0 auto; padding:32px 22px 72px}
+h1{font-size:27px; line-height:1.2; margin:0 0 6px; letter-spacing:-.02em}
+h2{font-size:19px; margin:0 0 4px; letter-spacing:-.015em}
+h3{font-size:14px; margin:0 0 3px; letter-spacing:-.005em}
+p{margin:0}
+.sub{color:var(--ink-2); font-size:13.5px}
+.muted{color:var(--ink-3); font-size:12.5px}
+
+header.top{display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start;
+  justify-content:space-between; margin-bottom:22px}
+.themebtn{background:var(--surface-1); color:var(--ink-2); border:1px solid var(--hair);
+  border-radius:999px; padding:7px 15px; font:inherit; font-size:13px; cursor:pointer}
+.themebtn:hover{color:var(--ink-1)}
+
+/* filter row - one row above everything it scopes */
+.filters{position:sticky; top:0; z-index:20; background:var(--page);
+  padding:12px 0 14px; margin-bottom:8px; border-bottom:1px solid var(--hair);
+  display:flex; flex-wrap:wrap; gap:20px; align-items:center}
+.fgroup{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.flabel{font-size:12px; color:var(--ink-3); text-transform:uppercase; letter-spacing:.07em}
+.chip{background:var(--surface-1); color:var(--ink-2); border:1px solid var(--hair);
+  border-radius:999px; padding:6px 11px; font:inherit; font-size:12.5px; cursor:pointer;
+  display:inline-flex; align-items:center; gap:6px; white-space:nowrap; min-height:32px; line-height:1}
+.chip:hover{color:var(--ink-1); border-color:var(--axis)}
+.chip[aria-pressed="true"]{background:var(--ink-1); color:var(--surface-1); border-color:var(--ink-1)}
+.chip .dot{width:9px; height:9px; border-radius:3px; flex:none}
+.scope{margin-left:auto; font-size:12.5px; color:var(--ink-3)}
+
+section{margin-top:34px}
+.card{background:var(--surface-1); border:1px solid var(--hair); border-radius:var(--radius);
+  padding:22px; box-shadow:var(--shadow)}
+.cardhead{display:flex; justify-content:space-between; align-items:flex-start; gap:16px;
+  margin-bottom:18px; flex-wrap:wrap}
+
+/* stat tiles */
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(178px,1fr)); gap:14px}
+.tile{background:var(--surface-1); border:1px solid var(--hair); border-radius:var(--radius);
+  padding:17px 18px; box-shadow:var(--shadow)}
+.tile .k{font-size:11.5px; color:var(--ink-3); text-transform:uppercase;
+  letter-spacing:.07em; margin-bottom:9px}
+.tile .v{font-size:31px; line-height:1; letter-spacing:-.03em; font-weight:600}
+.tile .n{margin-top:8px; font-size:12.5px; color:var(--ink-2)}
+.delta{font-weight:600}
+.delta.up{color:var(--up)} .delta.down{color:var(--crit)}
+
+/* charts */
+.legend{display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:16px}
+.lgi{display:inline-flex; align-items:center; gap:7px; font-size:12.5px; color:var(--ink-2)}
+.lgi .sw{width:11px; height:11px; border-radius:3px; flex:none}
+svg{display:block; width:100%; height:auto; overflow:visible}
+.gridline{stroke:var(--grid); stroke-width:1}
+.axisline{stroke:var(--axis); stroke-width:1}
+.tick{fill:var(--ink-3); font-size:11.5px; font-variant-numeric:tabular-nums}
+.axlabel{fill:var(--ink-2); font-size:12.5px}
+.vallabel{fill:var(--ink-1); font-size:12px; font-weight:600}
+.seg{cursor:pointer}
+.seg:hover{opacity:.82}
+
+.toggle{background:none; border:1px solid var(--hair); color:var(--ink-2);
+  border-radius:999px; padding:5px 12px; font:inherit; font-size:12.5px; cursor:pointer}
+.toggle:hover{color:var(--ink-1); border-color:var(--axis)}
+
+table{width:100%; border-collapse:collapse; font-size:13.5px}
+th{text-align:left; font-weight:600; color:var(--ink-3); font-size:11.5px;
+  text-transform:uppercase; letter-spacing:.06em; padding:0 12px 9px 0;
+  border-bottom:1px solid var(--hair); white-space:nowrap}
+td{padding:10px 12px 10px 0; border-bottom:1px solid var(--hair); color:var(--ink-2);
+  vertical-align:top}
+td.n, th.n{text-align:right; font-variant-numeric:tabular-nums}
+td:last-child, th:last-child{padding-right:0}
+td strong{color:var(--ink-1); font-weight:600}
+.tablewrap{overflow-x:auto; margin-top:6px}
+tr.hi td{background:color-mix(in srgb, var(--s1) 7%, transparent)}
+
+/* status chip - icon + label, never colour alone */
+.st{display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600;
+  white-space:nowrap}
+.st .ic{width:14px; text-align:center; font-size:12px}
+.st.good{color:var(--good)} .st.warn{color:var(--warn)}
+.st.serious{color:var(--serious)} .st.crit{color:var(--crit)}
+.st.neutral{color:var(--ink-3); font-weight:500}
+
+/* drill explorer */
+.drillgrid{display:grid; grid-template-columns:minmax(0,320px) minmax(0,1fr); gap:22px}
+@media(max-width:820px){.drillgrid{grid-template-columns:1fr}}
+.l2list{display:flex; flex-direction:column; gap:2px; max-height:520px; overflow-y:auto;
+  padding-right:6px}
+.l2row{display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center;
+  padding:9px 11px; border-radius:9px; cursor:pointer; border:1px solid transparent;
+  text-align:left; background:none; font:inherit; color:var(--ink-2); width:100%}
+.l2row:hover{background:color-mix(in srgb, var(--ink-1) 4%, transparent)}
+.l2row[aria-pressed="true"]{border-color:var(--hair);
+  background:color-mix(in srgb, var(--s1) 9%, transparent); color:var(--ink-1)}
+.l2row .nm{font-size:13.5px; display:flex; align-items:center; gap:8px}
+.l2row .ct{font-size:13px; font-variant-numeric:tabular-nums; font-weight:600; color:var(--ink-1)}
+.bartrack{grid-column:1/-1; display:block; height:4px; border-radius:2px;
+  background:var(--grid); margin-top:7px; overflow:hidden}
+.barfill{display:block; height:100%; border-radius:2px}
+
+.tk{border:1px solid var(--hair); border-radius:11px; padding:13px 15px; margin-bottom:9px;
+  background:color-mix(in srgb, var(--ink-1) 2%, transparent)}
+.tk .meta{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:11.5px; color:var(--ink-3);
+  margin-bottom:7px; font-variant-numeric:tabular-nums}
+.tk .desc{font-size:13.5px; color:var(--ink-1); margin-bottom:8px}
+.tk .why{font-size:12.5px; color:var(--ink-2); display:flex; gap:8px; align-items:baseline}
+.badge{display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600;
+  border-radius:999px; padding:2px 9px; border:1px solid var(--hair); white-space:nowrap}
+.badge.high{color:var(--good)} .badge.med{color:var(--warn)} .badge.low{color:var(--crit)}
+
+.note{margin-top:12px; font-size:12.5px; color:var(--ink-3); line-height:1.6}
+.callout{border-left:3px solid var(--s1); padding:2px 0 2px 15px; margin-top:16px;
+  color:var(--ink-2); font-size:13.5px}
+.callout.caution{border-left-color:var(--warn)}
+ol{margin:10px 0 0; padding-left:20px; color:var(--ink-2); font-size:13.5px}
+li{margin-bottom:5px}
+.hidden{display:none}
+.tooltip{position:fixed; z-index:60; pointer-events:none; background:var(--ink-1);
+  color:var(--surface-1); border-radius:8px; padding:8px 11px; font-size:12.5px;
+  line-height:1.45; opacity:0; transition:opacity .09s; max-width:260px}
+/* executive summary - the 20 second read, fixed to the whole period */
+.exec{margin-top:22px; background:var(--surface-1); border:1px solid var(--hair);
+  border-radius:var(--radius); padding:22px; box-shadow:var(--shadow)}
+.exec .eyebrow{font-size:11.5px; color:var(--ink-3); text-transform:uppercase; letter-spacing:.08em}
+.exec h2{margin-top:6px; font-size:19px; line-height:1.35; text-wrap:balance}
+.points{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-top:18px}
+.point{border-left:3px solid var(--axis); padding:2px 0 2px 14px; min-width:0}
+.point.crit{border-left-color:var(--crit)} .point.warn{border-left-color:var(--warn)}
+.point.act{border-left-color:var(--s1)}
+.point .tag{font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-3)}
+.point.crit .tag{color:var(--crit)} .point.act .tag{color:var(--s1)}
+.point .big{font-size:28px; font-weight:600; letter-spacing:-.03em; line-height:1.1; margin-top:4px;
+  font-variant-numeric:tabular-nums}
+.point .claim{margin-top:6px; font-size:14px; font-weight:600; color:var(--ink-1); line-height:1.4}
+.point .why{margin-top:4px; font-size:12.5px; color:var(--ink-2); line-height:1.5}
+.exec .trust{margin-top:16px; padding-top:12px; border-top:1px solid var(--hair); font-size:12.5px; color:var(--ink-3)}
+footer{margin-top:44px; padding-top:22px; border-top:1px solid var(--hair);
+  color:var(--ink-3); font-size:12.5px; line-height:1.65}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div>
+    <h1 id="maintitle"></h1>
+    <p class="sub" id="period"></p>
+  </div>
+  <button class="themebtn" id="themebtn" type="button">Switch theme</button>
+</header>
+
+<section class="exec" aria-labelledby="exechead">
+  <div class="eyebrow" id="execeyebrow"></div>
+  <h2 id="exechead"></h2>
+  <div class="points" id="execpoints"></div>
+  <p class="trust" id="exectrust"></p>
+</section>
+
+<div class="filters" role="group" aria-label="Filters">
+  <div class="fgroup">
+    <span class="flabel">Month</span>
+    <div id="monthchips"></div>
+  </div>
+  <div class="fgroup">
+    <span class="flabel">Category</span>
+    <div id="catchips"></div>
+  </div>
+  <span class="scope" id="scope"></span>
+</div>
+
+<section>
+  <div class="tiles" id="tiles"></div>
+</section>
+
+<section>
+  <div class="card">
+    <div class="cardhead">
+      <div>
+        <h2 id="trendtitle"></h2>
+        <p class="sub" id="trendsub"></p>
+      </div>
+      <button class="toggle" data-twin="trend" type="button">Show table</button>
+    </div>
+    <div id="trendchart"></div>
+    <div class="legend" id="trendlegend"></div>
+    <div class="tablewrap hidden" id="trendtable"></div>
+    <p class="note" id="trendnote"></p>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <div class="cardhead">
+      <div>
+        <h2>Where the volume is coming from</h2>
+        <p class="sub">Pick a subcategory to see the issue types under it and the tickets people actually raised.</p>
+      </div>
+    </div>
+    <div class="drillgrid">
+      <div>
+        <h3 id="l2head"></h3>
+        <p class="muted" style="margin-bottom:12px">Sorted by volume. Bar shows share of the current filter.</p>
+        <div class="l2list" id="l2list"></div>
+      </div>
+      <div>
+        <h3 id="l3head"></h3>
+        <p class="muted" style="margin-bottom:12px" id="l3sub"></p>
+        <div class="tablewrap" id="l3table"></div>
+        <h3 style="margin-top:22px">What people wrote</h3>
+        <p class="muted" style="margin-bottom:12px">The raw description, and why the classifier put it here.</p>
+        <div id="tickets"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <div class="cardhead">
+      <div>
+        <h2>Automation shortlist</h2>
+        <p class="sub" id="shortsub"></p>
+      </div>
+    </div>
+    <div class="tablewrap" id="shorttable"></div>
+    <div class="callout" id="shortcall"></div>
+    <p class="note">Agent-hours are measured resolution time only. They exclude triage, queue
+      waiting and context switching, so treat them as the floor of what automation gives back,
+      not the full number. The decision to raise a change request sits with the service owner.</p>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <div class="cardhead">
+      <div>
+        <h2>Where the agent hours go</h2>
+        <p class="sub">Volume and effort are different questions. This is effort.</p>
+      </div>
+      <button class="toggle" data-twin="effort" type="button">Show table</button>
+    </div>
+    <div id="effortchart"></div>
+    <div class="tablewrap hidden" id="efforttable"></div>
+    <p class="note" id="effortnote"></p>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <div class="cardhead">
+      <div>
+        <h2>SLA pressure</h2>
+        <p class="sub">Subcategories with at least 10 resolved tickets, worst first.</p>
+      </div>
+    </div>
+    <div class="tablewrap" id="slatable"></div>
+  </div>
+</section>
+
+<section>
+  <div class="card">
+    <div class="cardhead">
+      <div>
+        <h2>How the categories were assigned</h2>
+        <p class="sub">Every number above depends on this step, so it is measured, not assumed.</p>
+      </div>
+    </div>
+    <div class="tiles" id="qtiles"></div>
+    <div class="tablewrap" style="margin-top:20px" id="qtable"></div>
+    <div class="callout caution" id="qcaveat"></div>
+  </div>
+</section>
+
+<footer>
+  <p id="sourceline"></p>
+  <p style="margin-top:9px" id="samplenote" hidden>This is a sample dataset created to design and test the workflow.
+  The numbers are not live service desk data.</p>
+</footer>
+
+</div>
+<div class="tooltip" id="tip" role="status"></div>
+
+<script>
+const D = {"title":"Service Desk Ticket Report","source_file":"servicenow-tickets-categorized.xlsx","ticket_count":521,"high_priority_idx":[0,1],"portal_channel_idx":[3],"period":"Apr 2026 to Jun 2026","months":["Apr 2026","May 2026","Jun 2026"],"priorities":["P1","P2","P3","P4"],"channels":["Chat","Email","Phone","Self-Service Portal"],"l1_order":["Access & Identity","Software & Applications","Network & Connectivity","Hardware","Email & Collaboration","Security & Compliance"],"rows":[["INC1046575",0,2,"VPN","VPN will not connect",1,3.27,true,false,3,"Sales","no connection from my home line since yesterday evening","Medium","No connection from home since yesterday.","Network Operations"],["INC1046716",0,0,"Password","Account locked after failed attempts",3,1.1,true,false,1,"Sales","HI, BLOCKED OUT OF THE PORTAL, KEEPS SAYING ACCOUNT DISABLED THANKS IN ADVANCE","Medium","Account shows disabled; lockout is closest.","IAM Support"],["INC1046473",0,1,"Browser and Plugins","Add-in not loading",2,2.56,true,false,3,"Finance","second time reporting this, the toolbar button disappeared after the update","High","Toolbar button gone after update.","Application Support"],["INC1046360",0,0,"Password","Password expiry not notified",2,0.86,true,false,3,"Marketing","TEAM, NO WARNING CAME ADN TODAY IT JUST STOPPED LETTING ME IN","High","Login stopped with no expiry warning.","IAM Support"],["INC1046464",0,0,"Password","Account locked after failed attempts",1,0.62,true,false,2,"Finance","i am unable to sign in, message says account is locked contact admin kindly look into it urgently","High","Sign-in says account locked.","IAM Support"],["INC1046558",0,1,"Licensing","New license request",3,18.95,true,false,1,"Engineering","team, my trial expired, i need the proper version now need this today","Medium","Trial expired, needs a full licence.","Application Support"],["INC1046587",0,3,"Mobile","Company mobile setup",2,5.78,true,false,0,"Marketing","HELLO, PHONE IS NOT SYNCING ANYTHING FROM OFFICE","Medium","Phone not syncing office data.","Desktop Support"],["INC1046650",0,1,"Browser and Plugins","Add-in not loading",2,4.57,true,false,3,"Marketing","the toolbar button disappeared after the update appreciate a quick fix","High","Toolbar button gone after update.","Application Support"],["INC1046670",0,1,"Browser and Plugins","Site not opening in browser",2,1.6,true,true,1,"Customer Success","hi team, internal portal gives a certificate warning every time","High","Internal portal certificate warning.","Application Support"],["INC1046537",0,2,"VPN","VPN will not connect",2,8.35,true,true,3,"Marketing","second time reporting this, it just says connecting and stays there forever let me know if you need anything from my side","High","Stuck on connecting forever.","Network Operations"],["INC1046680",0,2,"VPN","VPN disconnects frequently",2,10.89,true,false,3,"Human Resources","THE TUNNEL DROPS EVERY 20 MINUTES WHILE WORKIGN FROM HOME","High","Tunnel drops every 20 minutes from home.","Network Operations"],["INC1046678",0,0,"MFA","MFA prompt loop",3,1.56,true,false,3,"Engineering","hi team, approve on phone, then it asks again on laptop, never ends","High","MFA approval loop between devices.","IAM Support"],["INC1046624",0,0,"Password","Account locked after failed attempts",3,0.89,true,false,1,"Sales","second time reporting this, blocked out of the portal, keeps saying account disabled need this today","Medium","Account shows disabled; lockout is closest.","IAM Support"],["INC1046722",0,0,"MFA","MFA device lost or replaced",2,2.51,true,false,3,"Legal","new device, teh authenticator is nto showing anything for work this is blocking my work","High","New device, authenticator empty.","IAM Support"],["INC1046642",0,4,"Meetings and Calls","Call quality poor",1,6.92,true,true,0,"Customer Success","raising this again, voice breaks badly in every call from my end need this today","High","Voice breaks in every call.","Messaging Support"],["INC1046545",0,4,"Meetings and Calls","Call quality poor",3,0.82,true,false,3,"Customer Success","hi team, voice breaks badly in every call from my end","High","Voice breaks in every call.","Messaging Support"],["INC1046540",0,1,"ERP System","ERP login failure",1,4.35,true,false,1,"Engineering","the finance system is throwing an error at login for me only","High","Finance system error at login.","Application Support"],["INC1046709",0,1,"Browser and Plugins","Site not opening in browser",2,0.61,true,false,1,"Engineering","the page loads blank, works on my colleague machine","Medium","Page loads blank on this machine only.","Application Support"],["INC1046548",0,4,"Meetings and Calls","Cannot join or schedule meeting",2,4.52,true,false,3,"Legal","good morning, cannot book a room in the invite, option is greyed out let me know if you need anything from my side","High","Cannot book a room in the invite.","Messaging Support"],["INC1046499",0,1,"ERP System","ERP transaction error",1,3.3,true,false,1,"Finance","good morning, the entry is nto going through, gives an error number thanks in advance","Medium","Entry fails with an error number.","Application Support"],["INC1046382",0,0,"Password","Password expiry not notified",1,0.68,true,false,3,"Procurement","hi team, expired without any mail to me, now i cant work","High","Password expired with no mail warning.","IAM Support"],["INC1046669",0,4,"Mail Client","Mail not syncing",3,5.27,true,false,3,"Human Resources","team, sent items are not updating on my laptop need this today","High","Sent items not updating on the laptop.","Messaging Support"],["INC1046395",0,5,"Phishing and Fraud","Suspicious email reported",1,4.74,true,false,1,"Finance","someone claiming to be the director asked me for gift cards need this today","High","Impersonation asking for gift cards.","Security Operations"],["INC1046639",0,1,"CRM System","CRM sync or data issue",1,21.89,false,false,3,"Marketing","data from the marketing tool is not flowing in","Medium","Data from another tool not flowing in.","Application Support"],["INC1046393",0,0,"Password","Password expiry not notified",2,0.99,true,false,3,"Sales","team, did not get the 14 day reminder, credentials expired suddenly","High","Credentials expired without the reminder.","IAM Support"],["INC1046560",0,1,"ERP System","ERP transaction error",3,22.68,true,false,3,"Human Resources","team, the entry is not going through, gives an error number please help","Medium","Entry fails with an error number.","Application Support"],["INC1046436",0,0,"Password","Password reset",2,0.81,true,false,2,"Human Resources","second time reporting this, forgot the credentials after the holiday, please help","High","Forgot credentials after holiday.","IAM Support"],["INC1046691",0,0,"Password","Password reset",2,0.79,true,false,3,"Operations","GOOD MORNING, MY LOGIN IS NOT WORKING. IT SAYS INVALID CREDENTIALS BUT IM SURE ITS RIGHT KINDLY LOOK INTO IT URGENTLY","Medium","Invalid credentials message; reset is the likely fix.","IAM Support"],["INC1046518",0,4,"Distribution Lists","Distribution list change",3,1.12,true,false,1,"Human Resources","hello, i am still getting mails from a team i left appreciate a quick fix","Medium","Still on a team mail group after leaving.","Messaging Support"],["INC1046745",0,0,"Password","Password reset",2,0.62,true,false,3,"Customer Success","hi team, my login is nto working. it says invalid credentials but im sure its right kindly look into it urgently","Medium","Invalid credentials message; reset is the likely fix.","IAM Support"],["INC1046620",0,5,"Data Access Control","Sensitive data access request",2,25.29,false,false,1,"Marketing","need acces to teh payroll folder for teh audit work plz help","High","Payroll folder access for audit.","Security Operations"],["INC1046533",0,2,"WiFi","Weak WiFi in a zone",2,4.71,true,false,3,"Customer Success","second time reporting this, cafeteria area has almost no connectivity","High","Almost no connectivity in the cafeteria.","Network Operations"],["INC1046752",0,1,"ERP System","ERP login failure",2,66.44,false,false,2,"Manufacturing","hi team, the finance system is throwing an error at login for me only this is blocking my work","High","Finance system error at login.","Application Support"],["INC1046447",0,4,"Mail Client","Mail not syncing",2,1.68,true,false,1,"Finance","sent items are nto updating on my laptop","High","Sent items not updating on the laptop.","Messaging Support"],["INC1046655",0,1,"Office Productivity Suite","Spreadsheet crash or corruption",3,1.56,true,false,0,"Manufacturing","my workbook says it cannot be opened, worked yesterday thanks in advance","Medium","Workbook cannot be opened.","Application Support"],["INC1046578",0,5,"Phishing and Fraud","Suspicious email reported",3,2.68,true,false,0,"Legal","TEAM, GOT A MAIL ASKING FOR MY DETAILS, LOOKS FAKE, FORWARDING IT APPRECIATE A QUICK FIX","High","Fake mail asking for details.","Security Operations"],["INC1046385",0,0,"Account Provisioning","Leaver account deactivation",3,5.22,true,false,3,"Human Resources","HIS LAST WORKING DAY WAS 28TH, STILL SHOWING ACTIVE IN THE SYSTEM","High","Leaver still active in the system.","IAM Support"],["INC1046626",0,0,"Account Provisioning","Role change access update",2,5.11,true,false,0,"Marketing","second time reporting this, transferred to another department, need teh right screens now kindly look into it urgently","High","Transferred, needs new screens.","IAM Support"],["INC1046652",0,0,"Password","Password expiry not notified",2,0.65,true,false,3,"Customer Success","team, did not get the 14 day reminder, credentials expired suddenly thanks in advance","High","Credentials expired without the reminder.","IAM Support"],["INC1046582",0,4,"Distribution Lists","Distribution list change",3,0.98,true,false,1,"Human Resources","PLEASE ADD THE TWO NEW JOINERS TO THE DELIVERY MAIL GROUP NEED THIS TODAY","High","Add new joiners to a mail group.","Messaging Support"],["INC1046509",0,2,"VPN","VPN disconnects frequently",2,10.84,true,false,0,"Customer Success","keeps disconnecting during calls, have to reconnect again and again thanks in advance","Medium","Keeps disconnecting during calls.","Network Operations"],["INC1046681",0,3,"Peripherals","Headset or audio device",2,3.91,true,false,3,"Legal","hello, no one can hear me on calls, tried both sides","High","No one can hear the user on calls.","Desktop Support"],["INC1046507",0,1,"Office Productivity Suite","Document or slide app fault",3,3.41,true,false,0,"Human Resources","team, cannot open the attachment, unsupported format error","Low","Attachment will not open, unsupported format; no bucket fits well.","Application Support"],["INC1046364",0,0,"Password","Account locked after failed attempts",2,0.79,true,false,3,"Finance","second time reporting this, account got blocked, i think i typed wrong 3 times","High","Blocked after three wrong attempts.","IAM Support"],["INC1046376",0,4,"Mail Client","Mail not syncing",2,1.65,true,false,3,"Legal","second time reporting this, not receiving anything since mornign but web version shows them kindly look into it urgently","High","Mail on web but not in the client.","Messaging Support"],["INC1046683",0,2,"VPN","VPN disconnects frequently",1,15.19,false,false,1,"Operations","second time reporting this, teh tunnel drops every 20 minutes while working from home let me know if you need anything from my side","High","Tunnel drops every 20 minutes from home.","Network Operations"],["INC1046371",0,1,"Licensing","New license request",2,12.72,true,false,2,"Marketing","team, please arrange a seat for the analytics software need this today","High","Requests a seat for analytics software.","Application Support"],["INC1046449",0,0,"MFA","MFA device lost or replaced",2,0.91,true,false,1,"Operations","GOOD MORNING, CHANGED MY PHONE, NOW THE 6 DIGIT CODE APP IS EMPTY APPRECIATE A QUICK FIX","High","New phone, authenticator app empty.","IAM Support"],["INC1046375",0,3,"Laptop","Battery or charging fault",1,3.91,true,false,3,"Sales","the adapter is warm but percentage keeps going down","High","Adapter warm but battery falls.","Desktop Support"],["INC1046397",0,0,"Password","Password expiry not notified",1,0.9,true,false,3,"Finance","raising this again, did not get the 14 day reminder, credentials expired suddenly let me know if you need anything from my side","High","Credentials expired without the reminder.","IAM Support"],["INC1046595",0,2,"WiFi","Weak WiFi in a zone",2,7.4,true,false,3,"Customer Success","team, on the 4th floor it drops constantly, ground floor is fine kindly look into it urgently","High","Signal drops on one floor only.","Network Operations"],["INC1046404",0,2,"Bandwidth and Performance","Slow network performance",2,49.63,false,false,1,"Sales","hi team, everything is crawling since 10am today across the floor","High","Whole floor crawling since 10am.","Network Operations"],["INC1046567",0,1,"ERP System","ERP login failure",2,16.44,false,false,1,"Manufacturing","THE FINANCE SYTEM IS THROWING AN ERROR AT LOGIN FOR ME ONLY THIS IS BLOCKING MY WORK","High","Finance system error at login.","Application Support"],["INC1046685",0,1,"Office Productivity Suite","Document or slide app fault",1,1.78,true,false,3,"Operations","hello, the deck will not save, says file is in use","High","Deck will not save, file in use.","Application Support"],["INC1046415",0,0,"Password","Password expiry not notified",3,0.72,true,false,1,"Engineering","team, no warning came adn today it just stopped letting me in","High","Login stopped with no expiry warning.","IAM Support"],["INC1046491",0,0,"Account Provisioning","Role change access update",2,8.6,true,false,3,"Human Resources","team, transferred to another department, need the right screens now","High","Transferred, needs new screens.","IAM Support"],["INC1046416",0,2,"VPN","VPN disconnects frequently",3,4.72,true,false,1,"Engineering","second time reporting this, the tunnel drops every 20 minutes while workign from home","High","Tunnel drops every 20 minutes from home.","Network Operations"],["INC1046440",0,3,"Printer","Print quality or paper jam",1,3.6,true,true,1,"Procurement","GOOD MORNING, OUTPUT IS VERY LIGHT, HARD TO READ THE INVOICE COPIES KINDLY LOOK INTO IT URGENTLY","High","Prints too light to read.","Desktop Support"],["INC1046563",0,0,"Account Provisioning","Leaver account deactivation",1,4.55,true,false,3,"Finance","second time reporting this, resignation done, need the access removed before audit","High","Resigned user access to remove.","IAM Support"],["INC1046450",0,3,"Laptop","Screen or display fault",2,73.55,false,true,3,"Engineering","half the screen is flickering, lines coming","High","Half the screen flickers.","Desktop Support"],["INC1046714",0,2,"Bandwidth and Performance","Slow network performance",1,24.15,false,false,1,"Operations","raising this again, everything is crawling since 10am today across the floor","High","Whole floor crawling since 10am.","Network Operations"],["INC1046389",0,1,"Office Productivity Suite","Spreadsheet crash or corruption",3,2.18,true,false,3,"Procurement","hi team, keeps saying not responding when i refresh the pivot","Medium","Spreadsheet not responding on pivot refresh.","Application Support"],["INC1046632",0,3,"Printer","Print quality or paper jam",3,8.62,true,false,2,"Engineering","hello, paper stuck inside, tried removing but still error thanks in advance","High","Paper jam error persists.","Desktop Support"],["INC1046488",0,0,"Password","Password reset",3,0.54,true,true,2,"Legal","team, system not accepting my details after i changed it last week let me know if you need anything from my side","Medium","Details rejected after a recent change.","IAM Support"],["INC1046460",0,1,"Licensing","License expired or reassigned",3,8.35,true,false,2,"Engineering","hi, the tool logged me out saying no seat available appreciate a quick fix","Medium","Logged out for no seat, reads as licence reassigned.","Application Support"],["INC1046383",0,0,"Account Provisioning","Leaver account deactivation",2,5.8,true,false,1,"Engineering","second time reporting this, his last working day was 28th, still showing active in the system this is blocking my work","High","Leaver still active in the system.","IAM Support"],["INC1046570",0,0,"Password","Account locked after failed attempts",3,0.66,true,false,3,"Human Resources","hi, it says too many attempts, locked. pls unlock appreciate a quick fix","High","Too many attempts, locked.","IAM Support"],["INC1046413",0,5,"Data Access Control","Sensitive data access request",3,12.06,true,false,2,"Finance","second time reporting this, requesting rights to the restricted client data set need this today","High","Requests restricted client data.","Security Operations"],["INC1046741",0,4,"Document Collaboration","Site or library access",2,7.35,true,false,1,"Legal","second time reporting this, cannot upload to teh project library anymore kindly look into it urgently","Medium","Cannot upload to the project library.","Messaging Support"],["INC1046611",0,2,"LAN and Cabling","Port dead at desk",3,30.51,true,false,3,"Human Resources","THE WALL SOCKET AT MY NEW SEAT IS NOT GIVING ANYTHING","High","Wall socket at new seat gives nothing.","Network Operations"],["INC1046696",0,1,"Office Productivity Suite","Spreadsheet crash or corruption",3,2.74,true,false,3,"Procurement","team, my workbook says it cannot be opened, worked yesterday let me know if you need anything from my side","Medium","Workbook cannot be opened.","Application Support"],["INC1046362",0,0,"Password","Account locked after failed attempts",2,0.93,true,false,3,"Customer Success","raising this again, account got blocked, i think i typed wrong 3 times let me know if you need anything from my side","High","Blocked after three wrong attempts.","IAM Support"],["INC1046746",0,1,"Licensing","License expired or reassigned",2,30.42,false,false,3,"Sales","second time reporting this, it says my subscription has ended, cannot open anything let me know if you need anything from my side","High","Subscription ended, app will not open.","Application Support"],["INC1046424",0,0,"Password","Password expiry not notified",3,0.7,true,false,1,"Marketing","no warning came and today it just stopped letting me in","High","Login stopped with no expiry warning.","IAM Support"],["INC1046403",0,3,"Laptop","Screen or display fault",2,28.69,false,false,3,"Manufacturing","there is a crack after it fell, still working but hard to read kindly look into it urgently","High","Cracked screen after a fall.","Desktop Support"],["INC1046711",0,3,"Laptop","Screen or display fault",2,47.95,false,false,1,"Customer Success","second time reporting this, there is a crack after it fell, still working but hard to read","High","Cracked screen after a fall.","Desktop Support"],["INC1046481",0,2,"LAN and Cabling","Port dead at desk",1,23.79,false,false,3,"Customer Success","the wall socket at my new seat is not giving anything appreciate a quick fix","High","Wall socket at new seat gives nothing.","Network Operations"],["INC1046673",0,1,"CRM System","CRM report not loading",2,6.07,true,false,3,"Customer Success","TEAM, DASHBOARD IS BLANK FOR ME BUT FINE FOR MY MANAGER","Medium","Dashboard blank for this user only.","Application Support"],["INC1046529",0,3,"Peripherals","Keyboard or mouse fault",2,37.81,false,false,2,"Engineering","few keys not typing, mainly e and r","High","Some keys not typing.","Desktop Support"],["INC1046634",0,4,"Distribution Lists","Distribution list change",3,1.28,true,false,2,"Finance","second time reporting this, i am still getting mails from a team i left kindly look into it urgently","Medium","Still on a team mail group after leaving.","Messaging Support"],["INC1046748",0,0,"Password","Password reset",3,0.86,true,false,3,"Legal","second time reporting this, forgot the credentials after the holiday, please help this is blocking my work","High","Forgot credentials after holiday.","IAM Support"],["INC1046555",0,1,"Licensing","New license request",3,35.01,true,false,3,"Engineering","team, my trial expired, i need the proper version now thanks in advance","Medium","Trial expired, needs a full licence.","Application Support"],["INC1046406",0,5,"Audit and Review","Access review or evidence request",2,40.01,false,false,3,"Human Resources","raising this again, auditors are asking for teh list of who has acces to the finance app need this today","High","Auditors want an access list.","Security Operations"],["INC1046378",0,0,"Password","Password expiry not notified",2,0.67,true,true,3,"Manufacturing","hello, expired without any mail to me, now i cant work","High","Password expired with no mail warning.","IAM Support"],["INC1046607",0,1,"ERP System","ERP login failure",2,11.53,true,false,3,"Engineering","second time reporting this, cannt get into teh module since teh weekend patch thanks in advance","Medium","Cannot get into a module since a patch.","Application Support"],["INC1046659",0,2,"VPN","VPN will not connect",2,19.6,false,false,3,"Human Resources","second time reporting this, it just says connecting adn stays there forever let me know if you need anything from my side","High","Stuck on connecting forever.","Network Operations"],["INC1046573",0,2,"VPN","VPN disconnects frequently",1,1.06,true,false,3,"Customer Success","the tunnel drops every 20 minutes while working from home","High","Tunnel drops every 20 minutes from home.","Network Operations"],["INC1046513",0,0,"Password","Account locked after failed attempts",3,0.89,true,false,1,"Sales","second time reporting this, account got blocked, i think i typed wrong 3 times","High","Blocked after three wrong attempts.","IAM Support"],["INC1046604",0,0,"MFA","MFA prompt loop",3,0.9,true,false,3,"Finance","good morning, verification keeps repeating every 5 minutes, very annoying","High","Verification repeats every 5 minutes.","IAM Support"],["INC1046612",0,2,"VPN","VPN will not connect",2,13.91,true,false,3,"Operations","getting authentication failed when i try from home","Medium","Authentication fails only from home.","Network Operations"],["INC1046647",0,2,"VPN","VPN will not connect",1,15.18,false,true,0,"Procurement","hi team, no connection from my home line since yesterday evening let me know if you need anything from my side","Medium","No connection from home since yesterday.","Network Operations"],["INC1046525",0,3,"Printer","Printer offline",2,2.29,true,true,2,"Customer Success","TEH MACHINE ON 3RD FLOOR SHOWS OFFLINE FOR EVERYONE","High","Printer on 3rd floor offline for everyone.","Desktop Support"],["INC1046516",0,3,"Laptop","Laptop slow or freezing",3,8.42,true,false,3,"Operations","everything hangs when i open more than 2 things","High","Machine hangs with more than two apps.","Desktop Support"],["INC1046468",0,0,"Password","Password expiry not notified",2,1.13,true,false,2,"Finance","good morning, expired without any mail to me, now i cant work kindly look into it urgently","High","Password expired with no mail warning.","IAM Support"],["INC1046466",0,0,"Password","Account locked after failed attempts",2,0.73,true,false,2,"Manufacturing","hi, i am unable to sign in, message says account is locked contact admin need this today","High","Sign-in says account locked.","IAM Support"],["INC1046636",0,0,"Password","Password reset",2,0.6,true,false,2,"Engineering","hello, system nto accepting my details after i changed it last week","Medium","Details rejected after a recent change.","IAM Support"],["INC1046543",0,0,"Group Membership","Application permission request",1,5.72,true,false,3,"Finance","raising this again, need edit rights in teh reporting tool, i only have view","High","Needs edit rights in the reporting tool.","IAM Support"],["INC1046459",0,4,"Mail Client","Mail not syncing",1,2.72,true,false,3,"Marketing","second time reporting this, nto receiving anything since morning but web version shows them let me know if you need anything from my side","High","Mail on web but not in the client.","Messaging Support"],["INC1046616",0,0,"Password","Password reset",3,0.74,true,false,3,"Customer Success","sytem nto accepting my details after i changed it last week","Medium","Details rejected after a recent change.","IAM Support"],["INC1046443",0,1,"ERP System","ERP login failure",2,111.69,false,false,2,"Sales","the finance sytem is throwing an error at login for me only","High","Finance system error at login.","Application Support"],["INC1046551",0,0,"Account Provisioning","New joiner account setup",3,11.35,true,false,3,"Marketing","raising this again, our new hire has no login, laptop is there but cannot start","High","New hire has no login.","IAM Support"],["INC1046520",0,1,"Office Productivity Suite","Document or slide app fault",2,15.0,true,false,3,"Finance","formatting breaks when i reopen the document","High","Document formatting breaks on reopen.","Application Support"],["INC1046735",0,3,"Laptop","Laptop slow or freezing",2,24.19,false,false,1,"Procurement","everything hangs when i open more than 2 things this is blocking my work","High","Machine hangs with more than two apps.","Desktop Support"],["INC1046583",0,3,"Printer","Print quality or paper jam",2,13.15,true,false,1,"Engineering","team, output is very light, hard to read the invoice copies please help","High","Prints too light to read.","Desktop Support"],["INC1046628",0,1,"Office Productivity Suite","Spreadsheet crash or corruption",2,1.76,true,false,3,"Customer Success","keeps saying not responding when i refresh the pivot let me know if you need anything from my side","Medium","Spreadsheet not responding on pivot refresh.","Application Support"],["INC1046433",0,0,"Password","Password reset",3,1.02,true,false,3,"Legal","hello, cant get into the system since morning, tried twice already","Medium","Cannot get in after two tries.","IAM Support"],["INC1046692",0,1,"CRM System","CRM sync or data issue",3,9.88,true,false,0,"Customer Success","the records i updated yesterday are missing today need this today","Medium","Updated records missing next day.","Application Support"],["INC1046379",0,5,"Phishing and Fraud","Suspicious email reported",1,4.19,true,false,1,"Manufacturing","got a mail asking for my details, looks fake, forwarding it kindly look into it urgently","High","Fake mail asking for details.","Security Operations"],["INC1046405",0,1,"ERP System","ERP transaction error",2,2.14,true,false,2,"Legal","hi team, posting fails with a dump error at the last step need this today","High","Posting fails with a dump error.","Application Support"],["INC1046451",0,2,"WiFi","Cannot join office WiFi",2,19.06,false,false,3,"Marketing","team, it asks for a certificate and then fails to join","Medium","Certificate prompt then fails to join.","Network Operations"],["INC1046472",0,0,"Password","Password reset",2,0.87,true,false,1,"Human Resources","cant get into the sytem since morning, tried twice already need this today","Medium","Cannot get in after two tries.","IAM Support"],["INC1046465",0,3,"Printer","Printer offline",3,1.88,true,false,3,"Marketing","the machine on 3rd floor shows offline for everyone appreciate a quick fix","High","Printer on 3rd floor offline for everyone.","Desktop Support"],["INC1046420",0,0,"MFA","MFA prompt loop",3,2.1,true,false,1,"Procurement","good morning, it keeps asking me for teh code agian and again in a loop appreciate a quick fix","High","Code asked again and again.","IAM Support"],["INC1046478",0,0,"MFA","MFA device lost or replaced",3,1.24,true,false,1,"Finance","second time reporting this, changed my phone, now the 6 digit code app is empty thanks in advance","High","New phone, authenticator app empty.","IAM Support"],["INC1046631",0,4,"Meetings and Calls","Cannot join or schedule meeting",2,6.29,true,false,0,"Legal","second time reporting this, cannot book a room in the invite, option is greyed out","High","Cannot book a room in the invite.","Messaging Support"],["INC1046638",0,1,"ERP System","ERP login failure",2,15.22,true,true,2,"Engineering","good morning, cannot get into the module since teh weekend patch","Medium","Cannot get into a module since a patch.","Application Support"],["INC1046602",0,3,"Mobile","Company mobile setup",3,7.33,true,false,2,"Engineering","HI, NEW HANDSET GIVEN, NEED THE WORK APPS PUT ON IT PLEASE HELP","High","New handset needs work apps.","Desktop Support"],["INC1046725",0,3,"Printer","Print quality or paper jam",2,8.19,true,false,3,"Legal","second time reporting this, paper stuck inside, tried removing but still error","High","Paper jam error persists.","Desktop Support"],["INC1046676",0,0,"MFA","MFA device lost or replaced",2,1.36,true,false,1,"Sales","changed my phone, now the 6 digit code app is empty appreciate a quick fix","High","New phone, authenticator app empty.","IAM Support"],["INC1046668",0,2,"WiFi","Cannot join office WiFi",2,0.91,true,false,1,"Customer Success","hi team, my laptop does nto see the office network at all kindly look into it urgently","High","Laptop cannot see the office network.","Network Operations"],["INC1046484",0,3,"Laptop","Screen or display fault",2,27.58,false,false,2,"Procurement","hello, half teh screen is flickering, lines coming appreciate a quick fix","High","Half the screen flickers.","Desktop Support"],["INC1046367",0,4,"Mail Client","Mailbox full or quota",3,3.1,true,false,3,"Sales","MAILS ARE BOUNCING BACK TO SENDERS, BOX SEEMS FULL LET ME KNOW IF YOU NEED ANYTHING FROM MY SIDE","High","Mailbox full, mails bouncing.","Messaging Support"],["INC1046599",0,0,"Password","Account locked after failed attempts",2,0.71,true,false,2,"Human Resources","locked out again. need it opened asap, have a client call at 11","High","Locked out again, asks to unlock.","IAM Support"],["INC1046706",0,4,"Document Collaboration","Site or library access",2,1.69,true,false,1,"Engineering","cannot upload to the project library anymore","Medium","Cannot upload to the project library.","Messaging Support"],["INC1046521",0,1,"ERP System","ERP login failure",2,4.67,true,false,3,"Sales","second time reporting this, cannot get into the module since the weekend patch this is blocking my work","Medium","Cannot get into a module since a patch.","Application Support"],["INC1046453",0,4,"Meetings and Calls","Call quality poor",2,15.09,true,false,3,"Engineering","hi team, video freezes for others while my network looks fine let me know if you need anything from my side","Medium","Video freezes for others on calls.","Messaging Support"],["INC1046429",0,1,"Browser and Plugins","Site not opening in browser",3,10.3,true,false,1,"Manufacturing","team, the page loads blank, works on my colleague machine let me know if you need anything from my side","Medium","Page loads blank on this machine only.","Application Support"],["INC1046729",0,2,"VPN","VPN disconnects frequently",1,8.89,false,false,2,"Human Resources","hi team, keeps disconnecting during calls, have to reconnect again adn again","Medium","Keeps disconnecting during calls.","Network Operations"],["INC1046456",0,3,"Peripherals","Headset or audio device",3,19.17,true,false,3,"Legal","good morning, audio only comes in left side of the headphone","High","Audio only in one side of headphones.","Desktop Support"],["INC1046621",0,3,"Laptop","Battery or charging fault",2,30.66,false,false,1,"Engineering","hello, not charging even when plugged in, shows 4% let me know if you need anything from my side","High","Not charging when plugged in.","Desktop Support"],["INC1046720",0,3,"Laptop","Screen or display fault",2,17.37,false,false,2,"Sales","hi team, half teh screen is flickering, lines coming","High","Half the screen flickers.","Desktop Support"],["INC1046435",0,2,"Bandwidth and Performance","Slow network performance",2,14.75,true,false,0,"Human Resources","team, everything is crawling since 10am today across the floor thanks in advance","High","Whole floor crawling since 10am.","Network Operations"],["INC1046494",0,0,"Password","Password expiry not notified",2,0.79,true,false,0,"Engineering","second time reporting this, no warning came and today it just stopped letting me in kindly look into it urgently","High","Login stopped with no expiry warning.","IAM Support"],["INC1046426",0,5,"Phishing and Fraud","Suspicious email reported",1,1.52,true,false,3,"Customer Success","someone claiming to be the director asked me for gift cards","High","Impersonation asking for gift cards.","Security Operations"],["INC1046665",0,3,"Peripherals","Keyboard or mouse fault",3,2.43,true,false,0,"Legal","FEW KEYS NOT TYPING, MAINLY E AND R","High","Some keys not typing.","Desktop Support"],["INC1046645",0,1,"Office Productivity Suite","Document or slide app fault",2,2.21,true,false,3,"Marketing","team, cannot open the attachment, unsupported format error appreciate a quick fix","Low","Attachment will not open, unsupported format; no bucket fits well.","Application Support"],["INC1046619",0,0,"Password","Password reset",2,0.54,true,false,1,"Operations","team, forgot the credentials after teh holiday, please help","High","Forgot credentials after holiday.","IAM Support"],["INC1046410",0,1,"ERP System","ERP transaction error",2,38.67,false,false,3,"Legal","good morning, posting fails with a dump error at the last step please help","High","Posting fails with a dump error.","Application Support"],["INC1046594",0,0,"Password","Password expiry not notified",2,0.88,true,false,1,"Legal","TEAM, NO WARNING CAME AND TODAY IT JUST STOPPED LETTING ME IN NEED THIS TODAY","High","Login stopped with no expiry warning.","IAM Support"],["INC1046550",0,0,"MFA","MFA device lost or replaced",2,1.88,true,false,3,"Customer Success","new device, the authenticator is not showing anything for work please help","High","New device, authenticator empty.","IAM Support"],["INC1046662",0,0,"MFA","MFA device lost or replaced",2,1.74,true,true,3,"Customer Success","second time reporting this, lost my handset yesterday, cannt get teh verification code need this today","High","Lost handset, cannot get the code.","IAM Support"],["INC1046498",0,3,"Laptop","Battery or charging fault",1,20.84,false,false,3,"Procurement","not charging even when plugged in, shows 4%","High","Not charging when plugged in.","Desktop Support"],["INC1046704",0,5,"Data Access Control","Removable media exception",2,33.6,false,false,1,"Human Resources","hello, usb ports are disabled, i need it for one day only thanks in advance","High","USB blocked, needs a one day exception.","Security Operations"],["INC1046686",0,0,"Group Membership","Shared mailbox or folder access",2,1.69,true,false,2,"Sales","hello, need to see the shared inbox that priya uses","High","Needs access to a colleague's shared inbox.","IAM Support"],["INC1046715",0,5,"Phishing and Fraud","Suspicious email reported",3,2.83,true,false,3,"Customer Success","raising this again, got a mail asking for my details, looks fake, forwarding it","High","Fake mail asking for details.","Security Operations"],["INC1046703",0,2,"LAN and Cabling","Port dead at desk",2,16.42,false,false,2,"Manufacturing","raising this again, moved desks and now there is no connection through teh cable","High","No connection through the cable at new desk.","Network Operations"],["INC1046355",0,0,"Password","Account locked after failed attempts",2,0.87,true,false,3,"Customer Success","i am unable to sign in, message says account is locked contact admin","High","Sign-in says account locked.","IAM Support"],["INC1046731",0,4,"Meetings and Calls","Cannot join or schedule meeting",2,5.35,true,false,2,"Procurement","second time reporting this, cannot book a room in the invite, option is greyed out need this today","High","Cannot book a room in the invite.","Messaging Support"],["INC1046597",0,1,"Office Productivity Suite","Spreadsheet crash or corruption",2,7.61,true,false,3,"Manufacturing","good morning, keeps saying not responding when i refresh the pivot please help","Medium","Spreadsheet not responding on pivot refresh.","Application Support"],["INC1046588",0,0,"Password","Account locked after failed attempts",2,0.86,true,false,1,"Operations","i am unable to sign in, message says account is locked contact admin need this today","High","Sign-in says account locked.","IAM Support"],["INC1046721",0,1,"ERP System","ERP transaction error",3,19.48,true,false,0,"Marketing","hello, posting fails with a dump error at teh last step need this today","High","Posting fails with a dump error.","Application Support"],["INC1046592",0,0,"Account Provisioning","Leaver account deactivation",3,3.09,true,false,2,"Human Resources","his last working day was 28th, still showing active in the system","High","Leaver still active in the system.","IAM Support"],["INC1046503",0,0,"Password","Password expiry not notified",2,0.85,true,false,2,"Manufacturing","no warning came and today it just stopped letting me in appreciate a quick fix","High","Login stopped with no expiry warning.","IAM Support"],["INC1046476",0,2,"Bandwidth and Performance","Slow network performance",3,40.88,false,false,1,"Human Resources","SECOND TIME REPORTING THIS, FILE TRANSFERS TO THE SERVER ARE TAKING FOREVER THIS WEEK NEED THIS TODAY","Medium","File transfers to the server are slow.","Network Operations"],["INC1046693",0,4,"Mail Client","Mail not syncing",1,2.79,true,false,1,"Procurement","raising this again, not receiving anything since morning but web version shows them need this today","High","Mail on web but not in the client.","Messaging Support"],["INC1046399",0,0,"Password","Password expiry not notified",3,0.68,true,false,1,"Sales","raising this again, no warning came and today it just stopped letting me in this is blocking my work","High","Login stopped with no expiry warning.","IAM Support"],["INC1046679",0,1,"Office Productivity Suite","Spreadsheet crash or corruption",1,1.2,true,false,1,"Operations","hello, the file closes by itself every time i open the big sheet appreciate a quick fix","High","Big sheet closes on open.","Application Support"],["INC1046738",0,1,"Office Productivity Suite","Document or slide app fault",3,1.01,true,false,3,"Sales","team, formatting breaks when i reopen teh document let me know if you need anything from my side","High","Document formatting breaks on reopen.","Application Support"],["INC1046754",0,0,"MFA","MFA prompt loop",2,1.51,true,false,1,"Customer Success","team, it keeps asking me for the code agian adn again in a loop this is blocking my work","High","Code asked again and again.","IAM Support"],["INC1046689",0,3,"Laptop","Screen or display fault",2,5.85,true,false,3,"Marketing","hi team, there is a crack after it fell, still working but hard to read thanks in advance","High","Cracked screen after a fall.","Desktop Support"],["INC1046528",0,1,"ERP System","ERP login failure",1,15.92,false,false,2,"Sales","HI, IT SAYS SESSION COULD NOT BE CREATED, OTHERS ARE FINE","Medium","Session could not be created, others fine: application login (classification note).","Application Support"],["INC1046490",0,0,"Password","Password reset",3,0.52,true,false,3,"Sales","raising this again, system nto accepting my details after i changed it last week thanks in advance","Medium","Details rejected after a recent change.","IAM Support"],["INC1046357",0,4,"Meetings and Calls","Call quality poor",2,6.02,true,false,3,"Finance","raising this again, video freezes for others while my network looks fine","Medium","Video freezes for others on calls.","Messaging Support"],["INC1046708",0,0,"MFA","MFA prompt loop",3,1.32,true,false,2,"Operations","it keeps asking me for the code again and again in a loop","High","Code asked again and again.","IAM Support"],["INC1046700",0,5,"Phishing and Fraud","Suspicious email reported",0,1.03,true,false,3,"Manufacturing","someone claiming to be the director asked me for gift cards","High","Impersonation asking for gift cards.","Security Operations"],["INC1047113",1,4,"Mail Client","Mailbox full or quota",1,3.19,true,false,1,"Engineering","HI TEAM, MAILS ARE BOUNCING BACK TO SENDERS, BOX SEEMS FULL APPRECIATE A QUICK FIX","High","Mailbox full, mails bouncing.","Messaging Support"],["INC1047133",1,3,"Peripherals","Headset or audio device",3,19.64,true,false,2,"Customer Success","raising this again, audio only comes in left side of the headphone","High","Audio only in one side of headphones.","Desktop Support"],["INC1046862",1,2,"Bandwidth and Performance","Slow network performance",1,182.68,false,false,1,"Marketing","second time reporting this, file transfers to the server are taking forever this week please help","Medium","File transfers to the server are slow.","Network Operations"],["INC1046985",1,0,"Group Membership","Shared mailbox or folder access",2,4.64,true,false,1,"Finance","cannot open the team folder, says you do not have permission thanks in advance","High","No permission on the team folder.","IAM Support"],["INC1046982",1,1,"Licensing","New license request",1,30.39,false,false,3,"Marketing","hi, my trial expired, i need the proper version now","Medium","Trial expired, needs a full licence.","Application Support"],["INC1047092",1,3,"Laptop","Screen or display fault",2,9.51,true,false,1,"Manufacturing","second time reporting this, display goes black randomly then comes back need this today","High","Display goes black randomly.","Desktop Support"],["INC1046932",1,4,"Mail Client","Mailbox full or quota",1,6.63,true,false,2,"Human Resources","raising this again, mails are bouncing back to senders, box seems full let me know if you need anything from my side","High","Mailbox full, mails bouncing.","Messaging Support"],["INC1047115",1,1,"Licensing","New license request",2,33.56,false,false,1,"Marketing","hi team, my trial expired, i need the proper version now let me know if you need anything from my side","Medium","Trial expired, needs a full licence.","Application Support"],["INC1046824",1,2,"VPN","VPN will not connect",1,6.15,true,true,3,"Engineering","SECOND TIME REPORTING THIS, IT JUST SAYS CONNECTING AND STAYS THERE FOREVER","High","Stuck on connecting forever.","Network Operations"],["INC1046805",1,4,"Mail Client","Mail not syncing",3,1.4,true,false,3,"Sales","NOT RECEIVING ANYTHING SINCE MORNING BUT WEB VERSION SHOWS THEM","High","Mail on web but not in the client.","Messaging Support"],["INC1047042",1,4,"Document Collaboration","Site or library access",1,7.88,true,false,1,"Engineering","team, cannt upload to teh project library anymore","Medium","Cannot upload to the project library.","Messaging Support"],["INC1047053",1,4,"Document Collaboration","Site or library access",1,10.29,false,false,3,"Customer Success","raising this again, the team site says access denied after the migration","High","Team site access denied after migration.","Messaging Support"],["INC1046766",1,3,"Printer","Printer offline",3,0.85,true,false,3,"Customer Success","the machine on 3rd floor shows offline for everyone please help","High","Printer on 3rd floor offline for everyone.","Desktop Support"],["INC1046861",1,0,"MFA","MFA device lost or replaced",3,1.13,true,true,2,"Finance","hi, changed my phone, now teh 6 digit code app is empty let me know if you need anything from my side","High","New phone, authenticator app empty.","IAM Support"],["INC1047075",1,0,"MFA","MFA prompt loop",2,1.97,true,false,1,"Engineering","approve on phone, then it asks again on laptop, never ends need this today","High","MFA approval loop between devices.","IAM Support"],["INC1046797",1,1,"Office Productivity Suite","Document or slide app fault",3,7.9,true,false,3,"Procurement","raising this again, cannot open the attachment, unsupported format error kindly look into it urgently","Low","Attachment will not open, unsupported format; no bucket fits well.","Application Support"],["INC1047003",1,1,"Licensing","New license request",3,15.73,true,false,3,"Operations","team, my trial expired, i need the proper version now appreciate a quick fix","Medium","Trial expired, needs a full licence.","Application Support"],["INC1046906",1,4,"Distribution Lists","Distribution list change",2,1.04,true,false,3,"Operations","please add the two new joiners to the delivery mail group please help","High","Add new joiners to a mail group.","Messaging Support"],["INC1046897",1,1,"Office Productivity Suite","Spreadsheet crash or corruption",2,1.66,true,false,3,"Procurement","good morning, my workbook says it cannot be opened, worked yesterday kindly look into it urgently","Medium","Workbook cannot be opened.","Application Support"],["INC1047145",1,0,"Account Provisioning","Leaver account deactivation",2,4.74,true,false,3,"Marketing","raising this again, resignation done, need the access removed before audit appreciate a quick fix","High","Resigned user access to remove.","IAM Support"],["INC1046966",1,4,"Meetings and Calls","Cannot join or schedule meeting",1,3.6,true,false,2,"Sales","hi, cannot book a room in the invite, option is greyed out this is blocking my work","High","Cannot book a room in the invite.","Messaging Support"],["INC1046952",1,2,"LAN and Cabling","Port dead at desk",2,13.53,true,false,3,"Legal","hello, the wall socket at my new seat is not giving anything","High","Wall socket at new seat gives nothing.","Network Operations"],["INC1047046",1,5,"Phishing and Fraud","Suspicious email reported",2,2.92,true,false,3,"Procurement","hi, strange link in a mail from an unknown sender, did nto click appreciate a quick fix","High","Suspicious link from unknown sender.","Security Operations"],["INC1047142",1,4,"Document Collaboration","Site or library access",1,5.41,true,false,2,"Customer Success","team, the team site says access denied after the migration let me know if you need anything from my side","High","Team site access denied after migration.","Messaging Support"],["INC1046785",1,3,"Printer","Printer offline",2,2.1,true,true,3,"Sales","team, cannot find the device in the list anymore please help","Low","Device missing from the list; printer is a guess.","Desktop Support"],["INC1046819",1,0,"Account Provisioning","New joiner account setup",2,7.79,true,false,2,"Marketing","good morning, new person joining monday in my team, nothing is set up for her yet","High","New joiner has nothing set up.","IAM Support"],["INC1046789",1,4,"Mail Client","Mail not syncing",2,2.28,true,false,3,"Marketing","second time reporting this, not receiving anything since morning but web version shows them let me know if you need anything from my side","High","Mail on web but not in the client.","Messaging Support"],["INC1047093",1,5,"Data Access Control","Sensitive data access request",3,7.15,true,false,1,"Marketing","HI, NEED ACCESS TO TEH PAYROLL FOLDER FOR TEH AUDIT WORK PLZ HELP","High","Payroll folder access for audit.","Security Operations"],["INC1047038",1,3,"Mobile","Company mobile setup",2,16.43,false,false,1,"Procurement","new handset given, need the work apps put on it","High","New handset needs work apps.","Desktop Support"],["INC1047154",1,0,"Password","Password expiry not notified",2,0.58,true,false,0,"Sales","good morning, expired without any mail to me, now i cant work plz help","High","Password expired with no mail warning.","IAM Support"],["INC1046788",1,5,"Audit and Review","Access review or evidence request",3,45.75,false,false,2,"Procurement","hi team, auditors are asking for the list of who has access to the finance app need this today","High","Auditors want an access list.","Security Operations"],["INC1046799",1,0,"Account Provisioning","Leaver account deactivation",1,6.28,true,false,1,"Sales","team, his last working day was 28th, still showing active in the system appreciate a quick fix","High","Leaver still active in the system.","IAM Support"],["INC1047007",1,2,"VPN","VPN disconnects frequently",1,1.89,true,false,3,"Finance","HI TEAM, CONNECTION IS UNSTABLE SINCE THE NEW CLIENT VERSION THANKS IN ADVANCE","Medium","Unstable connection since a new client version.","Network Operations"],["INC1047107",1,0,"Password","Password expiry not notified",2,0.93,true,false,3,"Finance","hi, no warning came and today it just stopped letting me in thanks in advance","High","Login stopped with no expiry warning.","IAM Support"],["INC1047049",1,2,"WiFi","Weak WiFi in a zone",2,53.72,false,false,1,"Sales","on the 4th floor it drops constantly, ground floor is fine","High","Signal drops on one floor only.","Network Operations"],["INC1047111",1,0,"Group Membership","Shared mailbox or folder access",3,6.85,true,false,3,"Engineering","raising this again, cannot open the team folder, says you do not have permission let me know if you need anything from my side","High","No permission on the team folder.","IAM Support"],["INC1047032",1,0,"MFA","MFA device lost or replaced",3,0.76,true,false,3,"Procurement","TEAM, LOST MY HANDSET YESTERDAY, CANNT GET THE VERIFICATION CODE","High","Lost handset, cannot get the code.","IAM Support"],["INC1046858",1,4,"Mail Client","Mailbox full or quota",2,1.66,true,false,1,"Sales","mails are bouncing back to senders, box seems full appreciate a quick fix","High","Mailbox full, mails bouncing.","Messaging Support"],["INC1047001",1,3,"Laptop","Laptop slow or freezing",3,31.3,true,false,3,"Operations","raising this again, everything hangs when i open more than 2 things","High","Machine hangs with more than two apps.","Desktop Support"],["INC1047138",1,0,"Password","Account locked after failed attempts",3,0.92,true,false,1,"Sales","hi, account got blocked, i think i typed wrong 3 times kindly look into it urgently","High","Blocked after three wrong attempts.","IAM Support"],["INC1047011",1,4,"Distribution Lists","Distribution list change",2,1.05,true,false,1,"Operations","please add the two new joiners to the delivery mail group need this today","High","Add new joiners to a mail group.","Messaging Support"],["INC1046841",1,2,"WiFi","Cannot join office WiFi",2,11.23,true,false,3,"Human Resources","hi team, it asks for a certificate adn then fails to join this is blocking my work","Medium","Certificate prompt then fails to join.","Network Operations"],["INC1047128",1,5,"Data Access Control","Sensitive data access request",2,11.67,true,false,3,"Procurement","hi team, need access to the payroll folder for teh audit work this is blocking my work","High","Payroll folder access for audit.","Security Operations"],["INC1047056",1,0,"Password","Account locked after failed attempts",2,0.76,true,false,2,"Manufacturing","hi team, locked out again. need it opened asap, have a client call at 11","High","Locked out again, asks to unlock.","IAM Support"],["INC1047161",1,1,"Office Productivity Suite","Spreadsheet crash or corruption",1,1.82,true,false,1,"Sales","my workbook says it cannot be opened, worked yesterday appreciate a quick fix","Medium","Workbook cannot be opened.","Application Support"],["INC1047022",1,4,"Meetings and Calls","Call quality poor",3,3.38,true,false,2,"Engineering","GOOD MORNING, VIDEO FREEZES FOR OTHERS WHILE MY NETWORK LOOKS FINE THIS IS BLOCKING MY WORK","Medium","Video freezes for others on calls.","Messaging Support"],["INC1046773",1,0,"Password","Account locked after failed attempts",2,0.81,true,false,3,"Human Resources","hello, locked out again. need it opened asap, have a client call at 11 need this today","High","Locked out again, asks to unlock.","IAM Support"],["INC1047073",1,2,"WiFi","Weak WiFi in a zone",2,6.29,true,false,2,"Human Resources","hi, cafeteria area has almost no connectivity this is blocking my work","High","Almost no connectivity in the cafeteria.","Network Operations"],["INC1046864",1,3,"Peripherals","Keyboard or mouse fault",2,5.68,true,false,3,"Procurement","hi team, few keys not typing, mainly e and r","High","Some keys not typing.","Desktop Support"],["INC1046964",1,0,"MFA","MFA device lost or replaced",2,1.15,true,false,0,"Marketing","HI, CHANGED MY PHONE, NOW THE 6 DIGIT CODE APP IS EMPTY","High","New phone, authenticator app empty.","IAM Support"],["INC1046853",1,0,"Group Membership","Application permission request",2,2.53,true,false,3,"Legal","hi team, i can see the dashboard but cannot download anything kindly look into it urgently","Medium","Can view but cannot download: a permission gap (classification note).","IAM Support"],["INC1047132",1,0,"Group Membership","Application permission request",1,3.04,true,false,3,"Engineering","i can see the dashboard but cannt download anything thanks in advance","Medium","Can view but cannot download: a permission gap (classification note).","IAM Support"],["INC1046886",1,1,"CRM System","CRM sync or data issue",2,6.94,true,false,3,"Marketing","the records i updated yesterday are missing today kindly look into it urgently","Medium","Updated records missing next day.","Application Support"],["INC1046918",1,1,"CRM System","CRM sync or data issue",3,8.41,true,false,1,"Sales","team, data from the marketing tool is not flowing in appreciate a quick fix","Medium","Data from another tool not flowing in.","Application Support"],["INC1046854",1,0,"Password","Password reset",3,0.98,true,false,1,"Sales","hi, forgot the credentials after the holiday, please help need this today","High","Forgot credentials after holiday.","IAM Support"],["INC1046977",1,0,"MFA","MFA prompt loop",2,0.75,true,false,3,"Procurement","hi, it keeps asking me for the code again and again in a loop thanks in advance","High","Code asked again and again.","IAM Support"],["INC1046817",1,0,"Password","Account locked after failed attempts",2,0.74,true,false,0,"Finance","team, i am unable to sign in, message says account is locked contact admin thanks in advance","High","Sign-in says account locked.","IAM Support"],["INC1046870",1,0,"MFA","MFA device lost or replaced",3,1.19,true,false,1,"Engineering","hi, lost my handset yesterday, cannot get the verification code","High","Lost handset, cannot get the code.","IAM Support"],["INC1046899",1,4,"Distribution Lists","Distribution list change",3,1.48,true,false,3,"Procurement","HELLO, PLEASE ADD THE TWO NEW JOINERS TO THE DELIVERY MAIL GROUP APPRECIATE A QUICK FIX","High","Add new joiners to a mail group.","Messaging Support"],["INC1046998",1,2,"VPN","VPN disconnects frequently",1,3.53,true,false,1,"Manufacturing","raising this again, connection is unstable since the new client version need this today","Medium","Unstable connection since a new client version.","Network Operations"],["INC1047058",1,0,"Password","Password reset",3,1.19,true,false,1,"Legal","sytem not accepting my details after i changed it last week","Medium","Details rejected after a recent change.","IAM Support"],["INC1046865",1,2,"VPN","VPN disconnects frequently",1,4.58,true,false,1,"Finance","hello, keeps disconnecting during calls, have to reconnect again and again kindly look into it urgently","Medium","Keeps disconnecting during calls.","Network Operations"],["INC1046949",1,0,"Password","Account locked after failed attempts",3,0.73,true,false,1,"Operations","i am unable to sign in, message says account is locked contact admin let me know if you need anything from my side","High","Sign-in says account locked.","IAM Support"],["INC1046925",1,1,"ERP System","ERP login failure",1,16.38,false,false,2,"Customer Success","team, the finance system is throwing an error at login for me only appreciate a quick fix","High","Finance system error at login.","Application Support"],["INC1046892",1,4,"Meetings and Calls","Call quality poor",1,5.48,true,false,0,"Human Resources","second time reporting this, video freezes for others while my network looks fine kindly look into it urgently","Medium","Video freezes for others on calls.","Messaging Support"],["INC1046904",1,2,"VPN","VPN will not connect",2,5.35,true,false,3,"Human Resources","good morning, getting authentication failed when i try from home please help","Medium","Authentication fails only from home.","Network Operations"],["INC1046774",1,1,"Licensing","License expired or reassigned",2,71.74,false,false,3,"Marketing","hi team, it says my subscription has ended, cannt open anything please help","High","Subscription ended, app will not open.","Application Support"],["INC1047018",1,5,"Data Access Control","Sensitive data access request",2,7.82,true,false,2,"Manufacturing","hi team, need access to the payroll folder for the audit work kindly look into it urgently","High","Payroll folder access for audit.","Security Operations"],["INC1047023",1,3,"Laptop","Laptop slow or freezing",2,102.6,false,false,3,"Engineering","second time reporting this, machine takes 15 mins to start, unusable in teh mornign let me know if you need anything from my side","High","Machine takes 15 minutes to start.","Desktop Support"],["INC1046901",1,3,"Peripherals","Docking station not working",3,21.77,true,false,1,"Legal","the dock is dead, nothing connects when i put the laptop","High","Dock is dead.","Desktop Support"],["INC1046955",1,4,"Document Collaboration","Site or library access",2,14.06,true,false,1,"Finance","good morning, the team site says acces denied after teh migration thanks in advance","High","Team site access denied after migration.","Messaging Support"],["INC1046821",1,4,"Document Collaboration","Site or library access",2,37.57,false,false,1,"Sales","hi team, cannot upload to the project library anymore this is blocking my work","Medium","Cannot upload to the project library.","Messaging Support"],["INC1047070",1,1,"Browser and Plugins","Add-in not loading",3,3.44,true,false,2,"Marketing","HI, THE TOOLBAR BUTTON DISAPPEARED AFTER THE UPDATE PLEASE HELP","High","Toolbar button gone after update.","Application Support"],["INC1046770",1,1,"Licensing","License expired or reassigned",2,22.12,false,false,2,"Finance","it says my subscription has ended, cannot open anything let me know if you need anything from my side","High","Subscription ended, app will not open.","Application Support"],["INC1046803",1,2,"VPN","VPN disconnects frequently",1,2.69,true,false,1,"Customer Success","connection is unstable since teh new client version kindly look into it urgently","Medium","Unstable connection since a new client version.","Network Operations"],["INC1046943",1,1,"Office Productivity Suite","Spreadsheet crash or corruption",1,1.9,true,false,2,"Legal","keeps saying not responding when i refresh the pivot","Medium","Spreadsheet not responding on pivot refresh.","Application Support"],["INC1047156",1,4,"Document Collaboration","Site or library access",2,1.51,true,false,3,"Customer Success","cannt upload to teh project library anymore need this today","Medium","Cannot upload to the project library.","Messaging Support"],["INC1047120",1,3,"Printer","Print quality or paper jam",2,1.26,true,false,3,"Procurement","output is very light, hard to read the invoice copies","High","Prints too light to read.","Desktop Support"],["INC1046783",1,1,"Licensing","New license request",3,19.75,true,false,2,"Engineering","second time reporting this, need the design tool for a project starting next month","High","Needs a design tool licence.","Application Support"],["INC1046888",1,4,"Distribution Lists","Distribution list change",3,1.24,true,false,3,"Procurement","raising this again, i am still getting mails from a team i left need this today","Medium","Still on a team mail group after leaving.","Messaging Support"],["INC1047026",1,0,"Password","Password reset",2,0.8,true,false,1,"Procurement","FORGOT THE CREDENTIALS AFTER THE HOLIDAY, PLEASE HELP NEED THIS TODAY","High","Forgot credentials after holiday.","IAM Support"],["INC1047054",1,5,"Malware","Malware or virus alert",2,2.38,true,false,3,"Human Resources","good morning, a warning popped up saying threat detected and quarantined need this today","High","Threat detected and quarantined.","Security Operations"],["INC1047083",1,5,"Audit and Review","Access review or evidence request",3,28.26,true,false,1,"Human Resources","raising this again, auditors are asking for the list of who has access to the finance app let me know if you need anything from my side","High","Auditors want an access list.","Security Operations"],["INC1046907",1,3,"Peripherals","Keyboard or mouse fault",2,2.74,true,false,1,"Customer Success","hi team, the pointer jumps on its own while typing","Medium","Pointer jumps while typing.","Desktop Support"],["INC1046831",1,4,"Meetings and Calls","Cannot join or schedule meeting",2,2.49,true,false,1,"Sales","cannot book a room in the invite, option is greyed out thanks in advance","High","Cannot book a room in the invite.","Messaging Support"],["INC1046935",1,2,"WiFi","Weak WiFi in a zone",1,11.81,false,false,3,"Engineering","signal is very poor near the east side meeting rooms let me know if you need anything from my side","High","Poor signal near one set of rooms.","Network Operations"],["INC1046928",1,4,"Document Collaboration","Site or library access",2,2.48,true,false,0,"Manufacturing","the team site says acces denied after teh migration","High","Team site access denied after migration.","Messaging Support"],["INC1047136",1,2,"VPN","VPN will not connect",1,2.86,true,false,3,"Operations","good morning, no connection from my home line since yesterday evening please help","Medium","No connection from home since yesterday.","Network Operations"],["INC1047100",1,4,"Meetings and Calls","Call quality poor",1,7.7,true,false,3,"Legal","second time reporting this, video freezes for others while my network looks fine kindly look into it urgently","Medium","Video freezes for others on calls.","Messaging Support"],["INC1046832",1,2,"VPN","VPN will not connect",2,27.4,false,false,0,"Marketing","team, it just says connecting adn stays there forever need this today","High","Stuck on connecting forever.","Network Operations"],["INC1046850",1,1,"Licensing","License expired or reassigned",3,11.16,true,false,1,"Engineering","hi team, the tool logged me out saying no seat available let me know if you need anything from my side","Medium","Logged out for no seat, reads as licence reassigned.","Application Support"],["INC1046800",1,2,"VPN","VPN will not connect",2,1.99,true,false,3,"Operations","NO CONNECTION FROM MY HOME LINE SINCE YESTERDAY EVENING PLEASE HELP","Medium","No connection from home since yesterday.","Network Operations"],["INC1047014",1,4,"Meetings and Calls","Call quality poor",1,1.75,true,false,1,"Sales","voice breaks badly in every call from my end appreciate a quick fix","High","Voice breaks in every call.","Messaging Support"],["INC1046828",1,3,"Laptop","Laptop slow or freezing",2,12.79,true,false,1,"Operations","raising this again, everything hangs when i open more than 2 things appreciate a quick fix","High","Machine hangs with more than two apps.","Desktop Support"],["INC1047080",1,1,"Office Productivity Suite","Spreadsheet crash or corruption",3,2.36,true,false,1,"Engineering","SECOND TIME REPORTING THIS, KEEPS SAYING NTO RESPONDING WHEN I REFRESH TEH PIVOT THIS IS BLOCKING MY WORK","Medium","Spreadsheet not responding on pivot refresh.","Application Support"],["INC1046811",1,0,"MFA","MFA prompt loop",2,2.22,true,false,3,"Operations","hello, approve on phone, then it asks again on laptop, never ends kindly look into it urgently","High","MFA approval loop between devices.","IAM Support"],["INC1046919",1,1,"Office Productivity Suite","Document or slide app fault",3,4.84,true,false,3,"Sales","FORMATTING BREAKS WHEN I REOPEN THE DOCUMENT","High","Document formatting breaks on reopen.","Application Support"],["INC1046814",1,5,"Audit and Review","Access review or evidence request",2,10.91,true,false,1,"Legal","need teh login history for our team for last quarter please help","Medium","Login history requested for a quarter.","Security Operations"],["INC1046837",1,0,"Account Provisioning","Role change access update",3,7.92,true,false,3,"Manufacturing","transferred to another department, need the right screens now kindly look into it urgently","High","Transferred, needs new screens.","IAM Support"],["INC1046818",1,0,"Password","Password expiry not notified",2,0.58,true,false,3,"Procurement","second time reporting this, expired without any mail to me, now i cant work let me know if you need anything from my side","High","Password expired with no mail warning.","IAM Support"],["INC1047024",1,0,"Password","Password reset",2,0.68,true,false,3,"Operations","MY LOGIN IS NOT WORKING. IT SAYS INVALID CREDENTIALS BUT IM SURE ITS RIGHT","Medium","Invalid credentials message; reset is the likely fix.","IAM Support"],["INC1046961",1,4,"Meetings and Calls","Cannot join or schedule meeting",1,2.83,true,false,3,"Engineering","the invite link says organiser has not started, but he has","High","Cannot join, invite says organiser not started.","Messaging Support"],["INC1046763",1,4,"Mail Client","Mailbox full or quota",2,1.04,true,false,2,"Procurement","HELLO, MAILS ARE BOUNCING BACK TO SENDERS, BOX SEEMS FULL KINDLY LOOK INTO IT URGENTLY","High","Mailbox full, mails bouncing.","Messaging Support"],["INC1046796",1,1,"Browser and Plugins","Add-in not loading",2,5.42,true,false,3,"Sales","teh toolbar button disappeared after teh update this is blocking my work","High","Toolbar button gone after update.","Application Support"],["INC1047002",1,2,"WiFi","Weak WiFi in a zone",2,13.2,true,false,1,"Marketing","ON THE 4TH FLOOR IT DROPS CONSTANTLY, GROUND FLOOR IS FINE KINDLY LOOK INTO IT URGENTLY","High","Signal drops on one floor only.","Network Operations"],["INC1046939",1,1,"Browser and Plugins","Site not opening in browser",2,0.39,true,false,1,"Engineering","team, the page loads blank, works on my colleague machine please help","Medium","Page loads blank on this machine only.","Application Support"],["INC1046931",1,0,"Password","Account locked after failed attempts",3,0.72,true,false,3,"Legal","hello, blocked out of the portal, keeps saying account disabled","Medium","Account shows disabled; lockout is closest.","IAM Support"],["INC1047016",1,3,"Peripherals","Keyboard or mouse fault",2,18.76,false,false,2,"Human Resources","second time reporting this, few keys nto typing, mainly e adn r","High","Some keys not typing.","Desktop Support"],["INC1046914",1,3,"Laptop","Screen or display fault",0,3.41,true,false,1,"Engineering","second time reporting this, half the screen is flickering, lines coming let me know if you need anything from my side","High","Half the screen flickers.","Desktop Support"],["INC1046877",1,2,"Bandwidth and Performance","Slow network performance",2,22.37,false,false,3,"Sales","everything is crawling since 10am today across the floor let me know if you need anything from my side","High","Whole floor crawling since 10am.","Network Operations"],["INC1047118",1,0,"Password","Account locked after failed attempts",2,0.87,true,false,2,"Marketing","blocked out of the portal, keeps saying account disabled let me know if you need anything from my side","Medium","Account shows disabled; lockout is closest.","IAM Support"],["INC1047029",1,3,"Peripherals","Keyboard or mouse fault",2,27.77,false,true,3,"Operations","wireless mouse disconnects every few minutes please help","High","Wireless mouse keeps disconnecting.","Desktop Support"],["INC1047078",1,2,"VPN","VPN will not connect",1,10.64,false,false,3,"Operations","hello, it just says connecting adn stays there forever","High","Stuck on connecting forever.","Network Operations"],["INC1046776",1,4,"Meetings and Calls","Cannot join or schedule meeting",2,1.61,true,false,3,"Engineering","hello, cannot book a room in the invite, option is greyed out","High","Cannot book a room in the invite.","Messaging Support"],["INC1046834",1,2,"WiFi","Weak WiFi in a zone",1,33.86,false,false,3,"Sales","cafeteria area has almost no connectivity thanks in advance","High","Almost no connectivity in the cafeteria.","Network Operations"],["INC1046992",1,0,"Password","Account locked after failed attempts",2,0.94,true,false,2,"Sales","hello, i am unable to sign in, message says account is locked contact admin appreciate a quick fix","High","Sign-in says account locked.","IAM Support"],["INC1046813",1,0,"Password","Password expiry not notified",2,0.81,true,false,3,"Finance","no warning came and today it just stopped letting me in let me know if you need anything from my side","High","Login stopped with no expiry warning.","IAM Support"],["INC1046946",1,2,"VPN","VPN disconnects frequently",3,1.96,true,false,3,"Sales","RAISING THIS AGAIN, THE TUNNEL DROPS EVERY 20 MINUTES WHILE WORKING FROM HOME PLEASE HELP","High","Tunnel drops every 20 minutes from home.","Network Operations"],["INC1047150",1,4,"Mail Client","Mail not syncing",2,6.5,true,false,3,"Sales","SENT ITEMS ARE NOT UPDATING ON MY LAPTOP NEED THIS TODAY","High","Sent items not updating on the laptop.","Messaging Support"],["INC1046807",1,0,"Password","Account locked after failed attempts",3,1.01,true,false,1,"Finance","hi team, account got blocked, i think i typed wrong 3 times need this today","High","Blocked after three wrong attempts.","IAM Support"],["INC1047065",1,4,"Distribution Lists","Distribution list change",2,1.78,true,false,3,"Manufacturing","team, plz add teh two new joiners to the delivery mail group plz help","High","Add new joiners to a mail group.","Messaging Support"],["INC1046974",1,3,"Mobile","Company mobile setup",2,7.29,true,false,1,"Customer Success","cannot add my official mail on the new phone let me know if you need anything from my side","Medium","Cannot add work mail on a new phone.","Desktop Support"],["INC1046976",1,0,"MFA","MFA prompt loop",1,1.18,true,false,2,"Legal","approve on phone, then it asks agian on laptop, never ends kindly look into it urgently","High","MFA approval loop between devices.","IAM Support"],["INC1047062",1,3,"Mobile","Company mobile setup",2,2.65,true,false,3,"Finance","hi, new handset given, need the work apps put on it please help","High","New handset needs work apps.","Desktop Support"],["INC1047068",1,3,"Laptop","Laptop slow or freezing",1,4.54,true,false,0,"Manufacturing","raising this again, everything hangs when i open more than 2 things let me know if you need anything from my side","High","Machine hangs with more than two apps.","Desktop Support"],["INC1046968",1,1,"Browser and Plugins","Site not opening in browser",2,0.96,true,false,0,"Operations","raising this again, internal portal gives a certificate warning every time","High","Internal portal certificate warning.","Application Support"],["INC1047165",1,3,"Peripherals","Docking station not working",2,10.23,true,false,2,"Human Resources","good morning, when i attach it the keyboard and mouse stop responding need this today","Medium","Keyboard and mouse stop when docked.","Desktop Support"],["INC1046970",1,3,"Laptop","Laptop slow or freezing",2,21.71,false,false,2,"Engineering","hi, everything hangs when i open more than 2 things this is blocking my work","High","Machine hangs with more than two apps.","Desktop Support"],["INC1046971",1,3,"Laptop","Battery or charging fault",2,34.64,false,false,3,"Finance","THE ADAPTER IS WARM BUT PERCENTAGE KEEPS GOING DOWN LET ME KNOW IF YOU NEED ANYTHING FROM MY SIDE","High","Adapter warm but battery falls.","Desktop Support"],["INC1047170",1,5,"Phishing and Fraud","Suspicious email reported",0,0.76,true,false,3,"Human Resources","team, someone claiming to be the director asked me for gift cards appreciate a quick fix","High","Impersonation asking for gift cards.","Security Operations"],["INC1047036",1,1,"Browser and Plugins","Add-in not loading",2,2.11,true,false,3,"Legal","hi, the toolbar button disappeared after the update","High","Toolbar button gone after update.","Application Support"],["INC1047031",1,3,"Printer","Printer offline",2,2.06,true,true,2,"Human Resources","cannt find the device in teh list anymore thanks in advance","Low","Device missing from the list; printer is a guess.","Desktop Support"],["INC1046909",1,1,"Browser and Plugins","Site not opening in browser",2,3.35,true,false,3,"Human Resources","good morning, the page loads blank, works on my colleague machine let me know if you need anything from my side","Medium","Page loads blank on this machine only.","Application Support"],["INC1047104",1,0,"Password","Password expiry not notified",1,1.0,true,false,3,"Customer Success","hi team, did not get the 14 day reminder, credentials expired suddenly kindly look into it urgently","High","Credentials expired without the reminder.","IAM Support"],["INC1046930",1,1,"Browser and Plugins","Add-in not loading",2,1.22,true,false,1,"Legal","raising this again, extension is installed but nothing happens when i click","High","Extension installed but does nothing.","Application Support"],["INC1046923",1,4,"Mail Client","Mail not syncing",1,2.54,true,false,1,"Engineering","GOOD MORNING, NOT RECEIVING ANYTHING SINCE MORNING BUT WEB VERSION SHOWS THEM KINDLY LOOK INTO IT URGENTLY","High","Mail on web but not in the client.","Messaging Support"],["INC1046937",1,3,"Peripherals","Keyboard or mouse fault",2,4.95,true,false,3,"Operations","THE POINTER JUMPS ON ITS OWN WHILE TYPING","Medium","Pointer jumps while typing.","Desktop Support"],["INC1046893",1,2,"VPN","VPN disconnects frequently",1,4.05,true,false,3,"Human Resources","raising this again, connection is unstable since the new client version","Medium","Unstable connection since a new client version.","Network Operations"],["INC1046942",1,0,"MFA","MFA device lost or replaced",3,1.29,true,false,3,"Engineering","good morning, changed my phone, now the 6 digit code app is empty this is blocking my work","High","New phone, authenticator app empty.","IAM Support"],["INC1046815",1,0,"Account Provisioning","Leaver account deactivation",2,16.39,false,false,2,"Marketing","SECOND TIME REPORTING THIS, RESIGNATION DONE, NEED THE ACCESS REMOVED BEFORE AUDIT LET ME KNOW IF YOU NEED ANYTHING FROM MY SIDE","High","Resigned user access to remove.","IAM Support"],["INC1047019",1,3,"Laptop","Laptop slow or freezing",2,1.32,true,false,2,"Engineering","VERY SLOW SINCE LAST WEEK, FAN RUNS LOUD ALL THE TIME","High","Very slow, fan loud.","Desktop Support"],["INC1046986",1,2,"Bandwidth and Performance","Slow network performance",2,4.55,true,false,1,"Manufacturing","raising this again, everything is crawling since 10am today across the floor this is blocking my work","High","Whole floor crawling since 10am.","Network Operations"],["INC1046989",1,0,"MFA","MFA prompt loop",2,0.9,true,false,0,"Procurement","good morning, verification keeps repeating every 5 minutes, very annoying let me know if you need anything from my side","High","Verification repeats every 5 minutes.","IAM Support"],["INC1046792",1,4,"Meetings and Calls","Cannot join or schedule meeting",2,0.58,true,false,1,"Manufacturing","CANNOT BOOK A ROOM IN THE INVITE, OPTION IS GREYED OUT NEED THIS TODAY","High","Cannot book a room in the invite.","Messaging Support"],["INC1046979",1,2,"WiFi","Cannot join office WiFi",1,11.73,false,false,3,"Manufacturing","good morning, my laptop does not see the office network at all let me know if you need anything from my side","High","Laptop cannot see the office network.","Network Operations"],["INC1047008",1,3,"Peripherals","Headset or audio device",2,7.23,true,false,1,"Operations","hello, audio only comes in left side of the headphone need this today","High","Audio only in one side of headphones.","Desktop Support"],["INC1046869",1,4,"Distribution Lists","Distribution list change",3,1.77,true,false,0,"Finance","raising this again, please add the two new joiners to the delivery mail group","High","Add new joiners to a mail group.","Messaging Support"],["INC1046859",1,0,"MFA","MFA prompt loop",2,1.37,true,false,1,"Finance","second time reporting this, it keeps asking me for the code again and again in a loop thanks in advance","High","Code asked again and again.","IAM Support"],["INC1047061",1,5,"Malware","Malware or virus alert",1,25.84,false,false,3,"Human Resources","hi team, my machine is behaving oddly after i opened an attachment","Medium","Machine odd after opening an attachment.","Security Operations"],["INC1047039",1,0,"Password","Password expiry not notified",2,0.56,true,false,3,"Marketing","second time reporting this, expired without any mail to me, now i cant work appreciate a quick fix","High","Password expired with no mail warning.","IAM Support"],["INC1046755",1,4,"Meetings and Calls","Call quality poor",2,2.05,true,false,2,"Manufacturing","raising this again, voice breaks badly in every call from my end thanks in advance","High","Voice breaks in every call.","Messaging Support"],["INC1047160",1,3,"Printer","Print quality or paper jam",3,2.38,true,false,1,"Human Resources","hi, paper stuck inside, tried removing but still error","High","Paper jam error persists.","Desktop Support"],["INC1046957",1,0,"MFA","MFA prompt loop",2,0.9,true,false,2,"Manufacturing","team, it keeps asking me for the code agian adn agian in a loop","High","Code asked again and again.","IAM Support"],["INC1047169",1,0,"Password","Account locked after failed attempts",2,0.84,true,false,3,"Manufacturing","second time reporting this, i am unable to sign in, message says account is locked contact admin kindly look into it urgently","High","Sign-in says account locked.","IAM Support"],["INC1046884",1,4,"Distribution Lists","Distribution list change",3,1.24,true,false,2,"Marketing","i am still getting mails from a team i left let me know if you need anything from my side","Medium","Still on a team mail group after leaving.","Messaging Support"],["INC1046845",1,5,"Data Access Control","Removable media exception",3,13.41,true,false,3,"Operations","need to copy files to a pen drive for the client, it is blocked kindly look into it urgently","High","Pen drive copy blocked.","Security Operations"],["INC1046875",1,3,"Printer","Printer offline",2,3.94,true,false,2,"Legal","second time reporting this, the machine on 3rd floor shows offline for everyone kindly look into it urgently","High","Printer on 3rd floor offline for everyone.","Desktop Support"],["INC1046994",1,3,"Peripherals","Docking station not working",2,54.37,false,false,0,"Engineering","team, when i attach it the keyboard and mouse stop responding let me know if you need anything from my side","Medium","Keyboard and mouse stop when docked.","Desktop Support"],["INC1046798",1,0,"Password","Account locked after failed attempts",2,0.72,true,false,2,"Manufacturing","GOOD MORNING, I AM UNABLE TO SIGN IN, MESSAGE SAYS ACCOUNT IS LOCKED CONTACT ADMIN LET ME KNOW IF YOU NEED ANYTHING FROM MY SIDE","High","Sign-in says account locked.","IAM Support"],["INC1046756",1,1,"Office Productivity Suite","Document or slide app fault",2,4.83,true,false,2,"Finance","hi, the deck will not save, says file is in use appreciate a quick fix","High","Deck will not save, file in use.","Application Support"],["INC1047124",1,1,"Browser and Plugins","Add-in not loading",3,3.16,true,false,2,"Customer Success","HI TEAM, EXTENSION IS INSTALLED BUT NOTHING HAPPENS WHEN I CLICK THIS IS BLOCKING MY WORK","High","Extension installed but does nothing.","Application Support"],["INC1046779",1,1,"Licensing","License expired or reassigned",2,14.19,true,false,3,"Procurement","second time reporting this, the tool logged me out saying no seat available appreciate a quick fix","Medium","Logged out for no seat, reads as licence reassigned.","Application Support"],["INC1047148",1,5,"Data Access Control","Sensitive data access request",2,3.13,true,false,0,"Procurement","need acces to teh payroll folder for teh audit work kindly look into it urgently","High","Payroll folder access for audit.","Security Operations"],["INC1046913",1,3,"Mobile","Company mobile setup",3,12.28,true,false,3,"Marketing","hi, new handset given, need the work apps put on it need this today","High","New handset needs work apps.","Desktop Support"],["INC1046760",1,5,"Audit and Review","Access review or evidence request",2,40.4,false,false,3,"Manufacturing","second time reporting this, auditors are asking for the list of who has access to the finance app","High","Auditors want an access list.","Security Operations"],["INC1047087",1,2,"VPN","VPN will not connect",2,1.93,true,false,3,"Legal","second time reporting this, no connection from my home line since yesterday evening","Medium","No connection from home since yesterday.","Network Operations"],["INC1046847",1,1,"ERP System","ERP transaction error",1,20.33,false,false,1,"Operations","posting fails with a dump error at the last step thanks in advance","High","Posting fails with a dump error.","Application Support"],["INC1047090",1,1,"Browser and Plugins","Site not opening in browser",3,2.72,true,false,3,"Sales","the page loads blank, works on my colleague machine this is blocking my work","Medium","Page loads blank on this machine only.","Application Support"],["INC1047082",1,1,"Browser and Plugins","Site not opening in browser",2,3.21,true,true,1,"Manufacturing","the page loads blank, works on my colleague machine kindly look into it urgently","Medium","Page loads blank on this machine only.","Application Support"],["INC1046881",1,4,"Mail Client","Mail not syncing",2,3.96,true,false,1,"Procurement","sent items are nto updating on my laptop need this today","High","Sent items not updating on the laptop.","Messaging Support"],["INC1047096",1,3,"Printer","Print quality or paper jam",3,5.21,true,false,1,"Marketing","pages coming with lines across, toner maybe thanks in advance","High","Lines across printed pages.","Desktop Support"],["INC1046872",1,0,"Group Membership","Shared mailbox or folder access",3,3.42,true,false,2,"Legal","hello, the drive that finance shared is not opening for me this is blocking my work","High","Shared drive from Finance not opening.","IAM Support"],["INC1047249",2,2,"WiFi","Cannot join office WiFi",2,5.0,true,false,1,"Human Resources","good morning, it asks for a certificate and then fails to join","Medium","Certificate prompt then fails to join.","Network Operations"],["INC1047186",2,3,"Peripherals","Headset or audio device",2,1.93,true,false,3,"Marketing","hello, audio only comes in left side of the headphone","High","Audio only in one side of headphones.","Desktop Support"],["INC1047363",2,0,"Group Membership","Application permission request",2,7.51,true,false,3,"Procurement","need edit rights in teh reporting tool, i only have view need this today","High","Needs edit rights in the reporting tool.","IAM Support"],["INC1047246",2,0,"Password","Password reset",2,0.64,true,false,3,"Manufacturing","hi team, forgot the credentials after the holiday, please help","High","Forgot credentials after holiday.","IAM Support"],["INC1047357",2,2,"VPN","VPN will not connect",2,2.01,true,false,1,"Operations","getting authentication failed when i try from home","Medium","Authentication fails only from home.","Network Operations"],["INC1047573",2,2,"VPN","VPN will not connect",2,null,null,false,0,"Sales","SECOND TIME REPORTING THIS, IT JUST SAYS CONNECTING AND STAYS THERE FOREVER","High","Stuck on connecting forever.","Network Operations"],["INC1047426",2,2,"VPN","VPN disconnects frequently",1,7.43,true,false,3,"Engineering","team, keeps disconnecting during calls, have to reconnect agian adn again appreciate a quick fix","Medium","Keeps disconnecting during calls.","Network Operations"],["INC1047374",2,1,"Browser and Plugins","Add-in not loading",3,1.47,true,true,2,"Engineering","second time reporting this, extension is installed but nothing happens when i click","High","Extension installed but does nothing.","Application Support"],["INC1047406",2,2,"VPN","VPN will not connect",2,4.55,true,false,2,"Human Resources","good morning, it just says connecting and stays there forever need this today","High","Stuck on connecting forever.","Network Operations"],["INC1047566",2,3,"Laptop","Screen or display fault",1,16.22,false,false,3,"Marketing","SECOND TIME REPORTING THIS, HALF TEH SCREEN IS FLICKERING, LINES COMING NEED THIS TODAY","High","Half the screen flickers.","Desktop Support"],["INC1047496",2,0,"Password","Password reset",2,0.61,true,false,2,"Marketing","hi team, forgot the credentials after the holiday, please help please help","High","Forgot credentials after holiday.","IAM Support"],["INC1047554",2,0,"MFA","MFA device lost or replaced",2,0.63,true,false,3,"Customer Success","lost my handset yesterday, cannot get the verification code let me know if you need anything from my side","High","Lost handset, cannot get the code.","IAM Support"],["INC1047447",2,4,"Mail Client","Mailbox full or quota",2,null,null,false,3,"Finance","hi, mails are bouncing back to senders, box seems full","High","Mailbox full, mails bouncing.","Messaging Support"],["INC1047207",2,0,"Password","Account locked after failed attempts",3,1.2,true,false,3,"Legal","hello, blocked out of the portal, keeps saying account disabled","Medium","Account shows disabled; lockout is closest.","IAM Support"],["INC1047305",2,2,"VPN","VPN will not connect",1,2.06,true,true,3,"Marketing","hi team, getting authentication failed when i try from home","Medium","Authentication fails only from home.","Network Operations"],["INC1047245",2,2,"VPN","VPN will not connect",1,3.12,true,false,3,"Finance","RAISING THIS AGAIN, GETTING AUTHENTICATION FAILED WHEN I TRY FROM HOME","Medium","Authentication fails only from home.","Network Operations"],["INC1047218",2,4,"Mail Client","Mail not syncing",2,2.32,true,false,1,"Customer Success","second time reporting this, sent items are not updating on my laptop thanks in advance","High","Sent items not updating on the laptop.","Messaging Support"],["INC1047383",2,2,"VPN","VPN disconnects frequently",2,null,null,false,3,"Marketing","the tunnel drops every 20 minutes while working from home let me know if you need anything from my side","High","Tunnel drops every 20 minutes from home.","Network Operations"],["INC1047190",2,4,"Mail Client","Mail not syncing",3,5.02,true,false,1,"Procurement","team, sent items are nto updating on my laptop","High","Sent items not updating on the laptop.","Messaging Support"],["INC1047378",2,2,"VPN","VPN disconnects frequently",1,4.67,true,false,3,"Customer Success","connection is unstable since the new client version need this today","Medium","Unstable connection since a new client version.","Network Operations"],["INC1047200",2,0,"Account Provisioning","New joiner account setup",3,10.52,true,false,1,"Customer Success","hi, our new hire has no login, laptop is there but cannot start appreciate a quick fix","High","New hire has no login.","IAM Support"],["INC1047311",2,1,"ERP System","ERP transaction error",2,28.78,false,false,1,"Marketing","SECOND TIME REPORTING THIS, BATCH JOB FOR MONTH END FAILED MIDWAY AGAIN APPRECIATE A QUICK FIX","Medium","Month-end batch job failed.","Application Support"],["INC1047569",2,1,"Licensing","New license request",2,8.76,true,false,1,"Engineering","second time reporting this, please arrange a seat for the analytics software","High","Requests a seat for analytics software.","Application Support"],["INC1047477",2,2,"VPN","VPN will not connect",2,5.88,true,false,1,"Sales","good morning, it just says connecting and stays there forever this is blocking my work","High","Stuck on connecting forever.","Network Operations"],["INC1047349",2,5,"Phishing and Fraud","Suspicious email reported",0,1.79,true,false,1,"Engineering","raising this again, someone claiming to be teh director asked me for gift cards thanks in advance","High","Impersonation asking for gift cards.","Security Operations"],["INC1047430",2,4,"Distribution Lists","Distribution list change",3,1.8,true,false,3,"Engineering","raising this again, please add the two new joiners to the delivery mail group","High","Add new joiners to a mail group.","Messaging Support"],["INC1047535",2,2,"VPN","VPN disconnects frequently",1,2.11,true,false,1,"Marketing","good morning, connection is unstable since the new client version","Medium","Unstable connection since a new client version.","Network Operations"],["INC1047539",2,2,"VPN","VPN will not connect",1,0.45,true,false,1,"Manufacturing","hi team, getting authentication failed when i try from home thanks in advance","Medium","Authentication fails only from home.","Network Operations"],["INC1047451",2,2,"VPN","VPN disconnects frequently",1,3.67,true,true,3,"Operations","team, teh tunnel drops every 20 minutes while workign from home let me know if you need anything from my side","High","Tunnel drops every 20 minutes from home.","Network Operations"],["INC1047366",2,0,"MFA","MFA device lost or replaced",2,1.31,true,true,2,"Operations","changed my phone, now teh 6 digit code app is empty thanks in advance","High","New phone, authenticator app empty.","IAM Support"],["INC1047263",2,1,"Licensing","License expired or reassigned",2,null,null,false,3,"Sales","it says my subscription has ended, cannot open anything","High","Subscription ended, app will not open.","Application Support"],["INC1047589",2,0,"Password","Password reset",2,null,null,false,3,"Marketing","hello, cant get into the system since morning, tried twice already need this today","Medium","Cannot get in after two tries.","IAM Support"],["INC1047270",2,1,"ERP System","ERP transaction error",2,5.34,true,false,2,"Marketing","the entry is not going through, gives an error number","Medium","Entry fails with an error number.","Application Support"],["INC1047209",2,1,"Licensing","License expired or reassigned",3,43.27,false,false,3,"Operations","good morning, it says my subscription has ended, cannt open anything","High","Subscription ended, app will not open.","Application Support"],["INC1047225",2,0,"Account Provisioning","Role change access update",3,3.88,true,false,1,"Manufacturing","moved from support to delivery team, my old screens are gone","High","Moved teams, old screens gone.","IAM Support"],["INC1047469",2,4,"Mail Client","Mailbox full or quota",1,1.3,true,false,3,"Sales","hello, cannt send anything, says storage limit reached this is blocking my work","High","Cannot send, storage limit reached.","Messaging Support"],["INC1047265",2,2,"VPN","VPN disconnects frequently",2,null,null,false,0,"Procurement","the tunnel drops every 20 minutes while working from home kindly look into it urgently","High","Tunnel drops every 20 minutes from home.","Network Operations"],["INC1047500",2,5,"Data Access Control","Sensitive data access request",2,29.72,false,true,0,"Marketing","need access to the payroll folder for the audit work let me know if you need anything from my side","High","Payroll folder access for audit.","Security Operations"],["INC1047253",2,1,"ERP System","ERP transaction error",2,8.49,true,false,1,"Human Resources","team, posting fails with a dump error at the last step appreciate a quick fix","High","Posting fails with a dump error.","Application Support"],["INC1047391",2,3,"Printer","Printer offline",3,3.64,true,false,3,"Customer Success","hi, cannot find the device in the list anymore","Low","Device missing from the list; printer is a guess.","Desktop Support"],["INC1047175",2,0,"Password","Account locked after failed attempts",2,0.69,true,false,0,"Operations","hi team, blocked out of the portal, keeps saying account disabled please help","Medium","Account shows disabled; lockout is closest.","IAM Support"],["INC1047367",2,0,"Account Provisioning","Role change access update",2,4.0,true,false,2,"Legal","HELLO, PROMOTED LAST MONTH BUT STILL SEEING THE OLD MENU OPTIONS APPRECIATE A QUICK FIX","High","Promoted but still sees old menus.","IAM Support"],["INC1047571",2,3,"Printer","Print quality or paper jam",2,49.77,false,false,2,"Operations","team, output is very light, hard to read the invoice copies thanks in advance","High","Prints too light to read.","Desktop Support"],["INC1047393",2,1,"Licensing","License expired or reassigned",2,20.01,false,false,1,"Engineering","the tool logged me out saying no seat available please help","Medium","Logged out for no seat, reads as licence reassigned.","Application Support"],["INC1047353",2,2,"VPN","VPN will not connect",1,null,null,false,1,"Customer Success","no connection from my home line since yesterday evening appreciate a quick fix","Medium","No connection from home since yesterday.","Network Operations"],["INC1047297",2,2,"VPN","VPN disconnects frequently",1,null,null,false,1,"Procurement","raising this again, keeps disconnecting during calls, have to reconnect agian adn agian","Medium","Keeps disconnecting during calls.","Network Operations"],["INC1047564",2,3,"Peripherals","Docking station not working",3,5.17,true,false,3,"Operations","hello, when i attach it the keyboard and mouse stop responding","Medium","Keyboard and mouse stop when docked.","Desktop Support"],["INC1047255",2,2,"WiFi","Weak WiFi in a zone",2,6.96,true,true,1,"Manufacturing","team, on the 4th floor it drops constantly, ground floor is fine","High","Signal drops on one floor only.","Network Operations"],["INC1047577",2,2,"VPN","VPN disconnects frequently",3,3.59,true,false,3,"Legal","connection is unstable since the new client version this is blocking my work","Medium","Unstable connection since a new client version.","Network Operations"],["INC1047279",2,1,"ERP System","ERP login failure",1,43.4,false,false,3,"Customer Success","raising this again, cannt get into teh module since teh weekend patch","Medium","Cannot get into a module since a patch.","Application Support"],["INC1047437",2,0,"MFA","MFA device lost or replaced",3,1.34,true,false,3,"Legal","raising this again, changed my phone, now teh 6 digit code app is empty plz help","High","New phone, authenticator app empty.","IAM Support"],["INC1047481",2,5,"Phishing and Fraud","Suspicious email reported",1,1.27,true,false,3,"Procurement","hi team, strange link in a mail from an unknown sender, did not click need this today","High","Suspicious link from unknown sender.","Security Operations"],["INC1047268",2,4,"Distribution Lists","Distribution list change",2,1.09,true,false,1,"Procurement","raising this again, i am still getting mails from a team i left please help","Medium","Still on a team mail group after leaving.","Messaging Support"],["INC1047189",2,2,"VPN","VPN will not connect",2,2.86,true,false,2,"Customer Success","getting authentication failed when i try from home","Medium","Authentication fails only from home.","Network Operations"],["INC1047516",2,1,"Office Productivity Suite","Spreadsheet crash or corruption",3,9.54,true,false,3,"Finance","raising this again, my workbook says it cannot be opened, worked yesterday","Medium","Workbook cannot be opened.","Application Support"],["INC1047181",2,5,"Malware","Malware or virus alert",1,6.18,true,false,1,"Engineering","hi team, a warning popped up saying threat detected and quarantined need this today","High","Threat detected and quarantined.","Security Operations"],["INC1047332",2,3,"Peripherals","Keyboard or mouse fault",2,22.69,false,false,1,"Marketing","THE POINTER JUMPS ON ITS OWN WHILE TYPING","Medium","Pointer jumps while typing.","Desktop Support"],["INC1047591",2,3,"Laptop","Battery or charging fault",2,null,null,false,1,"Engineering","HELLO, BATTERY DRAINS IN ONE HOUR, WAS FINE BEFORE THIS IS BLOCKING MY WORK","High","Battery drains in one hour.","Desktop Support"],["INC1047370",2,4,"Meetings and Calls","Call quality poor",2,1.12,true,false,2,"Operations","TEAM, VIDEO FREEZES FOR OTHERS WHILE MY NETWORK LOOKS FINE KINDLY LOOK INTO IT URGENTLY","Medium","Video freezes for others on calls.","Messaging Support"],["INC1047400",2,3,"Peripherals","Headset or audio device",2,8.95,true,false,1,"Operations","GOOD MORNING, MIC IS PICKING UP TOO MUCH NOISE, TEAM COMPLAINED NEED THIS TODAY","High","Mic picks up too much noise.","Desktop Support"],["INC1047605",2,3,"Peripherals","Keyboard or mouse fault",3,12.12,true,false,3,"Operations","HI, THE POINTER JUMPS ON ITS OWN WHILE TYPING","Medium","Pointer jumps while typing.","Desktop Support"],["INC1047342",2,4,"Document Collaboration","Site or library access",2,4.83,true,false,2,"Customer Success","good morning, cannot upload to the project library anymore need this today","Medium","Cannot upload to the project library.","Messaging Support"],["INC1047510",2,3,"Laptop","Battery or charging fault",0,29.05,false,false,1,"Operations","raising this again, not charging even when plugged in, shows 4%","High","Not charging when plugged in.","Desktop Support"],["INC1047323",2,3,"Mobile","Company mobile setup",3,15.04,true,false,2,"Procurement","hi, new handset given, need the work apps put on it","High","New handset needs work apps.","Desktop Support"],["INC1047404",2,1,"Licensing","New license request",3,32.57,true,false,0,"Legal","hi, my trial expired, i need the proper version now appreciate a quick fix","Medium","Trial expired, needs a full licence.","Application Support"],["INC1047369",2,0,"Password","Password expiry not notified",2,0.74,true,false,2,"Customer Success","good morning, did not get the 14 day reminder, credentials expired suddenly","High","Credentials expired without the reminder.","IAM Support"],["INC1047467",2,1,"Licensing","License expired or reassigned",3,18.6,true,false,3,"Human Resources","hi team, it says my subscription has ended, cannot open anything thanks in advance","High","Subscription ended, app will not open.","Application Support"],["INC1047337",2,2,"VPN","VPN disconnects frequently",2,3.62,true,false,0,"Customer Success","second time reporting this, keeps disconnecting during calls, have to reconnect again and again appreciate a quick fix","Medium","Keeps disconnecting during calls.","Network Operations"],["INC1047545",2,2,"VPN","VPN will not connect",2,3.93,true,false,3,"Engineering","hello, no connection from my home line since yesterday evening this is blocking my work","Medium","No connection from home since yesterday.","Network Operations"],["INC1047462",2,2,"VPN","VPN disconnects frequently",2,2.15,true,false,2,"Procurement","good morning, the tunnel drops every 20 minutes while working from home thanks in advance","High","Tunnel drops every 20 minutes from home.","Network Operations"],["INC1047408",2,2,"VPN","VPN will not connect",2,1.91,true,false,3,"Legal","no connection from my home line since yesterday evening please help","Medium","No connection from home since yesterday.","Network Operations"],["INC1047258",2,2,"Bandwidth and Performance","Slow network performance",1,22.62,false,false,0,"Human Resources","everything is crawling since 10am today across the floor this is blocking my work","High","Whole floor crawling since 10am.","Network Operations"],["INC1047333",2,2,"VPN","VPN will not connect",2,46.02,false,false,2,"Finance","team, no connection from my home line since yesterday evening","Medium","No connection from home since yesterday.","Network Operations"],["INC1047382",2,3,"Printer","Print quality or paper jam",1,null,null,false,3,"Finance","pages coming with lines across, toner maybe appreciate a quick fix","High","Lines across printed pages.","Desktop Support"],["INC1047409",2,0,"Account Provisioning","Role change access update",3,3.34,true,false,3,"Manufacturing","hello, promoted last month but still seeing the old menu options kindly look into it urgently","High","Promoted but still sees old menus.","IAM Support"],["INC1047637",2,1,"ERP System","ERP transaction error",2,14.86,true,false,3,"Engineering","second time reporting this, posting fails with a dump error at the last step kindly look into it urgently","High","Posting fails with a dump error.","Application Support"],["INC1047600",2,1,"Browser and Plugins","Site not opening in browser",2,2.1,true,false,3,"Manufacturing","THE PAGE LOADS BLANK, WORKS ON MY COLLEAGUE MACHINE THIS IS BLOCKING MY WORK","Medium","Page loads blank on this machine only.","Application Support"],["INC1047562",2,2,"WiFi","Cannot join office WiFi",2,null,null,false,3,"Procurement","hi, it asks for a certificate adn then fails to join please help","Medium","Certificate prompt then fails to join.","Network Operations"],["INC1047368",2,1,"CRM System","CRM report not loading",2,13.68,true,false,3,"Marketing","hi team, teh pipeline view spins forever and never loads appreciate a quick fix","High","Pipeline view never loads.","Application Support"],["INC1047421",2,3,"Printer","Print quality or paper jam",2,45.83,false,false,2,"Operations","hi team, pages coming with lines across, toner maybe need this today","High","Lines across printed pages.","Desktop Support"],["INC1047177",2,1,"Office Productivity Suite","Document or slide app fault",2,2.01,true,false,3,"Finance","team, the deck will not save, says file is in use this is blocking my work","High","Deck will not save, file in use.","Application Support"],["INC1047586",2,1,"ERP System","ERP login failure",2,7.54,true,false,1,"Customer Success","team, cannt get into the module since teh weekend patch","Medium","Cannot get into a module since a patch.","Application Support"],["INC1047222",2,3,"Laptop","Laptop slow or freezing",2,8.86,true,false,2,"Sales","team, everything hangs when i open more than 2 things this is blocking my work","High","Machine hangs with more than two apps.","Desktop Support"],["INC1047550",2,1,"Browser and Plugins","Site not opening in browser",2,15.01,true,false,1,"Marketing","good morning, internal portal gives a certificate warning every time need this today","High","Internal portal certificate warning.","Application Support"],["INC1047588",2,1,"Office Productivity Suite","Spreadsheet crash or corruption",2,2.35,true,false,2,"Operations","raising this again, my workbook says it cannot be opened, worked yesterday kindly look into it urgently","Medium","Workbook cannot be opened.","Application Support"],["INC1047606",2,2,"VPN","VPN disconnects frequently",2,3.27,true,false,2,"Manufacturing","good morning, the tunnel drops every 20 minutes while working from home","High","Tunnel drops every 20 minutes from home.","Network Operations"],["INC1047379",2,0,"Password","Password expiry not notified",2,0.74,true,false,3,"Legal","good morning, expired without any mail to me, now i cant work need this today","High","Password expired with no mail warning.","IAM Support"],["INC1047531",2,0,"Password","Password expiry not notified",3,0.82,true,false,3,"Operations","good morning, no warning came and today it just stopped letting me in","High","Login stopped with no expiry warning.","IAM Support"],["INC1047287",2,2,"WiFi","Cannot join office WiFi",3,1.71,true,false,3,"Customer Success","hi team, my laptop does not see the office network at all please help","High","Laptop cannot see the office network.","Network Operations"],["INC1047318",2,1,"ERP System","ERP login failure",1,null,null,false,3,"Manufacturing","SECOND TIME REPORTING THIS, CANNOT GET INTO THE MODULE SINCE THE WEEKEND PATCH PLEASE HELP","Medium","Cannot get into a module since a patch.","Application Support"],["INC1047612",2,0,"Password","Account locked after failed attempts",3,0.45,true,false,0,"Manufacturing","blocked out of teh portal, keeps saying account disabled this is blocking my work","Medium","Account shows disabled; lockout is closest.","IAM Support"],["INC1047479",2,0,"Password","Account locked after failed attempts",2,0.6,true,false,3,"Legal","hello, i am unable to sign in, message says account is locked contact admin","High","Sign-in says account locked.","IAM Support"],["INC1047583",2,3,"Laptop","Screen or display fault",2,25.69,false,false,3,"Engineering","half the screen is flickering, lines coming","High","Half the screen flickers.","Desktop Support"],["INC1047466",2,5,"Malware","Malware or virus alert",2,19.83,false,false,3,"Operations","a warning popped up saying threat detected and quarantined please help","High","Threat detected and quarantined.","Security Operations"],["INC1047345",2,4,"Mail Client","Mail not syncing",2,2.52,true,false,3,"Engineering","sent items are not updating on my laptop thanks in advance","High","Sent items not updating on the laptop.","Messaging Support"],["INC1047203",2,1,"CRM System","CRM sync or data issue",2,5.42,true,false,3,"Legal","my opportunities are not showing the latest numbers this is blocking my work","High","Opportunities not showing latest numbers.","Application Support"],["INC1047460",2,2,"VPN","VPN will not connect",2,12.31,true,false,3,"Human Resources","it just says connecting and stays there forever plz help","High","Stuck on connecting forever.","Network Operations"],["INC1047240",2,5,"Phishing and Fraud","Suspicious email reported",1,1.34,true,false,3,"Customer Success","second time reporting this, someone claiming to be the director asked me for gift cards need this today","High","Impersonation asking for gift cards.","Security Operations"],["INC1047362",2,1,"CRM System","CRM report not loading",1,14.79,false,false,3,"Sales","HI TEAM, THE PIPELINE VIEW SPINS FOREVER ADN NEVER LOADS KINDLY LOOK INTO IT URGENTLY","High","Pipeline view never loads.","Application Support"],["INC1047320",2,2,"VPN","VPN disconnects frequently",1,7.56,true,false,0,"Finance","keeps disconnecting during calls, have to reconnect again and again please help","Medium","Keeps disconnecting during calls.","Network Operations"],["INC1047610",2,0,"Account Provisioning","Role change access update",2,4.56,true,false,0,"Manufacturing","hello, promoted last month but still seeing the old menu options","High","Promoted but still sees old menus.","IAM Support"],["INC1047193",2,1,"Browser and Plugins","Add-in not loading",3,1.17,true,false,3,"Manufacturing","hi team, the toolbar button disappeared after the update please help","High","Toolbar button gone after update.","Application Support"],["INC1047492",2,4,"Distribution Lists","Distribution list change",3,1.89,true,false,3,"Human Resources","team, please add the two new joiners to the delivery mail group appreciate a quick fix","High","Add new joiners to a mail group.","Messaging Support"],["INC1047520",2,2,"WiFi","Cannot join office WiFi",2,11.73,true,false,2,"Finance","second time reporting this, my laptop does nto see the office network at all kindly look into it urgently","High","Laptop cannot see the office network.","Network Operations"],["INC1047529",2,3,"Mobile","Company mobile setup",2,4.41,true,false,1,"Customer Success","hi team, cannot add my official mail on the new phone","Medium","Cannot add work mail on a new phone.","Desktop Support"],["INC1047416",2,4,"Mail Client","Mail not syncing",2,1.06,true,false,3,"Procurement","hi, not receiving anything since morning but web version shows them thanks in advance","High","Mail on web but not in the client.","Messaging Support"],["INC1047401",2,0,"Account Provisioning","Leaver account deactivation",2,12.29,true,true,1,"Customer Success","raising this again, resignation done, need the access removed before audit","High","Resigned user access to remove.","IAM Support"],["INC1047327",2,2,"WiFi","Cannot join office WiFi",3,13.04,true,true,3,"Customer Success","my laptop does not see the office network at all","High","Laptop cannot see the office network.","Network Operations"],["INC1047558",2,0,"Password","Account locked after failed attempts",3,0.53,true,false,3,"Finance","team, it says too many attempts, locked. pls unlock","High","Too many attempts, locked.","IAM Support"],["INC1047301",2,0,"Account Provisioning","Role change access update",2,5.03,true,false,3,"Marketing","raising this again, transferred to another department, need the right screens now this is blocking my work","High","Transferred, needs new screens.","IAM Support"],["INC1047473",2,5,"Phishing and Fraud","Suspicious email reported",1,2.28,true,false,3,"Engineering","strange link in a mail from an unknown sender, did not click appreciate a quick fix","High","Suspicious link from unknown sender.","Security Operations"],["INC1047214",2,4,"Document Collaboration","Site or library access",2,1.69,true,false,3,"Operations","team, the team site says access denied after the migration need this today","High","Team site access denied after migration.","Messaging Support"],["INC1047541",2,1,"CRM System","CRM sync or data issue",1,19.75,false,false,1,"Sales","good morning, the records i updated yesterday are missing today","Medium","Updated records missing next day.","Application Support"],["INC1047197",2,1,"Licensing","New license request",3,17.44,true,false,2,"Operations","NEED TEH DESIGN TOOL FOR A PROJECT STARTING NEXT MONTH THIS IS BLOCKING MY WORK","High","Needs a design tool licence.","Application Support"],["INC1047530",2,3,"Laptop","Screen or display fault",2,5.95,true,false,2,"Sales","second time reporting this, half the screen is flickering, lines coming let me know if you need anything from my side","High","Half the screen flickers.","Desktop Support"],["INC1047423",2,3,"Laptop","Screen or display fault",1,12.89,false,false,3,"Customer Success","raising this again, half the screen is flickering, lines coming please help","High","Half the screen flickers.","Desktop Support"],["INC1047309",2,4,"Mail Client","Mailbox full or quota",3,2.0,true,false,1,"Marketing","cannot send anything, says storage limit reached","High","Cannot send, storage limit reached.","Messaging Support"],["INC1047561",2,0,"Password","Account locked after failed attempts",2,0.75,true,false,3,"Operations","account got blocked, i think i typed wrong 3 times","High","Blocked after three wrong attempts.","IAM Support"],["INC1047526",2,4,"Mail Client","Mailbox full or quota",2,1.38,true,false,3,"Operations","good morning, mails are bouncing back to senders, box seems full please help","High","Mailbox full, mails bouncing.","Messaging Support"],["INC1047293",2,2,"VPN","VPN will not connect",2,2.97,true,false,3,"Procurement","hi team, getting authentication failed when i try from home kindly look into it urgently","Medium","Authentication fails only from home.","Network Operations"],["INC1047396",2,0,"Account Provisioning","Leaver account deactivation",3,8.04,true,false,2,"Finance","hi, his last workign day was 28th, still showing active in teh sytem kindly look into it urgently","High","Leaver still active in the system.","IAM Support"],["INC1047523",2,3,"Laptop","Screen or display fault",2,17.28,false,false,1,"Manufacturing","team, there is a crack after it fell, still working but hard to read kindly look into it urgently","High","Cracked screen after a fall.","Desktop Support"],["INC1047634",2,2,"VPN","VPN will not connect",2,4.06,true,false,1,"Procurement","second time reporting this, it just says connecting and stays there forever thanks in advance","High","Stuck on connecting forever.","Network Operations"],["INC1047458",2,5,"Phishing and Fraud","Suspicious email reported",1,2.04,true,false,1,"Human Resources","HELLO, STRANGE LINK IN A MAIL FROM AN UNKNOWN SENDER, DID NOT CLICK NEED THIS TODAY","High","Suspicious link from unknown sender.","Security Operations"],["INC1047419",2,1,"Office Productivity Suite","Spreadsheet crash or corruption",2,1.67,true,false,3,"Engineering","team, the file closes by itself every time i open the big sheet","High","Big sheet closes on open.","Application Support"],["INC1047538",2,2,"VPN","VPN will not connect",1,9.22,false,false,1,"Engineering","getting authentication failed when i try from home","Medium","Authentication fails only from home.","Network Operations"],["INC1047616",2,4,"Document Collaboration","Site or library access",2,1.83,true,false,1,"Finance","RAISING THIS AGAIN, CANNOT UPLOAD TO THE PROJECT LIBRARY ANYMORE","Medium","Cannot upload to the project library.","Messaging Support"],["INC1047188",2,2,"VPN","VPN will not connect",2,0.41,true,false,1,"Procurement","it just says connecting and stays there forever kindly look into it urgently","High","Stuck on connecting forever.","Network Operations"],["INC1047441",2,2,"VPN","VPN will not connect",2,0.8,true,false,1,"Engineering","hi, it just says connecting and stays there forever thanks in advance","High","Stuck on connecting forever.","Network Operations"],["INC1047238",2,4,"Meetings and Calls","Call quality poor",2,4.49,true,false,1,"Sales","hello, voice breaks badly in every call from my end please help","High","Voice breaks in every call.","Messaging Support"],["INC1047514",2,2,"WiFi","Cannot join office WiFi",2,12.11,true,false,1,"Human Resources","it asks for a certificate and then fails to join please help","Medium","Certificate prompt then fails to join.","Network Operations"],["INC1047553",2,0,"Password","Password expiry not notified",2,0.9,true,false,3,"Customer Success","second time reporting this, expired without any mail to me, now i cant work need this today","High","Password expired with no mail warning.","IAM Support"],["INC1047233",2,0,"MFA","MFA prompt loop",2,1.14,true,false,3,"Legal","raising this again, verification keeps repeating every 5 minutes, very annoying","High","Verification repeats every 5 minutes.","IAM Support"],["INC1047593",2,1,"Office Productivity Suite","Document or slide app fault",2,3.36,true,false,2,"Customer Success","teh deck will nto save, says file is in use thanks in advance","High","Deck will not save, file in use.","Application Support"],["INC1047282",2,3,"Peripherals","Docking station not working",2,2.12,true,false,3,"Customer Success","good morning, external monitors not detecting through the port replicator this is blocking my work","Medium","Monitors not detected through the port replicator.","Desktop Support"],["INC1047627",2,1,"Office Productivity Suite","Spreadsheet crash or corruption",3,1.34,true,false,3,"Human Resources","my workbook says it cannot be opened, worked yesterday thanks in advance","Medium","Workbook cannot be opened.","Application Support"],["INC1047244",2,1,"CRM System","CRM sync or data issue",2,4.64,true,false,1,"Manufacturing","good morning, my opportunities are not showing teh latest numbers let me know if you need anything from my side","High","Opportunities not showing latest numbers.","Application Support"],["INC1047182",2,0,"MFA","MFA prompt loop",2,1.31,true,false,2,"Marketing","good morning, verification keeps repeating every 5 minutes, very annoying","High","Verification repeats every 5 minutes.","IAM Support"],["INC1047504",2,5,"Phishing and Fraud","Suspicious email reported",1,2.98,true,false,3,"Engineering","strange link in a mail from an unknown sender, did not click need this today","High","Suspicious link from unknown sender.","Security Operations"],["INC1047288",2,1,"Browser and Plugins","Add-in not loading",2,2.88,true,false,1,"Human Resources","HI TEAM, EXTENSION IS INSTALLED BUT NOTHING HAPPENS WHEN I CLICK THIS IS BLOCKING MY WORK","High","Extension installed but does nothing.","Application Support"],["INC1047485",2,4,"Mail Client","Mailbox full or quota",3,2.6,true,false,0,"Sales","second time reporting this, mails are bouncing back to senders, box seems full","High","Mailbox full, mails bouncing.","Messaging Support"],["INC1047579",2,1,"CRM System","CRM report not loading",2,null,null,false,2,"Procurement","raising this again, the pipeline view spins forever and never loads let me know if you need anything from my side","High","Pipeline view never loads.","Application Support"],["INC1047259",2,0,"MFA","MFA device lost or replaced",2,1.51,true,false,2,"Human Resources","changed my phone, now the 6 digit code app is empty this is blocking my work","High","New phone, authenticator app empty.","IAM Support"],["INC1047213",2,2,"VPN","VPN will not connect",1,7.12,true,false,1,"Finance","no connection from my home line since yesterday evening kindly look into it urgently","Medium","No connection from home since yesterday.","Network Operations"],["INC1047273",2,0,"Password","Password reset",2,0.62,true,false,1,"Procurement","hello, my login is not working. it says invalid credentials but im sure its right","Medium","Invalid credentials message; reset is the likely fix.","IAM Support"],["INC1047415",2,2,"WiFi","Cannot join office WiFi",2,3.87,true,false,0,"Marketing","second time reporting this, it asks for a certificate and then fails to join","Medium","Certificate prompt then fails to join.","Network Operations"],["INC1047236",2,3,"Laptop","Laptop slow or freezing",2,18.06,false,false,0,"Procurement","good morning, machine takes 15 mins to start, unusable in the mornign","High","Machine takes 15 minutes to start.","Desktop Support"],["INC1047388",2,1,"Office Productivity Suite","Spreadsheet crash or corruption",3,null,null,false,3,"Manufacturing","good morning, keeps saying not responding when i refresh the pivot","Medium","Spreadsheet not responding on pivot refresh.","Application Support"],["INC1047395",2,1,"Office Productivity Suite","Document or slide app fault",3,2.96,true,false,1,"Finance","team, formatting breaks when i reopen teh document thanks in advance","High","Document formatting breaks on reopen.","Application Support"],["INC1047433",2,2,"VPN","VPN disconnects frequently",0,2.58,true,false,1,"Manufacturing","hi team, connection is unstable since the new client version let me know if you need anything from my side","Medium","Unstable connection since a new client version.","Network Operations"],["INC1047488",2,4,"Distribution Lists","Distribution list change",3,1.28,true,false,3,"Procurement","i am still getting mails from a team i left","Medium","Still on a team mail group after leaving.","Messaging Support"],["INC1047596",2,2,"VPN","VPN will not connect",1,3.76,true,true,3,"Engineering","it just says connecting and stays there forever thanks in advance","High","Stuck on connecting forever.","Network Operations"],["INC1047443",2,2,"LAN and Cabling","Port dead at desk",2,51.11,false,false,3,"Marketing","raising this again, the wall socket at my new seat is not giving anything","High","Wall socket at new seat gives nothing.","Network Operations"],["INC1047411",2,1,"Office Productivity Suite","Spreadsheet crash or corruption",2,null,null,false,3,"Legal","keeps saying not responding when i refresh the pivot please help","Medium","Spreadsheet not responding on pivot refresh.","Application Support"],["INC1047524",2,2,"WiFi","Cannot join office WiFi",3,4.75,true,false,3,"Operations","my laptop does not see the office network at all thanks in advance","High","Laptop cannot see the office network.","Network Operations"],["INC1047508",2,0,"Group Membership","Application permission request",2,null,null,false,0,"Human Resources","raising this again, please give me approval rights for the requests queue","High","Needs approval rights in a queue.","IAM Support"],["INC1047632",2,3,"Peripherals","Docking station not working",2,32.06,false,false,3,"Operations","hi team, external monitors not detecting through the port replicator please help","Medium","Monitors not detected through the port replicator.","Desktop Support"],["INC1047172",2,4,"Mail Client","Mailbox full or quota",2,2.17,true,false,1,"Legal","hello, mails are bouncing back to senders, box seems full","High","Mailbox full, mails bouncing.","Messaging Support"],["INC1047328",2,2,"VPN","VPN disconnects frequently",1,1.88,true,false,1,"Engineering","team, connection is unstable since the new client version kindly look into it urgently","Medium","Unstable connection since a new client version.","Network Operations"],["INC1047601",2,1,"CRM System","CRM report not loading",1,3.7,true,false,3,"Legal","dashboard is blank for me but fine for my manager","Medium","Dashboard blank for this user only.","Application Support"],["INC1047338",2,3,"Printer","Printer offline",3,1.36,true,false,2,"Operations","GOOD MORNING, NOTHING PRINTS, JOBS JUST SIT IN TEH QUEUE KINDLY LOOK INTO IT URGENTLY","Medium","Print jobs sit in the queue.","Desktop Support"],["INC1047380",2,4,"Meetings and Calls","Call quality poor",1,3.76,true,false,1,"Legal","voice breaks badly in every call from my end this is blocking my work","High","Voice breaks in every call.","Messaging Support"],["INC1047618",2,3,"Laptop","Laptop slow or freezing",3,15.54,true,false,3,"Customer Success","very slow since last week, fan runs loud all the time need this today","High","Very slow, fan loud.","Desktop Support"],["INC1047260",2,3,"Laptop","Battery or charging fault",2,17.99,false,false,3,"Operations","TEAM, NOT CHARGING EVEN WHEN PLUGGED IN, SHOWS 4%","High","Not charging when plugged in.","Desktop Support"],["INC1047454",2,3,"Laptop","Laptop slow or freezing",2,28.55,false,false,0,"Procurement","hello, very slow since last week, fan runs loud all the time please help","High","Very slow, fan loud.","Desktop Support"],["INC1047522",2,1,"ERP System","ERP transaction error",2,16.24,false,false,3,"Human Resources","raising this again, the entry is not going through, gives an error number thanks in advance","Medium","Entry fails with an error number.","Application Support"],["INC1047229",2,1,"Office Productivity Suite","Spreadsheet crash or corruption",1,4.24,true,false,3,"Marketing","hi team, the file closes by itself every time i open teh big sheet","High","Big sheet closes on open.","Application Support"],["INC1047548",2,2,"VPN","VPN disconnects frequently",2,0.64,true,false,1,"Sales","second time reporting this, the tunnel drops every 20 minutes while working from home this is blocking my work","High","Tunnel drops every 20 minutes from home.","Network Operations"],["INC1047629",2,0,"Group Membership","Application permission request",2,null,null,false,0,"Marketing","i can see the dashboard but cannot download anything","Medium","Can view but cannot download: a permission gap (classification note).","IAM Support"],["INC1047194",2,1,"ERP System","ERP login failure",3,null,null,false,1,"Customer Success","HI, THE FINANCE SYSTEM IS THROWING AN ERROR AT LOGIN FOR ME ONLY THIS IS BLOCKING MY WORK","High","Finance system error at login.","Application Support"],["INC1047565",2,2,"VPN","VPN disconnects frequently",1,8.96,false,false,3,"Marketing","the tunnel drops every 20 minutes while working from home","High","Tunnel drops every 20 minutes from home.","Network Operations"],["INC1047623",2,2,"VPN","VPN will not connect",1,null,null,false,2,"Manufacturing","good morning, it just says connecting and stays there forever appreciate a quick fix","High","Stuck on connecting forever.","Network Operations"],["INC1047216",2,4,"Mail Client","Mail not syncing",2,2.87,true,false,3,"Finance","hello, not receiving anything since morning but web version shows them appreciate a quick fix","High","Mail on web but not in the client.","Messaging Support"],["INC1047385",2,2,"WiFi","Cannot join office WiFi",2,23.87,false,false,3,"Sales","my laptop does not see the office network at all thanks in advance","High","Laptop cannot see the office network.","Network Operations"],["INC1047290",2,2,"WiFi","Weak WiFi in a zone",2,null,null,false,3,"Sales","raising this again, signal is very poor near the east side meeting rooms","High","Poor signal near one set of rooms.","Network Operations"],["INC1047619",2,1,"Licensing","New license request",3,18.25,true,false,3,"Procurement","PLEASE ARRANGE A SEAT FOR THE ANALYTICS SOFTWARE","High","Requests a seat for analytics software.","Application Support"],["INC1047285",2,0,"Password","Account locked after failed attempts",3,0.92,true,false,3,"Engineering","team, blocked out of the portal, keeps saying account disabled kindly look into it urgently","Medium","Account shows disabled; lockout is closest.","IAM Support"],["INC1047241",2,5,"Malware","Malware or virus alert",0,1.97,true,false,3,"Marketing","hi team, a warning popped up saying threat detected and quarantined appreciate a quick fix","High","Threat detected and quarantined.","Security Operations"],["INC1047360",2,2,"VPN","VPN disconnects frequently",3,1.52,true,false,3,"Human Resources","connection is unstable since the new client version","Medium","Unstable connection since a new client version.","Network Operations"],["INC1047389",2,0,"Account Provisioning","New joiner account setup",2,3.48,true,false,1,"Engineering","our new hire has no login, laptop is there but cannot start","High","New hire has no login.","IAM Support"],["INC1047266",2,2,"VPN","VPN disconnects frequently",1,5.63,true,false,3,"Sales","hello, the tunnel drops every 20 minutes while working from home","High","Tunnel drops every 20 minutes from home.","Network Operations"],["INC1047390",2,4,"Distribution Lists","Distribution list change",2,1.63,true,false,2,"Manufacturing","HI TEAM, I AM STILL GETTING MAILS FROM A TEAM I LEFT THANKS IN ADVANCE","Medium","Still on a team mail group after leaving.","Messaging Support"],["INC1047275",2,4,"Meetings and Calls","Call quality poor",1,2.16,true,false,3,"Manufacturing","hi team, video freezes for others while my network looks fine kindly look into it urgently","Medium","Video freezes for others on calls.","Messaging Support"],["INC1047315",2,2,"WiFi","Cannot join office WiFi",3,37.33,true,false,1,"Marketing","hi team, my laptop does not see the office network at all","High","Laptop cannot see the office network.","Network Operations"]],"shortlist_rule":{"min_tickets_latest_month":12,"max_spread_hours":3.0,"max_p1p2_share_pct":25.0},"small_sample":10,"accuracy":{"tickets":521,"unique_cases":127,"dedup_saving_pct":75.6,"uncategorized":0,"needs_review_tickets":159,"scored":true,"tickets_scored":521,"overall":{"L1":100.0,"L2":100.0,"L3":99.4},"per_category":[{"Category (L1)":"Access & Identity","tickets":131,"L1_correct_pct":100.0,"L2_correct_pct":100.0,"L3_correct_pct":97.7},{"Category (L1)":"Email & Collaboration","tickets":74,"L1_correct_pct":100.0,"L2_correct_pct":100.0,"L3_correct_pct":100.0},{"Category (L1)":"Hardware","tickets":79,"L1_correct_pct":100.0,"L2_correct_pct":100.0,"L3_correct_pct":100.0},{"Category (L1)":"Network & Connectivity","tickets":99,"L1_correct_pct":100.0,"L2_correct_pct":100.0,"L3_correct_pct":100.0},{"Category (L1)":"Security & Compliance","tickets":33,"L1_correct_pct":100.0,"L2_correct_pct":100.0,"L3_correct_pct":100.0},{"Category (L1)":"Software & Applications","tickets":105,"L1_correct_pct":100.0,"L2_correct_pct":100.0,"L3_correct_pct":100.0}],"by_confidence":[{"Confidence":"High","tickets":362,"L2_correct_pct":100.0},{"Confidence":"Medium","tickets":153,"L2_correct_pct":100.0},{"Confidence":"Low","tickets":6,"L2_correct_pct":100.0}],"distinct_misclassified_cases":0},"sample_data":true};
+const R = D.rows;
+const ID=0, MO=1, L1=2, L2=3, L3=4, PR=5, HR=6, SLA=7, RO=8, CH=9, DEP=10,
+      DESC=11, CONF=12, REASON=13, GRP=14;
+const HIGH_PRI = new Set(D.high_priority_idx || []);
+const PORTAL = new Set(D.portal_channel_idx || []);
+const SERIES = ["--s1","--s2","--s3","--s4","--s5","--s6"];
+const cssv = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const state = { month:-1, cat:-1, l2:null };
+const SMALL_SAMPLE = D.small_sample || 10;
+const NM = D.months.length;          // month count is whatever the export had
+const LAST = NM - 1;
+
+/* ---------- small stats helpers ---------- */
+const num = n => n.toLocaleString("en-GB");
+const r1 = n => Math.round(n*10)/10;
+const pct = (a,b) => b ? Math.round(1000*a/b)/10 : 0;
+function quantile(sorted, q){
+  if(!sorted.length) return 0;
+  const p = (sorted.length-1)*q, lo = Math.floor(p), hi = Math.ceil(p);
+  return sorted[lo] + (sorted[hi]-sorted[lo])*(p-lo);
+}
+const esc = s => String(s).replace(/[&<>"]/g, c =>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- filtering ---------- */
+function scoped(){
+  return R.filter(t => (state.month<0 || t[MO]===state.month) &&
+                       (state.cat<0   || t[L1]===state.cat));
+}
+/* The trend chart is the one panel that always spans all three months - a
+   month-on-month chart filtered to one month would say nothing. The month
+   filter highlights there instead of slicing, and the subtitle says so. */
+function catScoped(){
+  return R.filter(t => state.cat<0 || t[L1]===state.cat);
+}
+
+/* ---------- tooltip ---------- */
+const tip = document.getElementById("tip");
+function bindTip(el, html){
+  el.addEventListener("mousemove", e => {
+    tip.innerHTML = html; tip.style.opacity = 1;
+    const w = tip.offsetWidth, h = tip.offsetHeight;
+    tip.style.left = Math.min(e.clientX+14, innerWidth-w-10) + "px";
+    tip.style.top  = Math.max(e.clientY-h-12, 8) + "px";
+  });
+  el.addEventListener("mouseleave", () => tip.style.opacity = 0);
+}
+
+/* ---------- filter chips ---------- */
+function buildChips(){
+  const mc = document.getElementById("monthchips");
+  mc.style.display="flex"; mc.style.gap="8px"; mc.style.flexWrap="wrap";
+  const mk = (label, val, dot) => {
+    const b = document.createElement("button");
+    b.className="chip"; b.type="button"; b.dataset.val=val;
+    b.innerHTML = (dot?`<span class="dot" style="background:${dot}"></span>`:"") + esc(label);
+    return b;
+  };
+  mc.append(mk(`All ${NM} month${NM===1?"":"s"}`,-1));
+  D.months.forEach((m,i)=> mc.append(mk(m,i)));
+  mc.addEventListener("click", e => {
+    const b = e.target.closest(".chip"); if(!b) return;
+    state.month = +b.dataset.val; renderAll();
+  });
+
+  const cc = document.getElementById("catchips");
+  cc.style.display="flex"; cc.style.gap="6px"; cc.style.flexWrap="wrap";
+  cc.append(mk("All",-1));
+  D.l1_order.forEach((c,i)=> cc.append(mk(c,i,`var(${SERIES[i]})`)));
+  cc.addEventListener("click", e => {
+    const b = e.target.closest(".chip"); if(!b) return;
+    const v = +b.dataset.val;
+    state.cat = v; state.l2 = null; renderAll();
+  });
+}
+function syncChips(){
+  document.querySelectorAll("#monthchips .chip").forEach(b =>
+    b.setAttribute("aria-pressed", (+b.dataset.val===state.month)+""));
+  document.querySelectorAll("#catchips .chip").forEach(b =>
+    b.setAttribute("aria-pressed", (+b.dataset.val===state.cat)+""));
+}
+
+/* ---------- 1. stat tiles ---------- */
+function renderTiles(){
+  const s = scoped();
+  const res = s.filter(t => t[HR]!==null);
+  const all = catScoped();
+  const perMonth = D.months.map((_,i)=> all.filter(t=>t[MO]===i).length);
+  const mom = NM>1 && perMonth[LAST-1] ? pct(perMonth[LAST]-perMonth[LAST-1], perMonth[LAST-1]) : 0;
+  const hrs = res.reduce((a,t)=>a+t[HR],0);
+  const slaOk = res.filter(t=>t[SLA]===true).length;
+
+  const delta = (v, suffix="%") => {
+    const cls = v>0 ? "up" : v<0 ? "down" : "";
+    const arrow = v>0 ? "▲" : v<0 ? "▼" : "–";
+    return `<span class="delta ${cls}">${arrow} ${Math.abs(v)}${suffix}</span>`;
+  };
+  const tiles = [
+    ["Tickets in scope", num(s.length),
+      state.month<0 ? `${perMonth.map(n=>num(n)).join(" → ")} across the ${NM} months`
+                    : `of ${num(all.length)} in the ${NM} month window`],
+    [NM>1 ? `${D.months[LAST]} vs ${D.months[LAST-1]}` : "Single month", NM>1 ? (mom>0?"+":"") + mom + "%" : "–",
+      NM>1 ? `${delta(mom)} month on month${state.cat<0?"":", this category"}`
+           : "Only one month in the export, so there is nothing to compare"],
+    ["SLA met", pct(slaOk, res.length) + "%",
+      `${num(res.length - slaOk)} of ${num(res.length)} resolved tickets breached`],
+    ["Agent hours", num(Math.round(hrs)),
+      `${r1(hrs/Math.max(1,res.length))} h average per resolved ticket, across ${num(res.length)} of them`],
+    ["Reopened", pct(res.filter(t=>t[RO]).length, res.length) + "%",
+      `${num(res.filter(t=>t[RO]).length)} tickets came back after closure`],
+  ];
+  document.getElementById("tiles").innerHTML = tiles.map(([k,v,n]) =>
+    `<div class="tile"><div class="k">${esc(k)}</div><div class="v">${v}</div>
+     <div class="n">${n}</div></div>`).join("");
+}
+
+/* ---------- 2. stacked trend ---------- */
+function renderTrend(){
+  const data = catScoped();
+  const cats = state.cat<0 ? D.l1_order.map((n,i)=>i) : [state.cat];
+  const counts = cats.map(ci => D.months.map((_,mi)=>
+    data.filter(t=>t[L1]===ci && t[MO]===mi).length));
+  const totals = D.months.map((_,mi)=> data.filter(t=>t[MO]===mi).length);
+
+  document.getElementById("trendtitle").textContent =
+    state.cat<0 ? "Ticket volume by category, month on month"
+                : `${D.l1_order[state.cat]} volume, month on month`;
+  document.getElementById("trendsub").textContent =
+    state.month<0 ? `All ${NM} months shown.`
+      : `All ${NM} months shown. ${D.months[state.month]} is highlighted, because a month-on-month chart filtered to one month would say nothing.`;
+
+  const W=920, H=330, PL=54, PR_=18, PT=26, PB=52;
+  const plotH = H-PT-PB, plotW = W-PL-PR_;
+  const max = Math.max(...totals, 1);
+  const step = max>120?40:max>60?20:10;
+  const top = Math.ceil(max/step)*step;
+  const y = v => PT + plotH - (v/top)*plotH;
+  const bw = Math.min(72, plotW/D.months.length*0.32);
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Stacked bar chart of ticket volume by category for each month">`;
+  for(let v=0; v<=top; v+=step){
+    svg += `<line class="gridline" x1="${PL}" x2="${W-PR_}" y1="${y(v)}" y2="${y(v)}"/>`;
+    svg += `<text class="tick" x="${PL-10}" y="${y(v)+4}" text-anchor="end">${v}</text>`;
+  }
+  svg += `<line class="axisline" x1="${PL}" x2="${W-PR_}" y1="${y(0)}" y2="${y(0)}"/>`;
+
+  D.months.forEach((m, mi) => {
+    const cx = PL + plotW*(mi+0.5)/D.months.length;
+    const x = cx - bw/2;
+    let acc = 0;
+    const dim = state.month>=0 && state.month!==mi;
+    cats.forEach((ci, k) => {
+      const v = counts[k][mi]; if(!v) return;
+      const y0 = y(acc+v), y1 = y(acc);
+      // 2px surface gap between stacked segments, not a border
+      const h = Math.max(1, y1-y0-2);
+      svg += `<rect class="seg" data-ci="${ci}" data-mi="${mi}" data-v="${v}"
+        x="${x}" y="${y0}" width="${bw}" height="${h}" rx="3"
+        fill="var(${SERIES[ci]})" opacity="${dim?0.28:1}"/>`;
+      acc += v;
+    });
+    // selective direct label: the month total only
+    svg += `<text class="vallabel" x="${cx}" y="${y(totals[mi])-9}" text-anchor="middle"
+      opacity="${dim?0.45:1}">${totals[mi]}</text>`;
+    svg += `<text class="axlabel" x="${cx}" y="${H-PB+22}" text-anchor="middle"
+      opacity="${dim?0.5:1}">${m}</text>`;
+    if(mi>0){
+      const d = totals[mi]-totals[mi-1];
+      const p = pct(d, totals[mi-1]);
+      svg += `<text class="tick" x="${cx}" y="${H-PB+39}" text-anchor="middle"
+        fill="${d>=0?cssv("--up"):cssv("--crit")}" opacity="${dim?0.5:1}">${d>=0?"+":""}${p}% vs prev</text>`;
+    }
+  });
+  svg += `<text class="axlabel" x="${PL-38}" y="${PT-10}">Tickets</text></svg>`;
+  document.getElementById("trendchart").innerHTML = svg;
+
+  document.querySelectorAll("#trendchart .seg").forEach(el => {
+    const ci = +el.dataset.ci, mi = +el.dataset.mi, v = +el.dataset.v;
+    bindTip(el, `<strong>${esc(D.l1_order[ci])}</strong><br>${D.months[mi]}: ${v} tickets
+      (${pct(v, totals[mi])}% of the month)`);
+    el.addEventListener("click", ()=>{ state.cat = ci; state.l2 = null; renderAll(); });
+  });
+
+  document.getElementById("trendlegend").innerHTML = cats.map(ci =>
+    `<span class="lgi"><span class="sw" style="background:var(${SERIES[ci]})"></span>
+     ${esc(D.l1_order[ci])}</span>`).join("");
+
+  document.getElementById("trendtable").innerHTML =
+    `<table><thead><tr><th>Category</th>` +
+    D.months.map(m=>`<th class="n">${m}</th>`).join("") +
+    `<th class="n">Total</th><th class="n">${D.months[0]} to ${D.months[LAST]}</th></tr></thead><tbody>` +
+    cats.map((ci,k)=>{
+      const c = counts[k], tot = c.reduce((a,b)=>a+b,0);
+      const g = c[0] ? pct(c[LAST]-c[0], c[0]) : 0;
+      return `<tr><td><strong>${esc(D.l1_order[ci])}</strong></td>` +
+        c.map(n=>`<td class="n">${n}</td>`).join("") +
+        `<td class="n"><strong>${tot}</strong></td>
+         <td class="n" style="color:${g>=0?cssv("--up"):cssv("--crit")}">${g>=0?"+":""}${g}%</td></tr>`;
+    }).join("") +
+    `<tr><td><strong>Total</strong></td>` +
+    totals.map(n=>`<td class="n"><strong>${n}</strong></td>`).join("") +
+    `<td class="n"><strong>${totals.reduce((a,b)=>a+b,0)}</strong></td><td class="n"></td></tr>` +
+    `</tbody></table>`;
+
+  const growers = cats.map((ci,k)=>({ci, g: counts[k][0] ? pct(counts[k][LAST]-counts[k][0], counts[k][0]) : 0,
+    d: counts[k][LAST]-counts[k][0]})).filter(o=>o.d>0).sort((a,b)=>b.d-a.d);
+  document.getElementById("trendnote").textContent = growers.length
+    ? `Biggest riser: ${D.l1_order[growers[0].ci]}, up ${growers[0].d} tickets from ${D.months[0]} to ${D.months[LAST]} (${growers[0].g}%).`
+      + (NM<=3 ? ` With ${NM} months there are only ${NM-1} delta${NM===2?"":"s"}, so read this as a direction, not a trend line.` : "")
+    : `No category grew between ${D.months[0]} and ${D.months[LAST]} in the current selection.`;
+}
+
+/* ---------- 3. drill ---------- */
+function renderDrill(){
+  const s = scoped();
+  const byL2 = {};
+  s.forEach(t => { (byL2[t[L2]] ||= {n:0, l1:t[L1], rows:[]}); byL2[t[L2]].n++;
+                   byL2[t[L2]].rows.push(t); });
+  const list = Object.entries(byL2).map(([k,v])=>({name:k,...v})).sort((a,b)=>b.n-a.n);
+
+  document.getElementById("l2head").textContent =
+    `Subcategories (${list.length})`;
+  if(!list.length){
+    document.getElementById("l2list").innerHTML = `<p class="muted">No tickets in this selection.</p>`;
+    document.getElementById("l3head").textContent = "";
+    document.getElementById("l3table").innerHTML = "";
+    document.getElementById("tickets").innerHTML = "";
+    return;
+  }
+  if(!state.l2 || !byL2[state.l2]) state.l2 = list[0].name;
+  const max = list[0].n;
+
+  document.getElementById("l2list").innerHTML = list.map(o =>
+    `<button class="l2row" type="button" data-l2="${esc(o.name)}"
+       aria-pressed="${o.name===state.l2}">
+       <span class="nm"><span class="dot" style="width:9px;height:9px;border-radius:3px;
+         background:var(${SERIES[o.l1]})"></span>${esc(o.name)}</span>
+       <span class="ct">${o.n}</span>
+       <span class="bartrack"><span class="barfill"
+         style="width:${(o.n/max*100).toFixed(1)}%;background:var(${SERIES[o.l1]})"></span></span>
+     </button>`).join("");
+  document.querySelectorAll(".l2row").forEach(b =>
+    b.addEventListener("click", ()=>{ state.l2 = b.dataset.l2; renderDrill(); }));
+
+  const sel = byL2[state.l2];
+  const byL3 = {};
+  sel.rows.forEach(t => { (byL3[t[L3]] ||= []).push(t); });
+  const l3rows = Object.entries(byL3).sort((a,b)=>b[1].length-a[1].length);
+
+  document.getElementById("l3head").textContent = `${state.l2} · ${sel.n} tickets`;
+  document.getElementById("l3sub").textContent =
+    `${D.l1_order[sel.l1]} › ${state.l2}. Handled by ${sel.rows[0][GRP]}.`;
+
+  document.getElementById("l3table").innerHTML =
+    `<table><thead><tr><th>Issue type</th>` +
+    (state.month<0 ? D.months.map(m=>`<th class="n">${m}</th>`).join("") : "") +
+    `<th class="n">Tickets</th><th class="n">Median hrs</th></tr></thead><tbody>` +
+    l3rows.map(([nm, rows])=>{
+      const res = rows.filter(t=>t[HR]!==null).map(t=>t[HR]).sort((a,b)=>a-b);
+      const med = res.length ? r1(quantile(res,0.5)) : "–";
+      const perM = D.months.map((_,i)=> rows.filter(t=>t[MO]===i).length);
+      return `<tr><td><strong>${esc(nm)}</strong></td>` +
+        (state.month<0 ? perM.map(n=>`<td class="n">${n}</td>`).join("") : "") +
+        `<td class="n"><strong>${rows.length}</strong></td><td class="n">${med}</td></tr>`;
+    }).join("") + `</tbody></table>`;
+
+  const badge = c => c==="High" ? `<span class="badge high">● High confidence</span>`
+    : c==="Medium" ? `<span class="badge med">◆ Medium, review</span>`
+    : `<span class="badge low">▲ Low, must review</span>`;
+  // spread the examples across the selection instead of showing the six oldest,
+  // otherwise every card says January and the drill looks stale
+  const stepN = Math.max(1, Math.floor(sel.rows.length/6));
+  const sample = sel.rows.filter((_,i)=> i % stepN === 0).slice(0,6);
+  document.getElementById("tickets").innerHTML = sample.map(t =>
+    `<div class="tk">
+      <div class="meta"><span>${esc(t[ID])}</span><span>${D.months[t[MO]]}</span>
+        <span>${D.priorities[t[PR]]}</span><span>${esc(t[DEP])}</span>
+        <span>${D.channels[t[CH]]}</span>
+        <span>${t[HR]===null ? "still open" : t[HR]+" h to resolve"}</span></div>
+      <div class="desc">“${esc(t[DESC])}”</div>
+      <div class="why">${badge(t[CONF])}<span>${esc(t[REASON])}</span></div>
+      <div class="muted" style="margin-top:6px">Assigned to ${esc(t[L3])}</div>
+    </div>`).join("") +
+    (sel.rows.length>6 ? `<p class="muted">Showing ${sample.length} spread across ${sel.rows.length}. The full set is in
+      <code>${esc(D.source_file)}</code>.</p>` : "");
+}
+
+/* ---------- shared subcategory stats ---------- */
+function l2stats(rows){
+  const by = {};
+  rows.forEach(t => { (by[t[L2]] ||= {l1:t[L1], rows:[]}).rows.push(t); });
+  const nMonths = state.month<0 ? NM : 1;
+  return Object.entries(by).map(([name, o]) => {
+    const res = o.rows.filter(t=>t[HR]!==null);
+    const hrs = res.map(t=>t[HR]).sort((a,b)=>a-b);
+    const sum = hrs.reduce((a,b)=>a+b,0);
+    const perM = D.months.map((_,i)=> o.rows.filter(t=>t[MO]===i).length);
+    return {
+      name, l1:o.l1, total:o.rows.length, perM, latest: perM[LAST],
+      median: hrs.length ? r1(quantile(hrs,0.5)) : 0,
+      spread: hrs.length ? r1(quantile(hrs,0.9)-quantile(hrs,0.1)) : 0,
+      hoursTotal: Math.round(sum), hoursPerMonth: r1(sum/nMonths),
+      slaPct: pct(res.filter(t=>t[SLA]===true).length, res.length),
+      reopenPct: pct(res.filter(t=>t[RO]).length, res.length),
+      p12Pct: pct(o.rows.filter(t=>HIGH_PRI.has(t[PR])).length, o.rows.length),
+      selfPct: pct(o.rows.filter(t=>PORTAL.has(t[CH])).length, o.rows.length),
+      resolved: res.length,
+      group: o.rows[0][GRP],
+    };
+  });
+}
+
+/* ---------- 4. automation shortlist ---------- */
+function renderShortlist(){
+  const rule = D.shortlist_rule;
+  // The shortlist always evaluates the full three months. It is a decision about a
+  // standing pattern, not about one month, so the month filter does not scope it.
+  const stats = l2stats(catScoped());
+  stats.forEach(o => {
+    o.hoursPerMonth = r1(o.hoursTotal/NM);
+    o.checks = {
+      volume:  o.perM[LAST] >= rule.min_tickets_latest_month,
+      spread:  o.spread <= rule.max_spread_hours,
+      routine: o.p12Pct <= rule.max_p1p2_share_pct,
+    };
+    o.passed = Object.values(o.checks).filter(Boolean).length;
+  });
+  const pass = stats.filter(o=>o.passed===3).sort((a,b)=>b.hoursPerMonth-a.hoursPerMonth);
+  const near = stats.filter(o=>o.passed===2).sort((a,b)=>b.hoursPerMonth-a.hoursPerMonth).slice(0,4);
+
+  document.getElementById("shortsub").innerHTML =
+    `A subcategory reaches the shortlist when it clears all three checks: at least
+     <strong>${rule.min_tickets_latest_month} tickets</strong> in ${D.months[LAST]}, a resolution-time
+     spread (P90 minus P10) of <strong>${rule.max_spread_hours} hours or less</strong>, and no more
+     than <strong>${rule.max_p1p2_share_pct}%</strong> P1 or P2. Evaluated across all ${NM} months.`;
+
+  const mark = ok => ok ? `<span class="st good"><span class="ic">✓</span>Pass</span>`
+                        : `<span class="st crit"><span class="ic">✗</span>Fail</span>`;
+  const rowHtml = (o, hi) =>
+    `<tr class="${hi?"hi":""}"><td><strong>${esc(o.name)}</strong>
+       <div class="muted">${esc(D.l1_order[o.l1])} · ${esc(o.group)}</div></td>
+     <td class="n">${o.perM[LAST]}<div class="muted">${mark(o.checks.volume)}</div></td>
+     <td class="n">${o.spread} h<div class="muted">${mark(o.checks.spread)}</div></td>
+     <td class="n">${o.p12Pct}%<div class="muted">${mark(o.checks.routine)}</div></td>
+     <td class="n">${o.median} h</td>
+     <td class="n"><strong>${o.hoursPerMonth}</strong></td>
+     <td class="n">${o.perM[0] ? (o.perM[LAST]>=o.perM[0]?"+":"") + pct(o.perM[LAST]-o.perM[0], o.perM[0]) + "%" : "–"}</td>
+     <td class="n">${o.selfPct}%</td></tr>`;
+
+  document.getElementById("shorttable").innerHTML =
+    `<table><thead><tr><th>Subcategory</th><th class="n">${D.months[LAST]} tickets</th>
+      <th class="n">Spread</th><th class="n">P1+P2</th><th class="n">Median</th>
+      <th class="n">Agent-hrs / month</th><th class="n">${D.months[0]} to ${D.months[LAST]}</th>
+      <th class="n">Via portal</th></tr></thead><tbody>` +
+    (pass.length ? pass.map(o=>rowHtml(o,true)).join("")
+      : `<tr><td colspan="8" class="muted">Nothing clears all three checks in this selection.</td></tr>`) +
+    (near.length ? `<tr><td colspan="8" style="padding-top:18px;border:0">
+      <span class="flabel">Near miss: two of three checks</span></td></tr>` +
+      near.map(o=>rowHtml(o,false)).join("") : "") +
+    `</tbody></table>`;
+
+  if(pass.length){
+    const t = pass[0];
+    document.getElementById("shortcall").innerHTML =
+      `<strong>${esc(t.name)}</strong> is the clearest candidate. It ran
+       ${t.perM.join(" → ")} tickets across the ${NM} months
+       (${pct(t.perM[LAST]-t.perM[0], Math.max(1,t.perM[0]))}% up), it is
+       ${pct(t.total, catScoped().length)}% of everything the desk received, and it resolves in
+       ${t.median} hours with a spread of only ${t.spread} hours. A spread that tight means the
+       fix is the same nearly every time, which is what makes it scriptable. It gives back at
+       least ${t.hoursPerMonth} agent-hours a month, and ${t.selfPct}% of these already arrive
+       through the portal, so the front door for a self-service flow is in place.`;
+  } else {
+    document.getElementById("shortcall").textContent =
+      "No subcategory clears all three checks in the current selection.";
+  }
+}
+
+/* ---------- 5. effort chart ---------- */
+function renderEffort(){
+  const stats = l2stats(scoped()).filter(o=>o.resolved>0)
+    .sort((a,b)=> b.hoursPerMonth-a.hoursPerMonth || b.resolved-a.resolved || a.name.localeCompare(b.name))
+    .slice(0,8);
+  const max = Math.max(...stats.map(o=>o.hoursPerMonth), 1);
+  const rowH = 44, PL = 230, W = 920, PB = 34, barH = 15;
+  const H = stats.length*rowH + PB + 10;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Horizontal bar chart of agent hours per month by subcategory">`;
+  const plotW = W-PL-84;
+  const stepv = max>200?100:max>80?50:20;
+  for(let v=0; v<=max; v+=stepv){
+    const x = PL + (v/max)*plotW;
+    svg += `<line class="gridline" x1="${x}" x2="${x}" y1="0" y2="${H-PB}"/>`;
+    svg += `<text class="tick" x="${x}" y="${H-PB+18}" text-anchor="middle">${v}</text>`;
+  }
+  svg += `<line class="axisline" x1="${PL}" x2="${PL}" y1="0" y2="${H-PB}"/>`;
+  stats.forEach((o,i)=>{
+    const h = barH, y = i*rowH + (rowH-h)/2 - 2;
+    const w = Math.max(2, (o.hoursPerMonth/max)*plotW);
+    // A row built on very few tickets is noise, not a finding. Say so on the chart
+    // rather than letting a 5-ticket median sit third in a management ranking.
+    const thin = o.resolved < SMALL_SAMPLE;
+    svg += `<rect class="seg" data-i="${i}" x="${PL}" y="${y}" width="${w}" height="${h}"
+      rx="3" fill="var(--s1)" opacity="${thin?0.45:1}"/>`;
+    svg += `<text class="axlabel" x="${PL-12}" y="${y+h/2}" text-anchor="end">${esc(o.name)}</text>`;
+    svg += `<text class="tick" x="${PL-12}" y="${y+h/2+14}" text-anchor="end">${o.resolved} resolved${thin?" · small sample":""}</text>`;
+    svg += `<text class="vallabel" x="${PL+w+10}" y="${y+h/2+4}"
+      opacity="${thin?0.6:1}">${o.hoursPerMonth} h</text>`;
+  });
+  svg += `<text class="axlabel" x="${PL}" y="${H-4}">Agent-hours per month</text></svg>`;
+  document.getElementById("effortchart").innerHTML = svg;
+  document.querySelectorAll("#effortchart .seg").forEach(el=>{
+    const o = stats[+el.dataset.i];
+    bindTip(el, `<strong>${esc(o.name)}</strong><br>${o.hoursPerMonth} agent-hours per month<br>
+      ${o.total} tickets, median ${o.median} h, spread ${o.spread} h`);
+  });
+  document.getElementById("efforttable").innerHTML =
+    `<table><thead><tr><th>Subcategory</th><th class="n">Tickets</th>
+     <th class="n">Resolved</th><th class="n">Median hrs</th><th class="n">Spread hrs</th>
+     <th class="n">Agent-hrs / month</th><th>Confidence</th></tr></thead><tbody>` +
+    stats.map(o=>`<tr><td><strong>${esc(o.name)}</strong>
+      <div class="muted">${esc(D.l1_order[o.l1])}</div></td>
+      <td class="n">${o.total}</td><td class="n">${o.resolved}</td>
+      <td class="n">${o.median}</td>
+      <td class="n">${o.spread}</td><td class="n"><strong>${o.hoursPerMonth}</strong></td>
+      <td>${o.resolved < SMALL_SAMPLE
+        ? `<span class="st warn"><span class="ic">◆</span>Small sample</span>`
+        : `<span class="st neutral"><span class="ic">●</span>Enough data</span>`}</td></tr>`).join("") +
+    `</tbody></table>`;
+  document.getElementById("effortnote").textContent =
+    `Rows built on fewer than ${SMALL_SAMPLE} resolved tickets are drawn faded and marked as a small sample. ` +
+    `A median from a handful of tickets moves a long way on one slow ticket, so it is not a basis for a staffing decision on its own.`;
+}
+
+/* ---------- 6. SLA ---------- */
+function renderSLA(){
+  const stats = l2stats(scoped()).filter(o=>o.resolved>=10)
+    .sort((a,b)=> a.slaPct-b.slaPct || b.resolved-a.resolved || a.name.localeCompare(b.name)).slice(0,8);
+  const st = p => p>=95 ? ["good","●","On track"]
+    : p>=85 ? ["warn","◆","Slipping"]
+    : p>=70 ? ["serious","▲","Under pressure"]
+    : ["crit","■","Failing"];
+  document.getElementById("slatable").innerHTML = stats.length ?
+    `<table><thead><tr><th>Subcategory</th><th>Status</th><th class="n">SLA met</th>
+      <th class="n">Breached</th><th class="n">Median hrs</th><th class="n">Reopened</th>
+      <th>Handled by</th></tr></thead><tbody>` +
+    stats.map(o=>{
+      const [c,i,l] = st(o.slaPct);
+      return `<tr><td><strong>${esc(o.name)}</strong>
+        <div class="muted">${esc(D.l1_order[o.l1])}</div></td>
+        <td><span class="st ${c}"><span class="ic">${i}</span>${l}</span></td>
+        <td class="n">${o.slaPct}%</td>
+        <td class="n">${Math.round(o.resolved*(100-o.slaPct)/100)} of ${o.resolved}</td>
+        <td class="n">${o.median}</td><td class="n">${o.reopenPct}%</td>
+        <td>${esc(o.group)}</td></tr>`;
+    }).join("") + `</tbody></table>`
+    : `<p class="muted">No subcategory has 10 or more resolved tickets in this selection.</p>`;
+}
+
+/* ---------- 7. categoriser quality ---------- */
+/* Two very different states. With an answer key we can report a measured number.
+   Without one we must say so plainly, because an unmeasured categorisation quietly
+   presented as fact is how a whole report becomes wrong without anyone noticing. */
+function renderQuality(){
+  const a = D.accuracy || {};
+  const scored = !!a.scored;
+  const base = [
+    ["Tickets categorised", num(a.tickets || R.length), "every ticket got all three levels"],
+    ["Unique cases sent", num(a.unique_cases || 0),
+      `${a.dedup_saving_pct ?? 0}% fewer classification calls after deduplicating`],
+    ["Uncategorised", num(a.uncategorized || 0),
+      "nothing in the taxonomy fitted, so nothing was forced"],
+    ["Flagged for review", num(a.needs_review_tickets || 0),
+      "medium or low confidence, a human should check these"],
+  ];
+  const measured = scored ? [
+    ["Category (L1) correct", a.overall.L1 + "%", "measured against the answer key"],
+    ["Subcategory (L2) correct", a.overall.L2 + "%", "measured against the answer key"],
+    ["Issue type (L3) correct", a.overall.L3 + "%",
+      `${a.distinct_misclassified_cases} distinct description${a.distinct_misclassified_cases===1?"":"s"} landed wrong`],
+  ] : [
+    ["Accuracy", "Not measured", "no answer key was supplied with this export"],
+  ];
+  document.getElementById("qtiles").innerHTML = [...measured, ...base].map(([k,v,n]) =>
+    `<div class="tile"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div>
+     <div class="n">${esc(n)}</div></div>`).join("");
+
+  document.getElementById("qtable").innerHTML = scored
+    ? `<table><thead><tr><th>Category</th><th class="n">Tickets</th>
+        <th class="n">L1 correct</th><th class="n">L2 correct</th>
+        <th class="n">L3 correct</th></tr></thead><tbody>` +
+      a.per_category.map(r=>`<tr><td><strong>${esc(r["Category (L1)"])}</strong></td>
+        <td class="n">${r.tickets}</td><td class="n">${r.L1_correct_pct}%</td>
+        <td class="n">${r.L2_correct_pct}%</td><td class="n">${r.L3_correct_pct}%</td></tr>`).join("") +
+      `</tbody></table>`
+    : "";
+
+  document.getElementById("qcaveat").innerHTML = scored
+    ? `<strong>Read this accuracy for what it is.</strong> It is measured against the answer key
+       supplied with this export, so it describes how the classifier performed on
+       <em>these</em> tickets. It is a measurement, not a forecast. If the answer key is a
+       sample built from the same taxonomy the classifier was scored against, the number will
+       run high, because the descriptions and the buckets came from one source. The number to
+       trust on live data comes from hand-labelling a few hundred real tickets and rerunning
+       this same check.`
+    : `<strong>Accuracy was not measured for this report, and that is worth stating plainly.</strong>
+       No answer key came with the export, so nothing here tells you how often the classifier
+       put a ticket in the right bucket. Every volume, trend and shortlist number above depends
+       on that being right. To close it: hand-label 200 to 300 tickets, add an
+       <code>Answer Key</code> sheet with the columns Ticket ID, True Category (L1),
+       True Subcategory (L2) and True Issue Type (L3), and rerun. Until then, treat the
+       ${num(a.needs_review_tickets || 0)} flagged tickets as the place a human should start.`;
+}
+
+/* ---------- table twins ---------- */
+document.querySelectorAll("[data-twin]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const t = btn.dataset.twin;
+    const chart = document.getElementById(t+"chart");
+    const table = document.getElementById(t+"table");
+    const showTable = table.classList.contains("hidden");
+    table.classList.toggle("hidden", !showTable);
+    chart.classList.toggle("hidden", showTable);
+    if(t==="trend") document.getElementById("trendlegend").classList.toggle("hidden", showTable);
+    btn.textContent = showTable ? "Show chart" : "Show table";
+  });
+});
+
+/* ---------- theme ---------- */
+document.getElementById("themebtn").addEventListener("click", () => {
+  const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+  const cur = document.documentElement.getAttribute("data-theme") || (dark ? "dark" : "light");
+  document.documentElement.setAttribute("data-theme", cur==="dark" ? "light" : "dark");
+  renderAll();
+});
+
+/* ---------- 0. executive summary ----------
+   Four pointers a leader can read in 20 seconds: the trend, the worst risk, where the
+   effort goes, and the one decision. Always the whole period and every category, so the
+   filters below never change it. Every number is computed from the same rows as the panels. */
+function renderSummary(){
+  const resOf = rows => rows.filter(t=>t[HR]!==null);
+  const slaOf = rows => { const r = resOf(rows); return {ok:r.filter(t=>t[SLA]===true).length, n:r.length}; };
+  const perMonth = D.months.map((_,i)=> R.filter(t=>t[MO]===i).length);
+  const all = slaOf(R), allPct = pct(all.ok, all.n);
+  const pts = [];
+
+  // 1. Trend, and which category drove it
+  if(NM>1){
+    const growth = pct(perMonth[LAST]-perMonth[0], perMonth[0]);
+    const d = D.l1_order.map((c,i)=>({c, i,
+      d: R.filter(t=>t[L1]===i && t[MO]===LAST).length - R.filter(t=>t[L1]===i && t[MO]===LAST-1).length}))
+      .sort((a,b)=>b.d-a.d);
+    const top = d[0];
+    const subs = l2stats(R.filter(t=>t[L1]===top.i))
+      .map(o=>({name:o.name, d:o.perM[LAST]-o.perM[LAST-1]})).filter(o=>o.d>0)
+      .sort((a,b)=>b.d-a.d).slice(0,2);
+    pts.push({cls:"warn", tag:"Demand", big:(growth>0?"+":"")+growth+"%",
+      claim:`Tickets rose from ${num(perMonth[0])} in ${D.months[0]} to ${num(perMonth[LAST])} in ${D.months[LAST]}.`,
+      why: top.d>0 ? `${esc(top.c)} added ${top.d} tickets in ${D.months[LAST]}` +
+        (subs.length ? `, mostly ${subs.map(s=>esc(s.name)+" (+"+s.d+")").join(" and ")}` : "") + "." : ""});
+  }
+
+  // 2. Risk: the most urgent tickets when they trail the overall SLA, otherwise the
+  //    subcategory with the worst SLA. A fixed P1 message goes stale once P1 is fixed.
+  const st = l2stats(R).filter(o=>o.resolved>=SMALL_SAMPLE).sort((a,b)=>b.hoursTotal-a.hoursTotal).slice(0,2);
+  const p1 = R.filter(t=>t[PR]===0), p1s = slaOf(p1), p1Pct = pct(p1s.ok, p1s.n);
+  let riskPhrase = "";
+  if(p1s.n && p1Pct < allPct){
+    riskPhrase = "urgent tickets miss SLA most";
+    pts.push({cls:"crit", tag:"Risk", big: p1Pct+"%",
+      claim:`Only ${p1s.ok} of ${p1s.n} ${esc(D.priorities[0])} (most urgent) tickets met SLA.`,
+      why:`Overall SLA is ${allPct}%, so the average hides the misses on the most urgent work.`});
+  } else {
+    // The effort pointer already covers its two subcategories, so look past them.
+    const worst = l2stats(R).filter(o=>o.resolved>=SMALL_SAMPLE && !st.some(e=>e.name===o.name))
+      .sort((a,b)=>a.slaPct-b.slaPct)[0];
+    if(worst){
+      const ws = slaOf(R.filter(t=>t[L2]===worst.name));
+      riskPhrase = `${worst.name} misses SLA most`;
+      pts.push({cls: worst.slaPct < allPct ? "crit" : "", tag:"Risk", big: worst.slaPct+"%",
+        claim:`Only ${ws.ok} of ${ws.n} ${esc(worst.name)} tickets met SLA.`,
+        why:(p1s.n ? `${esc(D.priorities[0])} is on track: ${p1s.ok} of ${p1s.n} met SLA. ` : "") +
+          `Overall SLA is ${allPct}%.`});
+    }
+  }
+
+  // 3. Where the effort goes, and whether it is on time
+  const hrsAll = resOf(R).reduce((a,t)=>a+t[HR],0);
+  if(st.length){
+    const rows = R.filter(t=>st.some(o=>o.name===t[L2]));
+    const s2 = slaOf(rows);
+    pts.push({cls:"crit", tag:"Effort", big: pct(st.reduce((a,o)=>a+o.hoursTotal,0), hrsAll)+"%",
+      claim:`of agent hours go to ${st.map(o=>esc(o.name)).join(" and ")}.`,
+      why:`Only ${pct(s2.ok,s2.n)}% of these tickets met SLA. They are ${pct(rows.length,R.length)}% of volume.`});
+  }
+
+  // 4. The decision: the automation shortlist's top candidate
+  const rule = D.shortlist_rule;
+  const pass = l2stats(R).map(o=>({...o, hpm:r1(o.hoursTotal/NM)}))
+    .filter(o=>o.perM[LAST]>=rule.min_tickets_latest_month && o.spread<=rule.max_spread_hours &&
+               o.p12Pct<=rule.max_p1p2_share_pct)
+    .sort((a,b)=>b.hpm-a.hpm);
+  if(pass.length){
+    const t = pass[0], falling = t.perM[LAST] < t.perM[0]*0.8;
+    pts.push({cls:"act", tag:"Decision", big:`1 in ${Math.max(1,Math.round(R.length/t.total))}`,
+      claim:`tickets is a ${esc(t.name)} ticket. ` + (falling ? "Volume is already falling." : "Automate these first."),
+      why:`Ran ${t.perM.join(" → ")} a month, fixed the same way each time (${t.spread} h spread). ` +
+        `Frees at least ${t.hpm} agent hours a month.` +
+        (falling ? ` Check what changed before building more.` : "")});
+  } else {
+    pts.push({cls:"", tag:"Decision", big:"None",
+      claim:"No subcategory is ready for automation yet.",
+      why:"None clears all three shortlist checks. See the shortlist for the near misses."});
+  }
+
+  document.getElementById("execeyebrow").textContent =
+    `Executive summary · ${D.period} · all ${num(R.length)} tickets, filters do not change this`;
+  const g = NM>1 ? pct(perMonth[LAST]-perMonth[0], perMonth[0]) : 0;
+  const parts = [g>0 ? `Demand is up ${g}%` : g<0 ? `Demand is down ${Math.abs(g)}%` : "Demand is flat"];
+  if(riskPhrase) parts.push(riskPhrase);
+  document.getElementById("exechead").textContent = parts.join(" and ") + "." +
+    (!pass.length ? "" : pass[0].perM[LAST] < pass[0].perM[0]*0.8
+      ? ` ${pass[0].name} tickets are already falling, so check why before automating.`
+      : ` Automating ${pass[0].name.toLowerCase()} tickets is the first lever.`);
+  document.getElementById("execpoints").innerHTML = pts.map(p =>
+    `<div class="point ${p.cls}"><div class="tag">${p.tag}</div><div class="big">${p.big}</div>
+     <div class="claim">${p.claim}</div><div class="why">${p.why}</div></div>`).join("");
+  const a = D.accuracy || {};
+  document.getElementById("exectrust").textContent = a.scored
+    ? `Categories were assigned from the ticket text and checked against a labelled answer key: ${a.overall.L2}% correct at subcategory level.`
+    : `Categories were assigned from the ticket text. Accuracy is not measured yet, so treat category numbers as indicative.`;
+}
+
+/* ---------- render ---------- */
+function renderAll(){
+  syncChips();
+  const s = scoped();
+  document.getElementById("scope").textContent =
+    `${num(s.length)} tickets in scope · ` +
+    (state.month<0 ? `all ${NM} months` : D.months[state.month]) + " · " +
+    (state.cat<0 ? "all categories" : D.l1_order[state.cat]);
+  renderTiles(); renderTrend(); renderDrill();
+  renderShortlist(); renderEffort(); renderSLA();
+}
+document.title = D.title;
+document.getElementById("maintitle").textContent = D.title;
+document.getElementById("sourceline").innerHTML =
+  `<strong>Source:</strong> <code>${esc(D.source_file)}</code>. Every figure on this page is ` +
+  `computed in the browser from the ${D.ticket_count} embedded ticket records, so a filter and ` +
+  `its panels can never disagree.`;
+document.getElementById("period").textContent =
+  `${D.period} · ${num(R.length)} tickets · ${D.l1_order.length} categories`;
+document.getElementById("samplenote").hidden = !D.sample_data;
+buildChips();
+renderSummary();
+renderQuality();
+renderAll();
+</script>
+</body>
+</html>

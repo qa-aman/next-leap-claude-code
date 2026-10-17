@@ -1,0 +1,26 @@
+{
+  "period": "Apr 2026 to Jun 2026",
+  "short_period": "Apr-Jun 2026",
+  "sample_data": true,
+  "verdict": "2 of last period's 4 calls moved the right way: P1 SLA and Password. Laptop got worse, and a Jun rise in VPN tickets is the new risk.",
+  "decisions": [
+    "VPN: Network Operations to check what changed \"since the new client version\" and publish a known-error article.",
+    "Laptop: Desktop Support to review how battery or charging fault tickets are handled, with the service owner.",
+    "Automation: pause the Password automation build. Volume already fell from 38 to 15 a month, and the bigger agent hours sit in Laptop, ERP System and Licensing."
+  ],
+  "kpis": {
+    "tickets": 521,
+    "sla_met_pct": 83.4,
+    "agent_hours": 4604,
+    "reopen_pct": 5.2
+  },
+  "previous_kpis": {
+    "tickets": 450,
+    "sla_met_pct": 83.8
+  },
+  "to_confirm": [
+    "VPN",
+    "Laptop",
+    "Licensing"
+  ]
+}

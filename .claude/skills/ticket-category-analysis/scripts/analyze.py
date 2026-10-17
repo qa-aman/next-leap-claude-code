@@ -50,6 +50,8 @@ def main():
     ap.add_argument("--sheet", default="Tickets")
     ap.add_argument("--title", default="Service desk ticket analysis")
     ap.add_argument("--template", default=None)
+    ap.add_argument("--sample-data", action="store_true",
+                    help="label the report as sample data (use with generate_sample.py output)")
     ap.add_argument("--min-tickets", type=int, default=SHORTLIST["min_tickets_latest_month"])
     ap.add_argument("--max-spread", type=float, default=SHORTLIST["max_spread_hours"])
     ap.add_argument("--max-p1p2", type=float, default=SHORTLIST["max_p1p2_share_pct"])
@@ -125,6 +127,7 @@ def main():
         "shortlist_rule": rule,
         "small_sample": SMALL_SAMPLE,
         "accuracy": accuracy,
+        "sample_data": bool(a.sample_data),
     }
 
     tpl = Path(a.template) if a.template else Path(__file__).resolve().parent.parent / \

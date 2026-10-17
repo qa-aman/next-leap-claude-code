@@ -1,0 +1,25 @@
+[
+  {
+    "run_date": "17-10-2026",
+    "period": "Jan 2026 to Mar 2026",
+    "export": "servicenow-tickets-2026.xlsx",
+    "tickets": 450,
+    "accuracy_l2": "98.7",
+    "page": "outputs/oct-2026-cohort/ticket-dashboard/service-desk-ticket-report.html",
+    "url": "https://claude.ai/artifact/XH3nCjGbqVRGAPdVpSmPf7",
+    "note": "first run, built by hand in session then captured as this skill"
+  },
+  {
+    "run_date": "17-10-2026",
+    "period": "Apr 2026 to Jun 2026",
+    "export": "servicenow-tickets-apr-jun-2026.xlsx",
+    "tickets": 521,
+    "accuracy_l2": "100.0",
+    "page": "outputs/oct-2026-cohort/ticket-dashboard-apr-jun-2026/service-desk-ticket-report.html",
+    "url": "https://claude.ai/artifact/1BCBokHvCc1xPhdbL5AhFT",
+    "note": "generated sample with 3 planted changes; see apr-jun-2026-planted-changes.md",
+    "test": true,
+    "review_page": "outputs/oct-2026-cohort/ticket-dashboard-apr-jun-2026/service-desk-review.html",
+    "review_url": "https://claude.ai/artifact/Hqh6cStZ63oSPM9K4rzF1W"
+  }
+]

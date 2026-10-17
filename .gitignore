@@ -9,3 +9,7 @@ node_modules/
 .agents/
 # Office temp lock files
 ~$*
+__pycache__/
+# Weekly email: real recipients and send history stay on this machine
+.claude/skills/monthly-service-desk-report/state/send-config.json
+.claude/skills/monthly-service-desk-report/state/send-log.jsonl

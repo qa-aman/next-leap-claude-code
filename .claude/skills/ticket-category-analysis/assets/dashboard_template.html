@@ -63,8 +63,8 @@ header.top{display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start;
 .fgroup{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
 .flabel{font-size:12px; color:var(--ink-3); text-transform:uppercase; letter-spacing:.07em}
 .chip{background:var(--surface-1); color:var(--ink-2); border:1px solid var(--hair);
-  border-radius:999px; padding:6px 13px; font:inherit; font-size:13px; cursor:pointer;
-  display:inline-flex; align-items:center; gap:7px; min-height:32px; line-height:1}
+  border-radius:999px; padding:6px 11px; font:inherit; font-size:12.5px; cursor:pointer;
+  display:inline-flex; align-items:center; gap:6px; white-space:nowrap; min-height:32px; line-height:1}
 .chip:hover{color:var(--ink-1); border-color:var(--axis)}
 .chip[aria-pressed="true"]{background:var(--ink-1); color:var(--surface-1); border-color:var(--ink-1)}
 .chip .dot{width:9px; height:9px; border-radius:3px; flex:none}
@@ -161,6 +161,22 @@ li{margin-bottom:5px}
 .tooltip{position:fixed; z-index:60; pointer-events:none; background:var(--ink-1);
   color:var(--surface-1); border-radius:8px; padding:8px 11px; font-size:12.5px;
   line-height:1.45; opacity:0; transition:opacity .09s; max-width:260px}
+/* executive summary - the 20 second read, fixed to the whole period */
+.exec{margin-top:22px; background:var(--surface-1); border:1px solid var(--hair);
+  border-radius:var(--radius); padding:22px; box-shadow:var(--shadow)}
+.exec .eyebrow{font-size:11.5px; color:var(--ink-3); text-transform:uppercase; letter-spacing:.08em}
+.exec h2{margin-top:6px; font-size:19px; line-height:1.35; text-wrap:balance}
+.points{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-top:18px}
+.point{border-left:3px solid var(--axis); padding:2px 0 2px 14px; min-width:0}
+.point.crit{border-left-color:var(--crit)} .point.warn{border-left-color:var(--warn)}
+.point.act{border-left-color:var(--s1)}
+.point .tag{font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-3)}
+.point.crit .tag{color:var(--crit)} .point.act .tag{color:var(--s1)}
+.point .big{font-size:28px; font-weight:600; letter-spacing:-.03em; line-height:1.1; margin-top:4px;
+  font-variant-numeric:tabular-nums}
+.point .claim{margin-top:6px; font-size:14px; font-weight:600; color:var(--ink-1); line-height:1.4}
+.point .why{margin-top:4px; font-size:12.5px; color:var(--ink-2); line-height:1.5}
+.exec .trust{margin-top:16px; padding-top:12px; border-top:1px solid var(--hair); font-size:12.5px; color:var(--ink-3)}
 footer{margin-top:44px; padding-top:22px; border-top:1px solid var(--hair);
   color:var(--ink-3); font-size:12.5px; line-height:1.65}
 </style>
@@ -175,6 +191,13 @@ footer{margin-top:44px; padding-top:22px; border-top:1px solid var(--hair);
   </div>
   <button class="themebtn" id="themebtn" type="button">Switch theme</button>
 </header>
+
+<section class="exec" aria-labelledby="exechead">
+  <div class="eyebrow" id="execeyebrow"></div>
+  <h2 id="exechead"></h2>
+  <div class="points" id="execpoints"></div>
+  <p class="trust" id="exectrust"></p>
+</section>
 
 <div class="filters" role="group" aria-label="Filters">
   <div class="fgroup">
@@ -293,7 +316,7 @@ footer{margin-top:44px; padding-top:22px; border-top:1px solid var(--hair);
 
 <footer>
   <p id="sourceline"></p>
-  <p style="margin-top:9px">This is a sample dataset created to design and test the workflow.
+  <p style="margin-top:9px" id="samplenote" hidden>This is a sample dataset created to design and test the workflow.
   The numbers are not live service desk data.</p>
 </footer>
 
@@ -368,8 +391,8 @@ function buildChips(){
   });
 
   const cc = document.getElementById("catchips");
-  cc.style.display="flex"; cc.style.gap="8px"; cc.style.flexWrap="wrap";
-  cc.append(mk("All categories",-1));
+  cc.style.display="flex"; cc.style.gap="6px"; cc.style.flexWrap="wrap";
+  cc.append(mk("All",-1));
   D.l1_order.forEach((c,i)=> cc.append(mk(c,i,`var(${SERIES[i]})`)));
   cc.addEventListener("click", e => {
     const b = e.target.closest(".chip"); if(!b) return;
@@ -551,7 +574,7 @@ function renderDrill(){
   sel.rows.forEach(t => { (byL3[t[L3]] ||= []).push(t); });
   const l3rows = Object.entries(byL3).sort((a,b)=>b[1].length-a[1].length);
 
-  document.getElementById("l3head").textContent = `${state.l2} — ${sel.n} tickets`;
+  document.getElementById("l3head").textContent = `${state.l2} · ${sel.n} tickets`;
   document.getElementById("l3sub").textContent =
     `${D.l1_order[sel.l1]} › ${state.l2}. Handled by ${sel.rows[0][GRP]}.`;
 
@@ -659,7 +682,7 @@ function renderShortlist(){
     (pass.length ? pass.map(o=>rowHtml(o,true)).join("")
       : `<tr><td colspan="8" class="muted">Nothing clears all three checks in this selection.</td></tr>`) +
     (near.length ? `<tr><td colspan="8" style="padding-top:18px;border:0">
-      <span class="flabel">Near miss — two of three checks</span></td></tr>` +
+      <span class="flabel">Near miss: two of three checks</span></td></tr>` +
       near.map(o=>rowHtml(o,false)).join("") : "") +
     `</tbody></table>`;
 
@@ -837,6 +860,104 @@ document.getElementById("themebtn").addEventListener("click", () => {
   renderAll();
 });
 
+/* ---------- 0. executive summary ----------
+   Four pointers a leader can read in 20 seconds: the trend, the worst risk, where the
+   effort goes, and the one decision. Always the whole period and every category, so the
+   filters below never change it. Every number is computed from the same rows as the panels. */
+function renderSummary(){
+  const resOf = rows => rows.filter(t=>t[HR]!==null);
+  const slaOf = rows => { const r = resOf(rows); return {ok:r.filter(t=>t[SLA]===true).length, n:r.length}; };
+  const perMonth = D.months.map((_,i)=> R.filter(t=>t[MO]===i).length);
+  const all = slaOf(R), allPct = pct(all.ok, all.n);
+  const pts = [];
+
+  // 1. Trend, and which category drove it
+  if(NM>1){
+    const growth = pct(perMonth[LAST]-perMonth[0], perMonth[0]);
+    const d = D.l1_order.map((c,i)=>({c, i,
+      d: R.filter(t=>t[L1]===i && t[MO]===LAST).length - R.filter(t=>t[L1]===i && t[MO]===LAST-1).length}))
+      .sort((a,b)=>b.d-a.d);
+    const top = d[0];
+    const subs = l2stats(R.filter(t=>t[L1]===top.i))
+      .map(o=>({name:o.name, d:o.perM[LAST]-o.perM[LAST-1]})).filter(o=>o.d>0)
+      .sort((a,b)=>b.d-a.d).slice(0,2);
+    pts.push({cls:"warn", tag:"Demand", big:(growth>0?"+":"")+growth+"%",
+      claim:`Tickets rose from ${num(perMonth[0])} in ${D.months[0]} to ${num(perMonth[LAST])} in ${D.months[LAST]}.`,
+      why: top.d>0 ? `${esc(top.c)} added ${top.d} tickets in ${D.months[LAST]}` +
+        (subs.length ? `, mostly ${subs.map(s=>esc(s.name)+" (+"+s.d+")").join(" and ")}` : "") + "." : ""});
+  }
+
+  // 2. Risk: the most urgent tickets when they trail the overall SLA, otherwise the
+  //    subcategory with the worst SLA. A fixed P1 message goes stale once P1 is fixed.
+  const st = l2stats(R).filter(o=>o.resolved>=SMALL_SAMPLE).sort((a,b)=>b.hoursTotal-a.hoursTotal).slice(0,2);
+  const p1 = R.filter(t=>t[PR]===0), p1s = slaOf(p1), p1Pct = pct(p1s.ok, p1s.n);
+  let riskPhrase = "";
+  if(p1s.n && p1Pct < allPct){
+    riskPhrase = "urgent tickets miss SLA most";
+    pts.push({cls:"crit", tag:"Risk", big: p1Pct+"%",
+      claim:`Only ${p1s.ok} of ${p1s.n} ${esc(D.priorities[0])} (most urgent) tickets met SLA.`,
+      why:`Overall SLA is ${allPct}%, so the average hides the misses on the most urgent work.`});
+  } else {
+    // The effort pointer already covers its two subcategories, so look past them.
+    const worst = l2stats(R).filter(o=>o.resolved>=SMALL_SAMPLE && !st.some(e=>e.name===o.name))
+      .sort((a,b)=>a.slaPct-b.slaPct)[0];
+    if(worst){
+      const ws = slaOf(R.filter(t=>t[L2]===worst.name));
+      riskPhrase = `${worst.name} misses SLA most`;
+      pts.push({cls: worst.slaPct < allPct ? "crit" : "", tag:"Risk", big: worst.slaPct+"%",
+        claim:`Only ${ws.ok} of ${ws.n} ${esc(worst.name)} tickets met SLA.`,
+        why:(p1s.n ? `${esc(D.priorities[0])} is on track: ${p1s.ok} of ${p1s.n} met SLA. ` : "") +
+          `Overall SLA is ${allPct}%.`});
+    }
+  }
+
+  // 3. Where the effort goes, and whether it is on time
+  const hrsAll = resOf(R).reduce((a,t)=>a+t[HR],0);
+  if(st.length){
+    const rows = R.filter(t=>st.some(o=>o.name===t[L2]));
+    const s2 = slaOf(rows);
+    pts.push({cls:"crit", tag:"Effort", big: pct(st.reduce((a,o)=>a+o.hoursTotal,0), hrsAll)+"%",
+      claim:`of agent hours go to ${st.map(o=>esc(o.name)).join(" and ")}.`,
+      why:`Only ${pct(s2.ok,s2.n)}% of these tickets met SLA. They are ${pct(rows.length,R.length)}% of volume.`});
+  }
+
+  // 4. The decision: the automation shortlist's top candidate
+  const rule = D.shortlist_rule;
+  const pass = l2stats(R).map(o=>({...o, hpm:r1(o.hoursTotal/NM)}))
+    .filter(o=>o.perM[LAST]>=rule.min_tickets_latest_month && o.spread<=rule.max_spread_hours &&
+               o.p12Pct<=rule.max_p1p2_share_pct)
+    .sort((a,b)=>b.hpm-a.hpm);
+  if(pass.length){
+    const t = pass[0], falling = t.perM[LAST] < t.perM[0]*0.8;
+    pts.push({cls:"act", tag:"Decision", big:`1 in ${Math.max(1,Math.round(R.length/t.total))}`,
+      claim:`tickets is a ${esc(t.name)} ticket. ` + (falling ? "Volume is already falling." : "Automate these first."),
+      why:`Ran ${t.perM.join(" → ")} a month, fixed the same way each time (${t.spread} h spread). ` +
+        `Frees at least ${t.hpm} agent hours a month.` +
+        (falling ? ` Check what changed before building more.` : "")});
+  } else {
+    pts.push({cls:"", tag:"Decision", big:"None",
+      claim:"No subcategory is ready for automation yet.",
+      why:"None clears all three shortlist checks. See the shortlist for the near misses."});
+  }
+
+  document.getElementById("execeyebrow").textContent =
+    `Executive summary · ${D.period} · all ${num(R.length)} tickets, filters do not change this`;
+  const g = NM>1 ? pct(perMonth[LAST]-perMonth[0], perMonth[0]) : 0;
+  const parts = [g>0 ? `Demand is up ${g}%` : g<0 ? `Demand is down ${Math.abs(g)}%` : "Demand is flat"];
+  if(riskPhrase) parts.push(riskPhrase);
+  document.getElementById("exechead").textContent = parts.join(" and ") + "." +
+    (!pass.length ? "" : pass[0].perM[LAST] < pass[0].perM[0]*0.8
+      ? ` ${pass[0].name} tickets are already falling, so check why before automating.`
+      : ` Automating ${pass[0].name.toLowerCase()} tickets is the first lever.`);
+  document.getElementById("execpoints").innerHTML = pts.map(p =>
+    `<div class="point ${p.cls}"><div class="tag">${p.tag}</div><div class="big">${p.big}</div>
+     <div class="claim">${p.claim}</div><div class="why">${p.why}</div></div>`).join("");
+  const a = D.accuracy || {};
+  document.getElementById("exectrust").textContent = a.scored
+    ? `Categories were assigned from the ticket text and checked against a labelled answer key: ${a.overall.L2}% correct at subcategory level.`
+    : `Categories were assigned from the ticket text. Accuracy is not measured yet, so treat category numbers as indicative.`;
+}
+
 /* ---------- render ---------- */
 function renderAll(){
   syncChips();
@@ -856,7 +977,9 @@ document.getElementById("sourceline").innerHTML =
   `its panels can never disagree.`;
 document.getElementById("period").textContent =
   `${D.period} · ${num(R.length)} tickets · ${D.l1_order.length} categories`;
+document.getElementById("samplenote").hidden = !D.sample_data;
 buildChips();
+renderSummary();
 renderQuality();
 renderAll();
 </script>

@@ -120,6 +120,10 @@ python3 analyze.py --input data/categorized.xlsx --work-dir work/ \
   --out report/dashboard.html --title "Service desk ticket analysis"
 ```
 
+Add `--sample-data` when the input came from `generate_sample.py`. It prints the footer line saying
+the numbers are not live data. Leave it off for a real export, or leadership reads real numbers
+labelled as fake.
+
 Self-contained HTML, no network calls, emailable. The whole ticket set is embedded so every
 filter recomputes from the raw rows, which is what prevents a filter changing a heading but not
 the panel under it. `references/report-spec.md` describes each section and the shortlist rule.

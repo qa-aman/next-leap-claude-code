@@ -1,0 +1,281 @@
+<title>Session Debrief Preview</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a field-report column, one reading width, review annotations in a right-hand tag that can be switched off */
+:root{
+  --bg:#F3F5F7; --surface:#FFFFFF; --sunk:#E8ECF0; --ink:#16202A; --muted:#55626F; --rule:#D3DAE1;
+  --accent:#1F5F8B; --accent-soft:#E1ECF4;
+  --ok:#2E7D4F; --ok-soft:#E2F2E8; --warn:#9A6200; --warn-soft:#FBEFD6; --crit:#B3261E; --crit-soft:#F8E1DF;
+  --tag:#6B3FA0; --tag-soft:#EFE7F8;
+  --f-display:"IBM Plex Sans Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"IBM Plex Sans",-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1419; --surface:#171E26; --sunk:#1E2731; --ink:#E6EBF0; --muted:#9AA7B4; --rule:#2B3642;
+  --accent:#7DB4DE; --accent-soft:#1B2C3B;
+  --ok:#6CC28F; --ok-soft:#18291F; --warn:#E3B04B; --warn-soft:#2E2512; --crit:#F08A82; --crit-soft:#331A18;
+  --tag:#C3A3EC; --tag-soft:#261C33; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1419; --surface:#171E26; --sunk:#1E2731; --ink:#E6EBF0; --muted:#9AA7B4; --rule:#2B3642;
+  --accent:#7DB4DE; --accent-soft:#1B2C3B;
+  --ok:#6CC28F; --ok-soft:#18291F; --warn:#E3B04B; --warn-soft:#2E2512; --crit:#F08A82; --crit-soft:#331A18;
+  --tag:#C3A3EC; --tag-soft:#261C33; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:880px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:28px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:2rem;font-weight:700}
+h2{font-size:1.35rem;font-weight:600}
+h3{font-size:1.02rem;font-weight:600}
+p{margin:0;max-width:68ch}
+.eyebrow{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-family:var(--f-mono);font-size:.8rem;color:var(--muted)}
+header{display:grid;gap:10px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--tag-soft);border:1px solid var(--rule);border-radius:8px;padding:10px 14px}
+.bar p{font-size:.88rem;color:var(--ink)}
+.switch{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:500;cursor:pointer;user-select:none}
+.switch input{width:18px;height:18px;accent-color:var(--tag)}
+section{display:grid;gap:14px}
+.head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px}
+.fw{font-family:var(--f-mono);font-size:.72rem;color:var(--tag);background:var(--tag-soft);border-radius:4px;padding:2px 8px;white-space:nowrap}
+.note{font-size:.84rem;color:var(--tag);border-left:3px solid var(--tag);padding:2px 0 2px 10px}
+body.clean .fw, body.clean .note, body.clean .reviewonly{display:none}
+.panel{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:18px}
+.bluf{border-left:4px solid var(--accent);display:grid;gap:12px}
+.bluf .verdict{font-size:1.12rem;font-weight:500;max-width:none}
+ol{margin:0;padding-left:22px;display:grid;gap:6px}
+.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:560px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--rule)}
+th{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--sunk)}
+tr:last-child td{border-bottom:0}
+.chip{display:inline-block;font-family:var(--f-mono);font-size:.72rem;font-weight:500;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.ok{color:var(--ok);background:var(--ok-soft)} .warn{color:var(--warn);background:var(--warn-soft)} .crit{color:var(--crit);background:var(--crit-soft)} .na{color:var(--muted);background:var(--sunk)}
+.aar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.aar .panel{display:grid;gap:8px;align-content:start}
+.aar .q{font-family:var(--f-mono);font-size:.74rem;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+.levels{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.lv{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:14px;display:grid;gap:6px;align-content:start;min-width:0}
+.lv .n{font-family:var(--f-mono);font-size:.72rem;color:var(--muted)}
+.lv p{font-size:.85rem}
+.score{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch}
+.big{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:14px 18px;display:grid;gap:2px;min-width:150px}
+.big b{font-family:var(--f-display);font-size:1.9rem;font-variant-numeric:tabular-nums}
+.big span{font-size:.8rem;color:var(--muted)}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ssc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.ssc .panel{display:grid;gap:8px;align-content:start}
+.ssc h3.s{color:var(--ok)} .ssc h3.t{color:var(--crit)} .ssc h3.c{color:var(--accent)}
+.kcs{display:grid;gap:12px}
+.kcs article{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:16px 18px;display:grid;gap:10px}
+.kcs dl{display:grid;grid-template-columns:120px minmax(0,1fr);gap:6px 14px;margin:0;font-size:.88rem}
+.kcs dt{font-family:var(--f-mono);font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding-top:2px}
+.kcs dd{margin:0;min-width:0}
+code{font-family:var(--f-mono);font-size:.85em;background:var(--sunk);padding:1px 5px;border-radius:4px}
+a{color:var(--accent)}
+details{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:12px 16px}
+summary{cursor:pointer;font-weight:600}
+details[open] summary{margin-bottom:10px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+footer{font-size:.8rem;color:var(--muted)}
+@media (max-width:720px){.levels{grid-template-columns:repeat(2,minmax(0,1fr))}.ssc,.aar{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:420px){.levels{grid-template-columns:minmax(0,1fr)}.kcs dl{grid-template-columns:minmax(0,1fr)}h1{font-size:1.6rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">NextLeap Applied Generative AI Bootcamp · October 2026 cohort</div>
+  <h1>Session 1: Claude Code setup, the terminal, plugins and CLAUDE.md</h1>
+  <div class="meta"><span>17-10-2026 · Saturday 10:30</span><span>~30 learners</span><span>Session 1 of 4</span><span><a href="https://notes.granola.ai/t/1a0705c5-b690-4875-afa8-883b0c86a30f-00b881l8">Granola transcript</a></span></div>
+  <div class="bar reviewonly">
+    <p>This is a preview built from today's real session. It shows how the debrief would look with the proposed frameworks. Purple tags name the framework behind each section.</p>
+    <label class="switch" for="rev"><input type="checkbox" id="rev" checked> Show framework tags</label>
+  </div>
+</header>
+
+<section class="reviewonly">
+  <div class="head"><h2>Framework map</h2><span class="fw">Your review</span></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Section</th><th>Framework</th><th>What changes from today's skill</th></tr></thead>
+    <tbody>
+      <tr><td>1. Bottom line</td><td>BLUF / Pyramid Principle (Minto)</td><td>New. The verdict and top 3 fixes come before any detail. The skill currently opens with a long coverage note</td></tr>
+      <tr><td>2. Plan vs what happened</td><td>After Action Review (US Army)</td><td>Becomes the spine and is always required. Today it is an optional section</td></tr>
+      <tr><td>3. Did learners learn</td><td>Kirkpatrick levels 1 to 4</td><td>New. Evidence per level, and a named gap where there is no data</td></tr>
+      <tr><td>4. Rating</td><td>Rubric scored from sections 2 and 3</td><td>Replaces the host-judged score. Each point is traceable</td></tr>
+      <tr><td>5. What broke</td><td>Blameless postmortem (Google SRE)</td><td>Replaces "What Didn't Work". Each item gets impact, root cause, fix and owner</td></tr>
+      <tr><td>6. Next session</td><td>Start / Stop / Continue (Atlassian)</td><td>Replaces "What Went Well" and the +/- rating bullets</td></tr>
+      <tr><td>7. Action items</td><td>Owner + due date</td><td>Adds a due date, or says "not set in class"</td></tr>
+      <tr><td>8. Q&amp;A entries</td><td>KCS article + Diátaxis type</td><td>Adds environment, cause, entry type and a correction flag to each Q</td></tr>
+      <tr><td>Appendix</td><td>Unchanged</td><td>Topics, audience, questions and quotes stay, moved below the analysis</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="head"><h2>1. Bottom line</h2><span class="fw">BLUF · Minto</span></div>
+  <div class="panel bluf">
+    <p class="verdict">Setup and the core architecture landed for a very mixed room. But the planned story, the <code>/init</code> demo and the memory section did not run, and two answers on plugins need correcting in the group.</p>
+    <h3>Top 3 fixes before Session 2</h3>
+    <ol>
+      <li>Post the two corrections (plugin security, <code>/reload-plugins</code>) in the group today.</li>
+      <li>Open Session 2 with the "Meera's Monday" thread so skills connect to the story, not taught alone.</li>
+      <li>End Session 2 with a 2-minute check: every learner pastes their <code>claude doctor</code> result and answers 2 poll questions.</li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="head"><h2>2. Plan vs what happened</h2><span class="fw">After Action Review</span></div>
+  <div class="aar">
+    <div class="panel">
+      <div class="q">What was supposed to happen</div>
+      <p>Open with the "Meera's Monday" story. Install and log in. Show <code>/init</code> on an empty folder vs the real repo. Teach three kinds of memory and the context window. Source: <code>.local/docs/oct-2026/s1-learner-handout.md</code>.</p>
+    </div>
+    <div class="panel">
+      <div class="q">What happened</div>
+      <p>Introductions, then about an hour of live setup with screen shares. Then terminal vs app, sessions on disk, permission modes, plugins, and CLAUDE.md as a router. The story never came up.</p>
+    </div>
+    <div class="panel">
+      <div class="q">Why it was different</div>
+      <p>Most of the room arrived without setup. Late joiners kept restarting the setup thread, and plugins were pulled forward from Session 2 because learners asked. There was no fixed point at which the story had to start.</p>
+    </div>
+    <div class="panel">
+      <div class="q">What to do next time</div>
+      <p>Run setup before class, not in it. Start the story at a fixed time and help late joiners after. Keep plugins in Session 1, since the room wanted them there.</p>
+    </div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Planned item</th><th>Status</th><th>Evidence from the transcript</th></tr></thead>
+    <tbody>
+      <tr><td>Install, login, <code>/doctor</code></td><td><span class="chip ok">Done</span></td><td>Live install, PATH fix for Ambrosh</td></tr>
+      <tr><td>Terminal vs app vs extension</td><td><span class="chip ok">Done</span></td><td>Questions from Nabil and Deepak answered</td></tr>
+      <tr><td>Sessions, <code>/context</code>, <code>/usage</code>, <code>/model</code>, permission modes</td><td><span class="chip ok">Done</span></td><td>JSONL file created live, manual vs auto shown</td></tr>
+      <tr><td>Plugins at user scope</td><td><span class="chip ok">Done</span></td><td>Pulled forward from Session 2</td></tr>
+      <tr><td>CLAUDE.md as router, 200 lines, three levels</td><td><span class="chip ok">Done</span></td><td>Prompt-writing rule demo</td></tr>
+      <tr><td>"Meera's Monday" story opener</td><td><span class="chip crit">Not run</span></td><td>No mention of Meera or the story</td></tr>
+      <tr><td><code>/init</code> on an empty folder vs the real repo</td><td><span class="chip warn">Mentioned</span></td><td>Explained to Sukesh, not demoed</td></tr>
+      <tr><td>Three kinds of memory</td><td><span class="chip crit">Deferred</span></td><td>"This is something which we'll cover next"</td></tr>
+      <tr><td>Context window exercise</td><td><span class="chip warn">Partial</span></td><td>Shown on the host's session only</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Rule for the skill: every planned item gets a status. "Done" needs evidence from the transcript, not a mention.</p>
+</section>
+
+<section>
+  <div class="head"><h2>3. Did learners learn?</h2><span class="fw">Kirkpatrick levels</span></div>
+  <div class="levels">
+    <div class="lv"><span class="n">Level 1 · Reaction</span><span class="chip warn">No data</span><p>No poll was run. Signals only: 23 questions, and one learner called the resource document "the Bible for Claude".</p></div>
+    <div class="lv"><span class="n">Level 2 · Learning</span><span class="chip warn">5 of ~30 verified</span><p>Prachiti, Deepak, Priyank, Bhavya and Ambrosh showed a working step on screen. Praseetha was still blocked at the close. The rest are unknown.</p></div>
+    <div class="lv"><span class="n">Level 3 · Behaviour</span><span class="chip na">Check in Session 2</span><p>Ask at 14:00: who installed the plugins and built a status line over lunch.</p></div>
+    <div class="lv"><span class="n">Level 4 · Results</span><span class="chip na">Out of scope</span><p>Needs data from learners' jobs weeks later. One transcript cannot show it.</p></div>
+  </div>
+  <p class="note">Rule for the skill: levels 1 and 2 need evidence or a named gap. Level 3 becomes a check at the start of the next session.</p>
+</section>
+
+<section>
+  <div class="head"><h2>4. Rating</h2><span class="fw">Rubric from sections 2 and 3</span></div>
+  <div class="score">
+    <div class="big"><b class="num">6 / 10</b><span>Rubric score</span></div>
+    <div class="big reviewonly"><b class="num">7 / 10</b><span>Today's skill (host judgement)</span></div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Criterion</th><th>2 means</th><th>Score</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Plan delivered</td><td>Every core item done</td><td class="num">1 / 2</td><td>5 of 9 done. The story and memory missed</td></tr>
+      <tr><td>Learners built it</td><td>Most verified on screen or by a check</td><td class="num">1 / 2</td><td>5 of ~30 verified</td></tr>
+      <tr><td>Accuracy</td><td>No corrections needed</td><td class="num">1 / 2</td><td>2 answers corrected in Q436, Q438</td></tr>
+      <tr><td>Questions handled</td><td>Every question answered or parked with a follow-up</td><td class="num">1 / 2</td><td>2 "I have not tried it" answers with no follow-up</td></tr>
+      <tr><td>Engagement</td><td>Most of the room spoke or built</td><td class="num">2 / 2</td><td>23 questions, 5 screen shares, 15 learners spoke</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">The rubric is 1 point lower than today's score because accuracy and learning now count. Each point can be checked against the transcript.</p>
+</section>
+
+<section>
+  <div class="head"><h2>5. What broke</h2><span class="fw">Blameless postmortem</span></div>
+  <div class="tbl"><table>
+    <thead><tr><th>What happened</th><th>Impact</th><th>Root cause</th><th>Fix</th><th>Owner</th></tr></thead>
+    <tbody>
+      <tr><td>Two answers did not match the docs: "marketplace plugins are security-reviewed" and "<code>/reload-plugins</code> pulls updates"</td><td>A learner whose company bans open-source tools may treat any marketplace plugin as vetted</td><td>Security and update questions come every cohort, but nothing checks those answers before class</td><td>A claims sheet for each session's topics, checked against the docs before class. In class, "I'll confirm in the group"</td><td>Aman</td></tr>
+      <tr><td>The story, the <code>/init</code> demo and memory did not run</td><td>Topics were taught one at a time, the same Sept cohort complaint the story was built to fix</td><td>Setup was done in class, with no fixed start for the story</td><td>Setup article 2 days early and a 20-minute clinic before class. The story starts at a fixed time</td><td>Aman, with NextLeap ops</td></tr>
+      <tr><td>Sessions were taught through the host's <code>ccs</code> script</td><td>Learners may rely on transcripts that Claude Code deletes after 30 days</td><td>The host's own workflow was shown before the built-in feature</td><td>Teach <code>/rename</code> and <code>claude --resume &lt;name&gt;</code> first, and mention the 30-day cleanup</td><td>Aman</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Blameless means each cause is written as a missing step or check, never as a person's mistake.</p>
+</section>
+
+<section>
+  <div class="head"><h2>6. Next session</h2><span class="fw">Start / Stop / Continue</span></div>
+  <div class="ssc">
+    <div class="panel"><h3 class="s">Start</h3><ol><li>A setup clinic before class</li><li>A 2-question poll at the close</li><li>A 2-minute <code>claude doctor</code> check</li><li>A claims sheet checked against the docs</li></ol></div>
+    <div class="panel"><h3 class="t">Stop</h3><ol><li>"I have not tried it" with no follow-up</li><li>Personal tools before the built-in feature</li></ol></div>
+    <div class="panel"><h3 class="c">Continue</h3><ol><li>Introductions first, then fitting answers to roles</li><li>The CLAUDE.md router demo</li><li>Creating a JSONL file live</li><li>Manual vs auto, same request</li><li>Screen-share fixes</li></ol></div>
+  </div>
+</section>
+
+<section>
+  <div class="head"><h2>7. Action items</h2><span class="fw">Owner + due date</span></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Owner</th><th>Action</th><th>Due</th></tr></thead>
+    <tbody>
+      <tr><td>Aman</td><td>Post the plugin security and <code>/reload-plugins</code> corrections in the group</td><td class="num">17-10-2026</td></tr>
+      <tr><td>All learners</td><td>Pro plan, finish setup, install the 4 plugins at user scope</td><td class="num">17-10-2026 14:00</td></tr>
+      <tr><td>Praseetha</td><td>Fix "not recognized" with section 5.4 of the setup article</td><td class="num">17-10-2026 14:00</td></tr>
+      <tr><td>Aman</td><td>Share the blank-setup repository through Akanksha</td><td>Not set in class</td></tr>
+      <tr><td>Aman</td><td>One-on-one with Sohan on keeping skills current in an organisation</td><td>Not set in class</td></tr>
+      <tr><td>Prachiti, Manish</td><td>Try the Playwright plugin on a URL they test today</td><td>Not set in class</td></tr>
+      <tr><td>Aman</td><td>Fill the Session 1 row in the story bible feedback table</td><td>Before Session 2</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="head"><h2>8. Q&amp;A entries, new shape</h2><span class="fw">KCS + Diátaxis</span></div>
+  <div class="kcs">
+    <article>
+      <h3>Q427: The install finished, but the terminal says "claude is not recognized". What now?</h3>
+      <dl>
+        <dt>Asked by</dt><dd>Praseetha, verbatim: "It just says, Cloud is not recognized or something like that."</dd>
+        <dt>Environment</dt><dd>Windows, PowerShell, fresh native install</dd>
+        <dt>Answer</dt><dd>Open a new terminal and run <code>claude --version</code> again. If it still fails, follow "Fix your PATH" in the troubleshooting page.</dd>
+        <dt>Cause</dt><dd>The install folder is not on PATH yet, and the old terminal window does not see the change</dd>
+        <dt>Type</dt><dd><span class="chip na">How-to</span></dd>
+        <dt>Sources</dt><dd><a href="https://code.claude.com/docs/en/troubleshoot-install">Troubleshoot installation and login</a> (verified 17-10-2026)</dd>
+      </dl>
+    </article>
+    <article>
+      <h3>Q436: Are plugins in Claude's marketplace safe for a company that bans open-source tools?</h3>
+      <dl>
+        <dt>Asked by</dt><dd>Sivaraj</dd>
+        <dt>Environment</dt><dd>Any plan. Applies to every marketplace, including <code>claude-plugins-official</code></dd>
+        <dt>Answer</dt><dd>Being listed is not a security review. The official marketplace includes partner and third-party plugins. Review each plugin's <strong>Will install</strong> list in <code>/plugin</code> before you install it.</dd>
+        <dt>Cause</dt><dd>Plugins can run code with your permissions, and Anthropic does not review third-party marketplaces</dd>
+        <dt>Type</dt><dd><span class="chip na">Explanation</span> <span class="chip crit">Corrects the in-class answer</span></dd>
+        <dt>Sources</dt><dd><a href="https://code.claude.com/docs/en/plugins/security">Plugin security and trust</a> (verified 17-10-2026)</dd>
+      </dl>
+    </article>
+  </div>
+  <p class="note">New fields: Environment, Cause, Type and a correction flag. A correction is easy to find and post in the group.</p>
+</section>
+
+<details>
+  <summary>Appendix: topics, audience and quotes (unchanged from today's format)</summary>
+  <p>These stay as they are in <code>session-1-setup-terminal-plugins-claude-md-summary.md</code>: 31 topics, the audience profile, questions grouped by theme, and key quotes. They move below the analysis so the reader gets the verdict first.</p>
+</details>
+
+<footer>Built from the Granola transcript of 17-10-2026 and the Session 1 summary. Counts are from the transcript.</footer>
+</div>
+
+<script>
+(function(){
+  var box=document.getElementById('rev');
+  function apply(){document.body.classList.toggle('clean',!box.checked);}
+  try{var v=localStorage.getItem('dbf-rev'); if(v==='0'){box.checked=false;}}catch(e){}
+  apply();
+  box.addEventListener('change',function(){apply(); try{localStorage.setItem('dbf-rev',box.checked?'1':'0');}catch(e){}});
+})();
+</script>

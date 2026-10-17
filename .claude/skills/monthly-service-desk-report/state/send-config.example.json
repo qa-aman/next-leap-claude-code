@@ -1,0 +1,8 @@
+{
+  "from": "you@example.com",
+  "to": ["you@example.com"],
+  "cc": [],
+  "allowlist": ["you@example.com"],
+  "include_test_runs": true,
+  "signature": "Your name"
+}

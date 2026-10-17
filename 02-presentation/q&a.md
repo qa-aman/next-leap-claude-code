@@ -40,6 +40,7 @@ Answers to open questions from workshop sessions, sourced from official Anthropi
 - **September 2026 Session 9 additions:** 27-09-2026 (Q396-Q403 - Hermes setup, OpenCode vs Hermes, Windows install blocks, Obsidian as a knowledge layer, the Nous subscription question, harness, local models, building a knowledge base from scratch, and Discord server permissions, Saturday afternoon - see "September 2026 - Session 9 Additions" section)
 - **September 2026 Session 10 additions:** 27-09-2026 (Q404-Q414 - installer extract errors, Hermes in Cursor, Claude vs Hermes, state.db vs Claude Code transcripts, the four memory places, skills and learned skills, unofficial skills, hallucination and compression, the memory interview prompt, and memory troubleshooting, Sunday morning - see "September 2026 - Session 10 Additions" section)
 - **September 2026 Session 11 additions:** 27-09-2026 (Q415-Q425 - the Telegram bot and a laptop that is off, hosting on managed or self-managed servers, the "no inference provider" message, how Telegram reaches Hermes, one bot per profile, bot pairing and /sethome, the Composio skill, Composio vs individual MCP servers, moving to another laptop, USER.md vs a personal profile file, and keeping Hermes healthy, Sunday afternoon, last session of the cohort - see "September 2026 - Session 11 Additions" section)
+- **October 2026 Session 1 additions:** 17-10-2026 (Q426-Q440 - new cohort: Claude subscription vs Cursor, the PATH error, terminal vs app vs extension, where sessions live and the 30-day cleanup, the status line, effort, permission modes, plugin scopes, how skills trigger and load, plugin security (correction), auditing a skill, plugin updates and /reload-plugins (correction), skills in Codex and Cursor, and /init for a new project, Saturday morning - see "October 2026 - Session 1 Additions" section)
 
 If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
@@ -6848,3 +6849,241 @@ This corrects the answer given in class, which described the local dashboard. Th
 **Sources:**
 - https://hermes-agent.nousresearch.com/docs/user-guide/features/memory (verified 27-09-2026)
 - https://hermes-agent.nousresearch.com/docs/user-guide/features/cron (verified 27-09-2026)
+
+---
+
+# October 2026 - Session 1 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 17-10-2026 during Session 1 (new cohort: Claude Code setup, terminal vs app vs extension, sessions, permission modes, plugins and CLAUDE.md as a router, Saturday morning). All URLs verified 17-10-2026.
+
+---
+
+## Q426: I already pay for Cursor Pro. Do I still need a Claude subscription? Does Claude Code work inside Cursor? (Ambrosh, Sohan)
+
+**Short answer:** Yes, you need a Claude plan. Claude Code requires a Pro, Max, Team, Enterprise or Console account, and the free claude.ai plan doesn't include it. A Cursor subscription doesn't cover it. Claude Code itself works in any editor: open the editor's built-in terminal and run `claude`.
+
+| You use | How to run Claude Code |
+|---|---|
+| Antigravity, Cursor, VS Code | Integrated terminal, run `claude`. VS Code-based editors can also use the extension |
+| JetBrains | The plugin, or the integrated terminal |
+| No editor | Any terminal, or the desktop app |
+
+Pro is the $20 a month plan the host recommended to start with.
+
+**Sources:**
+- https://code.claude.com/docs/en/setup (verified 17-10-2026)
+- https://code.claude.com/docs/en/vs-code (verified 17-10-2026)
+- https://claude.com/pricing (verified 17-10-2026)
+
+---
+
+## Q427: The install finished, but the terminal says "claude is not recognized" or "command not found". What now? (Praseetha)
+
+**Short answer:** The install folder isn't on your PATH yet. First open a new terminal window and run `claude --version` again, because the old window doesn't see the change. If it still fails, follow "Fix your PATH" in the official troubleshooting page.
+
+- On Windows, check you're in the right shell. `The token '&&' is not a valid statement separator` means you're in PowerShell running the CMD command. `'irm' is not recognized` means you're in CMD running the PowerShell command.
+- `claude doctor` checks the install once `claude` runs.
+- Still stuck: screenshot the terminal, including every command you ran, and paste it into Claude.
+
+**Sources:**
+- https://code.claude.com/docs/en/setup (verified 17-10-2026)
+- https://code.claude.com/docs/en/troubleshoot-install (verified 17-10-2026)
+
+---
+
+## Q428: Is there any real difference between the terminal, the desktop app and the IDE extension? Can I build the status line in the extension? (Nabil, Deepak, a participant)
+
+**Short answer:** They run the same engine and share settings, CLAUDE.md and plugins on one machine. The terminal (CLI) has every feature. The VS Code extension has a subset of commands and skills, and no `!` bash shortcut or tab completion. If you need a CLI-only feature in VS Code, Cursor or Antigravity, run `claude` in the editor's integrated terminal.
+
+| Surface | Best for |
+|---|---|
+| Terminal (CLI) | Every feature, the status line, running alongside other CLI tools such as Codex |
+| VS Code extension | Inline diffs, @-mentions, plan review inside the editor |
+| Desktop app | Visual diffs, several sessions side by side, scheduled tasks, cloud sessions |
+
+- The status line is a CLI setting. The docs don't describe it in the extension's panel, so use the integrated terminal for it.
+- Each surface keeps its own session list. Run `/desktop` in the terminal to move a CLI session into the desktop app.
+
+**Sources:**
+- https://code.claude.com/docs/en/vs-code (verified 17-10-2026)
+- https://code.claude.com/docs/en/desktop (verified 17-10-2026)
+- https://code.claude.com/docs/en/overview (verified 17-10-2026)
+
+---
+
+## Q429: Where are my sessions saved? Can I open them on another device, or after a restart? (Bhavya, Sivaraj, Sohan)
+
+**Short answer:** Each session is a JSONL file on your machine at `~/.claude/projects/<project>/<session-id>.jsonl`. It isn't synced to another device. To get back to one, name it with `/rename` and reopen it with `claude --resume <name>`. Important: Claude Code deletes transcripts older than 30 days by default. Change that with `cleanupPeriodDays` in `settings.json`.
+
+| To | Do this |
+|---|---|
+| Reopen the last session in this folder | `claude --continue` |
+| Pick from a list | `claude --resume` or `/resume` |
+| Name the current session | `/rename auth-refactor` |
+| Reopen by name | `claude --resume auth-refactor` |
+| Keep transcripts longer than 30 days | Set `cleanupPeriodDays` |
+| Move to another machine | Push the project to GitHub, and copy `~/.claude` |
+
+The host's `ccs` script is a personal registry on top of these. The built-in `/rename` covers the same need for most people. The JSONL format is internal and changes between versions, so use `/export` rather than parsing it in scripts.
+
+**Sources:**
+- https://code.claude.com/docs/en/sessions (verified 17-10-2026)
+- https://code.claude.com/docs/en/settings (verified 17-10-2026)
+
+---
+
+## Q430: How did you build the status line at the bottom of your terminal? (a participant)
+
+**Short answer:** Run `/statusline` and describe what you want, for example "model, effort, context left, project name, 5-hour and 7-day usage." Claude Code writes the script into `~/.claude/` and updates your settings. Pasting a screenshot of the host's line and asking for "a similar status line" works the same way.
+
+Run `/statusline` with no description to copy your shell prompt instead.
+
+**Sources:**
+- https://code.claude.com/docs/en/statusline (verified 17-10-2026)
+- https://code.claude.com/docs/en/commands (verified 17-10-2026)
+
+---
+
+## Q431: Which model and effort level should I use? (paraphrased from the session)
+
+**Short answer:** Start with the defaults. Medium is the default effort for Opus 5.5, and it's what the host uses. Change it with `/model` (left and right arrows) or `/effort`. Lower effort is faster and cheaper, higher effort reasons more on hard problems.
+
+- On the release chart shown in class, extra high scored 66.4 against 57.6 at medium, so higher effort does help on hard tasks. Raise it for a difficult bug or a big design, not for everyday work.
+- Your organisation can cap effort, so some levels may not appear.
+
+**Sources:**
+- https://code.claude.com/docs/en/model-config (verified 17-10-2026)
+
+---
+
+## Q432: What do the Shift+Tab modes do, and which one is the default? (paraphrased from the session)
+
+**Short answer:** Shift+Tab cycles through permission modes. In auto mode, a classifier reviews actions instead of asking you each time. In manual mode, Claude asks before edits and commands. From v2.1.283, auto mode is the built-in starting mode for terminal and VS Code sessions (on earlier versions, only on Pro, Max and Team plans). Organisations can turn it off, and you can set your own default with `permissions.defaultMode` in `~/.claude/settings.json`.
+
+| Status bar shows | What it means |
+|---|---|
+| `auto mode on` | Claude acts. Risky actions are reviewed or blocked |
+| `manual mode on` | Claude asks before edits and commands |
+| `accept edits on` | File edits go through, commands still ask |
+| `plan mode on` | Claude plans and doesn't edit until you approve |
+
+From auto, the first press goes to manual, then accept edits, then plan, then back to auto.
+
+**Sources:**
+- https://code.claude.com/docs/en/permission-modes (verified 17-10-2026)
+
+---
+
+## Q433: The plugin install asks "for you, for all collaborators, or this repo only". Which do I pick, and where are plugins stored? (Priyank, Bhavya)
+
+**Short answer:** Pick "Install for you" (user scope). The plugin is then on in every project on this machine. Plugins are stored locally under `~/.claude/plugins/`, so on a new machine you install them again.
+
+| Option | Scope | Saved in | Who gets it |
+|---|---|---|---|
+| Install for you | User | `~/.claude/settings.json` | You, every project |
+| All collaborators on this repository | Project | `.claude/settings.json` (committed) | Everyone in the repo, after each runs the install once |
+| You, in this repo only | Local | `.claude/settings.local.json` | You, this repo only |
+
+The terminal, the desktop app and the VS Code extension on one computer read the same settings, so a user-scope plugin works in all three.
+
+**Sources:**
+- https://code.claude.com/docs/en/discover-plugins (verified 17-10-2026)
+
+---
+
+## Q434: Do I need to call plugins and skills by name? Why install Skill Creator if Claude can write a skill anyway? (Bhavya, Sivaraj)
+
+**Short answer:** Usually no. Claude sees every skill's description and picks the right one from your request ("help me brainstorm", "create a skill"). If it doesn't, type the skill's slash command. Skill Creator is Anthropic's skill for writing skills: it follows the current skill format and can run evals and benchmark a skill against a baseline, which a plain "write me a skill" doesn't do.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 17-10-2026)
+- https://github.com/anthropics/skills/tree/main/skills/skill-creator (verified 17-10-2026)
+
+---
+
+## Q435: Does every skill load on every prompt? What does that cost? (Sivaraj)
+
+**Short answer:** Only each skill's name and description load every turn. The full `SKILL.md` loads when the skill is used, and its scripts or reference files only when the skill needs them. The descriptions still cost context on every turn, so many unused skills add up. Run `/skill-doctor` to see each skill's cost and how often you use it, then turn off the unused ones.
+
+- `/context` shows how much your skills, memory files and tools take before you type.
+- The skill list is capped at about 1% of the context window. Past that, Claude Code drops descriptions from the skills you use least.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 17-10-2026)
+- https://code.claude.com/docs/en/commands (verified 17-10-2026)
+
+---
+
+## Q436: Are plugins in Claude's marketplace safe for a company that bans open-source tools? (Sivaraj)
+
+**Short answer:** Being listed is not a security review. This corrects the answer given in class. The official marketplace (`claude-plugins-official`) holds plugins Anthropic maintains plus plugins from partners and other authors. Anthropic's guidance is to review a plugin before you install it, whichever marketplace it comes from, because plugins can run code with your permissions.
+
+- What Anthropic does guarantee: only marketplaces from `github.com/anthropics/` can use the official names, so a third-party catalog can't pretend to be Anthropic's.
+- Before installing, open the plugin in `/plugin` and read the **Will install** list (commands, skills, hooks, MCP servers).
+- Anthropic doesn't review third-party marketplaces.
+
+**Sources:**
+- https://code.claude.com/docs/en/plugins/security (verified 17-10-2026)
+- https://code.claude.com/docs/en/plugins/anthropic-marketplaces (verified 17-10-2026)
+
+---
+
+## Q437: How do I check a skill from GitHub is safe if I can't read the code? (Sivaraj)
+
+**Short answer:** Ask Claude to audit it before you install: give it the repo URL and your company's rules (no data sent out, no unknown network calls, no credentials read). For repeated checks, turn those rules into your own `/audit-skill` skill so every audit uses the same list and ends with a yes or no.
+
+What to have it check:
+- Scripts in the skill folder, and every command they run
+- Network calls and where data goes
+- Files it reads outside the project, especially keys and `.env` files
+- Hidden instructions in `SKILL.md` or reference files
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 17-10-2026)
+- https://code.claude.com/docs/en/plugins/security (verified 17-10-2026)
+
+---
+
+## Q438: Will plugins and skills update themselves? And how do I improve a skill when I find a better way? (a participant, Deepak, Priyank)
+
+**Short answer:** Plugins update automatically when their marketplace has auto-update on. Then run `/reload-plugins` to load the new version in an open session. `/reload-plugins` applies changes, it doesn't fetch updates (this corrects the answer given in class). To update one plugin now, open it in `/plugin` and choose **Update now**. Skills you wrote never update themselves: they're fixed instructions you improve.
+
+To improve your own skill:
+1. Keep a few fixed test prompts for it.
+2. Treat each new idea (a GitHub repo, a gap from the last run) as a proposed change.
+3. Use Skill Creator to run evals and compare the new version with the current one. Keep the change only if it wins.
+
+Plugins from the official marketplace auto-update by default.
+
+**Sources:**
+- https://code.claude.com/docs/en/discover-plugins (verified 17-10-2026)
+- https://github.com/anthropics/skills/tree/main/skills/skill-creator (verified 17-10-2026)
+
+---
+
+## Q439: Do these skills work in Codex or Cursor too? (Priyank, Deepak)
+
+**Short answer:** Mostly yes. Claude Code skills follow the Agent Skills open standard, which works across several AI tools. Claude Code adds some extra frontmatter fields (for example invocation control and running in a subagent) that other tools may ignore. The plain `SKILL.md` instructions carry over.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 17-10-2026)
+- https://agentskills.io (verified 17-10-2026)
+
+---
+
+## Q440: I'm starting a new project. Do I write CLAUDE.md myself? Where does my project context go? (Sukesh, Sohan)
+
+**Short answer:** Open the folder in Claude Code and run `/init`. It writes a starting CLAUDE.md, or suggests improvements if one exists. Then add what Claude can't find on its own: your role, the product, where the files are. Keep it under 200 lines and move detail into `.claude/rules/`.
+
+| File | Use for |
+|---|---|
+| `~/.claude/CLAUDE.md` | Your preferences for every project |
+| `CLAUDE.md` at the project root | Project context, shared through git |
+| `CLAUDE.md` in a subfolder | Loads when Claude works in that folder |
+| `.claude/rules/*.md` | Topic rules, optionally only for certain paths |
+
+Set `CLAUDE_CODE_NEW_INIT=1` before `/init` for an interactive version that also asks about skills and hooks.
+
+**Sources:**
+- https://code.claude.com/docs/en/memory (verified 17-10-2026)
+- https://code.claude.com/docs/en/commands (verified 17-10-2026)

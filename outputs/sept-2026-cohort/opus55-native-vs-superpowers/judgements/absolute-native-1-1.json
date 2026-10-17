@@ -1,0 +1,44 @@
+{
+ "captured": [
+  "R1",
+  "R2",
+  "R3",
+  "R4",
+  "R5",
+  "R6",
+  "R7",
+  "R8",
+  "R9",
+  "R10",
+  "R11",
+  "R12",
+  "R13",
+  "R14",
+  "R15",
+  "R16"
+ ],
+ "C1": 5,
+ "C2": 4,
+ "C3": 5,
+ "C4": 5,
+ "C5": 4,
+ "C6": 4,
+ "C7": 4,
+ "quotes": {
+  "C2": "Cloudflare Workers (free plan, via the OpenNext adapter), on a `*.workers.dev` URL | Commercial use allowed on the free plan",
+  "C3": "`0001_init.sql` + `seed.sql` + `scripts/migrate.ts`. Run against the live Supabase project.",
+  "C4": "`npm run eval -- 01` reports 5/5 items with correct owners, dates and flags, and neither non-item, on 3 of 3 runs."
+ },
+ "strength": "The design puts accuracy first and makes it measurable. Due dates are computed in code from the meeting date. Claude's owner keys are validated against the roster on the server. Snippets are checked against the notes to catch invented items. A graded answer-key eval runs 3 times per note with hard pass criteria (100% recall, zero wrong owners or dates), tuned on a worked Hinglish/Zoom example.",
+ "weakness": "The infrastructure and feature load is heavy for a non-technical PM on a 2-week clock. It combines Next.js via OpenNext on Cloudflare Workers, Cloudflare Queues, Supabase Auth and Postgres with RPC transactions, and two Supabase projects. On top of that, v1 includes series, re-runs of confirmed meetings, deactivation with needs_reassignment, and a double-paste guard. The day-1 risk check tests only the long Claude call, not whether the Next.js app fits Cloudflare's free-plan limits.",
+ "errors": [
+  "The Cloudflare Workers free plan has about a 3 MiB compressed script-size limit and 10 ms CPU per invocation. Next.js bundles built with OpenNext often exceed these, and the practical path is the $5/month paid plan. This still fits the $20 budget, but the plan never mentions or checks it.",
+  "R4 says a non-roster owner must be flagged, never guessed. The spec instead silently ignores tasks for external people ('John from Acme sends contract | Ignore'). If an item is misclassified as external, it becomes an unflagged miss instead of a 'needs review' item.",
+  "The fallback of moving extraction to a Supabase Edge Function may hit the same problem. Free-tier Edge Functions have a wall-clock/idle limit of about 150 s, which is close to the stated 30–120 s Claude call.",
+  "docs/setup-accounts.md never tells Aman to set Supabase Auth's Site URL / Redirect URLs to the workers.dev address. Without that, the Google OAuth callback falls back to localhost and login fails on the live site.",
+  "The worst-case cost row assumes about 34k input tokens for 15k words. The document's own ratio of about 1.4 tokens per word gives about 21k plus prompt overhead. The estimate is conservative and harmless, but internally inconsistent.",
+  "The phases are scheduled as 'days 1–14', which is 14 working days. A 2-week calendar deadline allows about 10 working days, so the schedule has no slack.",
+  "The spec keeps verbatim source snippets (up to 300 characters of the notes) forever. That goes beyond R7's 'only the action items are kept'. It is disclosed, but it is a deviation from a confidentiality requirement.",
+  "'next Friday', 'EOW' and 'kal' are always left blank and flagged. R5's own example ('by next Friday') expects resolution against the meeting date. The choice is defensible under R6, but it will generate many date_unclear flags."
+ ]
+}

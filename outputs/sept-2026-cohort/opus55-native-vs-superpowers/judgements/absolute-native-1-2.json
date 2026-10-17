@@ -1,0 +1,42 @@
+{
+ "captured": [
+  "R1",
+  "R2",
+  "R3",
+  "R4",
+  "R5",
+  "R6",
+  "R7",
+  "R8",
+  "R9",
+  "R10",
+  "R11",
+  "R12",
+  "R13",
+  "R14",
+  "R15",
+  "R16"
+ ],
+ "C1": 5,
+ "C2": 4,
+ "C3": 5,
+ "C4": 5,
+ "C5": 4,
+ "C6": 4,
+ "C7": 3,
+ "quotes": {
+  "C2": "Due dates are calculated in code from the meeting date (SPEC §5.3), never by Claude.",
+  "C3": "Work one phase at a time, in the order in SPEC §12.",
+  "C4": "`npm run eval -- 01` reports 5/5 items with correct owners, dates and flags, and neither non-item, on 3 of 3 runs."
+ },
+ "strength": "Accuracy (R4-R6) is built in at several layers, and each one can be tested. Claude only classifies date phrases and code works out the actual dates. Claude picks owners from short roster keys that the server checks. Every item's snippet is checked against the notes. Refusals and truncated replies become 'Failed – Retry', never 'no items'. Each meeting in the test set has an answer key, and the graded eval must pass every note on 3 of 3 runs. The rules include 'A wrong owner or date is worse than a blank one with a flag.'",
+ "weakness": "It is a lot to build in 2 weeks for a non-technical PM: Next.js on Workers through OpenNext, Cloudflare Queues, Postgres RPC transactions, two Supabase projects, re-runs on confirmed meetings, a full permissions table, deactivation and needs_reassignment, and Undo. It also depends on the Cloudflare free plan without checking the limits most likely to break it. The Implementation Plan is too technical for the PM to judge in a meaningful way.",
+ "errors": [
+  "The Cloudflare Workers free plan caps each Worker at about 3 MiB compressed and 10 ms of CPU per request. A Next.js app deployed through OpenNext often goes over these limits, which would force the $5/month paid plan. The budget still holds, but 'free hosting' would not. The day-1 risk check only tests wall-clock time, not bundle size or CPU.",
+  "Tasks with a clearly external owner are dropped without a flag ('Task for an external person ... Ignore'). The PM asked that owners not on the roster be flagged, never guessed. Dropping them loses items the reviewer never sees.",
+  "Some date rules are too strict: 'next Friday', 'kal', 'EOW', and a weekday that matches the meeting's weekday are always left blank. The PM's own example 'by next Friday' was meant to be worked out from the meeting date, so many common deadlines will reach the board without a date.",
+  "Real, confidential meeting notes and answer keys are stored in tests/extraction/ with no expiry. Verbatim source snippets are also kept forever. Both conflict with the 30-day rule (R7) and with CLAUDE.md's 'Don't copy them anywhere else'.",
+  "The snippet check is ambiguous. Claude sees notes with timestamps stripped and speaker lines joined, but the plan does not say whether the snippet is checked against those notes or the raw ones. If it is checked against the raw text, quotes that span joined lines will be wrongly flagged source_unverified.",
+  "The 34% error rate of the current tool is never recorded as a baseline to compare against. The model comparison also cites 'Opus 5 ... roughly 2.5× the cost', but the current model is Opus 5.5, so the price claim can't be checked."
+ ]
+}

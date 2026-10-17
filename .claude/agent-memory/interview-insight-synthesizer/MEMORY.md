@@ -24,6 +24,19 @@ Recorded 08-08-2026. In the repo's fictional timeline (today is 17-03-2026 per `
    - **Weak perceived value and price sensitivity.** Marcus and Priya. Tolerated today, exposed to Notion bundling.
 3. Quote fidelity note: James Whitfield's Salesforce quote in `interview-04-james-whitfield.md` contains an em dash. Preserve it. It is source text, and the no-em-dash writing rule governs your own prose, not a verbatim quote.
 
+## Clustering refinement (run of 26-09-2026, sept-2026-cohort)
+
+Folding Priya Nair's "summaries too long" pain into the accuracy/trust theme (rather than leaving it as a standalone summary-quality theme) sharpened the top theme to 3 of 4 interviews instead of 2, and is a better cluster: the common root is "AI output requires manual user correction before it's usable" (Sarah edits action items, Priya skims/rewrites summaries, James catches wrong follow-ups). Use this framing going forward rather than splitting "action item accuracy" and "summary quality" into separate themes when both trace to the same trust gap.
+
+Also folded Sarah's revenue-hold (8-seat Team upgrade) and feature-non-adoption (Meeting Pattern Insights) into the accuracy theme as consequences, rather than a separate "distrust blocks revenue" theme, since on its own that theme was a 1-interview singleton propped up by 2 pains from the same person. Keep it as a sub-point inside the accuracy theme's evidence, not a separate ranked row, unless a second interview surfaces the same revenue-hold pattern.
+
+Marcus's renewal-risk quote ("that's not a quality issue, it's an adoption issue... adoption won't happen until I trust the security story") belongs with his privacy pains, not with Sarah's AI-accuracy distrust: the root cause is security/data trust, not AI output quality, even though both surface as "distrust."
+
 ## How to maintain this file
 
 Append a roadmap-status entry whenever the user tells you a theme is already being built, already shipped, or explicitly out of scope, and record what it changes about the recommendation rather than about the finding. Keep the distinction sharp: status changes advice, never evidence.
+
+## Quote-fidelity trap (26-09-2026)
+- Run reported "all quotes cross-checked character-for-character" but two fragments were not verbatim: "look unprofessional" (source: "My rep looks unprofessional.", interview-04) and a Marcus quote where the source em dash was silently swapped for a comma (interview-02, line 30).
+- Rule: a quote must match the source exactly, including punctuation. If the source contains an em dash, end the quote before the dash and paraphrase the rest outside quote marks. Never edit inside quote marks to satisfy the no-em-dash rule.
+- Never shorten or re-inflect a quoted fragment ("looks" -> "look"). Quote the fragment as written or paraphrase without quote marks.

@@ -1,0 +1,38 @@
+{
+ "captured": [
+  "R1",
+  "R4",
+  "R5",
+  "R6",
+  "R8",
+  "R9",
+  "R10",
+  "R11",
+  "R15"
+ ],
+ "C1": 3,
+ "C2": 2,
+ "C3": 4,
+ "C4": 5,
+ "C5": 3,
+ "C6": 3,
+ "C7": 2,
+ "quotes": {
+  "C2": "Notes are limited to 50,000 characters (`MAX_NOTES_CHARS`).",
+  "C3": "Consumes: `resolveOwner` (Task 2), `resolveDue` (Task 3), `locateQuote` (Task 4)",
+  "C4": "Launch requires no missed items and no wrong-person owners across the set."
+ },
+ "strength": "The accuracy design fits R4–R6 closely. The LLM only copies the owner and due-date text as written. Pure, unit-tested code then matches owners by exact roster name or alias ('Only exact key matches count. There's **no** fuzzy matching'). Owner flags block adding items to the board. A golden-set eval reports a wrong owner separately from 'flagged instead', which gives a concrete way to measure progress against the current tool's 34% error rate. Every task follows test-first steps with an expected FAIL, then PASS.",
+ "weakness": "It covers the product logic but skips the operating constraints. It never mentions the $20/month budget or free-tier hosting ('host-agnostic'), and it defaults to the most expensive model. It has no 30-day deletion of raw notes and says 'Nothing is hard-deleted'. It gives no deploy path to a team URL for a non-technical PM, who would need Docker plus a manual Google Cloud OAuth setup. It has no 2-week timeline and no Hinglish handling. The two documents are mostly code and jargon, so the PM could not realistically approve them.",
+ "errors": [
+  "The 50,000-character cap is below the brief's maximum of 15,000 words (about 85–95k characters). Longer Zoom transcripts would be rejected, which contradicts R2.",
+  "Raw notes are kept forever. notes_text is stored, the meeting notes view depends on it, and the spec says 'Nothing is hard-deleted after commit'. This directly violates R7's 30-day deletion.",
+  "The default model ID 'claude-opus-5' is not a confirmed model ID; the current Opus is 'claude-opus-5-5'. Opus is also the priciest choice, and the plan never checks cost against the budget. The only cost mention is the eval ('Costs money').",
+  "Zoom transcripts are speaker-labelled ('Tom: I'll send it'). The prompt forbids inferring owners, so first-person commitments will return 'I' or null and be flagged en masse. The plan has no rule for mapping a speaker label to the owner.",
+  "Hinglish (R3) is never mentioned. The prompt, date parser (chrono-node en-US/en-GB only) and eval set assume English. Hindi date phrases like 'kal tak' will come back as unparsed_due at best.",
+  "R16 (the same item raised in two meetings) is not handled. Duplicate detection only works within one meeting (possible_duplicate) or on an identical notes hash.",
+  "The brief's own example 'by next Friday' is always left unresolved (unparsed_due). That is a defensible, conservative choice, but it departs from R5 without being flagged to the PM.",
+  "R10 says 'an owner can edit'. The plan lets any signed-in user edit any item.",
+  "There are small mismatches between the spec and the plan. The spec says blocked commits get a 409 response, but the plan returns an ActionResult error. The spec's paste flow saves the draft before the duplicate-hash check, which as written would always match the meeting just saved; the plan checks first."
+ ]
+}

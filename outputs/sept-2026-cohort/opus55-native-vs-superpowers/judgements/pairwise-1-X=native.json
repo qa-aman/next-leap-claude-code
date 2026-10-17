@@ -1,0 +1,11 @@
+{
+ "winner": "X",
+ "margin": "clear",
+ "why": [
+  "Y leaves out the privacy requirement R7. It stores `raw_notes (text)` with no deletion job, so notes are kept forever. X has a daily cron that 'sets `raw_notes = null` on every meeting created more than 30 days ago', and a retention test checks 31-day vs 29-day meetings.",
+  "Y has no change history, so it misses R10. Its schema only has `status_changed_by`, and any signed-in user can edit any item. X gives an owner/admin permission table that the server enforces, plus an append-only `item_events` log recording 'who, when, which field, old value → new value'.",
+  "Y never mentions Hinglish (R3). X designs for it throughout: date phrases like 'kal', 'parso' and 'Monday tak', the owner phrase 'main kar dunga', item text always in English with the snippet kept in the original language, and a required Hinglish case in the test set.",
+  "X respects the budget (R12) and the 2-week timeline (R14). It chooses Sonnet 5 with a cost table ('about $4 a month typical and about $9 worst case'), sets a $15 spend limit, logs cost per run, and lays out a 14-day phase schedule. Y uses `claude-opus-5` for extraction and also for the eval's judge, gives no cost estimate, and relies on Vercel `maxDuration = 300`, which may need a paid plan.",
+  "X fits the PM better and stays in scope. It has a board filter by meeting (R9), cross-meeting duplicate detection (R16), and click-by-click setup docs for a non-technical PM (R13), with a rule to 'use plain language'. Y filters by owner only, pushes duplicate detection to later ('Detecting duplicates across meetings' is out of scope), and adds Granola sources the PM never asked for. Y's fully written TDD code is very executable, but it builds the wrong product."
+ ]
+}

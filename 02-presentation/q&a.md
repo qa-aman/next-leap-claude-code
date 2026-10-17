@@ -36,6 +36,10 @@ Answers to open questions from workshop sessions, sourced from official Anthropi
 - **September 2026 Session 5 additions:** 19-09-2026 (Q345-Q358 - travel planner multi-agent build part 1, brainstorm decisions, APIs over web search, Google Maps keys, feedback versus memory, subagent-driven TDD, cost per run, Gemini versus Vertex, and workflow versus subagents, Saturday afternoon - see "September 2026 - Session 5 Additions" section)
 - **September 2026 Session 6 additions:** 20-09-2026 (Q359-Q371 - travel planner build part 2, Gemini via a standalone server, /compact before a model switch, /context and /doctor, subagent file flow, /goal versus /loop, adding an agent, branching for major changes, free video tooling, parallel terminals, marketing context in the same repo, /voice, Sunday morning - see "September 2026 - Session 6 Additions" section)
 - **September 2026 Session 7 additions:** 20-09-2026 (Q372-Q383 - travel planner build part 3, payments and the cart boundary, agent harness, /insights, the trip revision agent, delegating a decision to Claude, worktrees for a parallel build, the feature-dev plugin, how agents communicate, the permission classifier, documenting a build from session transcripts, and shipping a Claude plugin, Sunday afternoon - see "September 2026 - Session 7 Additions" section)
+- **September 2026 Session 8 additions:** 26-09-2026 (Q384-Q395 - the five agent patterns mapped onto the travel planner, PII checks before building on HR data, local models via Ollama, designing a multi-agent system yourself, when to split agents, the 15x token figure, structured JSON handoffs, cutting cost per run with omitClaudeMd and Haiku, long-running workflows, single-key API gateways, and what to build next, Saturday morning - see "September 2026 - Session 8 Additions" section)
+- **September 2026 Session 9 additions:** 27-09-2026 (Q396-Q403 - Hermes setup, OpenCode vs Hermes, Windows install blocks, Obsidian as a knowledge layer, the Nous subscription question, harness, local models, building a knowledge base from scratch, and Discord server permissions, Saturday afternoon - see "September 2026 - Session 9 Additions" section)
+- **September 2026 Session 10 additions:** 27-09-2026 (Q404-Q414 - installer extract errors, Hermes in Cursor, Claude vs Hermes, state.db vs Claude Code transcripts, the four memory places, skills and learned skills, unofficial skills, hallucination and compression, the memory interview prompt, and memory troubleshooting, Sunday morning - see "September 2026 - Session 10 Additions" section)
+- **September 2026 Session 11 additions:** 27-09-2026 (Q415-Q425 - the Telegram bot and a laptop that is off, hosting on managed or self-managed servers, the "no inference provider" message, how Telegram reaches Hermes, one bot per profile, bot pairing and /sethome, the Composio skill, Composio vs individual MCP servers, moving to another laptop, USER.md vs a personal profile file, and keeping Hermes healthy, Sunday afternoon, last session of the cohort - see "September 2026 - Session 11 Additions" section)
 
 If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
@@ -6240,3 +6244,607 @@ New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 20
 - https://code.claude.com/docs/en/plugins (verified 20-09-2026)
 - https://code.claude.com/docs/en/plugin-marketplaces (verified 20-09-2026)
 - https://code.claude.com/docs/en/discover-plugins (verified 20-09-2026)
+
+
+---
+
+# September 2026 - Session 8 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 26-09-2026 during Session 8 (the five agent patterns mapped onto the travel planner, structured handoffs, and cost per run, Saturday morning). All URLs verified 26-09-2026.
+
+---
+
+## Q384: We handle a lot of PII in HR. What checks should be in place before we build an agent on that data?
+
+**Short answer:** Three checks. Know which data terms your account is on, keep personal data and secrets out of the chat and out of Claude's reach with deny rules, and keep a human decision on anything that approves or rejects a person. The plan you use changes the answer more than the tool does.
+
+- **Which terms apply.** On Free, Pro and Max, "we will train new models using data from Free, Pro, and Max accounts when this setting is on." On Team, Enterprise and the API, "Anthropic does not train generative models using code or prompts sent to Claude Code under commercial terms." Commercial retention is 30 days by default, with zero data retention available to qualified accounts. For employee health or leave data, use a commercial account your company has approved, not a personal one.
+- **What stays on your laptop.** Claude Code stores session transcripts "locally in plaintext under `~/.claude/projects/` for 30 days by default." Shorten that with `cleanupPeriodDays` if sessions touch personal data.
+- **What Claude may read.** Add deny rules for files that hold secrets or raw personal records, for example `Read(./.env)` and `Read(./secrets/**)`. A deny rule is enforced by Claude Code, a request in the prompt is not.
+- **API keys.** Never paste one into a chat. If it happens, rotate the key, then put the new one in `.env` behind a deny rule.
+- **Decisions about people.** An agent can gather the state rule, list the missing documents and draft a recommendation. The approve or deny stays with a person.
+
+**Sources:**
+- https://code.claude.com/docs/en/data-usage (verified 26-09-2026)
+- https://code.claude.com/docs/en/permissions (verified 26-09-2026)
+- https://code.claude.com/docs/en/settings (verified 26-09-2026)
+- https://code.claude.com/docs/en/security (verified 26-09-2026)
+
+---
+
+## Q385: Can we go through the five patterns once more, and which ones does the travel planner actually use?
+
+**Short answer:** Five workflow patterns from Anthropic's "Building effective agents": prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer. The travel planner's Plan Trip flow uses four of them. Routing shows up only in the revision classifier and in `pm-request-router`.
+
+| Pattern | Anthropic's one-line meaning | Where it is in our builds |
+|---|---|---|
+| Prompt chaining | Each step processes the output of the previous one, with a gate between steps | Orchestrator writes `brief.json`, nothing downstream starts until it exists. Also `interview-insight-synthesizer`'s four gated stages |
+| Routing | "Classifies an input and directs it to a specialized followup task" | `pm-request-router` (PRD, competitor or churn). The trip revision classifier. **Not** `brief.json` going to three workers |
+| Parallelization | Independent subtasks run at once, then results are combined | Destination, logistics and budget launched in one message |
+| Orchestrator-workers | A central LLM splits the task, delegates, then synthesizes | Orchestrator merges three files into `itinerary_draft.md` |
+| Evaluator-optimizer | "One LLM call generates a response while another provides evaluation and feedback in a loop" | Review writes `review.json`, only the failing owners rerun |
+
+- The live session called the broadcast of `brief.json` "routing." That is a correction: nothing is classified there, every worker gets the same brief. Routing means one input goes down one of several paths.
+- You never named a pattern while building. Claude picked them from the problem. The names matter when you review a design or explain it to someone else.
+
+**Sources:**
+- https://www.anthropic.com/engineering/building-effective-agents (verified 26-09-2026)
+
+---
+
+## Q386: Do we clone the repos or rebuild from the recordings? And are the pattern prompts meant to go on top of the travel planner?
+
+**Short answer:** Clone both. The travel planner repo is the finished system to read and question. The pattern prompts in the course repo are separate practice, one prompt per pattern, run on the MeetFlow sample data. They do not modify the travel planner.
+
+- In the course repo, open `02-presentation/Five-Agent-Patterns.html` in Chrome, read one prompt, run it in Claude Code, then ask "which pattern did this use and where is the gate?"
+- In the travel planner, open `docs/demo-runs/agent-communication.html`, then run the prompt at the end of its README that asks Claude to label each step with its pattern. Check its labels against Q385.
+
+**Sources:**
+- https://code.claude.com/docs/en/common-workflows (verified 26-09-2026)
+
+---
+
+## Q387: How does a local model work, and can Claude Code use one? What are the limits? (Deepika)
+
+**Short answer:** Ollama runs open models on your own machine and exposes an Anthropic-compatible API, so Claude Code can point at it with `ollama launch claude`. You pay nothing per token and need no internet. The limits are your RAM, your CPU or GPU, and the model's context window.
+
+- Ollama's own guidance for Claude Code: local models need "a 64k+ context window." A model that fits in memory with a short context will fail on real repositories.
+- Expect lower quality on multi-step tool use than Claude's hosted models. Use local models for private, offline or high-volume simple jobs, not for the orchestrator of a multi-agent system.
+- A 35B-parameter model on a 24 GB laptop runs slowly, and downloading one saturates the network, which is what cut the audio in the session.
+
+**Sources:**
+- https://docs.ollama.com/integrations/claude-code (verified 26-09-2026)
+- https://code.claude.com/docs/en/llm-gateway (verified 26-09-2026)
+
+---
+
+## Q388: I can follow what Claude built, but I am reverse engineering it. How do I design a multi-agent system myself, before Claude builds it? (Neha)
+
+**Short answer:** Design on paper first, in five steps, then ask Claude to challenge the design instead of creating it. Anthropic's rule is the starting point: "find the simplest solution possible, and only increase complexity when needed. This might mean not building agentic systems at all."
+
+1. **List the jobs.** Write every distinct job the system does as a verb and an output ("find 3 hotels under budget, write `logistics.md`").
+2. **Ask four questions per job.** Can it be split? Can its output be checked against a rule? Does order matter? Does it share one output with other jobs?
+3. **Pick the cheapest shape.** One job, few tools: one agent. Fixed order: chaining. Different request types: routing. Independent pieces: parallel workers under an orchestrator. Output with checkable criteria: add an evaluator.
+4. **Run the removal test.** Delete each agent on paper. If nothing breaks, keep it deleted.
+5. **Write the handoffs as field lists** before any code. Every arrow in the diagram becomes a file with named fields.
+
+Then prompt: "Here is my design. Challenge it. Where would you merge agents, split them, or drop one, and why?" Keep the reasons in a decision log in the repo. When you add a new area later (the visa example), repeat steps 1 to 5 for the new jobs only.
+
+**Sources:**
+- https://www.anthropic.com/engineering/building-effective-agents (verified 26-09-2026)
+- https://www.anthropic.com/engineering/multi-agent-research-system (verified 26-09-2026)
+
+---
+
+## Q389: Someone else might merge the reviewer and the planner into one agent. How do I decide whether they should be separate? (Neha)
+
+**Short answer:** Split two jobs into two agents only when one of three things is true: the second job must not see the first job's reasoning (a reviewer grading work), the two need different tools or permissions, or they can run at the same time. Otherwise one agent with a longer prompt is cheaper and easier to change.
+
+- Reviewer versus planner passes the first test: a planner that grades its own itinerary tends to approve it. That is why the evaluator-optimizer pattern uses a separate call. Your colleague's merged version would be cheaper and would catch fewer budget errors.
+- Destination versus budget passes the third test: they run in parallel from the same brief.
+- Budget versus logistics could be merged if cost mattered more than speed. That is a legitimate choice, write it in the decision log.
+
+**Sources:**
+- https://www.anthropic.com/engineering/building-effective-agents (verified 26-09-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 26-09-2026)
+
+---
+
+## Q390: You said multi-agent systems cost 15 times more. Where does that number come from?
+
+**Short answer:** From Anthropic's post on its own research system: "agents typically use about 4× more tokens than chat interactions, and multi-agent systems use about 15× more tokens than chats." It is a measurement on their system, not a law. Your multiple depends on how many agents run, how much each one re-reads, and how often a repair loop fires.
+
+- Where the tokens go in the travel planner: every worker re-reads the brief and its own instructions, the orchestrator re-reads all three worker files to merge them, the reviewer reads the draft plus the brief, and each failed check reruns an agent and the review.
+- Anthropic's own condition: "multi-agent systems require tasks where the value of the task is high enough to pay for the increased performance." They also note that tasks with many dependencies between agents are "not a good fit for multi-agent systems today."
+
+**Sources:**
+- https://www.anthropic.com/engineering/multi-agent-research-system (verified 26-09-2026)
+
+---
+
+## Q391: Agents understand natural language. How do they understand a structured handoff like a JSON file?
+
+**Short answer:** JSON is still text, so the model reads it the same way it reads a sentence. The difference is that every fact has a named field, so the next agent reads `"within_budget": false, "owner": "budget"` instead of guessing what "a couple seem pricey" means. That is context engineering: "the smallest possible set of high-signal tokens that maximize the likelihood of some desired outcome."
+
+- Anthropic chose JSON for a long-running agent's feature list because "the model is less likely to inappropriately change or overwrite JSON files compared to Markdown files."
+- Rule for your own builds: prose is fine for the final human-facing output, fields are required for anything another agent acts on.
+
+**Sources:**
+- https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents (verified 26-09-2026)
+- https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents (verified 26-09-2026)
+
+---
+
+## Q392: The travel planner costs $4.28 a run. How do I cut that without dropping to one agent? (paraphrased from the session)
+
+**Short answer:** Measure first, then fix in order of cost. The session's report found the orchestrator and review cost more than the three workers combined, and proposed three fixes bringing the median to $2.03.
+
+1. **Stop loading `CLAUDE.md` into subagents that do not need it.** Set `omitClaudeMd: true` in the agent's frontmatter, which launches it "without the user, project, and local CLAUDE.md files." Requires Claude Code v2.1.271 or later. Restate any rule the agent must follow in its own prompt.
+2. **Fix repeated failures upstream.** If review keeps catching the same logistics error, put that rule in `logistics.md` so the worker checks itself. The loop stays as a safety net.
+3. **Try a smaller model on simple workers.** Set `model: haiku` on the budget agent, rerun the evals, and go back to Sonnet if quality drops.
+
+The Claude Code costs page adds two more levers that apply here: move rarely needed instructions from `CLAUDE.md` into skills, and check spend with `/usage`.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 26-09-2026)
+- https://code.claude.com/docs/en/costs (verified 26-09-2026)
+
+---
+
+## Q393: What if an agent workflow runs longer than 15 minutes? (paraphrased from the session)
+
+**Short answer:** Keep state on disk, not in the conversation, so any step can restart from the last saved point. The session named trigger.dev and Inngest as third-party job runners that do this for production apps. Anthropic's own write-up on long-running agents describes the same idea without a platform: each session "begins with no memory of what came before," so the agent keeps a progress file, a structured feature list and git history, and reads them at the start of each session.
+
+- For the travel planner, every stage already writes a file (`brief.json`, worker `.md` files, `review.json`), so a restart can skip finished stages.
+- For long single tasks inside Claude Code, compaction and subagents with their own context keep the main session from filling up.
+
+**Sources:**
+- https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents (verified 26-09-2026)
+- https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents (verified 26-09-2026)
+
+---
+
+## Q394: Can one API key give access to many models or tools to keep cost visible? (paraphrased from the session)
+
+**Short answer:** Yes. The session named OpenRouter (one key, many model providers) and Composio (one key, many app connections). Both are third-party services, so check their data terms before sending personal data through them. Claude Code itself can route through a gateway: its docs cover LLM gateways that centralise keys, usage tracking and cost controls.
+
+- Whatever you use, show cost per run inside the system from the first version, as the travel planner's cost report does. A cost you do not see only goes up.
+
+**Sources:**
+- https://code.claude.com/docs/en/llm-gateway (verified 26-09-2026)
+- https://code.claude.com/docs/en/costs (verified 26-09-2026)
+
+---
+
+## Q395: Can you suggest a problem statement we can build next?
+
+**Short answer:** Build a personal assistant inside Claude Code for one workflow you already do every week, before building a product. Pick something with a clear input and output, for example turning meeting notes into a status update, or checking a leave request against a policy document.
+
+- Apply Q388 to it: list the jobs, pick the cheapest shape, write the handoffs. Most personal workflows need one agent and one or two skills, not five agents.
+- Stretch idea from the session: a native macOS dictation app in the style of Wispr Flow.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 26-09-2026)
+- https://code.claude.com/docs/en/sub-agents (verified 26-09-2026)
+
+
+---
+
+# September 2026 - Session 9 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 26-09-2026 during Session 9 (Hermes setup, Obsidian as a knowledge layer, and the first personal-assistant use cases, Saturday afternoon). All URLs verified 27-09-2026.
+
+---
+
+## Q396: Is Hermes just an agent that helps Claude, with a longer memory? How is it different from OpenCode, which I already use? (Lakshmi)
+
+**Short answer:** Hermes is its own agent, not a helper for Claude. It's built to be a personal assistant: it runs on your machine in the background, keeps memory and a searchable history of every conversation, runs scheduled jobs, and answers you on Telegram, Slack or Discord. Claude is one of the models it can run on. Tools like OpenCode and Claude Code are coding agents built around working in a project.
+
+- In class Hermes ran on a Claude plan through the experimental `claude-subscription-directsdk` plugin. It can also use an API key, OpenRouter, other providers, or a local model.
+- **Check the repo you install from.** The OpenCode fork Lakshmi was using carried a warning from the real maintainers about an impersonating site. Install only from a project's official repository or website.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/ (verified 27-09-2026)
+- https://hermes-agent.nousresearch.com/docs/plugins/claude-subscription-directsdk (verified 27-09-2026)
+
+---
+
+## Q397: The Windows install says "dependency installation failed" and the log mentions an application control policy. What do I do? (Nidhi, paraphrased)
+
+**Short answer:** Something on the laptop (a security policy or antivirus rule) is blocking a file the installer runs. Try the desktop installer from the Hermes website instead of the PowerShell command. If it still fails, paste the log into Claude or ChatGPT and ask which program is blocking it.
+
+- The full log is saved by the installer. Its last lines name the blocked file.
+- On a work laptop, the policy may be set by your IT team, and only they can allow it.
+- The official install page lists both routes and marks the desktop installer as recommended.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/getting-started/installation (verified 27-09-2026)
+
+---
+
+## Q398: What is Obsidian, how is it different from Hermes memory, and how do I connect it? (Lakshmi)
+
+**Short answer:** Obsidian is a free notes app that keeps every note as a plain file in one folder, called a vault. Hermes' own memory is deliberately small (two files of 2,200 and 1,375 characters). The vault is where everything bigger goes: projects, trackers, reference notes. Hermes ships with an Obsidian skill, so connecting it means telling Hermes where the vault is.
+
+- Install Obsidian and create a vault, for example `Documents/Obsidian Vault`.
+- Set `OBSIDIAN_VAULT_PATH` in `~/.hermes/.env`, or just ask Hermes: "I have installed Obsidian, help me set it up." If the path isn't set, the skill uses `~/Documents/Obsidian Vault`.
+- Start a new chat after changing `.env`.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/skills/bundled/note-taking/note-taking-obsidian (verified 27-09-2026)
+- https://hermes-agent.nousresearch.com/docs/user-guide/features/memory (verified 27-09-2026)
+
+---
+
+## Q399: Setup asks me to sign in on the Hermes website and mentions a subscription. Do I need to pay Nous? (Lakshmi, paraphrased)
+
+**Short answer:** No. Hermes is free and open source. In the setup wizard, choose the blank or skip option, then install the Claude subscription plugin (step 6 of the setup guide) to run it on your Claude plan. Nous Portal is an optional paid way to get many models and web search in one place.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/getting-started/quickstart (verified 27-09-2026)
+- https://hermes-agent.nousresearch.com/docs/plugins/claude-subscription-directsdk (verified 27-09-2026)
+
+---
+
+## Q400: Hermes has its own guardrails. Do I still need to add a harness to the agents I build? (Mani)
+
+**Short answer:** Yes. A harness is what an agent is allowed to do: which tools it has, which actions need your approval, and what it must never do. Hermes provides some of this, but you set the boundaries for your job, and you keep a person on anything risky.
+
+- Give each job only the toolsets it needs.
+- Put "never send, pay, book or delete without asking me" in `SOUL.md`. That's a request the model follows, not a lock, so also limit the tools.
+- Keep private material outside the folders Hermes can read.
+- `hermes pause` stops all new scheduled, board and chat work.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/configuration (verified 27-09-2026)
+- https://www.anthropic.com/engineering/building-effective-agents (verified 27-09-2026)
+
+---
+
+## Q401: Can Hermes run on an offline model, and will it work well as a coding agent? (Mani)
+
+**Short answer:** It can run on a local model through Ollama, and it will do simple jobs offline at no cost per message. Large models need a lot of memory (a 35B model is over 20 GB), and quality on multi-step tool use is lower than hosted models. For coding, use Claude Code. The pattern from class: plan with a strong paid model, run the simple steps on a local one.
+
+**Sources:**
+- https://docs.ollama.com/integrations/claude-code (verified 27-09-2026)
+- https://hermes-agent.nousresearch.com/docs/user-stories (verified 27-09-2026)
+
+---
+
+## Q402: I've only just started with Claude, so I don't have years of notes. How do I tell Hermes who I am? (Pranjali)
+
+**Short answer:** Ask Hermes to interview you. It asks one question at a time and writes what it learns to `USER.md` and `MEMORY.md`. If you already use ChatGPT or Claude, ask them for a summary of what they know about you and paste it in.
+
+```text
+I want to build a knowledge base about me. Ask me one question at a time until you're satisfied you know how I work. Show me what you'll save before you save it, and only save what I actually tell you.
+```
+
+Then make it a habit: once a month, ask Hermes which entries are stale and remove them. The memory files have a character limit, so old entries crowd out new ones.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/features/memory (verified 27-09-2026)
+
+---
+
+## Q403: The Discord "Add to server" list is empty, so I can't add my bot. What's wrong? (paraphrased from the session)
+
+**Short answer:** Discord only lists servers where you have "Manage Server" rights. Create your own server first, then open the invite URL in a browser. Or use Telegram, which only needs a chat with @BotFather to get a bot token.
+
+- Keep the bot token secret. If it has been on a shared screen, reset it in the developer portal.
+- Telegram steps: @BotFather, `/newbot`, copy the token, get your user ID, then run `hermes gateway setup`.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/messaging/discord (verified 27-09-2026)
+- https://hermes-agent.nousresearch.com/docs/user-guide/messaging/telegram (verified 27-09-2026)
+
+
+---
+
+# September 2026 - Session 10 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 27-09-2026 during Session 10 (Hermes vs Claude, how Hermes memory works, and skills it learns on its own, Sunday morning). All URLs verified 27-09-2026.
+
+---
+
+## Q404: The Windows installer says "failed to extract the pinned Git archive." How do I fix it? (Kayal, paraphrased)
+
+**Short answer:** A download or extract step failed partway. Open the installer's logs and paste them into Claude or ChatGPT to find the cause. Then try the other install route (desktop installer or PowerShell command). If a half-finished install is left behind, delete the `.hermes` folder in your user folder and install again.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/getting-started/installation (verified 27-09-2026)
+
+---
+
+## Q405: Can I run Hermes inside Cursor? (Hima)
+
+**Short answer:** In Cursor's terminal, yes: type `hermes` like in any terminal. Inside Cursor's AI chat, no. Hermes is its own agent, not a plugin for another one.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/getting-started/quickstart (verified 27-09-2026)
+
+---
+
+## Q406: Now that we have Hermes, do we still need Claude? Do we use both, or pick one? (Nidhi)
+
+**Short answer:** Both, for different jobs. Claude Code is your coding assistant for building in a project. Hermes is your personal assistant: always running in the background while its machine is on, on your phone, with long memory and scheduled jobs. In class, Hermes itself ran on Claude, so Claude was the model inside it.
+
+| Use Claude Code for | Use Hermes for |
+|---|---|
+| Building or changing a product | A morning briefing on your phone |
+| Working inside a code repo | Reminders and scheduled check-ins |
+| Reviews, tests, refactors | Notes captured into Obsidian |
+| | Questions about what you did last week |
+
+**Does Hermes run when my laptop is off? No.** It runs only while its machine is on. For true 24/7, host it on a small cloud server. For cloud-scheduled jobs without your own machine, Claude Code has routines.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/ (verified 27-09-2026)
+- https://code.claude.com/docs/en/routines (verified 27-09-2026)
+
+---
+
+## Q407: Claude also remembers me through Markdown files. What's the advantage of Hermes memory? (Clide)
+
+**Short answer:** Hermes keeps every conversation in a local database (`state.db`) with full-text search, so it can answer "what did we decide last Tuesday?" months later. Claude Code keeps session transcripts as files under `~/.claude/projects/` for 30 days by default (change it with `cleanupPeriodDays`), plus `CLAUDE.md` and auto memory for standing context.
+
+- In class, the database had two tables on screen: `sessions` (one row per conversation) and `messages` (one row per message, with its role and content).
+- A correction to what was said in class: the Claude Code default is 30 days, not 20.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/features/memory (verified 27-09-2026)
+- https://code.claude.com/docs/en/data-usage (verified 27-09-2026)
+- https://code.claude.com/docs/en/memory (verified 27-09-2026)
+
+---
+
+## Q408: Does Hermes have short-term and long-term memory? (Lakshmi)
+
+**Short answer:** Not under those names. It has four built-in places plus an optional fifth.
+
+| Place | What it holds | When it loads |
+|---|---|---|
+| `SOUL.md` | Who the assistant is, its tone and rules | Start of every session |
+| `MEMORY.md` | Its own notes, up to 2,200 characters | Start of every session |
+| `USER.md` | What it knows about you, up to 1,375 characters | Start of every session |
+| `state.db` | Every past conversation, searchable | Only when it searches |
+| External provider (Obsidian, Honcho, Mem0) | Anything bigger | When a skill or tool reads it |
+
+The first three load once and then stay fixed for that session (the "frozen snapshot"). A memory saved now appears in your next session.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/features/memory (verified 27-09-2026)
+
+---
+
+## Q409: Is a skill in Hermes the same as a skill in Claude? (Nidhi)
+
+**Short answer:** The format is the same, and both follow the Agent Skills open standard, so Claude skills can be used in Hermes. Both load in stages: the name and description first, the full skill only when needed, reference files only if the skill asks for them. The difference: Hermes is told to save a workflow as a skill on its own when it works one out, and those skills show a "learned" tag.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/features/skills (verified 27-09-2026)
+- https://code.claude.com/docs/en/skills (verified 27-09-2026)
+
+---
+
+## Q410: Are skills pulled from the Skills Hub, or created from what Hermes learns? Or both? (Pranjali)
+
+**Short answer:** Both. Three sources: skills bundled with the install, skills you install from the Skills Hub, and skills Hermes creates after it works out a multi-step workflow or finds a way past an error. The ones it creates are personal to you and won't be on the hub.
+
+- A background review can suggest or stage skill changes after a session, and a write-approval setting lets you review them before they're saved.
+- The learned skill may not appear after one run. It depends on the model's judgment, so it varies by person and by run.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/features/skills (verified 27-09-2026)
+
+---
+
+## Q411: Some skills out there are malicious. How do I decide which ones to install? (Clide)
+
+**Short answer:** Prefer official sources: skills bundled with Hermes, skills from a vendor's own repo (for example Anthropic's), and connectors you sign into through the service itself. Stars and logos prove nothing. The Google Workspace CLI shown in class has tens of thousands of stars and a Google logo, and its own README says it is "not an officially supported Google product."
+
+- Before installing anything else, read its `SKILL.md` and any scripts it includes. Ask Claude or ChatGPT to check them for anything that sends data out or runs commands you don't expect.
+- Hub installs go through a security scan, which is a net, not a guarantee.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/features/skills (verified 27-09-2026)
+
+---
+
+## Q412: Will Hermes start hallucinating after a long conversation, like ChatGPT does? (a participant)
+
+**Short answer:** It can. Any model gets less reliable as its context fills up. Hermes reduces this by compressing automatically: it summarises older parts of the chat once it reaches its threshold (50% by default, and never earlier than 75% for models with a window under 512K). For a new task, start a new session.
+
+- A correction to what was said in class: Claude Code also compacts automatically as you approach the limit. `/compact` is there when you want to do it yourself.
+- The setting lives under `compression` in Hermes' config. Most people never need to change it.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/configuration (verified 27-09-2026)
+- https://code.claude.com/docs/en/context-window (verified 27-09-2026)
+
+---
+
+## Q413: Can you share the prompt you used to set up soul, user and memory? (a participant, paraphrased)
+
+**Short answer:** Yes. The guardrails in it are the important part: show before saving, only write what I said, merge instead of overwriting.
+
+```text
+Interview me to figure out how you should work with me: who I am and what you should remember. Ask about my role, how I like to communicate, how I make decisions, my recurring work, my tools, and things that have gone wrong with AI assistants before. Ask one question at a time and follow up where it's interesting.
+At the end, set things up: my SOUL.md (your tone with me), my profile facts to USER.md, and my setup and standing rules to MEMORY.md. Show me each one before saving. Only write what I actually told you. Compress my answers into short entries. If any of these files already has content, add to it, don't replace it.
+```
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/features/memory (verified 27-09-2026)
+
+---
+
+## Q414: Hermes says it saved a memory, but nothing changes. Or it refuses to save. What's wrong? (paraphrased from the session)
+
+**Short answer:** Usually one of three things.
+
+| You see | Why | Fix |
+|---|---|---|
+| Saved, but it doesn't use it | Frozen snapshot: memory loads at session start | Start a new session |
+| Save rejected | The file hit its limit (2,200 or 1,375 characters) | Ask Hermes to remove stale entries, then save again |
+| It won't write memory at all | Memory is switched off | Check `memory.memory_enabled` and `memory.user_profile_enabled` with `hermes config get`, and set them to `true` |
+
+`SOUL.md` changes also need a new session. Edit `SOUL.md` yourself or ask Hermes to. It isn't updated automatically the way the two memory files are.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/features/memory (verified 27-09-2026)
+
+
+---
+
+# September 2026 - Session 11 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 27-09-2026 during Session 11 (Hermes on your phone: Composio, Telegram and scheduled jobs, Sunday afternoon, last session of the cohort). All URLs verified 27-09-2026.
+
+---
+
+## Q415: Can the Telegram bot run in parallel with Hermes? Does it work when my laptop is off? (Yash)
+
+**Short answer:** The bot isn't a separate program. It's a window into the Hermes running on your laptop. It works from anywhere with internet as long as that laptop is on, awake and online. When the laptop is off, the bot doesn't reply and scheduled jobs don't run.
+
+- **Messages sent while it's off can be lost.** By default, when the gateway starts again, Hermes discards Telegram messages that arrived while it was off: "silently, no log, no retry." On a laptop that you shut down overnight, set `drop_pending_on_cold_boot: false` under `platforms.telegram.extra` to receive them in order instead.
+- Scheduled jobs that came due while the laptop was off run once to catch up when it's back.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/messaging/telegram (verified 27-09-2026)
+- https://hermes-agent.nousresearch.com/docs/user-guide/features/cron (verified 27-09-2026)
+
+---
+
+## Q416: Can we host Hermes on Hostinger or Railway? What's the difference between running it on my machine and on a server? (Yash)
+
+**Short answer:** Yes, because Hermes is open source you can run it anywhere. A managed host (a one-click template) sets up everything for you. A self-managed server (AWS, Google Cloud, a spare computer) needs you to install and maintain it. Claude Code itself can't be hosted this way. It's Anthropic's product, and its cloud option is Anthropic's own (routines).
+
+| Option | Setup effort | Runs when your laptop is off |
+|---|---|---|
+| Your laptop | Done already | No |
+| A spare computer left on | Install once | Yes |
+| Managed host, one-click template | Lowest | Yes |
+| Self-managed cloud server | Highest | Yes |
+
+For Telegram on a cloud host, the docs suggest webhook mode, which lets the server sleep when idle. The default mode (polling) keeps the machine awake.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/getting-started/installation (verified 27-09-2026)
+- https://hermes-agent.nousresearch.com/docs/user-guide/messaging/telegram (verified 27-09-2026)
+- https://code.claude.com/docs/en/routines (verified 27-09-2026)
+
+---
+
+## Q417: The CLI setup says "No inference provider is configured." What is that? (Yash)
+
+**Short answer:** It means Hermes has no AI model connected yet, so it can't chat. The full message is "No inference provider is configured — Hermes cannot chat yet." Run `hermes model` and pick a provider, or install the Claude subscription plugin (step 6 of the setup guide) and choose it there.
+
+This corrects the answer given in class, which described the local dashboard. The dashboard is a separate thing: a web page on your machine showing sessions, skills, channels and the Kanban board.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/getting-started/quickstart (verified 27-09-2026)
+- https://hermes-agent.nousresearch.com/docs/plugins/claude-subscription-directsdk (verified 27-09-2026)
+
+---
+
+## Q418: How does Telegram on my phone reach Hermes running on my laptop? (Pranjali)
+
+**Short answer:** Your laptop reaches out to Telegram, not the other way round. By default the Hermes gateway keeps asking Telegram's servers for new messages ("long polling"). When yours arrives, Hermes checks you're an approved user, loads your session and memory, calls the model, and sends the reply back through Telegram. No port forwarding or fixed IP address is needed.
+
+- The first time, Hermes asks the laptop's owner to approve you: run the `hermes pairing approve telegram ...` command it shows.
+- Send `/sethome` in the chat so scheduled jobs know where to deliver.
+- Telegram chats are stored in `state.db` like every other conversation.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/messaging/telegram (verified 27-09-2026)
+
+---
+
+## Q419: I made a second Telegram bot, and now my first bot doesn't reply. Why? (paraphrased from the session)
+
+**Short answer:** One profile holds one bot token. Pasting the new token replaced the old one. For a second bot, create a second profile (for example `researcher`, cloned from default), and give it the new token. Each profile is a separate assistant with its own memory, skills and model.
+
+- Don't use the same bot token in two running gateways. The docs say Telegram rejects two connections polling the same token.
+- A new profile needs its own model setup before it can chat. `--clone` copies your settings across.
+- If a bot token has ever been visible on screen, revoke it with `/revoke` in @BotFather.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/bot-mode (verified 27-09-2026)
+- https://hermes-agent.nousresearch.com/docs/user-guide/messaging/telegram (verified 27-09-2026)
+
+---
+
+## Q420: My new bot doesn't reply after I add the token. What am I missing? (paraphrased from the session)
+
+**Short answer:** Usually one of three steps, as seen in Lakshmi's live setup.
+
+| Step | Why |
+|---|---|
+| Restart the gateway, or close and reopen Hermes | The new token only loads on restart. "Restart now" in the app didn't always apply it |
+| Approve yourself: run the `hermes pairing approve telegram ...` command the bot sends | The first time, Hermes doesn't know you and won't reply |
+| Send `/sethome` | Tells Hermes where to deliver scheduled jobs |
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/messaging/telegram (verified 27-09-2026)
+
+---
+
+## Q421: What does the Composio skill do? (Yash)
+
+**Short answer:** It teaches your agent how to use Composio: which command finds the right tool, and how to call it. It works like a book's index: instead of reading every tool's description, the agent looks up the one it needs. Composio publishes its skills in its official GitHub organisation.
+
+**Sources:**
+- https://docs.composio.dev (verified 27-09-2026)
+
+---
+
+## Q422: Can Claude use Composio too? How is it different from connecting each MCP server myself? (Pranjali)
+
+**Short answer:** Yes. Composio is independent of Hermes and works with Claude Code as well. The difference is one login for many apps, and often more actions per app than a built-in connector. On screen, Composio's Google Drive offered 91 actions.
+
+- The trade-off: Composio is a third-party service in the middle of your data. Use an official connector when it does what you need.
+- Composio has separate workspaces. Keep personal and client work in different ones, and check which one is active before connecting anything.
+
+**Sources:**
+- https://docs.composio.dev (verified 27-09-2026)
+- https://code.claude.com/docs/en/mcp (verified 27-09-2026)
+
+---
+
+## Q423: If I move to another laptop, can I keep my context? (Yash)
+
+**Short answer:** Yes, by copying your folders. For Hermes, copy the `.hermes` folder in your user folder. For Claude Code, copy both the global `~/.claude` folder and each project's `.claude` folder and `CLAUDE.md`, because project memory lives in the project and personal settings live in the global folder.
+
+- These folders hold secrets: API keys in `.hermes/.env`, and login details for Claude Code. Store backups privately, never in a shared drive or a public repo.
+- On the new machine, sign in again rather than relying on copied login files.
+
+**Sources:**
+- https://code.claude.com/docs/en/claude-directory (verified 27-09-2026)
+- https://hermes-agent.nousresearch.com/docs/user-guide/features/memory (verified 27-09-2026)
+
+---
+
+## Q424: What's the difference between USER.md and the aman.md file you showed? (Yash)
+
+**Short answer:** `USER.md` is Hermes' own file about you: small (1,375 characters), maintained by Hermes, and loaded at the start of every session. `aman.md` is a personal profile the host wrote for Claude Code over months. It isn't a Hermes file. He planned to give it to Hermes once, so Hermes can pull the key facts into `USER.md` and `MEMORY.md`.
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/features/memory (verified 27-09-2026)
+
+---
+
+## Q425: How do I keep my Hermes assistant healthy over time? (paraphrased from the session)
+
+**Short answer:** Treat it like a colleague you review once a month.
+
+| When | Do this |
+|---|---|
+| Every month | Review `SOUL.md`, `MEMORY.md` and `USER.md` and remove stale entries |
+| You give the same instruction twice | Ask Hermes to save it as a skill |
+| It sounds wrong or too wordy | Edit `SOUL.md`, then start a new session |
+| You want a new scheduled job | Build the skill first, then schedule a job that uses it |
+| Something breaks | Check `MEMORY.md` first. Stale memory is a common cause |
+| Anything else | `hermes doctor` |
+
+**Sources:**
+- https://hermes-agent.nousresearch.com/docs/user-guide/features/memory (verified 27-09-2026)
+- https://hermes-agent.nousresearch.com/docs/user-guide/features/cron (verified 27-09-2026)

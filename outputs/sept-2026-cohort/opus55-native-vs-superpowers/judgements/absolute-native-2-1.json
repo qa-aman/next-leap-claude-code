@@ -1,0 +1,42 @@
+{
+ "captured": [
+  "R1",
+  "R2",
+  "R4",
+  "R5",
+  "R6",
+  "R7",
+  "R8",
+  "R9",
+  "R10",
+  "R11",
+  "R12",
+  "R13",
+  "R15",
+  "R16"
+ ],
+ "C1": 4,
+ "C2": 4,
+ "C3": 5,
+ "C4": 5,
+ "C5": 3,
+ "C6": 4,
+ "C7": 3,
+ "quotes": {
+  "C2": "Cloudflare Workers (paid plan, $5/month) + D1 database + Workflows + Cron Triggers.",
+  "C3": "/auth/callback: check state (single use, not expired) → exchange the code → verify the ID token",
+  "C4": "npm run eval on Aman's 10 labelled meetings prints PASS for all four launch bars"
+ },
+ "strength": "Accuracy is enforced by code instead of trusted to the model, and it is measured. 'The model never picks the owner'. Code does the roster and alias matching, recomputes dates and verifies quotes. A real-notes eval then gates launch on concrete bars: '≥ 95% found; 0 wrong confident owners; 0 wrong confident dates'.",
+ "weakness": "The plan is heavily over-scoped for a 2-week v1 built by a non-technical PM, and the timeline (R14) was never captured. Draft locks with heartbeat and take-over, a minimap, a stats page, a re-paste guard, typed-title meeting delete and a 23-day banner go well beyond the brief. Hinglish notes (R3) are never mentioned, although they are a core accuracy risk and neither the prompt nor the eval covers them.",
+ "errors": [
+  "Internal contradiction: CLAUDE.md says notes must never be sent 'anywhere except the Anthropic API', but the eval set of real confidential notes is stored indefinitely in the GitHub repo. That also breaks the 30-day raw-note deletion rule (R7).",
+  "D1 Time Travel keeps deleted rows restorable for about 30 days on the paid plan. Deleted notes stay recoverable for up to about 60 days after paste, and the plan doesn't acknowledge this.",
+  "Budget reaches the ceiling rather than staying under it. $5 hosting plus the $15 Anthropic cap is $20, and paid eval runs ($2–4 each, repeated during prompt tuning) draw from the same cap.",
+  "SPEC.md §14 step 4 tells the owner to enter ALLOWED_DOMAIN in the dashboard, but plan decision 3 moves it to wrangler.jsonc. The 'source of truth' spec is left inconsistent.",
+  "Spec §15.1 says 'Every item's quote is verified' and then allows 'Quote not found on < 2% of items'.",
+  "The paste limit is 30,000 words with no chunking, and max_tokens is a final failure with no fallback. Long transcripts with many items plus adaptive thinking could use up the 32K output tokens and fail with no recovery except manual review.",
+  "The model ID 'claude-opus-5' should be checked against current model IDs; the current Opus ID is 'claude-opus-5-5'.",
+  "The spec says the Workers paid plan is needed despite the preference for free-tier hosting, but never says what the free tier lacks. D1, Workflows and Cron are available on the free plan with limits."
+ ]
+}

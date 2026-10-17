@@ -1,0 +1,7 @@
+{
+ "arm": "superpowers",
+ "run": "2",
+ "note": "first pass hit a 30-min single-call timeout mid-plan; session resumed once with 'continue writing the plan' to finish. Builder cost/rounds before timeout not captured by the script.",
+ "resume_cost_usd": 1.4240244,
+ "resume_wall_s": 101.269
+}

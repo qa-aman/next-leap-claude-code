@@ -1,0 +1,39 @@
+{
+ "captured": [
+  "R1",
+  "R2",
+  "R4",
+  "R5",
+  "R6",
+  "R8",
+  "R11",
+  "R15",
+  "R16"
+ ],
+ "C1": 3,
+ "C2": 3,
+ "C3": 5,
+ "C4": 5,
+ "C5": 4,
+ "C6": 3,
+ "C7": 3,
+ "quotes": {
+  "C2": "Model `claude-opus-5`, adaptive thinking.",
+  "C3": "Expected: FAIL — cannot resolve `@/lib/roster`.",
+  "C4": "No silently wrong owners — an item with the wrong owner and no \"needs review\" flag is a hard fail."
+ },
+ "strength": "Accuracy is enforced in code, not left to trust. The model has to copy the owner exactly as written. Plain code then checks the owner against the roster, the date and a verbatim quote from the notes, and any doubt becomes a 'needs review' flag. Every step comes with failing-then-passing tests. An eval harness with three launch bars (no missed items, no silent wrong owners, flag rate ≤ 15%) and a plain-language labelling guide measures real accuracy before launch. This goes straight at R4–R6 and the 34% error problem.",
+ "weakness": "Three must-haves are missing. Raw notes are kept forever and shown on the meeting page, with no 30-day deletion (R7). Nothing checks the plan against the $20/month budget (R12), even though it uses the most expensive Opus model with adaptive thinking and 64k max tokens. Edits don't record who made them (R10). Hinglish (R3), the 2-week timeline (R14) and the non-technical builder (R13) are never mentioned.",
+ "errors": [
+  "R7 contradicted: `raw_notes` is stored with no deletion job and shown under 'Original notes' on the meeting page, so confidential notes are kept forever.",
+  "R10 not met: `editItem` changes task, owner and date without recording who made the change. Only status changes (tick or delete) store `status_changed_by`, and there is no edit history.",
+  "R12 not assessed: nothing estimates monthly AI cost for about 40 meetings of up to 15k words each on Opus with adaptive thinking (`maxTokens: 64000`). The eval makes two Opus calls per meeting. A cheaper model, or a cost cap, was never considered or justified.",
+  "Vercel Hobby (free) tier doesn't allow commercial use, and a 60-person startup is commercial. The plan also leans on `maxDuration = 300` and only says 'make sure your Vercel plan permits it'. The free-hosting fit is never confirmed.",
+  "R9 only partly met: the board filters by owner and 'needs review' but has no filter by meeting. The only per-meeting view is the separate meeting page.",
+  "R3 is ignored. Nothing in the prompt, validation or eval covers mixed Hindi/English notes. The quote check and owner matching could also fail on Devanagari or transliterated names.",
+  "The spec and plan disagree. Spec §5.2 says 'Each member's full name is therefore listed among their aliases', but the plan leaves surnames out ('Surnames are skipped for now'). The spec also says `review_reasons` is `text[]`, which the plan changes to jsonb.",
+  "The prompt says 'A weekday name means the next such day after the meeting date', so 'by next Friday' (the brief's own example) and 'by Friday' resolve to the same date. That ambiguity is never flagged.",
+  "The plan depends on API features that aren't confirmed to exist (`claude-opus-5`, `fallbacks: \"default\"` with beta `server-side-fallback-2026-07-01`), and it casts the params to `unknown` to get around the SDK types. If any of these is wrong, the failure only shows up at runtime in Task 11.",
+  "`memberByKey` returns a boolean, but its sibling functions (`memberByEmail`, `resolveOwner`) return a Member. The naming is misleading."
+ ]
+}

@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dynamic Workflows, Explained</title>
 <style>
-  :root { --bg:#0D0D0D; --accent:#D47A21; --accent2:#f0a44e; --white:#FFFFFF; --light:#CCCCCC; --mid:#888888; --card:#161616; --card-bd:#262626; --code-bg:#0a0a0a; --code-bd:#242424; --ok:#3fb950; --warn:#e3b341; --bad:#f85149; }
+  :root { --bg: #FFFFFF; --accent: #2F5BFF; --accent2: #1647FF; --white: #0A0C12; --light: #2B3445; --mid: #5B6577; --card: #F4F6FB; --card-bd: #DDE3EE; --code-bg: #F4F6FB; --code-bd: #DDE3EE; --ok: #1A7F37; --warn: #B45309; --bad: #C2410C; }
   * { box-sizing:border-box; }
   html { scroll-behavior:smooth; }
-  body { margin:0; background:var(--bg); color:var(--light); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif; -webkit-font-smoothing:antialiased; line-height:1.6; font-size:17px; }
+  body { margin:0; background:var(--bg); color:var(--light); font-family:"Lora", Georgia, "Times New Roman", serif; -webkit-font-smoothing:antialiased; line-height:1.6; font-size:17px; }
   code,pre,kbd { font-family:"JetBrains Mono","SF Mono",Menlo,Consolas,monospace; }
   .wrap { max-width:1080px; margin:0 auto; padding:32px 24px 80px; }
   header.hero { border-top:4px solid var(--accent); padding:36px 0 12px; }
@@ -33,21 +33,21 @@
   li { margin:6px 0; }
   .card { background:var(--card); border:1px solid var(--card-bd); border-radius:12px; padding:18px 20px; margin:16px 0; }
   .card h4 { margin:0 0 8px; color:var(--white); font-size:16px; }
-  .card .chip { display:inline-block; background:rgba(212,122,33,.14); color:var(--accent2); border:1px solid rgba(212,122,33,.4); border-radius:6px; font-size:11px; font-weight:800; letter-spacing:.1em; padding:2px 8px; margin-bottom:10px; }
+  .card .chip { display:inline-block; background:rgba(47, 91, 255, .14); color:var(--accent2); border:1px solid rgba(47, 91, 255, .4); border-radius:6px; font-size:11px; font-weight:800; letter-spacing:.1em; padding:2px 8px; margin-bottom:10px; }
   .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
   .grid .card { margin:0; }
   .grid.five { grid-template-columns:repeat(5,1fr); }
   .grid.five .card { padding:16px 14px; } .grid.five .card p { font-size:14.5px; }
   @media (max-width:900px) { .grid.five { grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); } }
-  .callout { border-left:4px solid var(--accent); background:#171310; padding:14px 18px; border-radius:0 10px 10px 0; margin:16px 0; }
-  .callout.break { border-color:var(--bad); background:#1a1111; }
-  .callout.ok { border-color:var(--ok); background:#101a12; }
+  .callout { border-left:4px solid var(--accent); background:#EAF0FF; padding:14px 18px; border-radius:0 10px 10px 0; margin:16px 0; }
+  .callout.break { border-color:var(--bad); background:#FDEDE6; }
+  .callout.ok { border-color:var(--ok); background:#E8F5EC; }
   .callout b { color:var(--white); }
   .quote { border:1px solid var(--card-bd); background:var(--card); border-radius:12px; padding:18px 22px; margin:16px 0; color:var(--white); font-size:19px; line-height:1.5; }
   .quote .who { display:block; color:var(--mid); font-size:13px; margin-top:10px; font-weight:400; }
   .quote .who a { color:var(--mid); }
-  pre { background:var(--code-bg); border:1px solid var(--code-bd); border-radius:10px; padding:14px 16px; overflow-x:auto; font-size:14px; line-height:1.5; color:#e6e6e6; margin:12px 0; }
-  code { background:var(--code-bg); border:1px solid var(--code-bd); border-radius:5px; padding:1px 6px; font-size:.92em; color:#f0d9bf; }
+  pre { background:var(--code-bg); border:1px solid var(--code-bd); border-radius:10px; padding:14px 16px; overflow-x:auto; font-size:14px; line-height:1.5; color:#0A0C12; margin:12px 0; }
+  code { background:var(--code-bg); border:1px solid var(--code-bd); border-radius:5px; padding:1px 6px; font-size:.92em; color:#2B3445; }
   pre code { background:none; border:0; padding:0; color:inherit; }
   table { width:100%; border-collapse:collapse; margin:14px 0; font-size:15px; }
   th,td { text-align:left; padding:10px 12px; border-bottom:1px solid var(--card-bd); vertical-align:top; }
@@ -55,15 +55,15 @@
   .table-wrap { overflow-x:auto; }
   .steps { counter-reset:step; list-style:none; padding:0; }
   .steps li { counter-increment:step; position:relative; padding:14px 16px 14px 58px; background:var(--card); border:1px solid var(--card-bd); border-radius:10px; margin:10px 0; }
-  .steps li::before { content:counter(step); position:absolute; left:14px; top:14px; width:30px; height:30px; border-radius:8px; background:var(--accent); color:#000; font-weight:800; display:flex; align-items:center; justify-content:center; }
+  .steps li::before { content:counter(step); position:absolute; left:14px; top:14px; width:30px; height:30px; border-radius:8px; background:var(--accent); color:#FFFFFF; font-weight:800; display:flex; align-items:center; justify-content:center; }
   .steps li b { color:var(--white); display:block; margin-bottom:4px; }
   figure.fig { margin:18px 0; background:var(--card); border:1px solid var(--card-bd); border-radius:12px; padding:14px; }
-  figure.fig.light { background:#fff; }
+  figure.fig.light { background:#FFFFFF; }
   figure.fig img { display:block; width:100%; height:auto; border-radius:8px; }
   figure.fig figcaption { color:var(--light); font-size:14px; margin-top:10px; line-height:1.5; }
-  figure.fig.light figcaption { color:#333; }
+  figure.fig.light figcaption { color:#0A0C12; }
   figure.fig .src { color:var(--mid); font-size:12px; }
-  figure.fig.light .src, figure.fig.light .src a { color:#777; }
+  figure.fig.light .src, figure.fig.light .src a { color:#5B6577; }
   .two { display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start; }
   .pill { display:inline-block; background:var(--card); border:1px solid var(--card-bd); color:var(--light); font-size:12px; padding:2px 10px; border-radius:999px; margin-right:6px; }
   .pill.ok { border-color:var(--ok); color:var(--ok); }
@@ -72,11 +72,12 @@
   .stat { text-align:center; padding:22px 12px; }
   .stat .big { color:var(--accent); }
   .stat .lbl { color:var(--light); font-size:14px; margin-top:8px; }
-  svg text { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif; }
+  svg text { font-family:"Lora", Georgia, "Times New Roman", serif; }
   footer { margin-top:70px; color:var(--mid); font-size:13px; border-top:1px solid var(--card-bd); padding-top:16px; }
   @media (max-width:720px) { nav.toc ol { columns:1; } body { font-size:16px; } .two { grid-template-columns:1fr; } table { display:block; overflow-x:auto; } .big { font-size:34px; } }
 </style>
-</head>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"><style id="substack-theme">.copy-btn:hover,.chip.active{color:#FFFFFF!important}
+::selection{background:#2F5BFF;color:#FFFFFF}</style></head>
 <body>
 <div class="wrap">
 
@@ -133,28 +134,28 @@
   <p>Table reproduced from the docs. In one sentence: "A workflow moves the plan into code. With subagents, skills, and agent teams, Claude is the orchestrator: it decides turn by turn what to spawn or assign next, and every result goes into a context window."</p>
   <figure class="fig">
     <svg viewBox="0 0 1000 420" width="100%" role="img" aria-label="Subagent fan-out versus workflow">
-      <rect x="20" y="30" width="460" height="360" rx="14" fill="#1E1E1E" stroke="#383838"/>
-      <text x="40" y="62" fill="#fff" font-size="18" font-weight="700">SUBAGENTS: CLAUDE HOLDS THE PLAN</text>
-      <rect x="150" y="90" width="200" height="40" rx="8" fill="#2a1a10" stroke="#D47A21"/><text x="250" y="115" fill="#f0a44e" font-size="14" text-anchor="middle" font-weight="700">Claude's context</text>
-      <rect x="50" y="180" width="120" height="36" rx="6" fill="#161616" stroke="#262626"/><text x="110" y="203" fill="#ccc" font-size="13" text-anchor="middle">reader 1</text>
-      <rect x="190" y="180" width="120" height="36" rx="6" fill="#161616" stroke="#262626"/><text x="250" y="203" fill="#ccc" font-size="13" text-anchor="middle">reader 2</text>
-      <rect x="330" y="180" width="120" height="36" rx="6" fill="#161616" stroke="#262626"/><text x="390" y="203" fill="#ccc" font-size="13" text-anchor="middle">reader 3</text>
-      <path d="M220 130 L110 180 M250 130 L250 180 M280 130 L390 180" stroke="#888" stroke-width="2" fill="none"/>
-      <path d="M110 216 L230 260 M250 216 L250 260 M390 216 L270 260" stroke="#D47A21" stroke-width="2" fill="none"/>
-      <rect x="150" y="260" width="200" height="40" rx="8" fill="#2a1a10" stroke="#D47A21"/><text x="250" y="285" fill="#f0a44e" font-size="14" text-anchor="middle" font-weight="700">merge, in Claude's context</text>
-      <text x="40" y="335" fill="#f85149" font-size="13" font-weight="700">three summaries land in your window</text>
-      <text x="40" y="356" fill="#888" font-size="13">the merge is judgement, the sequence is not a file</text>
-      <text x="40" y="377" fill="#888" font-size="13">tomorrow you type the whole prompt again</text>
-      <rect x="520" y="30" width="460" height="360" rx="14" fill="#1E1E1E" stroke="#D47A21" stroke-width="2"/>
-      <text x="540" y="62" fill="#fff" font-size="18" font-weight="700">WORKFLOW: THE SCRIPT HOLDS THE PLAN</text>
-      <rect x="540" y="80" width="420" height="250" rx="10" fill="#0a0a0a" stroke="#242424"/>
-      <text x="556" y="104" fill="#888" font-size="12" font-family="Menlo,monospace">churn-triangulate.js</text>
-      <rect x="556" y="118" width="388" height="52" rx="6" fill="#161616" stroke="#262626"/><text x="566" y="138" fill="#f0a44e" font-size="12" font-weight="700">phase('Read')</text><text x="566" y="158" fill="#ccc" font-size="12">parallel: reader 1, reader 2, reader 3</text>
-      <rect x="556" y="180" width="388" height="52" rx="6" fill="#161616" stroke="#262626"/><text x="566" y="200" fill="#f0a44e" font-size="12" font-weight="700">phase('Corroborate')</text><text x="566" y="220" fill="#ccc" font-size="12">one agent keeps drivers seen in 2+ sources</text>
-      <rect x="556" y="242" width="388" height="52" rx="6" fill="#161616" stroke="#262626"/><text x="566" y="262" fill="#f0a44e" font-size="12" font-weight="700">phase('Verify')</text><text x="566" y="282" fill="#ccc" font-size="12">pipeline: one adversary per surviving driver</text>
-      <text x="566" y="318" fill="#888" font-size="12" font-family="Menlo,monospace">return report</text>
-      <text x="540" y="356" fill="#3fb950" font-size="13" font-weight="700">only the final report reaches your window</text>
-      <text x="540" y="377" fill="#888" font-size="13">the sequence is a file in git, rerun it with /churn-triangulate</text>
+      <rect x="20" y="30" width="460" height="360" rx="14" fill="#F4F6FB" stroke="#DDE3EE"/>
+      <text x="40" y="62" fill="#0A0C12" font-size="18" font-weight="700">SUBAGENTS: CLAUDE HOLDS THE PLAN</text>
+      <rect x="150" y="90" width="200" height="40" rx="8" fill="#C9D6FF" stroke="#2F5BFF"/><text x="250" y="115" fill="#1647FF" font-size="14" text-anchor="middle" font-weight="700">Claude's context</text>
+      <rect x="50" y="180" width="120" height="36" rx="6" fill="#F4F6FB" stroke="#DDE3EE"/><text x="110" y="203" fill="#2B3445" font-size="13" text-anchor="middle">reader 1</text>
+      <rect x="190" y="180" width="120" height="36" rx="6" fill="#F4F6FB" stroke="#DDE3EE"/><text x="250" y="203" fill="#2B3445" font-size="13" text-anchor="middle">reader 2</text>
+      <rect x="330" y="180" width="120" height="36" rx="6" fill="#F4F6FB" stroke="#DDE3EE"/><text x="390" y="203" fill="#2B3445" font-size="13" text-anchor="middle">reader 3</text>
+      <path d="M220 130 L110 180 M250 130 L250 180 M280 130 L390 180" stroke="#5B6577" stroke-width="2" fill="none"/>
+      <path d="M110 216 L230 260 M250 216 L250 260 M390 216 L270 260" stroke="#2F5BFF" stroke-width="2" fill="none"/>
+      <rect x="150" y="260" width="200" height="40" rx="8" fill="#C9D6FF" stroke="#2F5BFF"/><text x="250" y="285" fill="#1647FF" font-size="14" text-anchor="middle" font-weight="700">merge, in Claude's context</text>
+      <text x="40" y="335" fill="#C2410C" font-size="13" font-weight="700">three summaries land in your window</text>
+      <text x="40" y="356" fill="#5B6577" font-size="13">the merge is judgement, the sequence is not a file</text>
+      <text x="40" y="377" fill="#5B6577" font-size="13">tomorrow you type the whole prompt again</text>
+      <rect x="520" y="30" width="460" height="360" rx="14" fill="#F4F6FB" stroke="#2F5BFF" stroke-width="2"/>
+      <text x="540" y="62" fill="#0A0C12" font-size="18" font-weight="700">WORKFLOW: THE SCRIPT HOLDS THE PLAN</text>
+      <rect x="540" y="80" width="420" height="250" rx="10" fill="#FFFFFF" stroke="#DDE3EE"/>
+      <text x="556" y="104" fill="#5B6577" font-size="12" font-family="Menlo,monospace">churn-triangulate.js</text>
+      <rect x="556" y="118" width="388" height="52" rx="6" fill="#F4F6FB" stroke="#DDE3EE"/><text x="566" y="138" fill="#1647FF" font-size="12" font-weight="700">phase('Read')</text><text x="566" y="158" fill="#2B3445" font-size="12">parallel: reader 1, reader 2, reader 3</text>
+      <rect x="556" y="180" width="388" height="52" rx="6" fill="#F4F6FB" stroke="#DDE3EE"/><text x="566" y="200" fill="#1647FF" font-size="12" font-weight="700">phase('Corroborate')</text><text x="566" y="220" fill="#2B3445" font-size="12">one agent keeps drivers seen in 2+ sources</text>
+      <rect x="556" y="242" width="388" height="52" rx="6" fill="#F4F6FB" stroke="#DDE3EE"/><text x="566" y="262" fill="#1647FF" font-size="12" font-weight="700">phase('Verify')</text><text x="566" y="282" fill="#2B3445" font-size="12">pipeline: one adversary per surviving driver</text>
+      <text x="566" y="318" fill="#5B6577" font-size="12" font-family="Menlo,monospace">return report</text>
+      <text x="540" y="356" fill="#1A7F37" font-size="13" font-weight="700">only the final report reaches your window</text>
+      <text x="540" y="377" fill="#5B6577" font-size="13">the sequence is a file in git, rerun it with /churn-triangulate</text>
     </svg>
     <figcaption>Left, the fan-out you can already do with subagents: three workers, and the merge happens in your context by Claude's judgement. Right, the same job as a workflow: the phases are lines in a script, the intermediate results stay in the script, and only the final report comes back. Diagram: Claude Code Workshop.</figcaption>
   </figure>
@@ -195,19 +196,19 @@
   <h2><span class="num">5</span>The life of one run</h2>
   <figure class="fig">
     <svg viewBox="0 0 1000 300" width="100%" role="img" aria-label="Lifecycle of a workflow run">
-      <defs><marker id="b" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#D47A21"/></marker></defs>
+      <defs><marker id="b" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2F5BFF"/></marker></defs>
       <g font-size="13">
-        <rect x="20" y="60" width="150" height="90" rx="10" fill="#1E1E1E" stroke="#383838"/><text x="95" y="90" fill="#f0a44e" text-anchor="middle" font-weight="800">1. YOU ASK</text><text x="95" y="112" fill="#ccc" text-anchor="middle">"use a workflow to..."</text><text x="95" y="132" fill="#888" text-anchor="middle" font-size="12">in your own words</text>
-        <rect x="190" y="60" width="150" height="90" rx="10" fill="#1E1E1E" stroke="#383838"/><text x="265" y="90" fill="#f0a44e" text-anchor="middle" font-weight="800">2. CLAUDE WRITES</text><text x="265" y="112" fill="#ccc" text-anchor="middle">the script, phases</text><text x="265" y="132" fill="#888" text-anchor="middle" font-size="12">Read, Corroborate, Verify</text>
-        <rect x="360" y="60" width="150" height="90" rx="10" fill="#1E1E1E" stroke="#D47A21" stroke-width="2"/><text x="435" y="90" fill="#f0a44e" text-anchor="middle" font-weight="800">3. YOU APPROVE</text><text x="435" y="112" fill="#ccc" text-anchor="middle">Yes, view script, or No</text><text x="435" y="132" fill="#888" text-anchor="middle" font-size="12">Ctrl+G opens the script</text>
-        <rect x="530" y="60" width="150" height="90" rx="10" fill="#1E1E1E" stroke="#383838"/><text x="605" y="90" fill="#f0a44e" text-anchor="middle" font-weight="800">4. IT RUNS</text><text x="605" y="112" fill="#ccc" text-anchor="middle">in the background</text><text x="605" y="132" fill="#888" text-anchor="middle" font-size="12">/workflows to watch</text>
-        <rect x="700" y="60" width="150" height="90" rx="10" fill="#1E1E1E" stroke="#383838"/><text x="775" y="90" fill="#f0a44e" text-anchor="middle" font-weight="800">5. REPORT</text><text x="775" y="112" fill="#ccc" text-anchor="middle">one result, in session</text><text x="775" y="132" fill="#888" text-anchor="middle" font-size="12">refuted claims kept apart</text>
-        <rect x="870" y="60" width="110" height="90" rx="10" fill="#1E1E1E" stroke="#3fb950"/><text x="925" y="90" fill="#3fb950" text-anchor="middle" font-weight="800">6. SAVE</text><text x="925" y="112" fill="#ccc" text-anchor="middle">press s</text><text x="925" y="132" fill="#888" text-anchor="middle" font-size="12">/name next time</text>
-        <path d="M170 105 L188 105" stroke="#D47A21" stroke-width="2" marker-end="url(#b)"/><path d="M340 105 L358 105" stroke="#D47A21" stroke-width="2" marker-end="url(#b)"/><path d="M510 105 L528 105" stroke="#D47A21" stroke-width="2" marker-end="url(#b)"/><path d="M680 105 L698 105" stroke="#D47A21" stroke-width="2" marker-end="url(#b)"/><path d="M850 105 L868 105" stroke="#D47A21" stroke-width="2" marker-end="url(#b)"/>
-        <rect x="360" y="190" width="490" height="80" rx="10" fill="#171310" stroke="#D47A21" stroke-dasharray="6 4"/>
-        <text x="380" y="216" fill="#fff" font-weight="700">While it runs, the only things that pause it:</text>
-        <text x="380" y="238" fill="#ccc" font-size="12.5">an agent permission prompt, a usage-limit wait, or you pressing p in /workflows.</text>
-        <text x="380" y="258" fill="#888" font-size="11">"No mid-run user input... For sign-off between stages, run each stage as its own workflow"</text>
+        <rect x="20" y="60" width="150" height="90" rx="10" fill="#F4F6FB" stroke="#DDE3EE"/><text x="95" y="90" fill="#1647FF" text-anchor="middle" font-weight="800">1. YOU ASK</text><text x="95" y="112" fill="#2B3445" text-anchor="middle">"use a workflow to..."</text><text x="95" y="132" fill="#5B6577" text-anchor="middle" font-size="12">in your own words</text>
+        <rect x="190" y="60" width="150" height="90" rx="10" fill="#F4F6FB" stroke="#DDE3EE"/><text x="265" y="90" fill="#1647FF" text-anchor="middle" font-weight="800">2. CLAUDE WRITES</text><text x="265" y="112" fill="#2B3445" text-anchor="middle">the script, phases</text><text x="265" y="132" fill="#5B6577" text-anchor="middle" font-size="12">Read, Corroborate, Verify</text>
+        <rect x="360" y="60" width="150" height="90" rx="10" fill="#F4F6FB" stroke="#2F5BFF" stroke-width="2"/><text x="435" y="90" fill="#1647FF" text-anchor="middle" font-weight="800">3. YOU APPROVE</text><text x="435" y="112" fill="#2B3445" text-anchor="middle">Yes, view script, or No</text><text x="435" y="132" fill="#5B6577" text-anchor="middle" font-size="12">Ctrl+G opens the script</text>
+        <rect x="530" y="60" width="150" height="90" rx="10" fill="#F4F6FB" stroke="#DDE3EE"/><text x="605" y="90" fill="#1647FF" text-anchor="middle" font-weight="800">4. IT RUNS</text><text x="605" y="112" fill="#2B3445" text-anchor="middle">in the background</text><text x="605" y="132" fill="#5B6577" text-anchor="middle" font-size="12">/workflows to watch</text>
+        <rect x="700" y="60" width="150" height="90" rx="10" fill="#F4F6FB" stroke="#DDE3EE"/><text x="775" y="90" fill="#1647FF" text-anchor="middle" font-weight="800">5. REPORT</text><text x="775" y="112" fill="#2B3445" text-anchor="middle">one result, in session</text><text x="775" y="132" fill="#5B6577" text-anchor="middle" font-size="12">refuted claims kept apart</text>
+        <rect x="870" y="60" width="110" height="90" rx="10" fill="#F4F6FB" stroke="#1A7F37"/><text x="925" y="90" fill="#1A7F37" text-anchor="middle" font-weight="800">6. SAVE</text><text x="925" y="112" fill="#2B3445" text-anchor="middle">press s</text><text x="925" y="132" fill="#5B6577" text-anchor="middle" font-size="12">/name next time</text>
+        <path d="M170 105 L188 105" stroke="#2F5BFF" stroke-width="2" marker-end="url(#b)"/><path d="M340 105 L358 105" stroke="#2F5BFF" stroke-width="2" marker-end="url(#b)"/><path d="M510 105 L528 105" stroke="#2F5BFF" stroke-width="2" marker-end="url(#b)"/><path d="M680 105 L698 105" stroke="#2F5BFF" stroke-width="2" marker-end="url(#b)"/><path d="M850 105 L868 105" stroke="#2F5BFF" stroke-width="2" marker-end="url(#b)"/>
+        <rect x="360" y="190" width="490" height="80" rx="10" fill="#EAF0FF" stroke="#2F5BFF" stroke-dasharray="6 4"/>
+        <text x="380" y="216" fill="#0A0C12" font-weight="700">While it runs, the only things that pause it:</text>
+        <text x="380" y="238" fill="#2B3445" font-size="12.5">an agent permission prompt, a usage-limit wait, or you pressing p in /workflows.</text>
+        <text x="380" y="258" fill="#5B6577" font-size="11">"No mid-run user input... For sign-off between stages, run each stage as its own workflow"</text>
       </g>
     </svg>
     <figcaption>One run from prompt to saved command. Step 3 is the gate: read the script before you say yes, at least the first few times. Diagram: Claude Code Workshop, built from the workflows doc.</figcaption>

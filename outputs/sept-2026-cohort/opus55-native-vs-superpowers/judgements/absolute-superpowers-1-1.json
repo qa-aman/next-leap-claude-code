@@ -1,0 +1,39 @@
+{
+ "captured": [
+  "R1",
+  "R2",
+  "R4",
+  "R5",
+  "R6",
+  "R8",
+  "R9",
+  "R11",
+  "R15",
+  "R16"
+ ],
+ "C1": 3,
+ "C2": 3,
+ "C3": 5,
+ "C4": 5,
+ "C5": 4,
+ "C6": 3,
+ "C7": 3,
+ "quotes": {
+  "C2": "`raw_notes` (text)",
+  "C3": "Expected: FAIL — cannot resolve `@/lib/roster`.",
+  "C4": "No silently wrong owners — an item with the wrong owner and no \"needs review\" flag is a hard fail."
+ },
+ "strength": "The accuracy design is excellent. The model copies the owner exactly as written, and code resolves it against the roster with no partial matching. Each item's source quote is checked against the notes, and anything uncertain gets a 'needs review' flag with reasons instead of a guess. It is backed by a labelling guide and an eval harness with three hard launch bars: no missed items, no silently wrong owners, and at most 15% of items flagged. This directly targets R4–R6 and the 34% error rate.",
+ "weakness": "Several of the PM's hard constraints are missing, probably because the candidate never asked about them. There is no 30-day deletion of raw notes (R7): notes are stored forever and shown on the Meeting page. There is no budget or cost analysis (R12), no record of who edited an item (R10), no Hinglish handling (R3), and no 2-week timeline (R14). The plan also never acknowledges that the builder is a non-technical PM (R13).",
+ "errors": [
+  "R7 is contradicted. `rawNotes` is `notNull` and kept forever, the Meeting page renders it in full, and there is no deletion job, cron, or retention setting anywhere.",
+  "R10 is not met. `editItem`/`editItemAction` never record who made an edit; only status changes store `statusChangedBy`. Any signed-in user in the domain can edit any item, not only its owner.",
+  "R12 is unaddressed. The plan uses Opus with adaptive thinking and `max_tokens` 64000, plus an Opus 'judge' call in the eval, with no cost estimate. Vercel Hobby is limited to non-commercial use, and Pro costs $20 a month on its own, which uses up the whole budget before any AI costs.",
+  "R9 is only partly met. The board filters by owner and 'needs review' but not by meeting, and there is no list of meetings. A Meeting page can only be reached through an item's link or the redirect after pasting.",
+  "I could not verify the model ID `claude-opus-5`, the `fallbacks: \"default\"` parameter, or the beta header `server-side-fallback-2026-07-01`. Because the request params are cast `as unknown`, a wrong value will only fail at runtime (Task 11 Step 7), not at type-check.",
+  "The spec says each member's full name is listed as an alias. The plan leaves surnames out, so full-name speaker labels like 'Priya Shah' get flagged. That pushes up the flag rate against the 15% launch bar.",
+  "The prompt rule 'a weekday name means the next such day after the meeting date' turns 'by next Friday', said on a Thursday, into the very next day. That is a common misreading of R5's own example, and it is not flagged as ambiguous.",
+  "Hinglish (R3) is ignored. If the model translates or transliterates a quote, the exact-substring quote check will flag it, and the eval set does not require any Hinglish meetings.",
+  "Minor: the plan claims its review messages are the exact strings from spec §5.2, but it uses 'not found in notes' where the spec says 'quote not found in notes'."
+ ]
+}

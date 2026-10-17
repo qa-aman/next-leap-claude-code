@@ -1,0 +1,268 @@
+[
+ {
+  "role": "user",
+  "text": "I want to build a web app where my team pastes meeting notes and gets a list of action items with owner and due date. The team sees all open items on one board and ticks them off. It works when every action item from a meeting shows up with the right owner, and nobody has to retype them. Interview me in detail using the AskUserQuestion tool. Ask about technical implementation, UI/UX, edge cases, concerns, and tradeoffs. Don't ask obvious questions, dig into the hard parts I might not have considered. Keep interviewing until we've covered everything, then write a complete spec to SPEC.md."
+ },
+ {
+  "role": "builder",
+  "text": "I'll interview you in a few rounds and write `SPEC.md` once we've covered everything. I can't use the interactive question tool in this session, so the questions are below. You can answer in shorthand like \"1b, 2a, 3: we use Slack names\". Where I have a preference I've marked it **(rec)**.\n\n## Round 1: Where extraction goes wrong\n\n**1. How do you want to capture who's on the team?** Owner accuracy is your main success test, and it's the hardest part. Notes say things like \"Sam\", \"SJ\", \"I'll take it\", \"we\", \"Design\", or name a client who isn't on the team.\n- a) Keep a team roster (name, nicknames/initials, email). Every owner must match someone on it, and anything that doesn't match gets flagged. **(rec)**\n- b) Free-text owner names with no roster. Simpler, but then \"Sam\" and \"Sam K.\" show up as two people on the board.\n- c) Pull the roster from somewhere else (Google Workspace, Slack, etc.). If so, which one?\n\n**2. When the notes say \"I'll send the deck\", who is \"I\"?**\n- a) The person who pasted the notes\n- b) Whoever the notes name as note-taker or facilitator\n- c) Leave it unassigned and flag it for review\n- Also: what happens with \"we\", \"the team\" or \"someone\"? Unassigned, or one item per person?\n\n**3. What should happen when an item has more than one owner?** For example: \"Priya and Tom to draft the proposal.\"\n- a) Allow several owners on one item. Either of them can tick it off.\n- b) Split it into one item per person.\n- c) Require a single owner and flag it for review.\n\n**4. When does an extracted item become official?**\n- a) Paste, then a review screen where you edit, delete or add items, then publish to the board. **(rec)** The review step is how you meet \"every item, right owner\" without retyping: it's quicker to fix one field than to type a whole item.\n- b) Items go straight onto the board, and people fix them there.\n- If (a): can anyone publish, or only the person who pasted the notes?\n\n**5. How cautious should extraction be?** Notes are full of maybes: \"we should probably look into X\", \"Tom mentioned he might check Y\", decisions that aren't tasks, and parking-lot items.\n- a) Catch everything that could be a task, with one-click reject in review. **(rec, since missing an item is your failure case)**\n- b) Only extract clear, explicit commitments.\n- c) Extract everything but label each item as confident or uncertain.\n\n**6. How should due dates be handled?**\n- a) Relative dates (\"Friday\", \"EOW\", \"next sprint\", \"before launch\") should be worked out from the **meeting date**, not the paste date. Should the app ask for the meeting date, detect it in the notes, or default to today?\n- b) If there's no due date: leave it blank, set a default (e.g. +7 days), or flag it?\n- c) Is there a team calendar to use for vague dates like \"next sprint\" or \"before launch\"? Or should those keep their original wording with no date set?\n\n**7. What do the notes you paste look like?**\n- a) Short bullet notes typed by a person\n- b) Full AI transcripts (Zoom, Otter, Granola, etc.)\n- c) Both\n- Also: roughly how long is a long one? A full transcript of a one-hour meeting is a very different extraction problem from 20 bullets.\n\n**8. What should happen with repeats?** The same notes might be pasted twice, a corrected version might be pasted, or this week's notes might say \"Sam still working on the vendor contract\" when that's already an open item from last week.\n- a) Detect likely duplicates of open items and suggest \"link to existing item\" in review. **(rec)**\n- b) Only block exact duplicate pastes.\n- c) Don't handle repeats for now.\n\n**9. Where can the notes go?** This decides how the items are extracted.\n- a) Sending notes to an LLM API (e.g. Claude) is fine. **(rec, since rules-based parsing won't reliably get owners right from messy notes)**\n- b) Notes can go to an LLM only if it doesn't train on them or retain them.\n- c) Notes must not leave your infrastructure, so it has to be a self-hosted model or rules only.\n\n**10. Who uses the app, and how many are there?**\n- a) Roughly how many people, and how many meetings a week?\n- b) One team, or several teams with separate boards?\n- c) How do people log in? Google or Microsoft single sign-on, magic link, or a shared link with no login?\n\nLater rounds will cover the board and ticking items off (who can close whose items, undo, what happens to done items), notifications, editing after publish, linking each item back to its line in the notes, and hosting/stack.\n\nSeparately: several of your claude.ai connectors (Apify, Atlassian, Canva, Higgsfield, Notion, S&P Global) need to be authorized in your claude.ai connector settings before I can use them. That matters if you want this to pull notes from Notion, for example.",
+  "turns": 1,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "1a. Every owner must match the roster (Priya, Marcus, Sarah, Tomás, Aisha, Dana, Ravi, Lena), including nicknames like \"Tom\" for Tomás. Anyone else gets flagged, never guessed.\n\n2c. Leave unassigned and flag for review — same for \"we\"/\"the team\"/\"someone\". One item per person if multiple names are actually given.\n\n3a. Allow multiple owners on one item, either can tick it off.\n\n4a. Yes, review screen before publish. Anyone on the team can publish, not just the person who pasted it.\n\n5c. Extract everything, label confident vs uncertain. Accuracy matters most, so flag anything shaky as \"needs review\" rather than guessing.\n\n6a. Ask for the meeting date. 6b. No date mentioned = leave blank, never invent one. 6c. No team calendar to use — vague stuff like \"next sprint\" should keep original wording with no date set.\n\n7c. Both, 500 to 15,000 words. Full transcripts. About 10 meetings a week.\n\n8a. Sounds right, detect likely duplicates and let us link in review — nice to have, not critical for v1.\n\n9a. Fine to send notes to an LLM API like Claude.\n\n10. 8 people, one product team, one board, 10 meetings/week. Login is Google sign-in, restricted to our company Google Workspace domain — this is a must-have, notes are confidential."
+ },
+ {
+  "role": "user",
+  "text": "1a. Every owner must match the roster (Priya, Marcus, Sarah, Tomás, Aisha, Dana, Ravi, Lena), including nicknames like \"Tom\" for Tomás. Anyone else gets flagged, never guessed.\n\n2c. Leave unassigned and flag for review — same for \"we\"/\"the team\"/\"someone\". One item per person if multiple names are actually given.\n\n3a. Allow multiple owners on one item, either can tick it off.\n\n4a. Yes, review screen before publish. Anyone on the team can publish, not just the person who pasted it.\n\n5c. Extract everything, label confident vs uncertain. Accuracy matters most, so flag anything shaky as \"needs review\" rather than guessing.\n\n6a. Ask for the meeting date. 6b. No date mentioned = leave blank, never invent one. 6c. No team calendar to use — vague stuff like \"next sprint\" should keep original wording with no date set.\n\n7c. Both, 500 to 15,000 words. Full transcripts. About 10 meetings a week.\n\n8a. Sounds right, detect likely duplicates and let us link in review — nice to have, not critical for v1.\n\n9a. Fine to send notes to an LLM API like Claude.\n\n10. 8 people, one product team, one board, 10 meetings/week. Login is Google sign-in, restricted to our company Google Workspace domain — this is a must-have, notes are confidential."
+ },
+ {
+  "role": "builder",
+  "text": "Thanks. That settles extraction policy, scale and login. Your answers raise one conflict and a few new problems, so there's a second round before I write `SPEC.md`.\n\n## Round 2\n\n**11. Should the app use the speaker to work out who \"I\" is?** Transcripts label speakers (\"Priya: I'll send the deck by Friday\"), so in a transcript \"I\" is usually knowable. Your answer to 2 was to always flag \"I\".\n- a) If the speaker label matches the roster, resolve \"I\" to that speaker and mark it confident. Without a speaker label, flag it as in 2c. **(rec)**\n- b) Always flag \"I\", even with a speaker label.\n- c) Treat a speaker-resolved \"I\" as uncertain: pre-fill the owner but mark it \"needs review\".\n- Also: do your transcripts sometimes label speakers generically (\"Speaker 2\")? If so, should the review screen let you map \"Speaker 2 → Marcus\" once for the whole meeting?\n\n**12. Must items be linked back to the text they came from?** Show each item with its source quote (e.g. \"Tom: yeah I'll chase legal on the NDA\") and a link to that spot in the stored notes.\n- a) Yes, show the quote in review and on the board. **(rec)** This lets a reviewer check \"right owner\" in 2 seconds instead of rereading 15,000 words. The model must quote real text from the notes, and the app should check the quote actually appears there. That check helps guard against invented items.\n- b) Only in review, not on the board.\n- c) Don't need it.\n\n**13. How do reviewers check nothing was missed?** Uncertain items are clearly visible. The harder failure is an item the model dropped entirely, and on a 15,000-word transcript nobody will notice.\n- a) The review screen shows the full notes next to the items, highlights each item's source text, and lets you select any text and click \"make action item\". **(rec)** This gives you an easy way to check what wasn't highlighted.\n- b) An \"add item\" button with a blank form is enough.\n- c) Also run a second extraction pass whose only job is to find missed items (costs more and takes longer).\n\n**14. What happens if two people review the same meeting, or someone walks away mid-review?**\n- a) Save drafts automatically. Only one person can edit at a time, others can view, and there's a \"take over\" button.\n- b) Last save wins, no locking.\n- c) Don't worry about it. Unpublished drafts expire after N days.\n\n**15. Can \"needs review\" items be published?**\n- a) No. Every item needs a roster owner (or explicit \"Unassigned\") and a confirmed status before you can publish.\n- b) Yes. They appear on the board with an \"Unassigned\" or \"needs review\" badge. **(rec)** Otherwise one unclear item blocks the other 14.\n- c) Publish the confident items and leave uncertain ones in the draft.\n\n**16. Who can do what on the board?**\n- a) Can anyone tick off anyone's item, or only its owners? For example, Dana ticks Marcus's item because she saw it done.\n- b) After publishing, can items be edited (owner, due date, text) and deleted, and by whom? Should changes be recorded (who changed what)?\n- c) What happens to done items: hidden by default with a \"show done\" filter, archived after N days, or kept on the board?\n- d) Is there any status besides open and done, like \"blocked\" or \"won't do\"? Or should v1 stay a plain checkbox? **(rec: open/done, plus a \"dropped\" state so cancelled items don't count as done)**\n\n**17. What should the board look like?** With about 10 meetings a week, after a month you'll have 100+ open items.\n- a) One list sorted by due date: overdue, then due this week, then later, then no date. Filter by owner and by meeting. A \"My items\" view is the default. **(rec)**\n- b) Columns per person\n- c) Grouped by meeting\n- d) Should overdue items be highlighted? And what does \"overdue\" mean for vague-date items like \"next sprint\"? My suggestion: never overdue.\n\n**18. Should anyone be notified outside the app?**\n- a) No notifications in v1. The board is the only source of truth.\n- b) Email the owners when items are published to them.\n- c) A weekly or daily digest of open and overdue items, sent to email or Slack.\n- d) Post to a Slack channel whenever a meeting is published.\n\n**19. How do you manage the roster?**\n- a) Who can add or remove people and nicknames? Is there an admin, or can everyone?\n- b) When someone leaves, what happens to their open items: reassign them, flag them, or leave them?\n- c) Should each roster member be tied to their Google account (email), so \"My items\" works automatically and ticking is attributed to them? **(rec: yes)**\n- d) What if a nickname could mean two people? For example, if \"Sam\" or \"T\" matched more than one roster member, should that be flagged, the same way as an unknown name? **(rec: yes, flag, never guess)**\n\n**20. How long do you keep things, given the notes are confidential?**\n- a) Keep raw notes forever, delete them after N days (keeping only the items and quotes), or never store them (in which case source links break)?\n- b) Should people be able to delete a meeting and everything extracted from it?\n- c) Any data residency rules or approved vendors? For example, the Claude API with zero data retention, or it must run via AWS Bedrock or GCP Vertex under your existing company agreements.\n\n**21. How should the app behave on the practical side?**\n- a) Extracting from a 15,000-word transcript can take 30–90 seconds. Is it fine to show a progress state and let the user leave and come back to the draft? **(rec)**\n- b) If extraction fails or times out, can the user retry? And should the paste be saved first, so nothing is lost? **(rec: always save the paste first)**\n- c) Does the team work in one time zone? That matters for turning \"Friday\" into a date and for \"overdue\".\n- d) Does the app need to work well on phones for ticking items off, or is desktop enough?\n\n**22. Where will it run and who maintains it?**\n- a) Any preference on stack or hosting? For example: \"we're a TypeScript shop on Vercel\", \"must run in our GCP project\", or \"no preference, keep it simple\".\n- b) Who maintains it after launch: an engineer on the team, or should it need close to zero ops?\n- c) What's your budget for LLM costs? At about 10 meetings a week, even long transcripts should come to a few dollars a month, so I'm assuming cost isn't a constraint unless you say otherwise.\n\nOnce you've answered, I'll do a short final round only if something new comes up. Otherwise I'll write `SPEC.md`.\n\nSeparately: the claude.ai Indeed connector failed to connect this session (rate-limited), and the connectors I listed before still need authorizing. Neither is needed for this spec.",
+  "turns": 1,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "11. a) Speaker label matches roster → resolve and mark confident. No label → flag. Yes, if speaker is generic like \"Speaker 2,\" let the reviewer map it once for the whole meeting.\n\n12. a) Yes, show quote in review and on board.\n\n13. a) Show full notes next to items with highlights, let reviewer select text and add an item.\n\n14. a) Auto-save drafts, one editor at a time, others view-only, take-over button.\n\n15. b) Yes, publish with \"needs review\"/\"Unassigned\" badge.\n\n16. a) Anyone can tick off anyone's item.\nb) Yes, items can be edited or deleted after publishing, by anyone, and changes are recorded.\nc) Hidden by default with \"show done\" filter.\nd) Go with your rec — open/done plus \"dropped\".\n\n17. a) Yes, single list sorted by due date, filter by owner/meeting, \"My items\" default.\nd) Yes highlight overdue. Agree, vague dates like \"next sprint\" are never overdue.\n\n18. a) No notifications in v1.\n\n19. a) Anyone on the team can manage the roster, no separate admin.\nb) Flag their open items.\nc) Yes, tie to Google account.\nd) Yes, flag ambiguous nicknames.\n\n20. a) Delete raw notes after 30 days, keep items and quotes (matches what I said before).\nb) Yes, let someone delete a meeting and everything from it.\nc) No rules I know of, no preference — recommend what fits, just keep cost low.\n\n21. a) Yes, fine to show progress and let them leave.\nb) Yes, always save the paste first, allow retry.\nc) Yes, one time zone — IST.\nd) Desktop is enough, phone nice-to-have not required.\n\n22. a) No preference, recommend what fits.\nb) I'm non-technical, so it needs close to zero ops — no engineer maintaining it.\nc) Budget is the $20/month total I already gave you, that includes LLM costs."
+ },
+ {
+  "role": "user",
+  "text": "11. a) Speaker label matches roster → resolve and mark confident. No label → flag. Yes, if speaker is generic like \"Speaker 2,\" let the reviewer map it once for the whole meeting.\n\n12. a) Yes, show quote in review and on board.\n\n13. a) Show full notes next to items with highlights, let reviewer select text and add an item.\n\n14. a) Auto-save drafts, one editor at a time, others view-only, take-over button.\n\n15. b) Yes, publish with \"needs review\"/\"Unassigned\" badge.\n\n16. a) Anyone can tick off anyone's item.\nb) Yes, items can be edited or deleted after publishing, by anyone, and changes are recorded.\nc) Hidden by default with \"show done\" filter.\nd) Go with your rec — open/done plus \"dropped\".\n\n17. a) Yes, single list sorted by due date, filter by owner/meeting, \"My items\" default.\nd) Yes highlight overdue. Agree, vague dates like \"next sprint\" are never overdue.\n\n18. a) No notifications in v1.\n\n19. a) Anyone on the team can manage the roster, no separate admin.\nb) Flag their open items.\nc) Yes, tie to Google account.\nd) Yes, flag ambiguous nicknames.\n\n20. a) Delete raw notes after 30 days, keep items and quotes (matches what I said before).\nb) Yes, let someone delete a meeting and everything from it.\nc) No rules I know of, no preference — recommend what fits, just keep cost low.\n\n21. a) Yes, fine to show progress and let them leave.\nb) Yes, always save the paste first, allow retry.\nc) Yes, one time zone — IST.\nd) Desktop is enough, phone nice-to-have not required.\n\n22. a) No preference, recommend what fits.\nb) I'm non-technical, so it needs close to zero ops — no engineer maintaining it.\nc) Budget is the $20/month total I already gave you, that includes LLM costs."
+ },
+ {
+  "role": "builder",
+  "text": "Nearly done. Three things came up that I can't decide for you, so there's one last short round. Answer these and I'll write `SPEC.md`.\n\nOne correction first: this is the first time the 30-day deletion and the $20/month budget have come up. I'm happy to use both, but I want to be sure I haven't missed other earlier requirements. If you gave me notes somewhere else, please paste them.\n\n## Round 3\n\n**23. Which Claude model should extract the items, given the $20/month limit?** My estimate at about 43 meetings a month (10 a week), if every meeting were a 15,000-word transcript (about 20,000–27,000 tokens each), including the model's reasoning and output:\n\n| Model | Price per million tokens (input / output) | Cost per long meeting | Cost per month, if every meeting is long |\n|---|---|---|---|\n| Claude Opus 5 (most accurate) | $5 / $25 | ~$0.35 | ~$15 |\n| Claude Sonnet 5 | $2 / $10 | ~$0.13 | ~$6 |\n\nMost meetings will be shorter, so real costs should be lower. Hosting takes about $5/month (see 24), which leaves $15 for the model.\n- a) **Opus 5.** It gives the best owner and item accuracy, which is your main goal. It fits the budget in a typical month, but a heavy month could reach about $20. I'd set a hard monthly spending cap on the API account so the bill can't go over. If the cap is hit, extraction pauses until the next month and you add items by hand.\n- b) **Sonnet 5.** Comfortably under budget, but somewhat more items will need fixing in review.\n- c) **Start on Opus 5 and keep a one-line switch to Sonnet 5** if the bill runs high. This is what I'd recommend.\n\n**24. Is this hosting setup OK, and who owns the accounts?** You want close to zero maintenance, a low bill and no engineer. My recommendation is **Cloudflare Workers on the $5/month paid plan**. The app, database, background extraction jobs and the nightly 30-day cleanup all run on one platform, with no servers to look after. Free tiers elsewhere have catches: some are licensed for non-commercial use only, and some databases pause when idle.\n\nWhichever host you choose, someone at your company has to own three accounts and put a card on them:\n- a) A Cloudflare account ($5/month)\n- b) An Anthropic API account, which is where the spending cap from 23 is set\n- c) A Google Cloud project to register the \"Sign in with Google\" app as internal to your Workspace. Some companies only let a Workspace admin do this.\n\nWho will that be: you, or someone in IT? Also, is it fine for me to write a setup guide in plain language, click by click, as part of the spec? I'm assuming yes.\n\n**25. Should anyone at the company be able to sign in, or only the 8 people on the roster?** Your company's Google domain probably includes people outside this team, and the notes are confidential.\n- a) Only people on the roster can sign in. Anyone else in your domain sees \"not on this team\". Adding someone to the roster gives them access, and removing them takes it away immediately. **(rec)**\n- b) Anyone with a company Google account can sign in.\n- If (a): on first setup, the first person to sign in becomes the first roster member and adds the others. Does that work?\n\n## Defaults I'll write into the spec unless you object\n\n- **What the 30-day deletion means in practice:** after 30 days the full notes are gone. Each item keeps its quote, but \"view in notes\" links stop working and that meeting can't be re-extracted. An unpublished draft is deleted along with its notes at 30 days. It gets a warning banner from day 23 on.\n- **Accuracy tracking:** the app quietly records how reviewers changed each draft: owners changed, items added by hand (these are items the model missed), and items rejected. It shows a simple monthly accuracy figure, so you can see whether the app meets your \"every item, right owner\" goal.\n- **\"Dropped\" items:** a reason is optional. They're hidden with the done items.\n- **Editing notes after extraction:** you can't edit the notes and re-run extraction on the same meeting. You'd delete it and paste again. Duplicate detection (a v1 nice-to-have) will catch the overlap.\n- **Mid-review changes:** if someone edits the roster while a draft is open, the draft's owner matching doesn't update automatically. There's a \"re-match owners\" button instead.\n- **Board updates:** the board refreshes when the page loads and every 30 seconds. It doesn't update instantly as others make changes, which isn't needed for 8 people.\n- **Out of scope for v1:** notifications, calendar links, recurring meetings, time zones other than IST (all dates and \"overdue\" use IST), and a phone-specific layout. The board should still work on a phone.",
+  "turns": 3,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "No earlier notes elsewhere — everything I know is what I've told you.\n\n23. c) Start on Opus 5, switch to Sonnet 5 if the bill runs high. Set the spending cap too.\n\n24. Cloudflare Workers is fine. I'll own all three accounts myself — no IT involved. Yes, write the setup guide.\n\n25. a) Roster-only. And yes, first sign-in becomes the first roster member and adds the rest — that works."
+ },
+ {
+  "role": "user",
+  "text": "No earlier notes elsewhere — everything I know is what I've told you.\n\n23. c) Start on Opus 5, switch to Sonnet 5 if the bill runs high. Set the spending cap too.\n\n24. Cloudflare Workers is fine. I'll own all three accounts myself — no IT involved. Yes, write the setup guide.\n\n25. a) Roster-only. And yes, first sign-in becomes the first roster member and adds the rest — that works."
+ },
+ {
+  "role": "builder",
+  "text": "I've written the spec to `SPEC.md`. It covers everything from the three rounds, plus the defaults you didn't object to. No application code was written.\n\n**What the spec does to meet your three goals:**\n- **Right owner:** the AI model only reports who the notes name, word for word. The app then matches that against the roster with fixed rules, including nicknames, accents, speaker labels and people who've left. Anything it can't match exactly becomes \"Needs review\" with a plain-English reason. It never guesses.\n- **Nothing missed:** the AI is told to pull out anything that might be a task, including tentative ones. Each item's quote must actually appear in the notes, or it's flagged. On the review screen, anything the AI missed is still visible in the notes and one text selection turns it into an item.\n- **No retyping:** reviewers only fix what's wrong. Items they don't touch count as accepted when they publish.\n\n**Things to check before building:**\n1. **Multiple owners.** Your round 1 answers conflicted: one said \"one item per person if several names are given\", the other said \"several owners on one item\". I followed the second, with a \"Split\" button for the first. It's easy to change (§16, note 1).\n2. **Spending cap.** You asked for a cap but didn't give an amount, so I set the Anthropic limit at **$15/month**. With about $5 for hosting that keeps you at $20. If the cap is hit, the team can still review and add items by hand until the next month.\n3. **Anthropic's data terms.** Your notes go to Anthropic's API. Check that its current data-retention terms meet your confidentiality needs; the spec lists this as your action item (§12).\n4. **A test before launch (§15).** Hand-write the correct action items for 10 real past meetings. The launch bar is that at least 95% of real items show up, and no owner marked as confident is wrong. Re-run the same test if you ever switch to the cheaper Sonnet 5.\n\n§14 is a click-by-click setup guide for the three accounts you'll own. My cost figures ($10–20/month in total) are estimates at today's prices, not measurements. The monthly Stats page will show the real numbers.",
+  "turns": 2,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "<<DONE>>"
+ },
+ {
+  "role": "user",
+  "text": "Read SPEC.md. Add three sections: 1) \"Out of scope\" listing what we are NOT building. 2) \"Phases\": split the build into 3-5 small phases, each one testable on its own. 3) For every phase, a \"How we check it\" line: a test, a command, or a screenshot that gives a clear pass or fail. Also create a short CLAUDE.md with the rules for this project. Ask me before adding anything I did not ask for."
+ },
+ {
+  "role": "builder",
+  "text": "I've added §17 \"Out of scope\" and §18 \"Phases\" to `SPEC.md`, and created a short `CLAUDE.md`. Nothing has been built or run yet, so none of the checks below exist yet.\n\n**§17 Out of scope** lists only things we already agreed not to build, grouped as features, behavior and platform. Examples: notifications, calendar links, admin roles, guessing owners, and keeping notes past 30 days. Section 2 already had a shorter list, so I replaced it with a pointer to §17 to avoid two lists that could drift apart.\n\n**§18 Phases** splits the build into five, each with its own check:\n\n| Phase | What it delivers | How we check it |\n|---|---|---|\n| 1 | Sign-in and roster, live on Cloudflare | Sign-in tests pass, plus a screenshot of a teammate you added on the live roster page |\n| 2 | Paste and extraction | Owner, date and failure tests pass, plus `npm run eval` prints PASS on your 10 hand-labeled meetings |\n| 3 | Review screen and publish | A browser test runs a whole review and checks the board gets exactly the published count |\n| 4 | Board | A browser test with a fixed date checks ordering, overdue highlighting, tick and Undo, history and \"Owner left\" |\n| 5 | Retention, meeting delete, stats | Tests with a fake clock check day 23 and day 31 behavior, plus a separate test for duplicate detection |\n\n**`CLAUDE.md`** says `SPEC.md` is the source of truth and to ask you before adding anything it doesn't call for. It also holds the \"flag, never guess\" rules, the IST and privacy rules, the cost limit, and that everything should be explained to you in plain language.\n\nTwo choices I made that you didn't spell out:\n- **Test style:** automated tests use saved example responses from the AI instead of calling it. Only the eval calls the real API, at about $2–4 per run, and `CLAUDE.md` says to ask you before running it.\n- **Duplicate detection:** it sits inside Phase 5 with its own separate check, so it can be dropped without blocking launch.\n\nQuestions for you:\n1. After each phase passes, should the builder stop and wait for your OK before starting the next one? `CLAUDE.md` doesn't say that right now.\n2. Phase 2 can't pass until you've written down the correct action items for 10 past meetings. Can you have those ready by then, or should the eval become a separate launch step?\n3. The multiple-owners conflict from last time (§16, note 1) is still open: keep one item with several owners and a Split button, or split into one item per person by default?",
+  "turns": 5,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "1. Yes, stop after each phase and wait for my OK.\n\n2. I'll have the 10 labeled meetings ready by then, keep it in Phase 2.\n\n3. Split into one item per person by default. Simpler for the board."
+ },
+ {
+  "role": "user",
+  "text": "1. Yes, stop after each phase and wait for my OK.\n\n2. I'll have the 10 labeled meetings ready by then, keep it in Phase 2.\n\n3. Split into one item per person by default. Simpler for the board."
+ },
+ {
+  "role": "builder",
+  "text": "I've updated both files with your three answers.\n\n1. **Stop after each phase:** `SPEC.md` §18 and `CLAUDE.md` now both say the builder reports each phase's result, then waits for your OK before starting the next one.\n2. **The 10 labeled meetings** stay in Phase 2, so nothing changed there.\n3. **One item per person:** when the notes say \"Priya and Tom to draft the proposal\", the app now creates two items, one for Priya and one for Tomás. Both have the same text, due date and quote. I changed the decisions table (D3), the owner-matching rules (§6.4) and the note in §16.\n\nOne question before building. The old spec let a reviewer put several people on one item by hand, and I've left that in for now. The Split button now only appears on those hand-made shared items.\n- **a)** Keep it: shared items are rare and only happen when a reviewer chooses to make one.\n- **b)** Remove it: every item has at most one owner. This is simpler for the board, which is what you said you wanted, and the Split button goes away.\n\nWhich do you want? I'll change the spec to match.",
+  "turns": 8,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "b) Remove it. One owner per item is simpler, go with that."
+ },
+ {
+  "role": "user",
+  "text": "b) Remove it. One owner per item is simpler, go with that."
+ },
+ {
+  "role": "builder",
+  "text": "I've updated `SPEC.md`: every item now has at most one owner.\n\n- **Decisions (D3):** now reads \"one owner per item\". When the notes name several teammates for one task, each person gets their own item.\n- **Data (§4):** drafts and board items store a single owner, or none (Unassigned).\n- **Review screen (§7):** the owner picker takes one person or Unassigned, and the Split button is gone. Phase 3 no longer mentions it either.\n- **Board (§8) and stats (§11):** each row shows one owner name, and the stats count \"owner changed\".\n- **Out of scope (§17):** added \"more than one owner on an item\", so it doesn't creep back in during the build.\n\nOne case to confirm. Take \"Priya and Sam will fix the login bug\" when \"Sam\" could mean two people. The spec gives Priya her item, flagged \"Needs review\" for the unclear name. Sam's share doesn't get its own item. The reviewer sees the flag and adds Sam's copy with \"+ Add item\", which means retyping it. Is that OK? The alternative is to also create a separate Unassigned item for each unclear or non-team name, so nothing needs retyping. That would put more Unassigned items on the board for things like \"John from Acme\". I'd keep it as written, since those cases should be rare, but it's your call.",
+  "turns": 15,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "Keep it as written — Priya gets her item, Sam's mention is flagged for manual add. Rare case, not worth extra Unassigned clutter."
+ },
+ {
+  "role": "user",
+  "text": "Keep it as written — Priya gets her item, Sam's mention is flagged for manual add. Rare case, not worth extra Unassigned clutter."
+ },
+ {
+  "role": "builder",
+  "text": "Kept as written. I added one line to the owner-matching rules (`SPEC.md` §6.4) that spells out this case. Take \"Priya and Sam\" when \"Sam\" could mean two people: Priya gets her item, flagged \"Ambiguous name\", and no extra Unassigned item is created. I noted it was a deliberate choice so no one \"fixes\" it during the build.\n\nThat was the last open question, so the spec is ready to build from.\n\n**Next step: Phase 1 (sign-in and roster).** Before the app can go live, you'll need to do steps 1–4 of the setup guide in `SPEC.md` §14:\n1. Create the Anthropic account and set the $15 monthly spending limit.\n2. Register \"Sign in with Google\" in Google Cloud.\n3. Create the Cloudflare account on the $5 paid plan.\n4. Paste the secret keys into Cloudflare.\n\nBuilding can start before you've done these; only the live check at the end of Phase 1 needs them. Say \"start Phase 1\" when you're ready. The builder will stop after it and wait for your OK before Phase 2.",
+  "turns": 2,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "Start Phase 1."
+ },
+ {
+  "role": "user",
+  "text": "Start Phase 1."
+ },
+ {
+  "role": "builder",
+  "text": "I can't start Phase 1 in this session. This session is set up for planning only and doesn't allow writing application code. Everything so far has been writing the spec, which is why this is the first time it has come up.\n\n**How to start the build:** open a new Claude Code session in this same folder, one that's allowed to write code, and type:\n\n> Start Phase 1 from SPEC.md.\n\nThe new session will read `CLAUDE.md` and `SPEC.md` automatically, so nothing from our discussion is lost. All the decisions are in those two files. It will build sign-in and the roster, run the Phase 1 checks, and stop for your OK before Phase 2.\n\n**What you can do in the meantime:** setup guide steps 1–3 in `SPEC.md` §14 (Anthropic account with the $15 limit, Google sign-in registration, Cloudflare paid plan). Step 2.5 needs the app's web address, and step 4 is pasting the secret keys in. The builder will walk you through both once the app exists.\n\nOne thing the new session will need: automatic deploys pull the code from GitHub. This folder isn't under version control yet, so the builder will need to set that up and connect it to a GitHub account. If you have a GitHub account, have it ready; if not, creating one is free.",
+  "turns": 1,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "Got it, I'll open a new session for that. I'll do the setup steps in the meantime and have GitHub ready."
+ },
+ {
+  "role": "user",
+  "text": "Got it, I'll open a new session for that. I'll do the setup steps in the meantime and have GitHub ready."
+ },
+ {
+  "role": "builder",
+  "text": "That plan works. Two tips while you do the setup:\n\n- **Don't paste the secret keys into a chat,** with me or the new session. That means the Anthropic API key and the Google client secret. Keep them in a password manager or a private note until you enter them directly into Cloudflare (step 4). The builder will tell you where to click without needing to see them.\n- **Start on the 10 labeled meetings early** if you can. For each past meeting, write down the correct list of action items with owner and due date. Phase 2 can't pass without them, and it's the one step nobody else can do for you.\n\nEverything else is in `SPEC.md` and `CLAUDE.md`, ready for the new session.",
+  "turns": 1,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "Sounds good, I'll keep the keys private and start writing up the 10 labeled meetings now."
+ },
+ {
+  "role": "user",
+  "text": "Sounds good, I'll keep the keys private and start writing up the 10 labeled meetings now."
+ },
+ {
+  "role": "builder",
+  "text": "A few tips so the labels match how the app is supposed to behave, which is what the test compares against:\n\n- **Label by the spec's rules, not hindsight.** If the notes say \"we'll look into it\", the correct answer is *Unassigned*, even if you know Dana ended up doing it. If they say \"next sprint\", the correct answer is *no date, wording \"next sprint\"*.\n- **One line per person.** \"Priya and Tom to draft the proposal\" is two items: one for Priya, one for Tomás.\n- **For each meeting, note:** the title, the meeting date, and the original notes exactly as pasted.\n- **For each item, note:** a short description, the owner (a roster name or \"Unassigned\"), and the due date (a real date, the vague wording, or blank).\n- **Cover the tricky cases.** The 10 meetings should include at least one transcript with generic \"Speaker 2\" labels, one using nicknames like \"Tom\", one with \"we\"/\"someone\" items, and one mentioning someone outside the team (`SPEC.md` §15.1).\n\nA simple spreadsheet with one row per item is plenty. The builder will turn it into the test format.",
+  "turns": 1,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "Sounds good, I'll pull together 10 meetings covering those cases and send you the spreadsheet."
+ },
+ {
+  "role": "user",
+  "text": "Sounds good, I'll pull together 10 meetings covering those cases and send you the spreadsheet."
+ },
+ {
+  "role": "builder",
+  "text": "One correction: send the spreadsheet to the **new build session**, not this one. This session doesn't carry over, and the new one is where the test gets built. The easiest way is to save it into this project folder (for example, a file called `eval-meetings.xlsx`) and tell the new session it's there.\n\nSince those notes are confidential, ask the builder to keep the GitHub repository **private**. The test meetings will be stored alongside the code.",
+  "turns": 1,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "Got it — I'll drop eval-meetings.xlsx into the project folder and tell the new session it's there. And yes, I'll make sure the repo is private since the meeting notes are confidential."
+ },
+ {
+  "role": "user",
+  "text": "Got it — I'll drop eval-meetings.xlsx into the project folder and tell the new session it's there. And yes, I'll make sure the repo is private since the meeting notes are confidential."
+ },
+ {
+  "role": "builder",
+  "text": "That covers everything. One suggestion: the private-repository rule isn't written down in `CLAUDE.md`, so the new session only knows about it if you remember to say so. Do you want me to add one line to `CLAUDE.md`, like \"The GitHub repository must be private; it contains confidential meeting notes\"? Then every future session sees it automatically.",
+  "turns": 1,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "Yes, add that line."
+ },
+ {
+  "role": "user",
+  "text": "Yes, add that line."
+ },
+ {
+  "role": "builder",
+  "text": "I've added the line to `CLAUDE.md`, next to the other confidentiality rule: \"The GitHub repository must be private; it contains confidential meeting notes (the eval set).\" Every future session will see it.\n\nThat's everything for this session. When you open the new one, it'll pick up `SPEC.md`, `CLAUDE.md`, and your `eval-meetings.xlsx` from this folder.",
+  "turns": 2,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "Sounds good, thanks. I'll start a new session for Phase 1."
+ },
+ {
+  "role": "user",
+  "text": "Sounds good, thanks. I'll start a new session for Phase 1."
+ },
+ {
+  "role": "builder",
+  "text": "Good luck with the build. The new session will pick up `SPEC.md` and `CLAUDE.md` from this folder, and it will stop for your OK after Phase 1.",
+  "turns": 1,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "Sounds good, thanks."
+ },
+ {
+  "role": "user",
+  "text": "Sounds good, thanks."
+ },
+ {
+  "role": "builder",
+  "text": "You're welcome, and good luck with the build.",
+  "turns": 1,
+  "session": "a7ecfedc-0cdc-4a1a-a449-c110fcb2d42f"
+ },
+ {
+  "role": "sim",
+  "text": "<<DONE>>"
+ },
+ {
+  "role": "user",
+  "text": "Read SPEC.md and CLAUDE.md. Write a detailed implementation plan for every phase to PLAN.md: the architecture, every file you will create or change, the order, and how each phase is checked. Do not write application code."
+ },
+ {
+  "role": "builder",
+  "text": "I've written the plan to `PLAN.md`. I haven't written any application code and haven't run anything that costs money.\n\n**What's in it:**\n- **A plain-language summary for you** at the top: how the app is put together, and what I'll need from you in each phase.\n- **How it's built:** everything is one Cloudflare project. Claude only suggests the action items. Ordinary code, following fixed rules, decides the owner, works out the due date and checks the quote. That's how the app stays \"flag, never guess\". The notes are never logged and never stored anywhere except our database.\n- **The database tables,** following spec §4.\n- **Every file** I'll create, and which phase creates it.\n- **For each of the 5 phases:** the build order and exactly how it gets checked. I stop after each phase for your OK.\n- **How testing works:** the automated tests use saved example answers from the AI, so they're free. `npm run eval` checks the AI against your 10 labelled meetings, using a simple spreadsheet you fill in. It costs about $2–4 a run, so I'll ask before every run.\n\n**One weak spot I found:** if the AI ignored its instructions and named the wrong teammate as owner, the current spec would mark that item as confident. Question 7 below proposes a fix.\n\n**Please answer these before I start Phase 1:**\n\n1. **Backup AI model:** Anthropic can automatically retry on a different AI model when the chosen one declines a text. The spec says a decline should show as \"Extraction failed\", and a second model wouldn't have been tested by the eval. I plan to leave it off. OK?\n2. **Eval labelling:** for each of the 10 meetings you'd fill in a spreadsheet with: action item, owner, due date, and a few words copied from the notes. Is that format OK? Can I also add one short made-up meeting with an \"ignore previous instructions\" line, to test that trick against the real AI?\n3. **Company domain:** automatic deploys can wipe settings typed into the Cloudflare dashboard. Can you tell me your company domain so I put it in the project settings? You'd then only enter the four secrets in the dashboard.\n4. **Where tests run:** the quick tests run on every push, and a failure blocks the deploy. The browser tests (Phases 3–5) are too heavy for Cloudflare's build machines, so I'd run them myself and include the results in each phase report. OK?\n5. **Duplicates:** can the AI see the list of open items from Phase 2 onward? If it can, the Phase 2 eval stays valid when duplicate detection is added in Phase 5. The app won't show duplicates until Phase 5.\n6. **Internal database columns:** a few bookkeeping columns aren't listed in the spec (for example, \"was this owner edited by hand?\"). They add no features, screens or settings. Is that fine?\n7. **New safety check (not in the spec):** a named owner would only count as confident if their name (or nickname) appears in the item's quote, or, for \"I\", if that person is the one speaking. Otherwise the item is marked \"Needs review\". The cost is a few extra \"Needs review\" items. I recommend it, but it's a new rule, so I need your OK.\n8. **Before real notes are pasted:** please check that Anthropic's current data-retention terms work for you (spec §12). This isn't needed for Phase 1.\n\nA separate note: some connected services in this session (Notion, Atlassian, Canva, Apify, Higgsfield, S&P Global) need sign-in through your claude.ai connector settings, and Indeed failed to connect. None of them are needed for this project.",
+  "turns": 15,
+  "session": "07757aaf-6a84-48bd-b3f8-f5757eaf3ed8"
+ },
+ {
+  "role": "sim",
+  "text": "1. OK, leave it off.\n\n2. Format's fine. Yes, add the \"ignore previous instructions\" test meeting - good idea.\n\n3. Domain is parmarstartup.com (placeholder, I'll confirm exact spelling before you enter it). I'll send the four secrets myself when you tell me to.\n\n4. OK.\n\n5. Yes, let it see the open items list from Phase 2 on.\n\n6. Fine.\n\n7. Yes, add that check.\n\n8. Will do, before we paste real notes.\n\nNoted on the other connectors - none needed here, ignore them."
+ },
+ {
+  "role": "user",
+  "text": "1. OK, leave it off.\n\n2. Format's fine. Yes, add the \"ignore previous instructions\" test meeting - good idea.\n\n3. Domain is parmarstartup.com (placeholder, I'll confirm exact spelling before you enter it). I'll send the four secrets myself when you tell me to.\n\n4. OK.\n\n5. Yes, let it see the open items list from Phase 2 on.\n\n6. Fine.\n\n7. Yes, add that check.\n\n8. Will do, before we paste real notes.\n\nNoted on the other connectors - none needed here, ignore them."
+ },
+ {
+  "role": "builder",
+  "text": "I've added all your answers to `PLAN.md`. Section 10 now records your decisions, and the parts of the plan they affect have been changed to match:\n\n- **\"Owner not in quote\" check (answer 7):** new section 5.1 describes how it works. It never removes an owner; it only marks the item \"Needs review\". For example, if the item says Tom owns it, \"Tom\" (or one of his nicknames) must appear in the quote. If the quote is \"I'll do it\", the person speaking must be Tom. The Phase 2 tests now cover this check. They also include a saved AI answer that follows the \"assign everything to Dana\" trick, and that answer must produce no confident Dana items.\n- **Prompt-injection test meeting (answer 2):** it's an 11th, made-up meeting in the eval, scored separately. Your 10 real meetings alone decide the four launch pass/fail results. The trick meeting gets its own fifth PASS/FAIL line.\n- **Domain (answer 3):** `parmarstartup.com` is written in the plan as a placeholder until you confirm the spelling. The setup guide will only ask you to enter the four secrets.\n- **Data-retention check (answer 8):** it doesn't block Phases 1–2, because those use made-up notes. It does block the first real eval run, because that sends your real meeting notes to Anthropic.\n\nTwo things are still open:\n\n1. **The exact spelling of your company domain.** I need it before Phase 1 goes live.\n2. **Should I add the new check to SPEC.md?** SPEC.md is the rulebook the build follows. The \"Owner not in quote\" check adds a new reason to it, so without an update, the code and the rulebook would disagree. I'd add one line to section 6.4 (how the owner is worked out) and one to section 6.6 (the list of \"Needs review\" reasons). Can I make that edit?\n\nOnce you've answered those and told me to go ahead, I'll start Phase 1.",
+  "turns": 12,
+  "session": "07757aaf-6a84-48bd-b3f8-f5757eaf3ed8"
+ },
+ {
+  "role": "sim",
+  "text": "Domain is amanparmar208@gmail.com — wait, no, the company domain, I need to check the exact spelling and get back to you. Don't block on it, just keep the placeholder for now.\n\nYes, add the \"Owner not in quote\" check to SPEC.md §6.4 and §6.6 as you described.\n\nGo ahead and start Phase 1."
+ },
+ {
+  "role": "user",
+  "text": "Domain is amanparmar208@gmail.com — wait, no, the company domain, I need to check the exact spelling and get back to you. Don't block on it, just keep the placeholder for now.\n\nYes, add the \"Owner not in quote\" check to SPEC.md §6.4 and §6.6 as you described.\n\nGo ahead and start Phase 1."
+ },
+ {
+  "role": "builder",
+  "text": "I've added the \"Owner not in quote\" check to SPEC.md. The rule is in §6.4, and it's listed as a \"Needs review\" reason in §6.6. PLAN.md now says the same, and the domain placeholder stays until you confirm the spelling.\n\n**I haven't started Phase 1.** This session is set up so that I can't write application code. I could only update the plan and the spec here. To build Phase 1, please open a new Claude Code session in this project folder and say \"Start Phase 1 from PLAN.md\". PLAN.md and SPEC.md contain all your decisions, so nothing is lost.\n\n**About the domain:** you first typed your Gmail address. A personal `@gmail.com` account can't sign in to this app. The spec only allows accounts on your company's Google Workspace domain, so everyone, including you, signs in with their company Google account.\n\n**Please don't send me the four secrets in chat.** You'll type them straight into Cloudflare yourself, and I'll give you the exact clicks when it's time. That way the keys never appear in a chat log.\n\n**What you can do now, before Phase 1 starts** (spec §14):\n\n*Anthropic (the AI)*\n1. Go to console.anthropic.com and create an account with your work email.\n2. Open **Billing**, add a card and buy $10 of credit.\n3. Open **Limits** and set the **monthly spend limit to $15**.\n4. Hold off on creating the API key until the builder asks for it. It's shown only once, and you'll paste it straight into Cloudflare.\n\n*Google sign-in (the first part)*\n1. Go to console.cloud.google.com, signed in with your **company** Google account.\n2. Click the project picker at the top → **New project** → name it \"Action Items\" → **Create**.\n3. Open **Google Auth Platform** (it may be called \"OAuth consent screen\") → choose **Internal** → app name \"Action Items\" → your email as support contact → **Save**.\n4. Stop there. Creating the sign-in client needs the app's web address, which comes during Phase 1.\n\n*Cloudflare (hosting)*\n1. Go to dash.cloudflare.com and create an account.\n2. Go to **Workers & Pages** → **Plans** → choose **Workers Paid** ($5/month).\n\n*GitHub (where the code lives)*\n1. Go to github.com and sign in, or create an account.\n2. Click **+** (top right) → **New repository** → name it `action-items` → select **Private** (it must be private, because it will hold meeting notes for testing) → **Create repository**.\n\nTell me when these are done or if any screen looks different. You can also do them after the new session starts.",
+  "turns": 5,
+  "session": "07757aaf-6a84-48bd-b3f8-f5757eaf3ed8"
+ },
+ {
+  "role": "sim",
+  "text": "<<DONE>>"
+ }
+]

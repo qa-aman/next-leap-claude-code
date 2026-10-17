@@ -1,0 +1,11 @@
+{
+ "winner": "Y",
+ "margin": "clear",
+ "why": [
+  "X misses the privacy requirement (R7). It stores `rawNotes: text(\"raw_notes\").notNull()` forever and has no deletion job. Y has a daily cron where `run_retention(now)` sets `raw_notes = null` after 30 days, and it is tested (`31 days → notes gone … 29 days → notes kept`).",
+  "X misses the edit audit trail and the meeting filter (R10, R9). It only records `statusChangedBy` for ticks, and its board filters are just `{ owner, reviewOnly }`. Y logs `Every change … who, when, which field, old value → new value` in an append-only `item_events` table, and filters by `Owner (including \"Unassigned\"), Meeting series, and specific meeting`.",
+  "X never mentions Hinglish (R3) and has no cost model for the $20 cap (R12), even though it runs `claude-opus-5` with adaptive thinking on 15k-word notes. Y tests `kal`/`parso` and Devanagari, puts a Hinglish meeting in the required test set, estimates `about $4 a month typical and about $9 worst case`, sets a `$15 monthly spend limit`, and logs cost per run.",
+  "Y fits a non-technical PM better (R13). It has click-by-click `docs/setup-accounts.md`, a CLAUDE.md that says to `use plain language`, and phase gates with a `How we check it` check before the PM approves each phase. It also computes due dates `in code, not by Claude`, which makes them easier to test than X's model-resolved dates. X's plan is excellent for a coding agent, with full TDD code, E2E tests and a 10–20-meeting eval with launch bars, but a PM gets little guidance from it.",
+  "Y has real weaknesses, which is why this isn't a landslide. It adds scope that nobody asked for: admin roles, a roster editor, series, and a Cloudflare Queues/OpenNext stack, all of which threaten the 2-week timeline. It also marks `\"next Friday\"` as ambiguous, which conflicts with R5, and it ignores external owners instead of flagging them as R4 requires. X handles those two points correctly and has leaner scope, but it still falls short on more of the must-have requirements."
+ ]
+}

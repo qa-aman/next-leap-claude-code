@@ -1,0 +1,11 @@
+{
+ "winner": "X",
+ "margin": "clear",
+ "why": [
+  "Y has no 30-day retention for raw notes (R7). Its spec says \"Nothing is hard-deleted after commit\" and stores `notes_text` on meetings indefinitely. X builds a nightly cron that \"delete[s] `notes` past `delete_after`\", keeps quotes, and tests it at day 23 and day 31.",
+  "Y's input limit breaks the stated note sizes (R2). \"notes up to 50,000 characters\" is roughly 8–9K words, so the 15,000-word Zoom transcripts would be rejected. X allows up to 30,000 words and does the math: \"15,000 words is about 20–27K tokens… no chunking.\"",
+  "X fits a non-technical PM who needs a URL on a budget (R12, R13). It uses one Cloudflare project with auto-deploy, a click-by-click setup guide, and a costed budget (\"~$10–20\") with a \"$15\" Anthropic spend cap. Y is \"host-agnostic. Any Node 20+ host plus managed Postgres\", needs Docker locally, and never addresses cost or who deploys it.",
+  "X handles dates and owners more carefully (R4, R5, R6). It uses IST everywhere, adds an \"Owner not in quote\" check, and never gives vague phrases a date. Its eval has explicit launch bars: \"0 items with a *confident* owner that is wrong\", \"≥ 95%\" found. Y uses the browser time zone for overdue, and its duplicate detection only compares items \"in the same meeting\", which misses R16's cross-meeting case.",
+  "Y wins on code-level executability: full TDD code for every task. But X is also highly executable. Its phases are gated (\"stop, wait for OK\"), each has a named test command, and paid eval runs need approval. X's weaknesses, heavy v1 scope (locks, take-over, stats) against a 2-week target and no mention of Hinglish, don't outweigh Y's missed requirements."
+ ]
+}

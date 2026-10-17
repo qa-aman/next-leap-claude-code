@@ -1,0 +1,18 @@
+{
+ "arm": "superpowers",
+ "run": "1",
+ "builder_calls": 25,
+ "sim_calls": 25,
+ "builder_cost_usd": 105.14365920000002,
+ "sim_cost_usd": 1.1054844000000001,
+ "wall_s": 1444.4,
+ "questions_rounds": 24,
+ "errors": 0,
+ "rounds_total": 25,
+ "artifact_files": [
+  "docs__eval-labelling-guide.md",
+  "docs__superpowers__plans__2026-09-26-meeting-action-items.md",
+  "docs__superpowers__specs__2026-09-26-meeting-action-items-design.md"
+ ],
+ "artifact_words": 20392
+}

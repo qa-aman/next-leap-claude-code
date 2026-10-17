@@ -55,7 +55,7 @@ Produce a ranked table ordered by interview count first, severity second, highes
 
 Save a one-page Markdown file to `outputs/<current-cohort>/interview-synthesis.md`. No date in the filename. Overwrite it if it already exists.
 
-Never write loose in `outputs/`. Glob `outputs/` first and write into the current month's cohort folder, which is `outputs/aug-2026-cohort/` as of 08-08-2026. If several cohort folders exist, use the most recent one.
+Never write loose in `outputs/`. Glob `outputs/` first and write into the current month's cohort folder, which is `outputs/sept-2026-cohort/` as of 26-09-2026. If several cohort folders exist, use the most recent one.
 
 Use this structure exactly:
 

@@ -37,7 +37,7 @@ Workshop workspace for the "Claude Code for PMs" course. It contains realistic p
 | `16-zomato/` | A second `ux-zone` prototype variant plus its build-prompt chain. |
 | `docs/` | Design specs written by the `superpowers` workflow (`docs/superpowers/specs/`) |
 | `videos/` | HyperFrames video projects (currently `vidaxl-brand-teaser`) |
-| `outputs/` | Write all generated content here, inside the current month's cohort folder (e.g. `outputs/aug-2026-cohort/`), never loose in `outputs/` |
+| `outputs/` | Write all generated content here, inside the current month's cohort folder (e.g. `outputs/sept-2026-cohort/`), never loose in `outputs/` |
 
 ## Prototype (the only runnable code)
 

@@ -7,23 +7,23 @@
   <title>Multi-Agent Systems with Claude Code - Theory + Practical</title>
   <style>
     :root {
-      --bg: #0D0D0D;
-      --bg-2: #141414;
-      --bg-3: #161616;
-      --line: #262626;
-      --text: #e8eaf0;
-      --muted: #9aa3b2;
-      --accent: #D47A21;
-      --accent-2: #f0a44e;
-      --pm: #7eb8ff;
-      --pm-bg: #0e1a2a;
-      --do: #65d39a;
-      --do-bg: #0a1c14;
-      --good: #65d39a;
-      --warn: #f0c674;
-      --bad: #ef6b6b;
-      --code-bg: #0a0a0a;
-      --code-border: #242424;
+      --bg: #FFFFFF;
+      --bg-2: #F4F6FB;
+      --bg-3: #F4F6FB;
+      --line: #DDE3EE;
+      --text: #0A0C12;
+      --muted: #5B6577;
+      --accent: #2F5BFF;
+      --accent-2: #1647FF;
+      --pm: #1647FF;
+      --pm-bg: #EAF0FF;
+      --do: #1A7F37;
+      --do-bg: #E8F5EC;
+      --good: #1A7F37;
+      --warn: #B45309;
+      --bad: #C2410C;
+      --code-bg: #F4F6FB;
+      --code-border: #DDE3EE;
     }
 
     * {
@@ -39,7 +39,7 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: "Lora", Georgia, "Times New Roman", serif;
       font-size: 17px;
       line-height: 1.65;
       -webkit-font-smoothing: antialiased;
@@ -65,7 +65,7 @@
       padding: 2px 6px;
       border-radius: 4px;
       font-size: 0.92em;
-      color: #f4d8c5;
+      color: #0A0C12;
     }
 
     pre {
@@ -82,7 +82,7 @@
     pre code {
       background: transparent;
       padding: 0;
-      color: #e8eaf0;
+      color: #0A0C12;
     }
 
     .copy-btn {
@@ -104,13 +104,13 @@
 
     .copy-btn:hover {
       background: var(--accent);
-      color: #fff;
+      color: #0A0C12;
       border-color: var(--accent);
     }
 
     .copy-btn.copied {
       background: var(--good);
-      color: #062014;
+      color: #E8F5EC;
       border-color: var(--good);
     }
 
@@ -323,7 +323,7 @@
     }
 
     .pm-example {
-      border: 1px solid #1f3654;
+      border: 1px solid #C9D6FF;
       border-left: 4px solid var(--pm);
       background: var(--pm-bg);
       border-radius: 10px;
@@ -340,9 +340,9 @@
       margin-bottom: 8px;
       font-weight: 700;
       padding: 2px 8px;
-      background: #0a1422;
+      background: #EAF0FF;
       border-radius: 4px;
-      border: 1px solid #1f3654;
+      border: 1px solid #C9D6FF;
     }
 
     .pm-example h4 {
@@ -361,7 +361,7 @@
 
     /* Practical "do it now" block */
     .practical {
-      border: 1px solid #19402a;
+      border: 1px solid #BFE3CB;
       border-left: 4px solid var(--do);
       background: var(--do-bg);
       border-radius: 10px;
@@ -378,9 +378,9 @@
       margin-bottom: 10px;
       font-weight: 700;
       padding: 3px 10px;
-      background: #06120c;
+      background: #E8F5EC;
       border-radius: 4px;
-      border: 1px solid #19402a;
+      border: 1px solid #BFE3CB;
     }
 
     .practical h4 {
@@ -390,7 +390,7 @@
     }
 
     .practical h5 {
-      color: #7adba6;
+      color: #1A7F37;
       margin-top: 18px;
     }
 
@@ -474,7 +474,7 @@
       font-family: "JetBrains Mono", "SF Mono", monospace;
       font-size: 13px;
       line-height: 1.5;
-      color: #cbd1de;
+      color: #2B3445;
       margin: 18px 0;
     }
 
@@ -493,14 +493,14 @@
 
     .pill.exp {
       color: var(--warn);
-      border-color: #3a2f0e;
-      background: #1c1808;
+      border-color: #F3D9A4;
+      background: #FDF6E3;
     }
 
     .pill.new {
       color: var(--good);
-      border-color: #0e3a25;
-      background: #08180f;
+      border-color: #BFE3CB;
+      background: #E8F5EC;
     }
 
     blockquote {
@@ -647,8 +647,8 @@
       }
 
       body {
-        background: #fff;
-        color: #111;
+        background: #FFFFFF;
+        color: #0A0C12;
       }
 
       main {
@@ -665,9 +665,9 @@
       .practical,
       .glossary,
       .picker {
-        background: #fafafa;
-        color: #111;
-        border-color: #ddd;
+        background: #FFFFFF;
+        color: #0A0C12;
+        border-color: #2B3445;
       }
 
       .copy-btn {
@@ -675,7 +675,8 @@
       }
     }
   </style>
-</head>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"><style id="substack-theme">.copy-btn:hover,.chip.active{color:#FFFFFF!important}
+::selection{background:#2F5BFF;color:#FFFFFF}</style></head>
 
 <body>
   <div class="wrap">

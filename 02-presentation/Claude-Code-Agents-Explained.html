@@ -7,19 +7,19 @@
   <title>Claude Code Agents, Explained</title>
   <style>
     :root {
-      --bg: #0D0D0D;
-      --accent: #D47A21;
-      --accent2: #f0a44e;
-      --white: #FFFFFF;
-      --light: #CCCCCC;
-      --mid: #888888;
-      --card: #161616;
-      --card-bd: #262626;
-      --code-bg: #0a0a0a;
-      --code-bd: #242424;
-      --ok: #3fb950;
-      --warn: #e3b341;
-      --bad: #f85149;
+      --bg: #FFFFFF;
+      --accent: #2F5BFF;
+      --accent2: #1647FF;
+      --white: #0A0C12;
+      --light: #2B3445;
+      --mid: #5B6577;
+      --card: #F4F6FB;
+      --card-bd: #DDE3EE;
+      --code-bg: #F4F6FB;
+      --code-bd: #DDE3EE;
+      --ok: #1A7F37;
+      --warn: #B45309;
+      --bad: #C2410C;
     }
 
     * {
@@ -34,7 +34,7 @@
       margin: 0;
       background: var(--bg);
       color: var(--light);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: "Lora", Georgia, "Times New Roman", serif;
       -webkit-font-smoothing: antialiased;
       line-height: 1.6;
       font-size: 17px;
@@ -181,9 +181,9 @@
 
     .card .chip {
       display: inline-block;
-      background: rgba(212, 122, 33, .14);
+      background: rgba(47, 91, 255, .14);
       color: var(--accent2);
-      border: 1px solid rgba(212, 122, 33, .4);
+      border: 1px solid rgba(47, 91, 255, .4);
       border-radius: 6px;
       font-size: 11px;
       font-weight: 800;
@@ -222,7 +222,7 @@
 
     .callout {
       border-left: 4px solid var(--accent);
-      background: #171310;
+      background: #EAF0FF;
       padding: 14px 18px;
       border-radius: 0 10px 10px 0;
       margin: 16px 0;
@@ -230,12 +230,12 @@
 
     .callout.break {
       border-color: var(--bad);
-      background: #1a1111;
+      background: #FDEDE6;
     }
 
     .callout.ok {
       border-color: var(--ok);
-      background: #101a12;
+      background: #E8F5EC;
     }
 
     .callout b {
@@ -273,7 +273,7 @@
       overflow-x: auto;
       font-size: 14px;
       line-height: 1.5;
-      color: #e6e6e6;
+      color: #0A0C12;
       margin: 12px 0;
     }
 
@@ -283,7 +283,7 @@
       border-radius: 5px;
       padding: 1px 6px;
       font-size: .92em;
-      color: #f0d9bf;
+      color: #2B3445;
     }
 
     pre code {
@@ -343,7 +343,7 @@
       height: 30px;
       border-radius: 8px;
       background: var(--accent);
-      color: #000;
+      color: #FFFFFF;
       font-weight: 800;
       display: flex;
       align-items: center;
@@ -365,7 +365,7 @@
     }
 
     figure.fig.light {
-      background: #fff;
+      background: #FFFFFF;
     }
 
     figure.fig img {
@@ -383,7 +383,7 @@
     }
 
     figure.fig.light figcaption {
-      color: #333;
+      color: #0A0C12;
     }
 
     figure.fig .src {
@@ -393,7 +393,7 @@
 
     figure.fig.light .src,
     figure.fig.light .src a {
-      color: #777;
+      color: #5B6577;
     }
 
     .two {
@@ -447,7 +447,7 @@
     }
 
     svg text {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+      font-family: "Lora", Georgia, "Times New Roman", serif;
     }
 
     footer {
@@ -481,7 +481,8 @@
       }
     }
   </style>
-</head>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"><style id="substack-theme">.copy-btn:hover,.chip.active{color:#FFFFFF!important}
+::selection{background:#2F5BFF;color:#FFFFFF}</style></head>
 
 <body>
   <div class="wrap">
@@ -622,41 +623,41 @@
         the messy work there, and hands back only the summary.</p>
       <figure class="fig">
         <svg viewBox="0 0 1000 400" width="100%" role="img" aria-label="Main context versus subagent context">
-          <rect x="20" y="30" width="430" height="340" rx="14" fill="#1E1E1E" stroke="#383838" />
-          <text x="40" y="62" fill="#fff" font-size="18" font-weight="700">MAIN CONVERSATION</text>
-          <text x="40" y="86" fill="#888" font-size="13">one context window, shared by everything you do</text>
-          <rect x="40" y="105" width="390" height="34" rx="6" fill="#161616" stroke="#262626" /><text x="52" y="128"
-            fill="#ccc" font-size="14">your prompt: why are Pro users churning?</text>
-          <rect x="40" y="147" width="390" height="34" rx="6" fill="#161616" stroke="#262626" /><text x="52" y="170"
-            fill="#ccc" font-size="14">delegation message to the subagent</text>
-          <rect x="40" y="189" width="390" height="34" rx="6" fill="#2a1a10" stroke="#D47A21" /><text x="52" y="212"
-            fill="#f0a44e" font-size="14" font-weight="700">summary comes back: 3 drivers, cited</text>
-          <rect x="40" y="231" width="390" height="34" rx="6" fill="#161616" stroke="#262626" /><text x="52" y="254"
-            fill="#ccc" font-size="14">your next question</text>
-          <text x="40" y="300" fill="#3fb950" font-size="14" font-weight="700">stays small, stays yours</text>
-          <text x="40" y="322" fill="#888" font-size="13">no file dumps, no logs, no search results</text>
-          <path d="M450 165 L550 165" stroke="#D47A21" stroke-width="3" marker-end="url(#a)" />
-          <path d="M550 205 L450 205" stroke="#D47A21" stroke-width="3" marker-end="url(#a)" />
-          <text x="500" y="152" fill="#f0a44e" font-size="12" text-anchor="middle">task</text>
-          <text x="500" y="228" fill="#f0a44e" font-size="12" text-anchor="middle">summary</text>
+          <rect x="20" y="30" width="430" height="340" rx="14" fill="#F4F6FB" stroke="#DDE3EE" />
+          <text x="40" y="62" fill="#0A0C12" font-size="18" font-weight="700">MAIN CONVERSATION</text>
+          <text x="40" y="86" fill="#5B6577" font-size="13">one context window, shared by everything you do</text>
+          <rect x="40" y="105" width="390" height="34" rx="6" fill="#F4F6FB" stroke="#DDE3EE" /><text x="52" y="128"
+            fill="#2B3445" font-size="14">your prompt: why are Pro users churning?</text>
+          <rect x="40" y="147" width="390" height="34" rx="6" fill="#F4F6FB" stroke="#DDE3EE" /><text x="52" y="170"
+            fill="#2B3445" font-size="14">delegation message to the subagent</text>
+          <rect x="40" y="189" width="390" height="34" rx="6" fill="#C9D6FF" stroke="#2F5BFF" /><text x="52" y="212"
+            fill="#1647FF" font-size="14" font-weight="700">summary comes back: 3 drivers, cited</text>
+          <rect x="40" y="231" width="390" height="34" rx="6" fill="#F4F6FB" stroke="#DDE3EE" /><text x="52" y="254"
+            fill="#2B3445" font-size="14">your next question</text>
+          <text x="40" y="300" fill="#1A7F37" font-size="14" font-weight="700">stays small, stays yours</text>
+          <text x="40" y="322" fill="#5B6577" font-size="13">no file dumps, no logs, no search results</text>
+          <path d="M450 165 L550 165" stroke="#2F5BFF" stroke-width="3" marker-end="url(#a)" />
+          <path d="M550 205 L450 205" stroke="#2F5BFF" stroke-width="3" marker-end="url(#a)" />
+          <text x="500" y="152" fill="#1647FF" font-size="12" text-anchor="middle">task</text>
+          <text x="500" y="228" fill="#1647FF" font-size="12" text-anchor="middle">summary</text>
           <defs>
             <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-              <path d="M0,0 L10,5 L0,10 z" fill="#D47A21" />
+              <path d="M0,0 L10,5 L0,10 z" fill="#2F5BFF" />
             </marker>
           </defs>
-          <rect x="550" y="30" width="430" height="340" rx="14" fill="#1E1E1E" stroke="#D47A21" stroke-width="2" />
-          <text x="570" y="62" fill="#fff" font-size="18" font-weight="700">SUBAGENT: survey-reader</text>
-          <text x="570" y="86" fill="#888" font-size="13">fresh window, own system prompt, Read + Glob only</text>
-          <rect x="570" y="105" width="390" height="34" rx="6" fill="#161616" stroke="#262626" /><text x="582" y="128"
-            fill="#ccc" font-size="14">reads 06-user-feedback/q1-2026-survey.md</text>
-          <rect x="570" y="147" width="390" height="34" rx="6" fill="#161616" stroke="#262626" /><text x="582" y="170"
-            fill="#ccc" font-size="14">reads 40 verbatim responses</text>
-          <rect x="570" y="189" width="390" height="34" rx="6" fill="#161616" stroke="#262626" /><text x="582" y="212"
-            fill="#ccc" font-size="14">counts, ranks, finds file and line for each quote</text>
-          <rect x="570" y="231" width="390" height="34" rx="6" fill="#161616" stroke="#262626" /><text x="582" y="254"
-            fill="#ccc" font-size="14">writes the summary, then this window is gone</text>
-          <text x="570" y="300" fill="#f85149" font-size="14" font-weight="700">cannot see your conversation</text>
-          <text x="570" y="322" fill="#888" font-size="13">so the file body must say everything it needs</text>
+          <rect x="550" y="30" width="430" height="340" rx="14" fill="#F4F6FB" stroke="#2F5BFF" stroke-width="2" />
+          <text x="570" y="62" fill="#0A0C12" font-size="18" font-weight="700">SUBAGENT: survey-reader</text>
+          <text x="570" y="86" fill="#5B6577" font-size="13">fresh window, own system prompt, Read + Glob only</text>
+          <rect x="570" y="105" width="390" height="34" rx="6" fill="#F4F6FB" stroke="#DDE3EE" /><text x="582" y="128"
+            fill="#2B3445" font-size="14">reads 06-user-feedback/q1-2026-survey.md</text>
+          <rect x="570" y="147" width="390" height="34" rx="6" fill="#F4F6FB" stroke="#DDE3EE" /><text x="582" y="170"
+            fill="#2B3445" font-size="14">reads 40 verbatim responses</text>
+          <rect x="570" y="189" width="390" height="34" rx="6" fill="#F4F6FB" stroke="#DDE3EE" /><text x="582" y="212"
+            fill="#2B3445" font-size="14">counts, ranks, finds file and line for each quote</text>
+          <rect x="570" y="231" width="390" height="34" rx="6" fill="#F4F6FB" stroke="#DDE3EE" /><text x="582" y="254"
+            fill="#2B3445" font-size="14">writes the summary, then this window is gone</text>
+          <text x="570" y="300" fill="#C2410C" font-size="14" font-weight="700">cannot see your conversation</text>
+          <text x="570" y="322" fill="#5B6577" font-size="13">so the file body must say everything it needs</text>
         </svg>
         <figcaption>Left is your window, right is the subagent's. The only things that cross the gap are the task going
           out and the summary coming back. Diagram: Claude Code Workshop, built from the sub-agents doc.</figcaption>
@@ -673,44 +674,44 @@
         plain text that becomes the subagent's system prompt.</p>
       <figure class="fig">
         <svg viewBox="0 0 1000 420" width="100%" role="img" aria-label="Anatomy of an agent file">
-          <rect x="20" y="20" width="560" height="380" rx="12" fill="#0a0a0a" stroke="#242424" />
-          <text x="40" y="52" fill="#888" font-size="14" font-family="Menlo,monospace">---</text>
-          <text x="40" y="78" fill="#f0d9bf" font-size="14" font-family="Menlo,monospace">name: survey-reader</text>
-          <text x="40" y="104" fill="#f0d9bf" font-size="14" font-family="Menlo,monospace">description: Use when the
+          <rect x="20" y="20" width="560" height="380" rx="12" fill="#FFFFFF" stroke="#DDE3EE" />
+          <text x="40" y="52" fill="#5B6577" font-size="14" font-family="Menlo,monospace">---</text>
+          <text x="40" y="78" fill="#2B3445" font-size="14" font-family="Menlo,monospace">name: survey-reader</text>
+          <text x="40" y="104" fill="#2B3445" font-size="14" font-family="Menlo,monospace">description: Use when the
             user asks what the</text>
-          <text x="40" y="126" fill="#f0d9bf" font-size="14" font-family="Menlo,monospace"> Q1 survey says about churn,
+          <text x="40" y="126" fill="#2B3445" font-size="14" font-family="Menlo,monospace"> Q1 survey says about churn,
             retention or</text>
-          <text x="40" y="148" fill="#f0d9bf" font-size="14" font-family="Menlo,monospace"> complaints. Reads
+          <text x="40" y="148" fill="#2B3445" font-size="14" font-family="Menlo,monospace"> complaints. Reads
             06-user-feedback/ only.</text>
-          <text x="40" y="170" fill="#f0d9bf" font-size="14" font-family="Menlo,monospace"> Example: "what does the
+          <text x="40" y="170" fill="#2B3445" font-size="14" font-family="Menlo,monospace"> Example: "what does the
             survey say about</text>
-          <text x="40" y="192" fill="#f0d9bf" font-size="14" font-family="Menlo,monospace"> action items?"</text>
-          <text x="40" y="218" fill="#f0d9bf" font-size="14" font-family="Menlo,monospace">tools: Read, Glob</text>
-          <text x="40" y="244" fill="#f0d9bf" font-size="14" font-family="Menlo,monospace">model: sonnet</text>
-          <text x="40" y="270" fill="#f0d9bf" font-size="14" font-family="Menlo,monospace">memory: project</text>
-          <text x="40" y="296" fill="#888" font-size="14" font-family="Menlo,monospace">---</text>
-          <text x="40" y="326" fill="#e6e6e6" font-size="14" font-family="Menlo,monospace">You read the Q1 2026 feedback
+          <text x="40" y="192" fill="#2B3445" font-size="14" font-family="Menlo,monospace"> action items?"</text>
+          <text x="40" y="218" fill="#2B3445" font-size="14" font-family="Menlo,monospace">tools: Read, Glob</text>
+          <text x="40" y="244" fill="#2B3445" font-size="14" font-family="Menlo,monospace">model: sonnet</text>
+          <text x="40" y="270" fill="#2B3445" font-size="14" font-family="Menlo,monospace">memory: project</text>
+          <text x="40" y="296" fill="#5B6577" font-size="14" font-family="Menlo,monospace">---</text>
+          <text x="40" y="326" fill="#0A0C12" font-size="14" font-family="Menlo,monospace">You read the Q1 2026 feedback
             survey and</text>
-          <text x="40" y="348" fill="#e6e6e6" font-size="14" font-family="Menlo,monospace">report churn drivers. Cite
+          <text x="40" y="348" fill="#0A0C12" font-size="14" font-family="Menlo,monospace">report churn drivers. Cite
             file and line for</text>
-          <text x="40" y="370" fill="#e6e6e6" font-size="14" font-family="Menlo,monospace">every quote. Never invent a
+          <text x="40" y="370" fill="#0A0C12" font-size="14" font-family="Menlo,monospace">every quote. Never invent a
             number.</text>
-          <rect x="30" y="36" width="540" height="272" rx="8" fill="none" stroke="#D47A21" stroke-dasharray="6 4" />
-          <rect x="30" y="312" width="540" height="72" rx="8" fill="none" stroke="#3fb950" stroke-dasharray="6 4" />
-          <path d="M580 170 L640 170" stroke="#D47A21" stroke-width="3" />
-          <path d="M580 348 L640 348" stroke="#3fb950" stroke-width="3" />
-          <rect x="640" y="60" width="340" height="220" rx="12" fill="#1E1E1E" stroke="#D47A21" />
-          <text x="660" y="92" fill="#f0a44e" font-size="16" font-weight="800">THE HIRING FORM</text>
-          <text x="660" y="122" fill="#fff" font-size="14">name: who it is</text>
-          <text x="660" y="148" fill="#fff" font-size="14">description: WHEN Claude calls it</text>
-          <text x="660" y="174" fill="#fff" font-size="14">tools: what it may touch</text>
-          <text x="660" y="200" fill="#fff" font-size="14">model: how much it costs</text>
-          <text x="660" y="226" fill="#fff" font-size="14">memory: whether it learns</text>
-          <text x="660" y="258" fill="#888" font-size="12">Claude reads this before every delegation</text>
-          <rect x="640" y="300" width="340" height="96" rx="12" fill="#1E1E1E" stroke="#3fb950" />
-          <text x="660" y="332" fill="#3fb950" font-size="16" font-weight="800">THE JOB DESCRIPTION</text>
-          <text x="660" y="358" fill="#fff" font-size="14">Becomes the system prompt. Replaces</text>
-          <text x="660" y="380" fill="#fff" font-size="14">Claude Code's own. Say everything.</text>
+          <rect x="30" y="36" width="540" height="272" rx="8" fill="none" stroke="#2F5BFF" stroke-dasharray="6 4" />
+          <rect x="30" y="312" width="540" height="72" rx="8" fill="none" stroke="#1A7F37" stroke-dasharray="6 4" />
+          <path d="M580 170 L640 170" stroke="#2F5BFF" stroke-width="3" />
+          <path d="M580 348 L640 348" stroke="#1A7F37" stroke-width="3" />
+          <rect x="640" y="60" width="340" height="220" rx="12" fill="#F4F6FB" stroke="#2F5BFF" />
+          <text x="660" y="92" fill="#1647FF" font-size="16" font-weight="800">THE HIRING FORM</text>
+          <text x="660" y="122" fill="#0A0C12" font-size="14">name: who it is</text>
+          <text x="660" y="148" fill="#0A0C12" font-size="14">description: WHEN Claude calls it</text>
+          <text x="660" y="174" fill="#0A0C12" font-size="14">tools: what it may touch</text>
+          <text x="660" y="200" fill="#0A0C12" font-size="14">model: how much it costs</text>
+          <text x="660" y="226" fill="#0A0C12" font-size="14">memory: whether it learns</text>
+          <text x="660" y="258" fill="#5B6577" font-size="12">Claude reads this before every delegation</text>
+          <rect x="640" y="300" width="340" height="96" rx="12" fill="#F4F6FB" stroke="#1A7F37" />
+          <text x="660" y="332" fill="#1A7F37" font-size="16" font-weight="800">THE JOB DESCRIPTION</text>
+          <text x="660" y="358" fill="#0A0C12" font-size="14">Becomes the system prompt. Replaces</text>
+          <text x="660" y="380" fill="#0A0C12" font-size="14">Claude Code's own. Say everything.</text>
         </svg>
         <figcaption>The two halves of an agent file. The frontmatter is the hiring form and the description line is what
           makes Claude call the agent at all. The body is the job description and it is the entire system prompt.

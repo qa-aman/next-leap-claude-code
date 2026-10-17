@@ -7,31 +7,20 @@
   <title>Claude Code Commands Reference</title>
   <style>
     :root {
-      --bg: #0d1117;
-      --panel: #161b22;
-      --panel2: #1c2330;
-      --border: #2a3140;
-      --text: #e6edf3;
-      --muted: #9aa7b5;
-      --accent: #d97757;
-      --accent2: #7aa2f7;
-      --green: #3fb950;
+      --bg: #FFFFFF;
+      --panel: #F4F6FB;
+      --panel2: #F4F6FB;
+      --border: #DDE3EE;
+      --text: #0A0C12;
+      --muted: #5B6577;
+      --accent: #2F5BFF;
+      --accent2: #1647FF;
+      --green: #1A7F37;
       --mono: "SF Mono", ui-monospace, "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
-      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --sans: "Lora", Georgia, "Times New Roman", serif;
     }
 
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f6f8fa;
-        --panel: #ffffff;
-        --panel2: #f0f3f6;
-        --border: #d8dee4;
-        --text: #1f2328;
-        --muted: #59636e;
-        --accent: #c4552f;
-        --accent2: #3b5bdb;
-      }
-    }
+    
 
     * {
       box-sizing: border-box
@@ -176,7 +165,7 @@
     .chip.active {
       background: var(--accent);
       border-color: var(--accent);
-      color: #fff
+      color: #0A0C12
     }
 
     main {
@@ -348,7 +337,8 @@
       }
     }
   </style>
-</head>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"><style id="substack-theme">.copy-btn:hover,.chip.active{color:#FFFFFF!important}
+::selection{background:#2F5BFF;color:#FFFFFF}</style></head>
 
 <body>
 
@@ -362,7 +352,7 @@
       <div class="meta">
         <span class="pill">Verified against <a
             href="https://code.claude.com/docs/en/commands">code.claude.com/docs</a></span>
-        <span class="pill">Updated 12-09-2026 (Claude Code v2.1.269)</span>
+        <span class="pill">Updated 17-10-2026 (Claude Code v2.1.302)</span>
         <span class="pill">Type <b>/</b> in Claude Code to see this live menu</span>
       </div>
     </div>
@@ -413,7 +403,7 @@
         </div>
         <div class="card" data-cat="essential slash">
           <div class="cmd">/model <span class="arg">[model]</span><span class="star">&#9733;</span></div>
-          <p class="desc">Switch the model (haiku, sonnet, opus, fable) and save it as default. Sonnet 5 at medium effort for daily work on a Pro plan, Opus 5 for hard reasoning and review passes, Haiku 4.5 for quick lookups. <span style="color:var(--muted)">fable</span> resolves to Fable 5.1 (01-09-2026), opt-in only.</p>
+          <p class="desc">Switch the model (haiku, sonnet, opus, fable) and save it as default. Opus 5.5 at medium effort is the default on every plan since v2.1.280. Sonnet 5.5 stretches a Pro plan's limits, Haiku 5.5 for quick lookups. <span style="color:var(--muted)">fable</span> resolves to Fable 5.1, opt-in only, and bills usage credits after a consent prompt.</p>
           <div class="link"><a href="https://code.claude.com/docs/en/model-config">docs / model</a></div>
         </div>
         <div class="card" data-cat="essential slash">
@@ -479,6 +469,21 @@
           <div class="link"><a href="https://code.claude.com/docs/en/common-workflows">docs / workflows</a></div>
         </div>
         <div class="card" data-cat="slash">
+          <div class="cmd">/effort <span class="arg">[level|auto|ultracode]</span></div>
+          <p class="desc">Set how hard Claude thinks: low to xhigh, max, or auto. Opus 5.5 starts at medium. <span style="color:var(--muted)">ultracode</span> lets Claude run workflows for the whole session.</p>
+          <div class="link"><a href="https://code.claude.com/docs/en/model-config">docs / model</a></div>
+        </div>
+        <div class="card" data-cat="slash">
+          <div class="cmd">/subtask <span class="arg">&lt;task&gt;</span></div>
+          <p class="desc">Spawn a forked subagent that inherits the full conversation and works in the background. Its result comes back to this conversation when it finishes.</p>
+          <div class="link"><a href="https://code.claude.com/docs/en/sub-agents">docs / sub-agents</a></div>
+        </div>
+        <div class="card" data-cat="slash">
+          <div class="cmd">/workflows</div>
+          <p class="desc">Watch, pause, resume or save running and completed workflows. Press <span style="color:var(--muted)">s</span> on a run to save it as a reusable command.</p>
+          <div class="link"><a href="https://code.claude.com/docs/en/workflows">docs / workflows</a></div>
+        </div>
+        <div class="card" data-cat="slash">
           <div class="cmd">/goal <span class="arg">[condition]</span></div>
           <p class="desc">Set a target condition and Claude keeps working until it is met. Pass <span
               style="color:var(--muted)">clear</span> to remove it.</p>
@@ -497,9 +502,8 @@
           <div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div>
         </div>
         <div class="card" data-cat="slash">
-          <div class="cmd">/fork <span class="arg">&lt;directive&gt;</span></div>
-          <p class="desc">Spawn a forked subagent that inherits the full conversation, so you can branch an experiment
-            without losing the main thread.</p>
+          <div class="cmd">/fork <span class="arg">[prompt]</span></div>
+          <p class="desc">Copy the current conversation into a new background session and keep working here. Pass a prompt and the copy starts on it right away.</p>
           <div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div>
         </div>
         <div class="card" data-cat="slash">
@@ -566,7 +570,7 @@
         </div>
         <div class="card" data-cat="slash">
           <div class="cmd">/diff <span class="arg">&middot; /focus</span></div>
-          <p class="desc">/diff opens a panel beside the conversation (fullscreen mode) showing your uncommitted changes as Claude edits. /focus toggles a view with only your last prompt, a one-line summary and the answer.</p>
+          <p class="desc">/diff shows your uncommitted changes as Claude edits: a side panel in fullscreen, a dialog in the classic view. /focus toggles a view with only your last prompt, a one-line summary and the answer (fullscreen only).</p>
           <div class="link"><a href="https://code.claude.com/docs/en/commands">docs / commands</a></div>
         </div>
         <div class="card" data-cat="slash">
@@ -669,6 +673,11 @@
         <div class="card" data-cat="slash">
           <div class="cmd">/skills</div>
           <p class="desc">List available skills with filtering and sorting.</p>
+          <div class="link"><a href="https://code.claude.com/docs/en/skills">docs / skills</a></div>
+        </div>
+        <div class="card" data-cat="slash">
+          <div class="cmd">/reload-skills</div>
+          <p class="desc">Re-scan skill folders so a skill folder you just created works without restarting. Edits to an existing SKILL.md are picked up on their own.</p>
           <div class="link"><a href="https://code.claude.com/docs/en/skills">docs / skills</a></div>
         </div>
         <div class="card" data-cat="slash">
@@ -866,12 +875,6 @@
           <p class="desc">File path mention. Triggers autocomplete to reference a specific file in your prompt.</p>
           <div class="link"><a href="https://code.claude.com/docs/en/interactive-mode">docs / interactive-mode</a></div>
         </div>
-        <div class="card" data-cat="keys slash">
-          <div class="cmd"># <span class="arg">at start</span></div>
-          <p class="desc">Quick-add a memory to CLAUDE.md without opening <span
-              style="color:var(--muted)">/memory</span>.</p>
-          <div class="link"><a href="https://code.claude.com/docs/en/memory">docs / memory</a></div>
-        </div>
       </div>
     </section>
 
@@ -894,8 +897,7 @@
         <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Ctrl+D</span></span><span
             class="kbd-desc">Exit the Claude Code session (EOF).</span></div>
         <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Shift+Tab</span></span><span
-            class="kbd-desc">Cycle permission modes: Manual &rarr; acceptEdits &rarr; plan &rarr; any others you
-            enabled.</span></div>
+            class="kbd-desc">Cycle permission modes. Sessions start in Auto (v2.1.283+): Auto &rarr; Manual &rarr; Accept edits &rarr; Plan &rarr; any others you enabled.</span></div>
         <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Ctrl+O</span></span><span
             class="kbd-desc">Toggle the transcript viewer for detailed tool usage and execution.</span></div>
         <div class="kbd-row" data-cat="keys"><span class="kbd-keys"><span class="kbd">Ctrl+R</span></span><span
@@ -943,7 +945,7 @@
 
   <footer>
     <div class="wrap">
-      <p><b>Sources</b> (official Claude Code docs, verified 11-07-2026):
+      <p><b>Sources</b> (official Claude Code docs, verified 17-10-2026):
         <a href="https://code.claude.com/docs/en/commands">Commands</a> &middot;
         <a href="https://code.claude.com/docs/en/cli-reference">CLI reference</a> &middot;
         <a href="https://code.claude.com/docs/en/interactive-mode">Interactive mode</a> &middot;

@@ -7,17 +7,17 @@
   <title>Claude Code Skills — Workshop</title>
   <style>
     :root {
-      --bg: #0D0D0D;
-      --accent: #D47A21;
-      --accent2: #f0a44e;
-      --white: #FFFFFF;
-      --light: #CCCCCC;
-      --mid: #888888;
-      --tag-bg: #1E1E1E;
-      --card: #161616;
-      --card-bd: #262626;
-      --code-bg: #0a0a0a;
-      --code-bd: #242424;
+      --bg: #FFFFFF;
+      --accent: #2F5BFF;
+      --accent2: #1647FF;
+      --white: #0A0C12;
+      --light: #2B3445;
+      --mid: #5B6577;
+      --tag-bg: #EAF0FF;
+      --card: #F4F6FB;
+      --card-bd: #DDE3EE;
+      --code-bg: #F4F6FB;
+      --code-bd: #DDE3EE;
     }
 
     * {
@@ -29,9 +29,9 @@
     html,
     body {
       height: 100%;
-      background: #000;
+      background: #FFFFFF;
       color: var(--white);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: "Lora", Georgia, "Times New Roman", serif;
       -webkit-font-smoothing: antialiased
     }
 
@@ -46,7 +46,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(120% 120% at 50% -10%, #161310 0%, #000 60%);
+      background: radial-gradient(120% 120% at 50% -10%, #FFFFFF 0%, #FFFFFF 60%);
       overflow: hidden
     }
 
@@ -55,12 +55,12 @@
       width: 1280px;
       height: 720px;
       background: var(--bg);
-      border: 1px solid #1c1c1c;
+      border: 1px solid #DDE3EE;
       border-radius: 14px;
       overflow: hidden;
       padding: 60px 70px 56px;
       display: none;
-      box-shadow: 0 30px 90px rgba(0, 0, 0, .6)
+      box-shadow: 0 30px 90px rgba(10, 12, 18, 0.1)
     }
 
     .slide::before {
@@ -115,7 +115,7 @@
     .live {
       align-self: flex-start;
       background: var(--accent);
-      color: #0d0d0d;
+      color: #FFFFFF;
       font-size: 12px;
       font-weight: 800;
       letter-spacing: .1em;
@@ -149,8 +149,8 @@
       margin-top: 14px;
       font-size: 15px;
       color: var(--light);
-      background: rgba(212, 122, 33, .08);
-      border: 1px solid rgba(212, 122, 33, .25);
+      background: rgba(47, 91, 255, .08);
+      border: 1px solid rgba(47, 91, 255, .25);
       border-radius: 8px;
       padding: 11px 16px
     }
@@ -161,7 +161,7 @@
       color: var(--accent2);
       font-size: 16px;
       font-style: italic;
-      border-top: 1px solid #1c1c1c
+      border-top: 1px solid #DDE3EE
     }
 
     .pagenum {
@@ -292,14 +292,14 @@
       padding: 18px 20px;
       font-size: 14.5px;
       line-height: 1.55;
-      color: #e8d9c8;
+      color: #2B3445;
       height: 100%;
       overflow: auto;
       white-space: pre
     }
 
     .code code {
-      color: #e8d9c8
+      color: #2B3445
     }
 
     .cards {
@@ -324,7 +324,7 @@
       height: 30px;
       border-radius: 8px;
       background: var(--accent);
-      color: #0d0d0d;
+      color: #FFFFFF;
       font-weight: 800;
       font-size: 15px;
       display: flex;
@@ -338,8 +338,8 @@
       font-weight: 800;
       letter-spacing: .12em;
       color: var(--accent);
-      background: rgba(212, 122, 33, .12);
-      border: 1px solid rgba(212, 122, 33, .3);
+      background: rgba(47, 91, 255, .12);
+      border: 1px solid rgba(47, 91, 255, .3);
       padding: 3px 9px;
       border-radius: 5px
     }
@@ -461,9 +461,9 @@
       gap: 14px;
       align-items: center;
       z-index: 30;
-      background: rgba(20, 20, 20, .8);
+      background: rgba(255, 255, 255, .92);
       backdrop-filter: blur(8px);
-      border: 1px solid #2a2a2a;
+      border: 1px solid #DDE3EE;
       border-radius: 30px;
       padding: 8px 16px
     }
@@ -480,7 +480,7 @@
 
     #nav button:hover {
       color: var(--accent);
-      background: #222
+      background: #F4F6FB
     }
 
     #dots {
@@ -494,7 +494,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #444;
+      background: #DDE3EE;
       cursor: pointer;
       transition: .2s
     }
@@ -508,7 +508,7 @@
       position: fixed;
       top: 14px;
       right: 16px;
-      color: #555;
+      color: #5B6577;
       font-size: 12px;
       z-index: 30
     }
@@ -527,7 +527,7 @@
       #stage {
         position: static;
         display: block;
-        background: #000
+        background: #FFFFFF
       }
 
       .slide {
@@ -542,7 +542,8 @@
       }
     }
   </style>
-</head>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"><style id="substack-theme">.copy-btn:hover,.chip.active{color:#FFFFFF!important}
+::selection{background:#2F5BFF;color:#FFFFFF}</style></head>
 
 <body>
   <div id="hint">&larr; &rarr; navigate &middot; F fullscreen &middot; P print</div>
@@ -1053,7 +1054,7 @@ Can you confirm by Wednesday?</code></pre>
           <div class="cards" style="grid-template-columns:repeat(5,1fr)">
             <div class="card"><span class="num">1</span>
               <div class="ch">Identify the pattern.</div>
-              <div class="cdesc">Pick a task you paste instructions for 3 or more times. That is your candidate.</div>
+              <div class="cdesc">Pick a task you have pasted instructions for twice. That is your candidate.</div>
             </div>
             <div class="card"><span class="num">2</span>
               <div class="ch">Create the folder.</div>
@@ -1099,8 +1100,8 @@ Can you confirm by Wednesday?</code></pre>
             </div>
             <div class="card"><span class="chip">STANDING RULE</span>
               <div class="ch">Memory</div>
-              <div class="cdesc">A preference Claude applies everywhere: date format, tone, naming. Add with #, view
-                with /memory. Split out of CLAUDE.md by design.</div>
+              <div class="cdesc">A preference that applies everywhere: date format, tone, naming. Put it in ~/.claude/CLAUDE.md, or tell Claude
+                "remember that ..." and it lands in auto memory. View both with /memory.</div>
             </div>
             <div class="card"><span class="chip">STABLE PROCEDURE</span>
               <div class="ch">Make it a skill</div>
@@ -1114,7 +1115,7 @@ Can you confirm by Wednesday?</code></pre>
             </div>
           </div>
         </div>
-        <div class="foot">A recurring rule is the trap: it belongs in memory, not CLAUDE.md and not a skill.</div>
+        <div class="foot">A personal rule is the trap: it belongs in ~/.claude/CLAUDE.md or memory, not the project CLAUDE.md and not a skill.</div>
       </div>
       <div class="pagenum">17 / 22</div>
     </section>
@@ -1127,7 +1128,7 @@ Can you confirm by Wednesday?</code></pre>
             <li>A skill is a markdown file with YAML frontmatter and an instructions body.</li>
             <li>The description field is the trigger. Load trigger phrases there, not in the body.</li>
             <li>Progressive disclosure: description always, body on trigger, resources on demand.</li>
-            <li>Three times pasting the same thing = time to make a skill.</li>
+            <li>Pasted the same thing twice = time to make a skill.</li>
             <li>Project facts in CLAUDE.md. Standing rules in memory. Procedures in skills. One-offs in chat.</li>
           </ul>
         </div>
@@ -1172,8 +1173,8 @@ Can you confirm by Wednesday?</code></pre>
               <div class="gdef">Metadata always in context, body loads on trigger, files load on demand.</div>
             </div>
             <div class="gitem">
-              <div class="gterm">3+ repeat heuristic</div>
-              <div class="gdef">If you do a task three times, it is probably a skill.</div>
+              <div class="gterm">Twice rule</div>
+              <div class="gdef">If you have pasted the same instructions twice, it is probably a skill.</div>
             </div>
           </div>
         </div>
@@ -1246,8 +1247,7 @@ Can you confirm by Wednesday?</code></pre>
       <div class="slide-in hero">
         <h1 class="htitle big">Questions?</h1>
         <div class="who">Aman Parmar · Ship with AI Lab</div>
-        <div class="links"><a href="https://amanparmar3.substack.com/" target="_blank"
-            rel="noopener"><span>Substack</span>https://amanparmar3.substack.com/</a><a
+        <div class="links"><a href="https://shipwithailab.substack.com/" target="_blank" rel="noopener"><span>Substack</span>https://shipwithailab.substack.com/</a><a href="https://www.youtube.com/@shipwithai-lab" target="_blank" rel="noopener"><span>YouTube</span>https://www.youtube.com/@shipwithai-lab</a><a href="https://www.instagram.com/shipwithai_lab/" target="_blank" rel="noopener"><span>Instagram</span>https://www.instagram.com/shipwithai_lab/</a><a
             href="https://www.linkedin.com/in/amanmparmar" target="_blank"
             rel="noopener"><span>LinkedIn</span>https://www.linkedin.com/in/amanmparmar</a><a
             href="https://github.com/qa-aman" target="_blank"

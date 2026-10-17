@@ -1,0 +1,37 @@
+{
+ "captured": [
+  "R1",
+  "R4",
+  "R5",
+  "R6",
+  "R8",
+  "R9",
+  "R10",
+  "R11",
+  "R15"
+ ],
+ "C1": 2,
+ "C2": 2,
+ "C3": 5,
+ "C4": 5,
+ "C5": 3,
+ "C6": 3,
+ "C7": 2,
+ "quotes": {
+  "C2": "Hosting: host-agnostic. Any Node 20+ host plus managed Postgres (with encryption at rest).",
+  "C3": "Run: `npm test -- tests/unit/roster` Expected: FAIL. The modules don't exist yet.",
+  "C4": "Launch requires no missed items and no wrong-person owners across the set."
+ },
+ "strength": "Owner accuracy has a strong design. The LLM copies the owner and due date exactly as written. Deterministic, unit-tested code then does exact roster and alias matching and never guesses. Items with an unresolved owner are blocked from the board, and a golden-set eval gates launch ('Owner is never guessed', 'Target: 100% recall on the golden set before launch'). This matches R4 to R6 closely.",
+ "weakness": "Several hard constraints from the brief are missing or contradicted. There is no 30-day deletion of raw notes: notes are kept forever and shown in a notes view. There is no cost or free-tier plan for the $20/month budget, and the default model is Opus. Hinglish is never mentioned. The 50,000-character cap rejects the 15,000-word notes the team actually pastes. The plan is also roughly 3,000 lines of code plus Docker, which is heavy for a non-technical PM who wants a URL in 2 weeks.",
+ "errors": [
+  "MAX_NOTES_CHARS = 50,000 is about 8,000 words, but R2 notes run up to 15,000 words (about 90,000 characters). The longest meetings would be rejected, and chunking is explicitly out of scope ('Chunking is out of scope for v1').",
+  "Raw notes are stored indefinitely ('Nothing is hard-deleted after commit'), and the board links to a full notes view. This contradicts R7, which requires raw notes to be deleted after 30 days. There is no retention job.",
+  "The default model ID 'claude-opus-5' does not match any known current model ID (e.g. claude-opus-5-5 or claude-sonnet-5). Opus is also the most expensive choice, and the plan does no cost estimate against the $20/month cap.",
+  "No hosting target is chosen ('Any Node 20+ host plus managed Postgres'). Local dev and E2E need Docker. Neither suits a non-technical PM who needs a shareable URL on free-tier hosting.",
+  "'next week' is resolved to the following Monday. That arguably invents a specific date the notes never stated, which conflicts with R5's rule against inventing dates.",
+  "Dedupe works only within one meeting (possible_duplicate) or for identical pasted notes (notes_hash). The same action item raised in two different meetings (R16) is not detected.",
+  "The eval harness scores item recall and owner correctness but not due-date correctness, so R5 accuracy is never measured on real notes.",
+  "Hinglish (mixed Hindi and English) notes are not covered in the prompt, the date parsing (chrono-node, English only) or the golden set."
+ ]
+}

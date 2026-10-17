@@ -1,0 +1,11 @@
+{
+ "winner": "Y",
+ "margin": "clear",
+ "why": [
+  "Requirement capture (R7 privacy): Y implements the 30-day deletion of raw notes with a nightly cron job ('delete `notes` past `delete_after`'), keeps item quotes, and tests it at day 31. X stores `notesText` on `meetings` indefinitely and never mentions retention, so a stated confidentiality requirement is missing.",
+  "Input size (R2): X caps notes at 'MAX_NOTES_CHARS = 50_000', about 8K words, and tells users to 'split the notes into two meetings'. That rejects the 15,000-word Zoom transcripts the team actually pastes. Y sets 'Maximum 30,000 words (2× the expected maximum)', uses a single call with no chunking, and handles transcript speaker labels ('Speaker 2:', 'Name (00:12:31):').",
+  "Budget and non-technical builder (R12, R13): Y picks Cloudflare Workers + D1 with a costed budget ('$5' hosting plus '~$5–15' AI), a '$15' hard spend cap, a Sonnet fallback lever, auto-deploy from GitHub, and a click-by-click setup guide that ends in a workers.dev URL. X is 'host-agnostic… any Node 20.9+ host plus managed Postgres', relies on docker-compose for local development, and never estimates cost. Getting to a shareable URL would be hard for this PM.",
+  "Verification and risk handling: both plans are test-first. Y ties each phase to a pass/fail check, stops for PM sign-off after each phase, and sets explicit eval launch bars ('≥ 95% found; 0 wrong confident owners; 0 wrong confident dates'). It also adds an 'Owner not in quote' check and a prompt-injection eval case. X has a strong code-level plan, including an eval ('no missed items and no wrong-person owners') and a DB constraint for owner-required, but does not cover the PM's operational risks.",
+  "Trade-offs against Y: Y is less executable line by line than X, which gives full code and exact test commands. Y also adds scope beyond the brief (review locks and take-over, stats page, 'Dropped' status, roster-gated login), which endangers the 2-week timeline (R14). Neither plan addresses Hinglish (R3). Even so, X's misses on retention, the input limit, budget and deployment are more damaging to this PM's product."
+ ]
+}

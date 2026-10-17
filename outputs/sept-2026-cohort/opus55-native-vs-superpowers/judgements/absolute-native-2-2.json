@@ -1,0 +1,42 @@
+{
+ "captured": [
+  "R1",
+  "R2",
+  "R4",
+  "R5",
+  "R6",
+  "R7",
+  "R8",
+  "R9",
+  "R10",
+  "R11",
+  "R12",
+  "R13",
+  "R15",
+  "R16"
+ ],
+ "C1": 4,
+ "C2": 4,
+ "C3": 5,
+ "C4": 5,
+ "C5": 3,
+ "C6": 4,
+ "C7": 4,
+ "quotes": {
+  "C2": "The model never picks the owner. It reports owner mentions as written; code does the roster matching",
+  "C3": "Files are grouped by the phase that creates them (P1–P5). Later phases edit earlier files, and the phase sections say which.",
+  "C4": "≥ 95% found; 0 wrong confident owners; 0 wrong confident dates and no dates on vague items; Quote not found < 2%"
+ },
+ "strength": "The model only reports raw owner references and date phrases, and ordinary code does roster matching, date resolution, quote verification and the owner-in-quote check. This, plus a real-API eval with launch bars (\"0 wrong confident owners\"), targets R6: flag rather than guess, and measure it against the 34% baseline.",
+ "weakness": "Scope and timeline. The 2-week deadline (R14) is never mentioned, yet v1 includes draft locks with heartbeat and take-over, a minimap, speaker mapping, a stats page, meeting delete, undo toasts and a re-paste hash guard. That is far more than the brief asks for in two weeks. Hinglish (R3) is also missing from the prompt, the eval set and the risk list.",
+ "errors": [
+  "Privacy conflict with R7: the plan commits Aman's 10 real labelled meetings to eval/cases/ in the GitHub repo. That keeps raw confidential notes indefinitely, beyond the 30-day deletion rule; a private repo does not fix this.",
+  "The plan picks Workers Paid ($5/month) without explaining why the free tier won't do, even though free-tier hosting was preferred. D1, Cron Triggers and Workflows are all offered on the Workers Free plan.",
+  "The worst-case budget is $5 hosting + a $15 Anthropic cap = $20, which is at the ceiling, not under it (spec says \"~$10–20\"). Paid eval runs ($2–4 each) count against the same $15 cap.",
+  "max_tokens 32000 with adaptive thinking: thinking tokens count toward max_tokens. On long 15K-word transcripts, a max_tokens stop is treated as a final non-retryable failure instead of being handled.",
+  "After 30 days, verbatim quotes from the notes are kept on items. This goes slightly beyond \"only the action items are kept\" (R7).",
+  "Inconsistency: spec §14 step 4 still tells Aman to enter ALLOWED_DOMAIN in the dashboard, but plan decision 3 moves it to wrangler.jsonc.",
+  "Hinglish (R3) is not handled: fold(), normalization and fuzzy quote matching are not designed or tested for code-mixed or Devanagari text.",
+  "R15 is only partly listed: audio recording and Jira sync are not named in §17 out-of-scope, though \"Pasting is the only input\" implies audio is excluded."
+ ]
+}

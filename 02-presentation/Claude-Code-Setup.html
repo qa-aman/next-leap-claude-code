@@ -7,17 +7,17 @@
   <title>Claude Code Setup — Workshop</title>
   <style>
     :root {
-      --bg: #0D0D0D;
-      --accent: #D47A21;
-      --accent2: #f0a44e;
-      --white: #FFFFFF;
-      --light: #CCCCCC;
-      --mid: #888888;
-      --tag-bg: #1E1E1E;
-      --card: #161616;
-      --card-bd: #262626;
-      --code-bg: #0a0a0a;
-      --code-bd: #242424;
+      --bg: #FFFFFF;
+      --accent: #2F5BFF;
+      --accent2: #1647FF;
+      --white: #0A0C12;
+      --light: #2B3445;
+      --mid: #5B6577;
+      --tag-bg: #EAF0FF;
+      --card: #F4F6FB;
+      --card-bd: #DDE3EE;
+      --code-bg: #F4F6FB;
+      --code-bd: #DDE3EE;
     }
 
     * {
@@ -29,9 +29,9 @@
     html,
     body {
       height: 100%;
-      background: #000;
+      background: #FFFFFF;
       color: var(--white);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: "Lora", Georgia, "Times New Roman", serif;
       -webkit-font-smoothing: antialiased
     }
 
@@ -46,7 +46,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(120% 120% at 50% -10%, #161310 0%, #000 60%);
+      background: radial-gradient(120% 120% at 50% -10%, #FFFFFF 0%, #FFFFFF 60%);
       overflow: hidden
     }
 
@@ -55,12 +55,12 @@
       width: 1280px;
       height: 720px;
       background: var(--bg);
-      border: 1px solid #1c1c1c;
+      border: 1px solid #DDE3EE;
       border-radius: 14px;
       overflow: hidden;
       padding: 62px 70px 58px;
       display: none;
-      box-shadow: 0 30px 90px rgba(0, 0, 0, .6)
+      box-shadow: 0 30px 90px rgba(10, 12, 18, 0.1)
     }
 
     .slide::before {
@@ -115,7 +115,7 @@
     .live {
       align-self: flex-start;
       background: var(--accent);
-      color: #0d0d0d;
+      color: #FFFFFF;
       font-size: 12px;
       font-weight: 800;
       letter-spacing: .1em;
@@ -151,7 +151,7 @@
       color: var(--accent2);
       font-size: 16px;
       font-style: italic;
-      border-top: 1px solid #1c1c1c
+      border-top: 1px solid #DDE3EE
     }
 
     .pagenum {
@@ -272,14 +272,14 @@
       padding: 20px 22px;
       font-size: 15px;
       line-height: 1.6;
-      color: #e8d9c8;
+      color: #2B3445;
       height: 100%;
       overflow: auto;
       white-space: pre
     }
 
     .code code {
-      color: #e8d9c8
+      color: #2B3445
     }
 
     /* cards */
@@ -305,7 +305,7 @@
       height: 30px;
       border-radius: 8px;
       background: var(--accent);
-      color: #0d0d0d;
+      color: #FFFFFF;
       font-weight: 800;
       font-size: 15px;
       display: flex;
@@ -319,8 +319,8 @@
       font-weight: 800;
       letter-spacing: .12em;
       color: var(--accent);
-      background: rgba(212, 122, 33, .12);
-      border: 1px solid rgba(212, 122, 33, .3);
+      background: rgba(47, 91, 255, .12);
+      border: 1px solid rgba(47, 91, 255, .3);
       padding: 3px 9px;
       border-radius: 5px
     }
@@ -459,9 +459,9 @@
       gap: 14px;
       align-items: center;
       z-index: 30;
-      background: rgba(20, 20, 20, .8);
+      background: rgba(255, 255, 255, .92);
       backdrop-filter: blur(8px);
-      border: 1px solid #2a2a2a;
+      border: 1px solid #DDE3EE;
       border-radius: 30px;
       padding: 8px 16px
     }
@@ -478,7 +478,7 @@
 
     #nav button:hover {
       color: var(--accent);
-      background: #222
+      background: #F4F6FB
     }
 
     #dots {
@@ -492,7 +492,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #444;
+      background: #DDE3EE;
       cursor: pointer;
       transition: .2s
     }
@@ -506,7 +506,7 @@
       position: fixed;
       top: 14px;
       right: 16px;
-      color: #555;
+      color: #5B6577;
       font-size: 12px;
       z-index: 30
     }
@@ -525,7 +525,7 @@
       #stage {
         position: static;
         display: block;
-        background: #000
+        background: #FFFFFF
       }
 
       .slide {
@@ -540,7 +540,8 @@
       }
     }
   </style>
-</head>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"><style id="substack-theme">.copy-btn:hover,.chip.active{color:#FFFFFF!important}
+::selection{background:#2F5BFF;color:#FFFFFF}</style></head>
 
 <body>
   <div id="hint">← → navigate · F fullscreen · P print</div>
@@ -851,7 +852,7 @@ claude --help</code></pre>
             <div class="card">
               <div class="ch">/diff &nbsp;·&nbsp; /focus</div>
               <div class="csub">See what changed, or see less</div>
-              <div class="cdesc">/diff opens a panel of your uncommitted changes as Claude edits (new in v2.1.260, 03-09-2026). /focus shows only your prompt, a one-line summary and the answer. Both need /tui fullscreen.</div>
+              <div class="cdesc">/diff shows your uncommitted changes as Claude edits: a side panel in /tui fullscreen, a dialog in the classic view. /focus shows only your prompt, a one-line summary and the answer, and needs /tui fullscreen.</div>
             </div>
             <div class="card">
               <div class="ch">/doctor &nbsp;·&nbsp; /skill-doctor</div>
@@ -861,7 +862,7 @@ claude --help</code></pre>
             <div class="card">
               <div class="ch">/model &nbsp;·&nbsp; /effort</div>
               <div class="csub">Pick the brain and how hard it thinks</div>
-              <div class="cdesc">Sonnet 5 is the workshop default on a Pro plan (the built-in effort default is high, set medium with /effort to save tokens). Opus 5 for a review pass. Fable 5.1 (01-09-2026) is opt-in with /model fable.</div>
+              <div class="cdesc">Opus 5.5 is the default on every plan since v2.1.280, at medium effort. On a Pro plan, /model sonnet (Sonnet 5.5) stretches your limits. Fable 5.1 is opt-in with /model fable and bills usage credits after a consent prompt.</div>
             </div>
           </div>
         </div>
@@ -875,16 +876,16 @@ claude --help</code></pre>
           <div class="tag">PART 3 · CORE COMMANDS</div>
         </div>
         <h2 class="stitle">Four Modes, One Shortcut: Shift+Tab Cycles Them</h2>
-        <div class="lead">The active mode shows in the status line. On a Pro, Max or Team plan a new session starts in Auto mode. Shift+Tab cycles Auto to Manual to Accept edits to Plan, then Auto again.</div>
+        <div class="lead">The active mode shows in the status line. Since v2.1.283 every new terminal and VS Code session starts in Auto mode. Shift+Tab cycles Auto to Manual to Accept edits to Plan, then Auto again.</div>
         <div class="body">
           <div class="cards" style="grid-template-columns:repeat(4,1fr)">
             <div class="card">
               <div class="ch">Auto</div>
-              <div class="csub">The starting mode on Pro, Max, Team</div>
+              <div class="csub">The starting mode since v2.1.283</div>
               <div class="cdesc">A second model, the classifier, reviews each action instead of you. Long tasks, less prompt fatigue. It asks once before reading outside your project folder, and when it blocks an action, Claude is told which rule stopped it. Workshop tip: switch to Manual before changing settings files.</div>
             </div>
             <div class="card">
-              <div class="ch">Manual (default)</div>
+              <div class="ch">Manual</div>
               <div class="csub">Asks before every write</div>
               <div class="cdesc">Approves each file edit and command as it comes. Sensitive work, or when you want to
                 review each change. A Bash prompt here offers "Yes, and switch to auto mode".</div>
@@ -1377,12 +1378,12 @@ claude --help</code></pre>
         <div class="body">
           <div class="rec-head">Eight things to remember</div>
           <ul class="bul">
-            <li>Install: one curl command on Mac, irm command on Windows (Git for Windows required)</li>
+            <li>Install: one curl command on Mac, irm command on Windows (Git for Windows optional)</li>
             <li>Login: pick Claude account with subscription, complete browser OAuth, choose theme</li>
             <li>Verify: claude --version, claude doctor, /doctor inside a session</li>
             <li>Commands: /help, /clear, /exit (Ctrl+D), ESC to interrupt, plus /status, /usage, /cost, /config, /memory
             </li>
-            <li>Four modes on Shift+Tab: Default, Plan, Accept edits, Auto. Start in Plan when stakes are high</li>
+            <li>Four modes on Shift+Tab: Auto (the start), Manual, Accept edits, Plan. Start in Plan when stakes are high</li>
             <li>CLAUDE.md: global (personal) — project (shared) — subfolder (scoped). More specific wins</li>
             <li>Settings: settings.json for team rules, settings.local.json for personal machine only</li>
             <li>MCP: claude mcp add --transport http [name] [url] — then /mcp to authenticate</li>
@@ -1439,8 +1440,7 @@ claude --help</code></pre>
       <div class="slide-in hero">
         <h1 class="htitle big">Questions?</h1>
         <div class="who">Aman Parmar · Ship with AI Lab</div>
-        <div class="links"><a href="https://amanparmar3.substack.com/" target="_blank"
-            rel="noopener"><span>Substack</span>https://amanparmar3.substack.com/</a><a
+        <div class="links"><a href="https://shipwithailab.substack.com/" target="_blank" rel="noopener"><span>Substack</span>https://shipwithailab.substack.com/</a><a href="https://www.youtube.com/@shipwithai-lab" target="_blank" rel="noopener"><span>YouTube</span>https://www.youtube.com/@shipwithai-lab</a><a href="https://www.instagram.com/shipwithai_lab/" target="_blank" rel="noopener"><span>Instagram</span>https://www.instagram.com/shipwithai_lab/</a><a
             href="https://www.linkedin.com/in/amanmparmar" target="_blank"
             rel="noopener"><span>LinkedIn</span>https://www.linkedin.com/in/amanmparmar</a><a
             href="https://github.com/qa-aman" target="_blank"

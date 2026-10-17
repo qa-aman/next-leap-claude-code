@@ -1,0 +1,20 @@
+{
+ "arm": "native",
+ "run": "1",
+ "builder_calls": 30,
+ "sim_calls": 30,
+ "builder_cost_usd": 66.63116959999999,
+ "sim_cost_usd": 0.7716632,
+ "wall_s": 1128.3999999999999,
+ "questions_rounds": 28,
+ "errors": 0,
+ "rounds_total": 30,
+ "artifact_files": [
+  "CLAUDE.md",
+  "PLAN.md",
+  "SPEC.md",
+  "docs__setup-accounts.md",
+  "tests__extraction__README.md"
+ ],
+ "artifact_words": 10951
+}

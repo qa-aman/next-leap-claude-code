@@ -1,0 +1,6 @@
+{
+  "eval_id": 2,
+  "eval_name": "follow-up-ghosted-dana",
+  "prompt": "Dana Rivera hasn't replied in 8 days to my question on whether the Salesforce integration can expose MeetFlow action items through the API by the May launch. I've chased once already. I need a yes or no by Thursday 19-03 for sprint planning. Write the follow-up.",
+  "assertions": []
+}

@@ -1,0 +1,6 @@
+{
+  "eval_id": 1,
+  "eval_name": "ask-borrow-engineer",
+  "prompt": "I need to ask the Head of Data Science, Ravi, to lend me one ML engineer for two weeks starting 23-03 to help retrain the action item model. Write the email. Use the repo for context on why accuracy matters.",
+  "assertions": []
+}

@@ -41,6 +41,7 @@ Answers to open questions from workshop sessions, sourced from official Anthropi
 - **September 2026 Session 10 additions:** 27-09-2026 (Q404-Q414 - installer extract errors, Hermes in Cursor, Claude vs Hermes, state.db vs Claude Code transcripts, the four memory places, skills and learned skills, unofficial skills, hallucination and compression, the memory interview prompt, and memory troubleshooting, Sunday morning - see "September 2026 - Session 10 Additions" section)
 - **September 2026 Session 11 additions:** 27-09-2026 (Q415-Q425 - the Telegram bot and a laptop that is off, hosting on managed or self-managed servers, the "no inference provider" message, how Telegram reaches Hermes, one bot per profile, bot pairing and /sethome, the Composio skill, Composio vs individual MCP servers, moving to another laptop, USER.md vs a personal profile file, and keeping Hermes healthy, Sunday afternoon, last session of the cohort - see "September 2026 - Session 11 Additions" section)
 - **October 2026 Session 1 additions:** 17-10-2026 (Q426-Q440 - new cohort: Claude subscription vs Cursor, the PATH error, terminal vs app vs extension, where sessions live and the 30-day cleanup, the status line, effort, permission modes, plugin scopes, how skills trigger and load, plugin security (correction), auditing a skill, plugin updates and /reload-plugins (correction), skills in Codex and Cursor, and /init for a new project, Saturday morning - see "October 2026 - Session 1 Additions" section)
+- **October 2026 Session 2 additions:** 17-10-2026 (Q441-Q454 - skills and slash commands merged, same-name precedence (correction), what loads when and the 500-line guidance (correction), plugin vs skill, skills as an MCP server, connector vs MCP server and in-house tools, artifacts, cloud vs desktop vs /loop scheduling, missed-run catch-up (correction), one-off vs durable feedback and evals, files inside a skill, routing 40 skills, folder structure, and skills in Codex, Saturday afternoon - see "October 2026 - Session 2 Additions" section)
 
 If you are reading this after mid-2026, re-verify every URL and command before relying on the answers - product behavior, plan limits, UI labels, and command flags change.
 
@@ -7087,3 +7088,247 @@ Set `CLAUDE_CODE_NEW_INIT=1` before `/init` for an interactive version that also
 **Sources:**
 - https://code.claude.com/docs/en/memory (verified 17-10-2026)
 - https://code.claude.com/docs/en/commands (verified 17-10-2026)
+
+---
+
+# October 2026 - Session 2 Additions
+
+New questions raised by the NextLeap Applied Generative AI Bootcamp cohort on 17-10-2026 during Session 2 (skills from a real workflow: the service desk report, feedback loops, scheduling and MCP, Saturday afternoon). All URLs verified 17-10-2026.
+
+---
+
+## Q441: Are skills and slash commands the same thing now? (Deepak)
+
+**Short answer:** Yes. Custom commands have been merged into skills. A file at `.claude/commands/deploy.md` and a skill at `.claude/skills/deploy/SKILL.md` both create `/deploy` and work the same way. Old command files keep working.
+
+A skill adds three things a command file doesn't have:
+- A folder for supporting files (references, scripts, assets)
+- Front matter that controls whether you, Claude, or both can invoke it
+- Automatic use: Claude can load it when your request matches its description
+
+If a skill and a command file share a name, the skill runs.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 17-10-2026)
+
+---
+
+## Q442: The same skill exists at project level and global level. Which one runs? (Deepak)
+
+**Short answer:** The global (personal) one. This corrects the answer given in class. The docs say: "Enterprise over personal, and personal over project. With `deploy` in both `~/.claude/skills/` and the project's `.claude/skills/`, `/deploy` runs the personal one."
+
+| Same name in | Which one runs |
+|---|---|
+| Personal (`~/.claude/skills/`) and project (`.claude/skills/`) | Personal |
+| Your skill and a bundled command | Your skill |
+| A plugin skill and any other | Both. Plugin skills are named `/plugin-name:skill-name` |
+
+To make a project version win, give it a different name.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 17-10-2026)
+
+---
+
+## Q443: What loads every time, what loads only when the skill runs, and is 500 lines a hard limit? (paraphrased from the session)
+
+**Short answer:** The name and description load in every session, so Claude knows the skill exists. The rest of `SKILL.md` loads only when the skill runs, and its reference files only when the skill reads them. This corrects the in-class wording, which had the description loading on use.
+
+| Part | When it enters context |
+|---|---|
+| Name and description | Every turn |
+| `SKILL.md` body | When the skill is invoked |
+| `references/`, `scripts/`, `assets/` | When the skill reads or runs them |
+
+On length, the docs say "Keep `SKILL.md` under 500 lines. Move detailed reference material to separate files." That is guidance, not a cut-off. The docs don't say Claude stops reading after 500 lines. The description is shortened in the skill listing after 1,536 characters, so put the main use case first.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 17-10-2026)
+
+---
+
+## Q444: What's the difference between a plugin and a skill, and how do I share each? (Bhavya, Deepak, Vikram)
+
+**Short answer:** A skill is one set of instructions in a folder. A plugin is a package that can hold several skills plus agents, hooks, MCP servers and more, installed from a marketplace. Share a skill by copying its folder (or a GitHub repo). Share a plugin through a marketplace, so people install it with `/plugin` and get your updates.
+
+| | Skill | Plugin |
+|---|---|---|
+| What it holds | `SKILL.md` and its files | Skills, agents, hooks, MCP servers, LSP servers |
+| How others get it | Copy the folder or clone a repo | Install from a marketplace |
+| Updates | They copy again | Auto-update if the marketplace has it on, or "Update now" in `/plugin` |
+| Name when invoked | `/skill-name` | `/plugin-name:skill-name` |
+
+Skill Creator is a plugin whose main content is one skill, which is why it shows up as a skill when it runs.
+
+**Sources:**
+- https://code.claude.com/docs/en/plugins (verified 17-10-2026)
+- https://code.claude.com/docs/en/plugins-reference (verified 17-10-2026)
+- https://code.claude.com/docs/en/discover-plugins (verified 17-10-2026)
+
+---
+
+## Q445: Can I serve my skills from one MCP server instead of copying them into every project? (Sohan)
+
+**Short answer:** You can, but you rebuild what Claude Code already does for skills. Claude Code loads only skill descriptions until one is needed. An MCP server would need tools that list skills and return one on request, or every skill's text lands in context. For sharing across projects, the built-in options are simpler.
+
+| Need | Simpler built-in option |
+|---|---|
+| The same skills in all my projects | Put them in `~/.claude/skills/` (personal) |
+| The same skills for a team | Package them as a plugin in a team marketplace |
+| Skills in other AI tools too | Agent Skills is an open standard. The same folder works in other tools that support it |
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 17-10-2026)
+- https://code.claude.com/docs/en/plugins (verified 17-10-2026)
+- https://agentskills.io (verified 17-10-2026)
+
+---
+
+## Q446: What's the difference between a connector and an MCP server, and what if my in-house tool has no connector? (Deepak, Ambrosh)
+
+**Short answer:** A connector is an MCP server, named for non-technical users. Each one exposes tools (for Gmail: create a draft, apply a label). If your tool isn't listed, add a custom connector with a name and the server URL. If no MCP server exists at all, someone builds one on top of the tool's API or database.
+
+For an in-house tool:
+1. Check if it has an API. If not, its data lives in a database the team can expose.
+2. Build a small MCP server with an official SDK that calls that API.
+3. Add it in Claude Code with `claude mcp add`, or in Claude as a custom connector.
+4. Keep credentials out of the repo, in environment variables.
+
+**Sources:**
+- https://claude.com/docs/connectors/building (verified 17-10-2026)
+- https://code.claude.com/docs/en/mcp (verified 17-10-2026)
+- https://modelcontextprotocol.io/docs/learn/architecture (verified 17-10-2026)
+
+---
+
+## Q447: What is an artifact, did Claude choose it on its own, and does it cost more than working in the terminal? (Vikram, a participant)
+
+**Short answer:** An artifact is a live web page Claude Code publishes from your session to a private URL on claude.ai. Claude publishes one when an interactive page is the clearest output, like a dashboard. It stays private until you share it, and each publish is a version you can pick from.
+
+- **Sharing:** from the Share control in the page header, with people in your organization or as a public link.
+- **Cost:** the docs don't describe a separate charge. Building the page is ordinary session work, the same as writing a file.
+- Artifacts need a Pro, Max, Team or Enterprise plan and a signed-in session.
+
+**Sources:**
+- https://code.claude.com/docs/en/artifacts (verified 17-10-2026)
+
+---
+
+## Q448: Can this skill run every Friday at 7 PM? Which kind of scheduler should I use? (a participant)
+
+**Short answer:** Yes. Pick by where the data lives. A cloud routine runs with your laptop off, but it works on a fresh clone of your repo, so a local Excel file isn't there. A Desktop scheduled task can read local files, but needs your machine on.
+
+| | Cloud routine | Desktop scheduled task | `/loop` |
+|---|---|---|---|
+| Runs on | Anthropic cloud | Your machine | Your machine |
+| Needs machine on | No | Yes | Yes |
+| Needs an open session | No | No | Yes |
+| Local files | No (fresh clone) | Yes | Yes |
+| Minimum interval | 1 hour | 1 minute | 1 minute |
+
+For ticket data, the reliable setup is: fetch from ServiceNow through a connector, or have the export land in the repo, then schedule in the cloud. Add a guard so the job checks whether this period's report already exists.
+
+**Sources:**
+- https://code.claude.com/docs/en/scheduled-tasks (verified 17-10-2026)
+- https://code.claude.com/docs/en/routines (verified 17-10-2026)
+- https://code.claude.com/docs/en/desktop-scheduled-tasks (verified 17-10-2026)
+
+---
+
+## Q449: My laptop is off at 10 AM and I open it at 10:15. Does the scheduled task still run? (Deepak, Sohan)
+
+**Short answer:** For a Desktop scheduled task, yes. This corrects the in-class answer that a separate cron is needed. When the app starts or the computer wakes, Desktop checks for runs missed in the last seven days and starts one catch-up run for the most recent one.
+
+- Older misses are dropped: a daily task that missed six days runs once.
+- A notification shows when a catch-up starts.
+- A 9 AM task can end up running at 11 PM. If timing matters, put the guard in the prompt, for example "if it's after 5 PM, post a summary of what was missed instead".
+- Tasks only run while the app is open and the computer awake. "Keep computer awake" in Settings stops idle sleep, but closing the lid still sleeps.
+
+The class demo used a macOS launchd job with a "has a Friday 19:00 passed since the last send?" check. That works too, and also retries failed sends, but the built-in Desktop catch-up covers Deepak's case without a script.
+
+**Sources:**
+- https://code.claude.com/docs/en/desktop-scheduled-tasks (verified 17-10-2026)
+
+---
+
+## Q450: How do I separate one-off feedback from feedback that should change the skill? Are evals the answer? (a participant, Vikram)
+
+**Short answer:** Sort the feedback before it reaches the skill. Ask Claude to split it into "durable rule" and "this report only", then you approve each line. Log the durable ones in a feedback file the skill reads. Evals are a different job: they check the skill's output against fixed test prompts, so you know a change helped.
+
+| Tool | What it checks | Example |
+|---|---|---|
+| Feedback log (`references/feedback.md`) | Which review points became rules | "Leaders get 20 seconds: four pointers at the top" |
+| Guardrail in `SKILL.md` | A check the skill always runs | "Summary numbers must match the source file before publishing" |
+| Eval | Whether a new version beats the old one on the same prompts | Skill Creator runs evals and benchmarks against a baseline |
+
+Expect to sort by hand for the first 5 to 10 reviews. Then write the pattern you keep applying into the skill as a sorting rule.
+
+**Sources:**
+- https://github.com/anthropics/skills/tree/main/skills/skill-creator (verified 17-10-2026)
+- https://code.claude.com/docs/en/skills (verified 17-10-2026)
+
+---
+
+## Q451: Can a skill folder hold screenshots, HTML or other files? (a participant)
+
+**Short answer:** Yes. Put them next to `SKILL.md`, for example in `references/`, `assets/` or `scripts/`, and mention each one in `SKILL.md` so Claude knows when to open it. Nothing in those folders loads until the skill reads it.
+
+Keep only what the skill uses. Notes for yourself belong outside the skill folder, so they never cost tokens.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 17-10-2026)
+- https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview (verified 17-10-2026)
+
+---
+
+## Q452: We have 40 skills and only I know which to trigger when. How does the team use them? (Priyank)
+
+**Short answer:** Put one agent in front of them. A subagent can list the skills it needs in its `skills` front matter, and their full content loads when it starts. The team asks the agent for the outcome, and it picks the skill. For a fixed sequence, chain them: each skill's last step names the next one.
+
+| Pattern | What it is | Use when |
+|---|---|---|
+| Chaining | Skill A's final step invokes skill B | The order never changes |
+| Orchestration | One agent or script routes: skill 1, then 2, then 3 | The path depends on the request |
+| Routing agent | A subagent with the skills preloaded | People shouldn't need skill names |
+
+Preloading puts every listed skill's full text in the agent's context. With 40 skills, preload only the ones a given agent needs, or split into a few agents by stage.
+
+**Sources:**
+- https://code.claude.com/docs/en/sub-agents (verified 17-10-2026)
+- https://code.claude.com/docs/en/skills (verified 17-10-2026)
+
+---
+
+## Q453: What goes in `.claude/` vs the project folders, and what is `.agents/`? How is a skill different from the knowledge base? (Deepak, a participant)
+
+**Short answer:** `.claude/` is where Claude Code looks for its own configuration: skills, agents, rules, settings. Everything else in the project (product docs, personas, feedback) is your knowledge base, shaped however suits the work. A skill says how to do a task. The knowledge base says what is true about the product.
+
+| Location | Holds | Loaded |
+|---|---|---|
+| `CLAUDE.md` (root) | Project context and routing rules | Every session |
+| `.claude/skills/` | Skills | Descriptions always, bodies on use |
+| `.claude/agents/` | Subagents | When delegated to |
+| `.claude/rules/` | Topic or path-specific rules | Always, or when matching files are touched |
+| Your folders | Knowledge base | When Claude reads them |
+
+`.agents/` isn't a Claude Code folder. In class it was created by a third-party installer (HyperFrames).
+
+**Sources:**
+- https://code.claude.com/docs/en/claude-directory (verified 17-10-2026)
+- https://code.claude.com/docs/en/memory (verified 17-10-2026)
+
+---
+
+## Q454: My skill works in Claude, but Codex didn't follow its steps. Why? (Priyank)
+
+**Short answer:** The docs don't explain Codex's behaviour. What they do say: Claude Code skills follow the Agent Skills open standard, and Claude Code adds its own front matter fields that other tools may ignore. The plain instructions in `SKILL.md` carry over.
+
+To make a skill portable:
+1. Keep required steps in the `SKILL.md` body, not only in Claude-specific front matter.
+2. Put the main instruction near the top, and keep the file short.
+3. Give an exact output example (the table), not only a description of it.
+4. Test the same prompt in both tools before relying on it.
+
+**Sources:**
+- https://code.claude.com/docs/en/skills (verified 17-10-2026)
+- https://agentskills.io (verified 17-10-2026)

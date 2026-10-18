@@ -1,0 +1,22 @@
+[
+  {
+    "text": "Ask answerable in one word",
+    "passed": true,
+    "evidence": "'a yes or no by Thu 19-03 would be enough'"
+  },
+  {
+    "text": "Uses a Voss technique (no-oriented question or label)",
+    "passed": true,
+    "evidence": "'Is it a bad idea to ask...' and 'It seems like...'"
+  },
+  {
+    "text": "Keeps the thread subject (Re:)",
+    "passed": true,
+    "evidence": "'Re: Salesforce integration...'"
+  },
+  {
+    "text": "Deadline with reason",
+    "passed": true,
+    "evidence": "'to lock sprint planning scope'"
+  }
+]

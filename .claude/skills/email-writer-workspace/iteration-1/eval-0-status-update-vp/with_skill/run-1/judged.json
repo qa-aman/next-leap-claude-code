@@ -1,0 +1,22 @@
+[
+  {
+    "text": "Headline status in first sentence",
+    "passed": true,
+    "evidence": "'on track for the demo on 28-03, but model evaluation has less time than planned'"
+  },
+  {
+    "text": "Has a 'Why it matters' line",
+    "passed": true,
+    "evidence": "'Why it matters: Smart Follow-Up (April) depends on this...'"
+  },
+  {
+    "text": "Uses repo accuracy baseline (66%)",
+    "passed": true,
+    "evidence": "'66% action item accuracy today'"
+  },
+  {
+    "text": "States what the VP needs to do (or that nothing is needed)",
+    "passed": true,
+    "evidence": "'No action needed from you' plus optional reply 'narrow'"
+  }
+]

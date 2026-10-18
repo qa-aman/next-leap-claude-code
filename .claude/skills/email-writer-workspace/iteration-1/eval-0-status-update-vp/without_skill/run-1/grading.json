@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Has a subject line",
+      "passed": true,
+      "evidence": "**Subject:** Action Item Confidence Scoring v2: on track for 28-03 demo, evaluation window is tight"
+    },
+    {
+      "text": "No em dashes",
+      "passed": true,
+      "evidence": "0 em dashes"
+    },
+    {
+      "text": "No emojis",
+      "passed": true,
+      "evidence": "regex scan"
+    },
+    {
+      "text": "No filler phrases (just checking in, hope this finds you, etc.)",
+      "passed": true,
+      "evidence": "none found"
+    },
+    {
+      "text": "Body within length target +30% (195 words)",
+      "passed": false,
+      "evidence": "275 words"
+    },
+    {
+      "text": "No ISO, US-slash or month-name dates in the email body",
+      "passed": true,
+      "evidence": "none found"
+    },
+    {
+      "text": "Headline status in first sentence",
+      "passed": true,
+      "evidence": "'Scoring v2 is on track for the demo on 28-03-2026. One risk...'"
+    },
+    {
+      "text": "Has a 'Why it matters' line",
+      "passed": false,
+      "evidence": "no consequence line; impact buried in 'The risk' section"
+    },
+    {
+      "text": "Uses repo accuracy baseline (66%)",
+      "passed": true,
+      "evidence": "'action item accuracy is 66% today'"
+    },
+    {
+      "text": "States what the VP needs to do (or that nothing is needed)",
+      "passed": true,
+      "evidence": "'Nothing today.'"
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 2,
+    "total": 10,
+    "pass_rate": 0.8
+  }
+}

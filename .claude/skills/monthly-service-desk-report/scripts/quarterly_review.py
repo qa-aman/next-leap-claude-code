@@ -97,7 +97,10 @@ class Period:
                 for m in self.months]
 
     def hours(self, name):
-        return int(round(self.res[self.res[L2] == name]["Resolution Hours"].sum()))
+        return int(round(self.hours_raw(name)))
+
+    def hours_raw(self, name):
+        return float(self.res[self.res[L2] == name]["Resolution Hours"].sum())
 
     def pointers(self):
         """The dashboard's four summary pointers, by the same rules (see renderSummary and F-003)."""
@@ -290,11 +293,12 @@ def build(cur, prev, notes, sample, show_fw):
     if dec_call and dec_call["sub"] in cur.l2:
         d = dec_call["sub"]
         por0, por1 = prev.portal_by_month(d), cur.portal_by_month(d)
-        # Same rounding as the dashboard (round the total, then divide), so the two pages agree.
-        h0 = round(prev.hours(d) / len(prev.months), 1)
-        h1 = round(cur.hours(d) / len(cur.months), 1)
+        # Same rounding as the dashboard (divide the raw hours, round once), so the two pages agree.
+        r0, r1 = prev.hours_raw(d) / len(prev.months), cur.hours_raw(d) / len(cur.months)
+        h0, h1 = round(r0, 1), round(r1, 1)
         top = sorted(cur.m["l2"], key=lambda r: -cur.hours(r["name"]))[:4]
         chain = {"name": d, "por": (por0[-1], por1[-1]), "vol": (prev.l2[d]["counts"][-1], cur.l2[d]["counts"][-1]),
+                 "vol_months": (label_month(prev.months[-1])[:3], label_month(cur.months[-1])[:3]),
                  "hpm": (h0, h1), "freed": round(h0 - h1, 1), "top": [(t["name"], cur.hours(t["name"])) for t in top],
                  "own": cur.hours(d), "median": round(cur.l2[d]["median_hours"], 1)}
 
@@ -321,7 +325,7 @@ def build(cur, prev, notes, sample, show_fw):
                  for p in post[:2]]
     if stop and chain:
         decisions.append(f"<strong>Automation:</strong> pause the {E(chain['name'])} automation build. Volume already "
-                         f"fell from {chain['vol'][0]} to {chain['vol'][1]} a month, and the bigger agent hours sit in "
+                         f"fell from {chain['vol'][0]} in {chain['vol_months'][0]} to {chain['vol'][1]} in {chain['vol_months'][1]}, and the bigger agent hours sit in "
                          f"{E(', '.join(n for n, _ in chain['top'][:2]) + ' and ' + chain['top'][2][0])}.")
     elif len(post) > 2:
         p = post[2]

@@ -1,4 +1,8 @@
-# MeetFlow — Claude Code Workshop
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## MeetFlow - Claude Code Workshop
 
 ## Project Identity
 
@@ -37,7 +41,7 @@ Workshop workspace for the "Claude Code for PMs" course. It contains realistic p
 | `16-zomato/` | A second `ux-zone` prototype variant plus its build-prompt chain. |
 | `docs/` | Design specs written by the `superpowers` workflow (`docs/superpowers/specs/`) |
 | `videos/` | HyperFrames video projects (currently `vidaxl-brand-teaser`) |
-| `outputs/` | Write all generated content here, inside the current month's cohort folder (e.g. `outputs/sept-2026-cohort/`), never loose in `outputs/` |
+| `outputs/` | Write all generated content here, inside the current month's cohort folder (e.g. `outputs/sept-2026-cohort/`), never loose in `outputs/`. One known exception: the `feedback-triangulator` agent is hard-coded to overwrite `outputs/triangulated-feedback.md` |
 
 ## Prototype (the only runnable code)
 
@@ -52,13 +56,13 @@ There is no test runner or linter wired up; `typecheck` is the check to run befo
 
 How the prototype is wired: there is no API or backend. All data is static in `lib/mock-data.ts`, and all cross-page state (selected meeting, action-item filter, follow-up tone and draft) lives in one Zustand store, `lib/store.ts`. The five routes under `app/` (`/`, `/live`, `/summary`, `/action-items`, `/follow-up`) map one-to-one to the five screens in `15-prototype/ux-zone/<screen>/`, which is a design reference kit (screen notes, competitor screenshot sources, per-component `spec.md` + `tokens.json`), not runnable code.
 
-`16-zomato/ux-zone/` is a different thing: a locked design kit (plain HTML/CSS/JSON, `uxz-` class prefix). Read `16-zomato/ux-zone/UX-ZONE.md` first, it carries hard rules. Tokens are edited in `tokens.json`, never `tokens.css`, then regenerated with `node adapters/build-tailwind.mjs`.
+`16-zomato/ux-zone/` is a different thing: a locked design kit (plain HTML/CSS/JSON, `uxz-` class prefix). Read `16-zomato/ux-zone/UX-ZONE.md` first, it carries hard rules. Each build phase appends its constraint checks to `16-zomato/ux-zone/VERIFICATION.md`; the phases come from the numbered `16-zomato/prompt-ux-zone*.md` chain. Tokens are edited in `tokens.json`, never `tokens.css`, then regenerated with `node adapters/build-tailwind.mjs`.
 
 ## Claude Code Infrastructure (`.claude/`)
 
 This repo is also a live Claude Code toolkit. Before hand-rolling a PM artifact, check whether a skill or agent already does it.
 
-- **`.claude/skills/`** (~65 skills) - PM deliverable generators: `prd` (MeetFlow PRD that follows `14-templates/template-prd.md` section for section, every number cited; prefer over `write-prd`, which is the generic Shape Up pitch and is shadowed by the same-named user-level skill), `write-prd`, `feature-spec`, `okr-writer`, `prioritization`, `write-user-stories`, `stakeholder-update`, `jira-ticket-creator`, `mom` (Smart Brevity meeting minutes), plus publishing skills (`md-to-confluence`, `ppt-builder`), `work-log` (builds this repo's daily work log from Claude Code session transcripts), `ticket-category-analysis` (categorizes free-text support tickets into a 3-tier taxonomy, then builds a dashboard and a management deck), `ux-designer` (designs new UI or reviews existing UI, ships a self-contained HTML mockup or a Figma file, and gates it with `scripts/check_mockup.py` plus a browser audit before handover), and writing skills. Invoke with `/<skill-name>`. Some skills are vendored from `heygen-com/hyperframes` (all the `hyperframes-*`, video, and captions skills) and pinned by hash in `skills-lock.json` - edit those upstream, not in place. `launch-announcement-workspace/` is a skill-eval workspace, not a skill. `feature-spec copy/` is a second, Shape Up-based draft whose frontmatter also says `name: feature-spec`, so the two collide on `/feature-spec`; treat `feature-spec/` as canonical until the copy is renamed or removed.
+- **`.claude/skills/`** (~70 skills) - PM deliverable generators: `prd` (MeetFlow PRD that follows `14-templates/template-prd.md` section for section, every number cited; prefer over `write-prd`, which is the generic Shape Up pitch and is shadowed by the same-named user-level skill), `write-prd`, `feature-spec`, `okr-writer`, `prioritization`, `write-user-stories`, `stakeholder-update`, `jira-ticket-creator`, `mom` (Smart Brevity meeting minutes), `email-writer` (work emails: Minto answer-first structure, Smart Brevity for updates, Cialdini / Voss / Crucial Conversations modules for asks, follow-ups and difficult emails, gated by the six *Writing for Busy Readers* principles; the skill `pm-nidhi` routes emails to), plus publishing skills (`md-to-confluence`, `ppt-builder`), `work-log` (builds this repo's daily work log from Claude Code session transcripts), `ticket-category-analysis` (categorizes free-text support tickets into a 3-tier taxonomy, then builds a dashboard and a management deck), `monthly-service-desk-report` (the monthly runbook on top of it: profiles the export, categorizes and scores, builds the dashboard with a 20-second executive summary, gates and verifies it, republishes to the same artifact link via `state/history.json`, and hands over sharing steps), `ux-designer` (designs new UI or reviews existing UI, ships a self-contained HTML mockup or a Figma file, and gates it with `scripts/check_mockup.py` plus a browser audit before handover), and writing skills. Invoke with `/<skill-name>`. Some skills are vendored from `heygen-com/hyperframes` (all the `hyperframes-*`, video, and captions skills) and pinned by hash in `skills-lock.json` - edit those upstream, not in place. `launch-announcement-workspace/` is a skill-eval workspace, not a skill. `better-way` is a copy of the user-level skill of the same name, which shadows it on Aman's machine; it references `~/.claude/` files that do not exist on a learner's clone. `feature-spec copy/` is a second, Shape Up-based draft whose frontmatter also says `name: feature-spec`, so the two collide on `/feature-spec`; treat `feature-spec/` as canonical until the copy is renamed or removed.
 - **`.claude/agents/`** - specialized subagents. Prefer these over ad-hoc work for their domains:
   - `aman` - the default PM co-pilot; routes a vague PM ask to the right skill and produces the artifact end to end.
   - `nextleap-pm` - turns a problem statement into an agent-ready, technology-free spec using `14-templates/template-agent-spec.md` (EARS requirements, Given/When/Then stories, a Verify line per FR, unchanged-behaviour contract). Interviews through its launcher until no gap remains, then gates with `spec-reviewer`.
@@ -69,8 +73,9 @@ This repo is also a live Claude Code toolkit. Before hand-rolling a PM artifact,
   - `interview-insight-synthesizer` - four-stage pipeline over `07-user-interviews/`.
   - `competitor-snapshot` (internal docs only) and `competitor-intel-analyst` (live first-party web research, validates every URL).
   - `feedback-triangulator` - fans out over interviews + survey + churn, keeps issues corroborated by 2 or 3 sources.
+  - `ticket-report-auditor` - read-only audit of a service desk report folder: recomputes every number in its HTML pages from the categorized Excel and ranks discrepancies. One folder per run; dispatch one per period in parallel.
   - `senior-code-reviewer` (correctness/security), `code-improver` (read-only, Sonnet, inline report on named files or a directory), `code-improver-recent` (inline scan of the current diff).
-  - Nine of these (`churn-diagnoser`, `churn-pattern-analyst`, `competitor-intel-analyst`, `competitor-snapshot`, `interview-insight-synthesizer`, `nextleap-pm`, `pm-nidhi`, `prd-drafter`, `senior-code-reviewer`) have `memory: project`, so they read and update `.claude/agent-memory/<name>/MEMORY.md` across runs. A lesson about how one of them should reason belongs in that memory file, not only in chat.
+  - Ten of these (`churn-diagnoser`, `churn-pattern-analyst`, `competitor-intel-analyst`, `competitor-snapshot`, `interview-insight-synthesizer`, `nextleap-pm`, `pm-nidhi`, `prd-drafter`, `senior-code-reviewer`, `ticket-report-auditor`) have `memory: project`, so they read and update `.claude/agent-memory/<name>/MEMORY.md` across runs. A lesson about how one of them should reason belongs in that memory file, not only in chat.
 - **`.claude/hooks/`** - `refresh-docs.sh` is a Stop hook that auto-updates CLAUDE.md and README.md from the diff after a turn changes source files but leaves the docs stale. It is wired in `.claude/settings.local.json`, which is not committed, so a fresh clone does not have it. The committed `.claude/settings.json` only sets permissions and `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`.
 - **`.claude/rules/`** - path-triggered rules that auto-load when you touch matching files. Know these fire without being asked:
   - `08-product-features/**` -> PRDs must cite a persona, use real baselines, include a "What we're NOT building" section, link to Q2 OKRs.

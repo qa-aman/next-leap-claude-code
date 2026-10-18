@@ -6,7 +6,7 @@
   "decisions": [
     "VPN: Network Operations to check what changed \"since the new client version\" and publish a known-error article.",
     "Laptop: Desktop Support to review how battery or charging fault tickets are handled, with the service owner.",
-    "Automation: pause the Password automation build. Volume already fell from 38 to 15 a month, and the bigger agent hours sit in Laptop, ERP System and Licensing."
+    "Automation: pause the Password automation build. Volume already fell from 38 in Mar to 15 in Jun, and the bigger agent hours sit in Laptop, ERP System and Licensing."
   ],
   "kpis": {
     "tickets": 521,

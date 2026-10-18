@@ -1,0 +1,22 @@
+[
+  {
+    "text": "Ask in first two lines",
+    "passed": true,
+    "evidence": "'Could I borrow one ML engineer from your team for two weeks'"
+  },
+  {
+    "text": "Effort / duration stated",
+    "passed": true,
+    "evidence": "'23-03 to 03-04', 'at least 80%'"
+  },
+  {
+    "text": "Reply deadline with a reason",
+    "passed": true,
+    "evidence": "'yes or no by Thursday so I can lock the sprint plan'"
+  },
+  {
+    "text": "Offers an easy out",
+    "passed": true,
+    "evidence": "'even the first week on error analysis would help'"
+  }
+]

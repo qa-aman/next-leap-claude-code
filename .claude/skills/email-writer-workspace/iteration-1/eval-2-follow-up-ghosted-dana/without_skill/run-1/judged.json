@@ -1,0 +1,22 @@
+[
+  {
+    "text": "Ask answerable in one word",
+    "passed": true,
+    "evidence": "'I need a yes or no'"
+  },
+  {
+    "text": "Uses a Voss technique (no-oriented question or label)",
+    "passed": false,
+    "evidence": "none; direct ask plus 'I cannot plan around silence'"
+  },
+  {
+    "text": "Keeps the thread subject (Re:)",
+    "passed": false,
+    "evidence": "new subject 'Need a yes/no by Thu 19-03...' breaks the thread"
+  },
+  {
+    "text": "Deadline with reason",
+    "passed": true,
+    "evidence": "'it decides what goes into sprint planning'"
+  }
+]

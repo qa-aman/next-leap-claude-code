@@ -626,7 +626,7 @@ function l2stats(rows){
       name, l1:o.l1, total:o.rows.length, perM, latest: perM[LAST],
       median: hrs.length ? r1(quantile(hrs,0.5)) : 0,
       spread: hrs.length ? r1(quantile(hrs,0.9)-quantile(hrs,0.1)) : 0,
-      hoursTotal: Math.round(sum), hoursPerMonth: r1(sum/nMonths),
+      hoursTotal: Math.round(sum), hoursSum: sum, hoursPerMonth: r1(sum/nMonths),
       slaPct: pct(res.filter(t=>t[SLA]===true).length, res.length),
       reopenPct: pct(res.filter(t=>t[RO]).length, res.length),
       p12Pct: pct(o.rows.filter(t=>HIGH_PRI.has(t[PR])).length, o.rows.length),
@@ -644,7 +644,8 @@ function renderShortlist(){
   // standing pattern, not about one month, so the month filter does not scope it.
   const stats = l2stats(catScoped());
   stats.forEach(o => {
-    o.hoursPerMonth = r1(o.hoursTotal/NM);
+    // Divide the raw hours, never the rounded total, so this matches the effort chart.
+    o.hoursPerMonth = r1(o.hoursSum/NM);
     o.checks = {
       volume:  o.perM[LAST] >= rule.min_tickets_latest_month,
       spread:  o.spread <= rule.max_spread_hours,
@@ -688,10 +689,12 @@ function renderShortlist(){
 
   if(pass.length){
     const t = pass[0];
+    const chg = pct(t.perM[LAST]-t.perM[0], Math.max(1,t.perM[0]));
+    const dir = chg>0 ? `${chg}% up` : chg<0 ? `${Math.abs(chg)}% down` : "flat";
     document.getElementById("shortcall").innerHTML =
       `<strong>${esc(t.name)}</strong> is the clearest candidate. It ran
        ${t.perM.join(" → ")} tickets across the ${NM} months
-       (${pct(t.perM[LAST]-t.perM[0], Math.max(1,t.perM[0]))}% up), it is
+       (${dir}), it is
        ${pct(t.total, catScoped().length)}% of everything the desk received, and it resolves in
        ${t.median} hours with a spread of only ${t.spread} hours. A spread that tight means the
        fix is the same nearly every time, which is what makes it scriptable. It gives back at
@@ -801,9 +804,10 @@ function renderQuality(){
   ];
   const measured = scored ? [
     ["Category (L1) correct", a.overall.L1 + "%", "measured against the answer key"],
-    ["Subcategory (L2) correct", a.overall.L2 + "%", "measured against the answer key"],
-    ["Issue type (L3) correct", a.overall.L3 + "%",
-      `${a.distinct_misclassified_cases} distinct description${a.distinct_misclassified_cases===1?"":"s"} landed wrong`],
+    // The misclassified count is the L2 error count, so it sits on the L2 tile only.
+    ["Subcategory (L2) correct", a.overall.L2 + "%",
+      `${a.distinct_misclassified_cases} distinct description${a.distinct_misclassified_cases===1?"":"s"} landed in the wrong subcategory`],
+    ["Issue type (L3) correct", a.overall.L3 + "%", "measured against the answer key"],
   ] : [
     ["Accuracy", "Not measured", "no answer key was supplied with this export"],
   ];
@@ -923,7 +927,7 @@ function renderSummary(){
 
   // 4. The decision: the automation shortlist's top candidate
   const rule = D.shortlist_rule;
-  const pass = l2stats(R).map(o=>({...o, hpm:r1(o.hoursTotal/NM)}))
+  const pass = l2stats(R).map(o=>({...o, hpm:r1(o.hoursSum/NM)}))
     .filter(o=>o.perM[LAST]>=rule.min_tickets_latest_month && o.spread<=rule.max_spread_hours &&
                o.p12Pct<=rule.max_p1p2_share_pct)
     .sort((a,b)=>b.hpm-a.hpm);

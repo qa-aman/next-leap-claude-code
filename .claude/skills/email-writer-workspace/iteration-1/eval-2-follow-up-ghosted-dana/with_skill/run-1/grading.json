@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Has a subject line",
+      "passed": true,
+      "evidence": "**Subject:** Re: Salesforce integration: MeetFlow action items via API by May"
+    },
+    {
+      "text": "No em dashes",
+      "passed": true,
+      "evidence": "0 em dashes"
+    },
+    {
+      "text": "No emojis",
+      "passed": true,
+      "evidence": "regex scan"
+    },
+    {
+      "text": "No filler phrases (just checking in, hope this finds you, etc.)",
+      "passed": true,
+      "evidence": "none found"
+    },
+    {
+      "text": "Body within length target +30% (117 words)",
+      "passed": true,
+      "evidence": "93 words"
+    },
+    {
+      "text": "No ISO, US-slash or month-name dates in the email body",
+      "passed": true,
+      "evidence": "none found"
+    },
+    {
+      "text": "Ask answerable in one word",
+      "passed": true,
+      "evidence": "'a yes or no by Thu 19-03 would be enough'"
+    },
+    {
+      "text": "Uses a Voss technique (no-oriented question or label)",
+      "passed": true,
+      "evidence": "'Is it a bad idea to ask...' and 'It seems like...'"
+    },
+    {
+      "text": "Keeps the thread subject (Re:)",
+      "passed": true,
+      "evidence": "'Re: Salesforce integration...'"
+    },
+    {
+      "text": "Deadline with reason",
+      "passed": true,
+      "evidence": "'to lock sprint planning scope'"
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  }
+}

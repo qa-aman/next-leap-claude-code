@@ -27,6 +27,8 @@
 - **Workshop repo (GitHub):** https://github.com/qa-aman/next-leap-claude-code
 - **LinkedIn:** https://www.linkedin.com/in/amanmparmar
 - **Substack:** https://shipwithailab.substack.com/
+- **YouTube:** https://www.youtube.com/@shipwithai-lab
+- **Instagram:** https://www.instagram.com/shipwithai_lab/
 - **Setup guide with the five install errors and fixes (Substack):** https://shipwithailab.substack.com/p/claude-code-install-fails-the-same
 - **GitHub:** https://github.com/qa-aman
 
@@ -58,7 +60,7 @@
 - **Permission modes (auto, manual, plan):** https://code.claude.com/docs/en/permission-modes
 - **Models and effort in Claude Code:** https://code.claude.com/docs/en/model-config
 - **Claude models overview (Fable 5.1, Opus 5, Sonnet 5, Haiku 4.5):** https://platform.claude.com/docs/en/about-claude/models/overview
-- **Fable 5.1 announcement, 01-09-2026:** https://www.anthropic.com/claude-fable-and-mythos-5-1
+- **Fable 5.1 announcement:** https://www.anthropic.com/claude-fable-and-mythos-5-1
 - **Desktop app quickstart:** https://code.claude.com/docs/en/desktop-quickstart
 - **VS Code, Cursor and other editors:** https://code.claude.com/docs/en/vs-code
 

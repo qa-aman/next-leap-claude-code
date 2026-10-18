@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Has a subject line",
+      "passed": true,
+      "evidence": "Subject: Custom CRM field mapping for [Prospect]: not in Q2, here is what we can do"
+    },
+    {
+      "text": "No em dashes",
+      "passed": true,
+      "evidence": "0 em dashes"
+    },
+    {
+      "text": "No emojis",
+      "passed": true,
+      "evidence": "regex scan"
+    },
+    {
+      "text": "No filler phrases (just checking in, hope this finds you, etc.)",
+      "passed": true,
+      "evidence": "none found"
+    },
+    {
+      "text": "Body within length target +30% (260 words)",
+      "passed": true,
+      "evidence": "248 words"
+    },
+    {
+      "text": "No ISO, US-slash or month-name dates in the email body",
+      "passed": true,
+      "evidence": "none found"
+    },
+    {
+      "text": "The 'no' is in the first two lines",
+      "passed": true,
+      "evidence": "'We can't build custom CRM field mapping...'"
+    },
+    {
+      "text": "Offers an alternative",
+      "passed": true,
+      "evidence": "May integration, field mapping session, Q3 planning"
+    },
+    {
+      "text": "Invites his view or facts",
+      "passed": false,
+      "evidence": "asks for a meeting but never asks what Kevin knows or thinks"
+    },
+    {
+      "text": "States shared purpose",
+      "passed": false,
+      "evidence": "no shared-goal line; frames as protecting other revenue"
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 2,
+    "total": 10,
+    "pass_rate": 0.8
+  }
+}

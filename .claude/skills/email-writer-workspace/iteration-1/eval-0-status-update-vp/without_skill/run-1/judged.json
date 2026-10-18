@@ -1,0 +1,22 @@
+[
+  {
+    "text": "Headline status in first sentence",
+    "passed": true,
+    "evidence": "'Scoring v2 is on track for the demo on 28-03-2026. One risk...'"
+  },
+  {
+    "text": "Has a 'Why it matters' line",
+    "passed": false,
+    "evidence": "no consequence line; impact buried in 'The risk' section"
+  },
+  {
+    "text": "Uses repo accuracy baseline (66%)",
+    "passed": true,
+    "evidence": "'action item accuracy is 66% today'"
+  },
+  {
+    "text": "States what the VP needs to do (or that nothing is needed)",
+    "passed": true,
+    "evidence": "'Nothing today.'"
+  }
+]

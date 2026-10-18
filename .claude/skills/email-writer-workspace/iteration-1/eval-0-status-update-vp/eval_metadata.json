@@ -1,0 +1,6 @@
+{
+  "eval_id": 0,
+  "eval_name": "status-update-vp",
+  "prompt": "Draft a status email to our VP Product on Action Item Confidence Scoring v2. Sprint runs 17-03-2026 to 28-03-2026 and is on track for the demo on 28-03, but the labelled meeting data from our annotation vendor arrived 3 days late, so model evaluation is compressed. Pull any baseline numbers you need from the repo.",
+  "assertions": []
+}

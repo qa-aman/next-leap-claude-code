@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Has a subject line",
+      "passed": true,
+      "evidence": "**Subject:** Need a yes/no by Thu 19-03: Action Items via Salesforce API for May"
+    },
+    {
+      "text": "No em dashes",
+      "passed": true,
+      "evidence": "0 em dashes"
+    },
+    {
+      "text": "No emojis",
+      "passed": true,
+      "evidence": "regex scan"
+    },
+    {
+      "text": "No filler phrases (just checking in, hope this finds you, etc.)",
+      "passed": true,
+      "evidence": "none found"
+    },
+    {
+      "text": "Body within length target +30% (117 words)",
+      "passed": true,
+      "evidence": "85 words"
+    },
+    {
+      "text": "No ISO, US-slash or month-name dates in the email body",
+      "passed": true,
+      "evidence": "none found"
+    },
+    {
+      "text": "Ask answerable in one word",
+      "passed": true,
+      "evidence": "'I need a yes or no'"
+    },
+    {
+      "text": "Uses a Voss technique (no-oriented question or label)",
+      "passed": false,
+      "evidence": "none; direct ask plus 'I cannot plan around silence'"
+    },
+    {
+      "text": "Keeps the thread subject (Re:)",
+      "passed": false,
+      "evidence": "new subject 'Need a yes/no by Thu 19-03...' breaks the thread"
+    },
+    {
+      "text": "Deadline with reason",
+      "passed": true,
+      "evidence": "'it decides what goes into sprint planning'"
+    }
+  ],
+  "summary": {
+    "passed": 8,
+    "failed": 2,
+    "total": 10,
+    "pass_rate": 0.8
+  }
+}

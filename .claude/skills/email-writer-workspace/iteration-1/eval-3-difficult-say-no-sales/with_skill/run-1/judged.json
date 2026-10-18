@@ -1,0 +1,22 @@
+[
+  {
+    "text": "The 'no' is in the first two lines",
+    "passed": true,
+    "evidence": "'We will not build custom CRM field mapping...'"
+  },
+  {
+    "text": "Offers an alternative",
+    "passed": true,
+    "evidence": "May Salesforce integration plus field mapping walkthrough"
+  },
+  {
+    "text": "Invites his view or facts",
+    "passed": true,
+    "evidence": "'If their requirement is more specific than that, I want to hear it.'"
+  },
+  {
+    "text": "States shared purpose",
+    "passed": true,
+    "evidence": "'We both want it closed'"
+  }
+]

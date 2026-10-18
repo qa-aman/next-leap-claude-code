@@ -1,0 +1,6 @@
+{
+  "eval_id": 3,
+  "eval_name": "difficult-say-no-sales",
+  "prompt": "Our Head of Sales, Kevin, asked us to build custom CRM field mapping for their biggest prospect in Q2. We're saying no, it's not on the Q2 roadmap and would delay Enterprise GA and Transcript Accuracy v2. He'll be annoyed. Write the email. We could offer the standard Salesforce integration shipping in May as an alternative.",
+  "assertions": []
+}

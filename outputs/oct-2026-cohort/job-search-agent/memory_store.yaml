@@ -1,0 +1,3 @@
+# yaml-language-server: $schema=https://platform.claude.com/schemas/ant/beta/memory_store.json
+name: Job Search Memory
+description: Roles already shown (seen-jobs.md) and the person's feedback on past shortlists (feedback.md).

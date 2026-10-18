@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://platform.claude.com/schemas/ant/beta/environment.json
+# The sandbox can only reach these public job-board APIs. Add a host here to add a board type.
+name: job-search-env
+config:
+  type: cloud
+  networking:
+    type: limited
+    allowed_hosts:
+      - boards-api.greenhouse.io
+      - api.lever.co
+      - api.ashbyhq.com

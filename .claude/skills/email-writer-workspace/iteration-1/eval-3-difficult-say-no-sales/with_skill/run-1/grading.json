@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Has a subject line",
+      "passed": true,
+      "evidence": "**Subject:** Custom field mapping: Q2 answer and an alternative"
+    },
+    {
+      "text": "No em dashes",
+      "passed": true,
+      "evidence": "0 em dashes"
+    },
+    {
+      "text": "No emojis",
+      "passed": true,
+      "evidence": "regex scan"
+    },
+    {
+      "text": "No filler phrases (just checking in, hope this finds you, etc.)",
+      "passed": true,
+      "evidence": "none found"
+    },
+    {
+      "text": "Body within length target +30% (260 words)",
+      "passed": true,
+      "evidence": "174 words"
+    },
+    {
+      "text": "No ISO, US-slash or month-name dates in the email body",
+      "passed": true,
+      "evidence": "none found"
+    },
+    {
+      "text": "The 'no' is in the first two lines",
+      "passed": true,
+      "evidence": "'We will not build custom CRM field mapping...'"
+    },
+    {
+      "text": "Offers an alternative",
+      "passed": true,
+      "evidence": "May Salesforce integration plus field mapping walkthrough"
+    },
+    {
+      "text": "Invites his view or facts",
+      "passed": true,
+      "evidence": "'If their requirement is more specific than that, I want to hear it.'"
+    },
+    {
+      "text": "States shared purpose",
+      "passed": true,
+      "evidence": "'We both want it closed'"
+    }
+  ],
+  "summary": {
+    "passed": 10,
+    "failed": 0,
+    "total": 10,
+    "pass_rate": 1.0
+  }
+}

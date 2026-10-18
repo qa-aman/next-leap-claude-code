@@ -1,0 +1,22 @@
+[
+  {
+    "text": "Ask in first two lines",
+    "passed": true,
+    "evidence": "'Could you lend me one ML engineer from Mon 23-03 to Fri 03-04'"
+  },
+  {
+    "text": "Effort / duration stated",
+    "passed": true,
+    "evidence": "'10 working days'"
+  },
+  {
+    "text": "Reply deadline with a reason",
+    "passed": true,
+    "evidence": "'reply by Thu 19-03 so I can plan the sprint'"
+  },
+  {
+    "text": "Offers an easy out",
+    "passed": true,
+    "evidence": "'If 23-03 does not work, a later start also helps'"
+  }
+]

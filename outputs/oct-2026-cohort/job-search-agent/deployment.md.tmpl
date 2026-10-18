@@ -1,0 +1,30 @@
+---
+name: Daily job search
+agent: $LEAD_ID
+environment_id: $ENV_ID
+schedule:
+  type: cron
+  expression: "0 8 * * 1-5"
+  timezone: Asia/Kolkata
+budget:
+  type: limit
+  max_list_cost:
+    amount: "300"
+    currency: USD
+resources:
+  - type: file
+    file_id: $RESUME_FILE_ID
+    mount_path: /resume.md
+  - type: file
+    file_id: $PROFILE_FILE_ID
+    mount_path: /profile.md
+  - type: file
+    file_id: $WATCHLIST_FILE_ID
+    mount_path: /watchlist.md
+  - type: memory_store
+    memory_store_id: $STORE_ID
+    access: read_write
+    instructions: Read seen-jobs.md and feedback.md before you start. Update seen-jobs.md at the end.
+---
+
+Run today's job search.

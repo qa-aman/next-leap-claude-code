@@ -1,0 +1,60 @@
+{
+  "expectations": [
+    {
+      "text": "Has a subject line",
+      "passed": true,
+      "evidence": "**Subject:** Ask: one ML engineer for 2 weeks from Mon 23-03"
+    },
+    {
+      "text": "No em dashes",
+      "passed": true,
+      "evidence": "0 em dashes"
+    },
+    {
+      "text": "No emojis",
+      "passed": true,
+      "evidence": "regex scan"
+    },
+    {
+      "text": "No filler phrases (just checking in, hope this finds you, etc.)",
+      "passed": true,
+      "evidence": "none found"
+    },
+    {
+      "text": "Body within length target +30% (156 words)",
+      "passed": false,
+      "evidence": "167 words"
+    },
+    {
+      "text": "No ISO, US-slash or month-name dates in the email body",
+      "passed": true,
+      "evidence": "none found"
+    },
+    {
+      "text": "Ask in first two lines",
+      "passed": true,
+      "evidence": "'Could you lend me one ML engineer from Mon 23-03 to Fri 03-04'"
+    },
+    {
+      "text": "Effort / duration stated",
+      "passed": true,
+      "evidence": "'10 working days'"
+    },
+    {
+      "text": "Reply deadline with a reason",
+      "passed": true,
+      "evidence": "'reply by Thu 19-03 so I can plan the sprint'"
+    },
+    {
+      "text": "Offers an easy out",
+      "passed": true,
+      "evidence": "'If 23-03 does not work, a later start also helps'"
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 1,
+    "total": 10,
+    "pass_rate": 0.9
+  }
+}

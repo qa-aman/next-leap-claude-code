@@ -1,0 +1,22 @@
+[
+  {
+    "text": "The 'no' is in the first two lines",
+    "passed": true,
+    "evidence": "'We can't build custom CRM field mapping...'"
+  },
+  {
+    "text": "Offers an alternative",
+    "passed": true,
+    "evidence": "May integration, field mapping session, Q3 planning"
+  },
+  {
+    "text": "Invites his view or facts",
+    "passed": false,
+    "evidence": "asks for a meeting but never asks what Kevin knows or thinks"
+  },
+  {
+    "text": "States shared purpose",
+    "passed": false,
+    "evidence": "no shared-goal line; frames as protecting other revenue"
+  }
+]

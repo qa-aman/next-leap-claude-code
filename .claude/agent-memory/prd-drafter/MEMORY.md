@@ -40,6 +40,10 @@ Targets come from `04-strategy/okrs-q2-2026.md`, never from your own judgement. 
 3. **Priya Nair** - price-sensitive lower-usage Pro user. The right persona for summary length, pricing and anything exposed to Notion bundling.
 4. **James Whitfield** appears in `07-user-interviews/` but has no persona file. He is the Salesforce and integrations evidence, 22 seats, with a Fireflies pilot at end of Q1 2026. Cite him as an interview, not as a persona.
 
+## Other memories
+
+- [project_vague_efficacy_request_defaults.md](project_vague_efficacy_request_defaults.md) - Vague "efficacy" ask maps to Confidence Scoring v2; existing full PRD in sept folder, do not overwrite; no oct folder yet.
+
 ## How to maintain this file
 
 Append a roadmap-status entry whenever the user tells you a feature is already being built, shipped, or out of scope, and record what it changes about the draft. Add a baseline only when you have traced it to a file, with the file named.
